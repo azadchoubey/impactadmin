@@ -17,11 +17,8 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    protected $table = "wm_users";
+    protected $grads = [];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -29,8 +26,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
-        'remember_token',
+        'password'
     ];
 
     /**
@@ -39,7 +35,11 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
+        'password' => 'md5',
     ];
+    // relations
+
+    public function user_role(){
+        return $this->hasMany(Picklist::class,'role','ID');
+    }
 }

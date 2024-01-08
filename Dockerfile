@@ -10,5 +10,5 @@ COPY . .
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 ENV PORT=8000
-RUN chmod +x /docker/index.sh
+RUN chmod +x docker/index.sh
 ENTRYPOINT [ "sh","docker/index.sh" ]
