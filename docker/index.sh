@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ ! -f "vendor/autoload.php" ]; then
-composer install --no-progress --no interaction
+composer install -n
 fi
 
 if [ ! -f ".env" ]; then
