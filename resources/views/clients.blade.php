@@ -1,4 +1,5 @@
 @extends('layouts.default')
+
 @section('content')
-<livewire:login /> 
+    <livewire:client-profile/>
 @endsection

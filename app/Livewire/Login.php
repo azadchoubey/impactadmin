@@ -1,34 +1,71 @@
 <?php
 
 namespace App\Livewire;
-
 use Livewire\Component;
+
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class Login extends Component
 {
     public $userid;
     public $password;
+    public $rememberpasswd;
     public $autherror;
-    public function authenticate()
+
+    public function mount()
     {
-        return $this->userid;
-        $user = User::where(["login"=>$this->userid,"password"=>$this->password])->with('user_role')->first(['id', 'login', 'password', 'fullname', 'role', 'region', 'active']);
-        if ($user) {
-            if ($user->active) {
-                Auth::login($user);
-                // Redirect to 'admin_home' route or Livewire component
-                return redirect()->to('admin_home');
-            } else {
-                $this->autherror = "User is Inactive!";
-            }
-        } else {
-            $this->autherror = "Authentication Error!";
-        }
+        $this->fillPass();  
     }
+
     public function render()
     {
         return view('livewire.login');
+    }
+
+    public function fillPass()
+    {
+        $userid = session('userid');
+        $password = session('pass');
+
+        $this->userid = $userid;
+        $this->password = $password;
+
+        if (trim($userid) != "" && trim($password) != "") {
+            $this->rememberpasswd = true;
+        }
+    }
+
+    public function authenticate()
+    {
+        $user = User::where(['UserID'=>$this->userid])->first();
+
+        if ($user) {
+            $hashedInputPassword = md5($this->password);
+
+            if ($hashedInputPassword === $user->Md5Pass) {
+
+                Auth::login($user); 
+                if($this->rememberpasswd){
+                $this->setRememberPassword($this->userid, $this->password);
+                }else{
+                    session(['remember' => false]);
+                }
+                return redirect()->route('dashboard');
+            } else {
+                $this->autherror = "Invalid Password";
+            }
+        } else {
+            $this->autherror = "User not found";
+        }
+    }
+
+    private function setRememberPassword($userid, $password)
+    {
+        session(['userid' => $userid]);
+        session(['pass' => $password]);
+        session(['remember' => true]);
     }
 }

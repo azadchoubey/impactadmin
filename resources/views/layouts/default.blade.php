@@ -5,19 +5,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="{{ asset('js/app.js') }}" defer></script>
 
+<link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
     @livewireStyles
 </head>
 
 <body>
+    <livewire:navbar /> 
 
-    <div id="main" class="row">
 
         @yield('content')
-    </div>
-
-    @livewireScripts
+    
+        @livewireScripts
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
 </body>
 
 </html>

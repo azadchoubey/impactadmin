@@ -17,22 +17,17 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $table = "userinfo";
-    protected $primaryKey = 'Id';
+    protected $table = "wm_users";
+    protected $primaryKey = 'id';
     protected $fillable = [
-        'Id',
-        'UserID',
-        'UserName',
-        'Profile',
-        'RemoteProfileID',
-        'AllowRemote',
-        'LastUpdate',
-        'Password',
-        'Md5Pass',
-        'tmp',
-        'ProfileId',
-        'EmailID',
-        'citycode',
+        'id',
+        'login',
+        'password',
+        'fullname',
+        'role',
+        'region',
+        'agency',
+        'active',
     ];
 
        
@@ -42,18 +37,12 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'Md5Pass'
+        'password'
     ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
 
     // relations
 
-    // public function user_role(){
-    //     return $this->hasMany(Picklist::class,'ID','role');
-    // }
+    public function user_role(){
+        return $this->hasMany(Picklist::class,'ID','role');
+    }
 }
