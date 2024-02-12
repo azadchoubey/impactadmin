@@ -57,14 +57,18 @@ class Publications extends Component
         }
     }
     public function fetchAll($id,$title){
-        $this->searchResults = [];
-        $this->title = $title;
-        $this->id = $id;
+
+            $this->searchResults = [];
+            $this->title = $title;
+            $this->id = $id;
+    
+       
     }
     public function pubsubmit() {
+        if($this->id){
         $this->pubshow = true;
         $data = Pubmaster::with('Type','city','country','state','cat','lang','pub_pages','edition')->find($this->id);
-        // dd($data);
+        //dd($data);
           $this->pubid = $data->PubId;
           $this->address1 = $data->address1;
           $this->address2 = $data->address2;
@@ -90,5 +94,10 @@ class Publications extends Component
           $this->RateNC = $data->RateNC;
           $this->RatePB = $data->RatePB;
           $this->masthead = $data->MastHead;
+        }else{
+            $this->skipRender();
+        }
+        
+       
     }
 }

@@ -23,7 +23,7 @@ Route::get('/dashboard', function () {return view('admin');})->name('dashboard')
 Route::view('/change-password', 'change-password')->name('changepassword');
 Route::view('/publications','publications/index');
 Route::view('/clients','clients');
-
+Route::view('/createpublication','createpublication')->name('createpub');
 });
 Route::get('/publication',function(){
 return Pubmaster::with('Type','City','Country','State','Language')->select('PubId','Title','Type','CityID','countryID','stateID','Language')->find(8773);

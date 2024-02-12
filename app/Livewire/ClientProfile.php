@@ -12,19 +12,39 @@ class ClientProfile extends Component
     public $phone, $fax, $mobile, $email;
     public $contractstart, $contractend, $printstatus, $region, $webstatus;
     public $csrsince, $industrySector, $sector, $subsector;
-    public $reference, $type, $billingcycle, $billingdate, $billingrate,$client;
-
-    public $clientshow = false;
+    public $reference, $type, $billingcycle, $billingdate, $billingrate,$client,$editing;
+    public $clientshow = true;
     public $Results = [];
     public $contacts;
     public $keywords = [];
-    public $id;
-    public function mount()
+    public $id ,$selectAll = false,$checkboxes;
+    public $activeTab = 'profile'; 
+    public function switchTab($tabName)
     {
+        $this->activeTab = $tabName;
     }
-    public function render()
+
+    public function toggleSelectAll($contacts)
     {
-        return view('livewire.client-profile');
+        //dd($contacts);
+        $this->selectAll = !$this->selectAll;
+
+        foreach ($contacts  as $contact) {
+            $this->checkboxes[$contact['contactid']] = $this->selectAll;
+        }
+    }
+    public function startEditing($clientId)
+    {
+        $this->editing = $clientId;
+       
+    }
+    public function mount(){
+
+    }
+    public function updateClient($clientId)
+    {
+       
+        $this->editing = null; 
     }
     public function updateTitle(){
         $this->clientshow = false;
@@ -36,15 +56,22 @@ class ClientProfile extends Component
             $this->Results = [];
         }
     }
+    public function render()
+    {
+
+        return view('livewire.client-profile');
+    }
+    public function updateCheckbox($contactid){
+        $this->checkboxes[$contactid] = !$this->checkboxes[$contactid] ;
+    }
     public function fetchAll($id,$name){
+        $this->clientshow = false;
         $this->Results = [];
         $this->name = $name;
         $this->id = $id;
     }
     public function clientsubmit(){
-        $this->clientshow = true;
         $data = Clinetprofile::with('contacts.delivery','contacts.regularDigestPrint','contacts.regularDigestWeb','Country','region','sector')->find($this->id);
-     //dd($data->contacts[16]);
         $this->clientID = $data->ClientID;
         $this->csrsince = $data->csrsince;
         $this->phone = $data->Phone;
@@ -69,6 +96,7 @@ class ClientProfile extends Component
         $this->billingdate =$data->wm_billingdate;
         $this->billingrate =$data->wm_billingrate;
         $this->contacts = $data;
+        $this->checkboxes = array_fill_keys($this->contacts->contacts->pluck('contactid')->toArray(), false);  
         $this->sector = $data->sector->Name;
     }
 }
