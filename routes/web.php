@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\LoginController;
+use App\Livewire\EditPublications;
 use Illuminate\Support\Facades\Route;
 use App\Models\Pubmaster;
 /*
@@ -24,7 +25,9 @@ Route::view('/change-password', 'change-password')->name('changepassword');
 Route::view('/publications','publications/index');
 Route::view('/clients','clients');
 Route::view('/createpublication','createpublication')->name('createpub');
+Route::get('/editpublication/{id}',EditPublications::class)->name('editpublication');
 });
+
 Route::get('/publication',function(){
 return Pubmaster::with('Type','City','Country','State','Language')->select('PubId','Title','Type','CityID','countryID','stateID','Language')->find(8773);
 });

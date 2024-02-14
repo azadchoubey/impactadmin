@@ -1,36 +1,5 @@
 <div>
-    <form wire:submit.prevent="pubsubmit" class="flex items-center max-w-lg mx-auto">
-        <label for="simple-search" class="sr-only">Search</label>
-        <div class="relative flex-grow">
-            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M6 10c0-3.314 2.686-6 6-6s6 6 6 6-2.686 6-6 6-6-2.686-6-6z" />
-                </svg>
-            </div>
-            <input wire:model="title" wire:keyup.debounce.200ms="updateTitle" type="text"   id="simple-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 pr-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search publication name..." required>
-
-            @if(!empty($searchResults))
-            <div class="absolute z-10 mt-1 bg-white border border-gray-300 rounded-md shadow-lg w-full">
-                <ul>
-                    @foreach($searchResults as $result)
-                    <li wire:click="fetchAll('{{ $result->PubId }}', '{{$result->Title }}')" class="px-4 py-2 hover:bg-gray-100">
-                        {{ Str::limit($result->Title, 40) }} ({{$result->edition->Name??''}} )
-                    </li>
-                    @endforeach
-                </ul>
-            </div>
-            @endif
-        </div>
-        <button type="submit" class="ml-2 flex-shrink-0 p-2.5 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-            <span>Search</span>
-        </button>
-    </form>
-    <div class="relative">
-  <!-- Your button with absolute positioning to align it to the right -->
-  <a href="{{route('createpub')}}" wire:navigate class="absolute right-6 top-0 p-2.5 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create Publication</a>
-</div>
-
-    <div class='mt-3 flex flex-col items-center'>
+<div class='mt-3 flex flex-col items-center'>
         <button wire:loading disabled type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 inline-flex items-center">
             <svg aria-hidden="true" role="status" class="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB" />
@@ -39,7 +8,77 @@
             Processing ...
         </button>
         </div>
-    @if($pubshow)
+@if(!$pubshow)
+<div class="p-6 shadow-md sm:rounded-lg">
+    <div class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
+        <div>
+        <label for="table-search" >Page </label>
+            <select wire:model.live="page" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+                <option value="40">40</option>
+                <option value="50">50</option>
+            </select>
+        </div>
+        <a href="{{route('createpub')}}" wire:navigate class="p-2.5 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create Publication</a>
+
+        <label for="table-search" class="sr-only">Search</label>
+        <div class="relative">
+            <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                </svg>
+            </div>
+            <input wire:model.live.debounce.300ms="title" type="text" id="table-search-users" class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search for Publication">
+
+        </div>
+
+    </div>
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">
+                    Name
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Edition
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Action
+                </th>
+              
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($Results as $result)
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">                          
+            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            <a wire:click="fetchAll('{{ $result->PubId }}')" href="javascript:void(0);">{{$result->Title}}</a> 
+          
+                <td class="px-6 py-4">
+                    <div class="flex items-center">
+                       {{$result->edition->Name}}
+                    </div>
+                </td>        
+                <td class="px-6 py-4">
+                    <div class="flex items-center">
+                    <a wire:navigate href="{{route('editpublication',$result->PubId )}}" class="mr-2 bg-green-500 text-white px-4 py-2 rounded hover:bg-blue-600">Edit</a>
+                    <button type="button"  class="bg-red-800 text-white px-4 py-2 rounded hover:bg-blue-600">Delete</button>
+
+                    </div>
+                </td>        
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+    {{$Results->links(data: ['scrollTo' => false])}}
+
+</div>
+
+
+
+    @else
     <form wire:submit.prevent="submitForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 p-4">
         <div class="bg-gray-300 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 p-4 dark:bg-gray-800 dark:border-gray-700">
             <div class="grid grid-cols-2 gap-3">
@@ -127,11 +166,7 @@
                     <input disabled type="{{$masthead?'text':'file'}}" {{$masthead?'disabled':''}} wire:model="masthead" class="text" />
                 </div>
                 <div class="col-span-2 mt-4">
-                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Save</button>
-                    <button type="button" id="editbtn" onclick="enableAllDisabledItems()" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-blue-600">Edit</button>
-                    <button type="button" id="cancel" onclick="desableAllDisabledItems()" class="hidden bg-red-500 text-white px-4 py-2 rounded hover:bg-blue-600">Cancel</button>
-                    <button type="button"  class="bg-red-800 text-white px-4 py-2 rounded hover:bg-blue-600">Delete</button>
-                    <button type="button"  class="bg-gray-800 text-white px-4 py-2 rounded hover:bg-blue-600">Set AVE</button>
+                <a wire:navigate href="{{route('editpublication',$this->pubid )}}" class="mr-2 bg-green-500 text-white px-4 py-2 rounded hover:bg-blue-600">Edit</a>
 
                 </div>
             </div>
@@ -199,4 +234,6 @@
 
     </form>
     @endif
+    
+
 </div>

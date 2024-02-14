@@ -38,30 +38,21 @@ class Publications extends Component
     public $id;
     public $pubshow = false;
     public $masthead;
+    public $page = 10;
     public function render()
     {
-   
-        return view('livewire.publications');
+        
+       // $this->pubshow = false;
+        return view('livewire.publications',[
+            'Results' => Pubmaster::where('Title','LIKE','%'.$this->title.'%')->where('deleted',0)
+            ->with('edition')->orderBy('Title')
+            ->paginate($this->page)
+        ]);
     }
-    public function updateTitle()
-    {
-        $this->pubshow = false;
-
-        if(strlen($this->title) >= 2){ 
-            $this->searchResults = Pubmaster::where('Title','LIKE','%'.$this->title.'%')->where('deleted',0)
-            ->with('edition')
-            ->get();
-            $this->isOpen = True;
-        } else {
-            $this->searchResults = [];
-        }
-    }
-    public function fetchAll($id,$title){
-
-            $this->searchResults = [];
-            $this->title = $title;
-            $this->id = $id;
-    
+ 
+    public function fetchAll($id){
+            $this->id = $id;   
+            $this->pubsubmit(); 
        
     }
     public function pubsubmit() {
@@ -69,6 +60,7 @@ class Publications extends Component
         $this->pubshow = true;
         $data = Pubmaster::with('Type','city','country','state','cat','lang','pub_pages','edition')->find($this->id);
         //dd($data);
+         $this->title = $data->Title;
           $this->pubid = $data->PubId;
           $this->address1 = $data->address1;
           $this->address2 = $data->address2;
