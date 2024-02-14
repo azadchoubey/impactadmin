@@ -28,6 +28,7 @@ class Publications extends Component
     public $language;
     public $domestic;
     public $international;
+    public $primary;
     public $pagenames= [];
     public $circulation = '';
     public $isOpen = false;
@@ -79,6 +80,7 @@ class Publications extends Component
           $this->phone = $data->phone;
           $this->domestic = $data->IsDomestic;
           $this->international = $data->IsDomestic?0:1;
+          $this->primary = $data->PrimaryPubID;
           $this->pagenames = $data->pub_pages->toArray();
           $this->circulation = $data->Circulation;
           $this->RateNB = $data->RateNB;

@@ -73,7 +73,7 @@ class ClientProfile extends Component
     public function clientsubmit(){
         $data = Clinetprofile::with('contacts.delivery','contacts.regularDigestPrint','contacts.regularDigestWeb','Country','region','sector')->find($this->id);
         $this->clientID = $data->ClientID;
-        $this->csrsince = $data->csrsince;
+        $this->csrsince = $data->customersince;
         $this->phone = $data->Phone;
         $this->AddressLine1 = $data->AddressLine1;
         $this->AddressLine2 = $data->AddressLine2;
@@ -98,5 +98,7 @@ class ClientProfile extends Component
         $this->contacts = $data;
         $this->checkboxes = array_fill_keys($this->contacts->contacts->pluck('contactid')->toArray(), false);  
         $this->sector = $data->sector->Name;
+        $this->client =$data->Logo;
+
     }
 }
