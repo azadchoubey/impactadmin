@@ -109,6 +109,9 @@
                     <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Domestic</span>
                     <input disabled wire:model="international" {{$international == 0 ?"":'checked'}} class="text" value="{{$international}}" type="checkbox">
                     <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">International</span>
+                    <br>
+                    <input disabled wire:model="primary" {{$primary == 1 ? "checked" : ''}} class="text" value="{{$primary}}" type="checkbox">
+                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Primary</span>
                 </div>
                 <div class="mb-4">
                     <label for="pagename" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Page Name</label>
