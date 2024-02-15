@@ -1,39 +1,8 @@
 <div class="container mx-auto p-6 bg-white rounded-md shadow-md">
-    <div>
-        <form wire:submit.prevent="clientsubmit" class="flex items-center max-w-lg mx-auto">
-            <label for="simple-search" class="sr-only">Search</label>
-            <div class="relative flex-grow">
-                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                    <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M6 10c0-3.314 2.686-6 6-6s6 6 6 6-2.686 6-6 6-6-2.686-6-6z" />
-                    </svg>
-                </div>
-                <input autocomplete="off" wire:model="name" wire:keyup.debounce.200ms="updateTitle" type="text" id="simple-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 pr-4 py-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search client name..." required>
-
-                @if(!empty($Results))
-                <div class="absolute z-10 mt-1 bg-white border border-gray-300 rounded-md shadow-lg ">
-                    <ul>
-                        @foreach($Results as $result)
-                        <li wire:click="fetchAll('{{ $result->ClientID }}', '{{$result->Name }}')" class="px-4 py-2 hover:bg-gray-100">
-                            {{ Str::limit($result->Name, 40) }}
-                        </li>
-                        @endforeach
-                    </ul>
-                </div>
-                @endif
-
-            </div>
-            <button type="submit" onclick="showtab()" class="ml-2 flex-shrink-0 p-2.5 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                <span>Search</span>
-            </button>
-        </form>
-    </div>
-
-    <div class="mt-4">
-        @php
+@php
         $keywords = $contacts?->keywords()->paginate(50,pageName: 'keywords');
-        $cont = $contacts?->contacts()->get();
         $contacts = $contacts?->contacts()->paginate(50,pageName: 'contacts');
+        
         $cross = '<div>
             <svg class="w-3 h-3 text-red-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
@@ -45,21 +14,7 @@
             </svg>
         </div>';
         @endphp
-
-        <div id="tabs" class="hidden mb-4 border-b border-gray-200 dark:border-gray-700" wire:ignore>
-            <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist">
-                <li class="me-2" role="presentation">
-                    <button class="inline-block p-4 border-b-2 rounded-t-lg" id="profile-tab" data-tabs-target="#profile" type="button" role="tab" aria-controls="profile" wire:click.prevent="switchTab('profile')" aria-selected="true">Client Details</button>
-                </li>
-                <li class="me-2" role="presentation">
-                    <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="dashboard-tab" wire:click.prevent="switchTab('dashboard-tab')" data-tabs-target="#dashboard" type="button" role="tab" aria-controls="dashboard" aria-selected="false">Client Contacts</button>
-                </li>
-                <li class="me-2" role="presentation">
-                    <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="settings-tab" wire:click.prevent="switchTab('settings-tab')" data-tabs-target="#settings" type="button" role="tab" aria-controls="settings" aria-selected="false">Client Keywords</button>
-                </li>
-            </ul>
-        </div>
-        <div class='mt-3 flex flex-col items-center'>
+<div class='mt-3 flex flex-col items-center'>
         <button wire:loading disabled type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 inline-flex items-center">
             <svg aria-hidden="true" role="status" class="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB" />
@@ -68,10 +23,25 @@
             Processing ...
         </button>
         </div>
+
+    <div class="mt-4">
+        <div id="tabs" class="mb-4 border-b border-gray-200 dark:border-gray-700" wire:ignore >
+            <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist">
+                <li class="me-2" role="presentation">
+                    <button class="inline-block p-4 border-b-2 rounded-t-lg" id="profile-tab" data-tabs-target="#profile" type="button" role="tab" aria-controls="profile" wire:click="switchTab('profile')" aria-selected="true">Client Details</button>
+                </li>
+                <li class="me-2" role="presentation">
+                    <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="dashboard-tab" wire:click="switchTab('dashboard-tab')" data-tabs-target="#dashboard" type="button" role="tab" aria-controls="dashboard" aria-selected="false">Client Contacts</button>
+                </li>
+                <li class="me-2" role="presentation">
+                    <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="settings-tab" wire:click="switchTab('settings-tab')" data-tabs-target="#settings" type="button" role="tab" aria-controls="settings" aria-selected="false">Client Keywords</button>
+                </li>
+            </ul>
+        </div>
+
         <div id="default-tab-content">
             <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                 @if($activeTab == 'profile')
-                @if($contacts)
                 <form wire:submit.prevent="save">
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                         <div>
@@ -224,19 +194,19 @@
                         <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             Save
                         </button>
-                        <button type="button" id="editbtn" onclick="enableAllDisabledItems()" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-blue-600">Delete</button>
-                        <button type="button" id="editbtn" onclick="enableAllDisabledItems()" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-blue-600">Edit</button>
+                        <button type="button" id="editbtn"  class="bg-green-500 text-white px-4 py-2 rounded hover:bg-blue-600">Delete</button>
+                        <button type="button" id="editbtn"  class="bg-green-500 text-white px-4 py-2 rounded hover:bg-blue-600">Edit</button>
                         
                     </div>
                 </form>
                 @endif
-                @endif
+          
             </div>
             <div class="rounded-lg bg-gray-50 dark:bg-gray-800" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <button id="editbutton" data-modal-target="large-modal" data-modal-toggle="large-modal" class="hidden px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Edit</button>
                     @if($activeTab == 'dashboard-tab')
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <table  class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <th scope="col" class="px-6 py-3">
                                 <input type="checkbox" id="selectAll" onchange="toggleSelectAll(this)" class="form-checkbox">
@@ -260,58 +230,58 @@
                             <th scope="col" class="px-6">Action</th>
                         </thead>
                         <tbody>
-                            @if($contacts)
+                        
                             @foreach($contacts as $contact)
                             <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
                                 <td class="px-6 py-4">
                                     <input type="checkbox" onchange="updateEditButtonVisibility()" value="{{$contact->contactid}}" class="form-checkbox checkboxes">
                                 </td>
                                 <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $contact->ContactName}}</td>
-                                @if($editing === $contact->contactid)
+                                @if($this->editing === $contact->contactid)
                                 <td class="px-6 py-4">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="wm_enableforprint" value="1" {{ $contact->wm_enableforprint ? 'checked' : '' }} />
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="wm_enableforprint" {{ $contact->wm_enableforprint ? 'checked' : '' }} />
                                 </td>
                                 <td class="px-6 py-4">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="wm_enableforweb" value="1" {{ $contact->wm_enableforweb ? 'checked' : '' }} />
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="wm_enableforweb"  {{ $contact->wm_enableforweb ? 'checked' : '' }} />
                                 </td>
                                 <td class="px-6 py-4">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforqlikview" value="1" {{ $contact->enableforqlikview ? 'checked' : '' }} />
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforqlikview"  {{ $contact->enableforqlikview ? 'checked' : '' }} />
                                 </td>
                                 <td class="px-6 py-4">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enabletoqualify" value="1" {{ $contact->enabletoqualify ? 'checked' : '' }} />
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enabletoqualify"  {{ $contact->enabletoqualify ? 'checked' : '' }} />
                                 </td>
                                 <td class="px-6 py-4">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="getcriticalalert" value="1" {{ $contact->getcriticalalert ? 'checked' : '' }} />
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="getcriticalalert"  {{ $contact->getcriticalalert ? 'checked' : '' }} />
                                 </td>
                                 <td class="px-6 py-4">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforcharts" value="1" {{ $contact->enableforcharts ? 'checked' : '' }} />
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforcharts"  {{ $contact->enableforcharts ? 'checked' : '' }} />
                                 </td>
                                 <td class="px-6 py-4">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforbr" value="1" {{ $contact->enableforbr ? 'checked' : '' }} />
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforbr"  {{ $contact->enableforbr ? 'checked' : '' }} />
                                 </td>
                                 <td class="px-6 py-4">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforbb" value="1" {{ $contact->enableforbb ? 'checked' : '' }} />
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforbb"  {{ $contact->enableforbb ? 'checked' : '' }} />
                                 </td>
                                 <td class="px-6 py-4">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableformobile" value="1" {{ $contact->enableformobile ? 'checked' : '' }} />
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableformobile"  {{ $contact->enableformobile ? 'checked' : '' }} />
                                 </td>
                                 <td class="px-6 py-4">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforwhatsapp" value="1" {{ $contact->enableforwhatsapp ? 'checked' : '' }} />
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforwhatsapp"  {{ $contact->enableforwhatsapp ? 'checked' : '' }} />
                                 </td>
                                 <td class="px-6 py-4">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableformediatouch" value="1" {{ $contact->enableformediatouch ? 'checked' : '' }} />
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableformediatouch"  {{ $contact->enableformediatouch ? 'checked' : '' }} />
                                 </td>
                                 <td class="px-6 py-4">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enablefordidyounotice" value="1" {{ $contact->enablefordidyounotice ? 'checked' : '' }} />
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enablefordidyounotice"  {{ $contact->enablefordidyounotice ? 'checked' : '' }} />
                                 </td>
                                 <td class="px-6 py-4">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="delivery" value="1" {{ $contact->delivery->isNotEmpty() ? 'checked' : '' }} />
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="delivery"  {{ $contact->delivery->isNotEmpty() ? 'checked' : '' }} />
                                 </td>
                                 <td class="px-6 py-4">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="regularDigestWeb" value="1" {{ $contact->regularDigestWeb->isNotEmpty() ? 'checked' : '' }} />
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="regularDigestWeb"  {{ $contact->regularDigestWeb->isNotEmpty() ? 'checked' : '' }} />
                                 </td>
                                 <td class="px-6 py-4">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="regularDigestPrint" value="1" {{ $contact->regularDigestPrint->ID != 0 ? 'checked' : '' }} />
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="regularDigestPrint"  {{ $contact->regularDigestPrint->ID != 0 ? 'checked' : '' }} />
                                 </td>
                                 <td wire:click="updateClient({{ $contact->contactid }})" class="px-6 py-4"><a href="javascript:void(0);">Update</a></td>
                                 @else
@@ -339,8 +309,8 @@
                         </tbody>
                     </table>
 
-                    {{ $contacts?->links(data: ['scrollTo' => false])  }}
-                    @endif
+                    {{ $contacts->links(data: ['scrollTo' => false])  }}
+                 
                 </div>
 
             </div>
@@ -352,8 +322,7 @@
                         <button id="createkeyword" data-modal-target="large-modal1" data-modal-toggle="large-modal1" class="right-0 px-3 py-2 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create Keyword</button>
                     </div>
                     @if ($activeTab == 'settings-tab')
-                    <div>
-                        @if($contacts)
+                    <div >
                         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <th scope="col" class="px-6 py-3">
@@ -384,12 +353,10 @@
                                 @endforeach
                             </tbody>
                         </table>
-                        {{ $keywords?->links(data: ['scrollTo' => false])  }}
-                        @endif
+                        {{ $keywords->links(data: ['scrollTo' => false])  }}
                         @endif
                     </div>
                 </div>
             </div>
         </div>
-
     </div>

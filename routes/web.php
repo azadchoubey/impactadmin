@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\ClientsProfile;
 use App\Http\Controllers\LoginController;
 use App\Livewire\EditPublications;
+use App\Livewire\ShowClientProfile;
 use Illuminate\Support\Facades\Route;
 use App\Models\Pubmaster;
 /*
@@ -23,7 +25,11 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/dashboard', function () {return view('admin');})->name('dashboard');
 Route::view('/change-password', 'change-password')->name('changepassword');
 Route::view('/publications','publications/index');
-Route::view('/clients','clients');
+// client profile routes
+Route::get('/clients',ShowClientProfile::class);
+Route::get('/clients/{id}',[ClientsProfile::class,'index'])->name('clients');
+
+
 Route::view('/createpublication','createpublication')->name('createpub');
 Route::get('/editpublication/{id}',EditPublications::class)->name('editpublication');
 });

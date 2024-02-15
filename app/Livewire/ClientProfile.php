@@ -12,13 +12,17 @@ class ClientProfile extends Component
     public $phone, $fax, $mobile, $email;
     public $contractstart, $contractend, $printstatus, $region, $webstatus;
     public $csrsince, $industrySector, $sector, $subsector;
-    public $reference, $type, $billingcycle, $billingdate, $billingrate,$client,$editing;
+    public $reference, $type, $billingcycle, $billingdate, $billingrate,$client;
     public $clientshow = true;
-    public $Results = [];
     public $contacts;
     public $keywords = [];
-    public $id ,$selectAll = false,$checkboxes;
-    public $activeTab = 'profile'; 
+    public $id ,$selectAll = false,$checkboxes,$cont;
+    public $activeTab = 'profile',$page = 10,$broadcastCheckbox,$broadcast,$primaryCheckbox,$primary; 
+    private $editing;
+   public function mount(){
+    $this->id = request()->route()->parameter('id');
+    $this->clientsubmit();
+   }
     public function switchTab($tabName)
     {
         $this->activeTab = $tabName;
@@ -38,27 +42,16 @@ class ClientProfile extends Component
         $this->editing = $clientId;
        
     }
-    public function mount(){
 
-    }
     public function updateClient($clientId)
     {
        
         $this->editing = null; 
     }
-    public function updateTitle(){
-        $this->clientshow = false;
 
-        if(strlen($this->name) >= 2){ 
-            $this->Results = Clinetprofile::where('Name','LIKE','%'.$this->name.'%')
-            ->get(['ClientID','Name']);
-        } else {
-            $this->Results = [];
-        }
-    }
     public function render()
     {
-
+      
         return view('livewire.client-profile');
     }
     public function updateCheckbox($contactid){
@@ -66,9 +59,9 @@ class ClientProfile extends Component
     }
     public function fetchAll($id,$name){
         $this->clientshow = false;
-        $this->Results = [];
         $this->name = $name;
         $this->id = $id;
+        $this->clientsubmit();
     }
     public function clientsubmit(){
         $data = Clinetprofile::with('contacts.delivery','contacts.regularDigestPrint','contacts.regularDigestWeb','Country','region','sector')->find($this->id);
@@ -99,6 +92,6 @@ class ClientProfile extends Component
         $this->checkboxes = array_fill_keys($this->contacts->contacts->pluck('contactid')->toArray(), false);  
         $this->sector = $data->sector->Name;
         $this->client =$data->Logo;
-
+      
     }
 }
