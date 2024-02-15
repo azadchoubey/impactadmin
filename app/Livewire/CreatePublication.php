@@ -25,7 +25,7 @@ class CreatePublication extends Component
     public $region;
     public $size;
     public $language;
-    public $domestic;
+    public $domestic,$mu,$restrictedmu,$primary;
     public $international;
     public $pagenames;
     public $circulation = '';

@@ -26,7 +26,7 @@ class Publications extends Component
     public $region;
     public $size;
     public $language;
-    public $domestic;
+    public $domestic,$restrictedmu,$mu;
     public $international;
     public $primary;
     public $pagenames= [];

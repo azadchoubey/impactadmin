@@ -36,7 +36,7 @@ class EditPublications extends Component
     public $RateNC;
     public $RateNB;
     public $id;
-    public $masthead,$primary,$webuniverse,$restrictedmu;
+    public $masthead,$primary,$webuniverse,$restrictedmu,$mu;
     public function mount($id)
     {
         $this->id = $id;

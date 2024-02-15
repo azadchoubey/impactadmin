@@ -151,6 +151,11 @@
                     <br>
                     <input disabled wire:model="primary" {{$primary == 1 ? "checked" : ''}} class="text" value="{{$primary}}" type="checkbox">
                     <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Primary</span>
+                    <input  wire:model="restrictedmu" {{$restrictedmu == 1 ?"checked":''}} class="text" value="{{$restrictedmu}}" type="checkbox"style="margin-left: 10px;">
+                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Restricted MU</span>
+                    <br>
+                    <input  wire:model="mu" {{$mu == 1 ?"checked":''}} class="text" value="{{$mu}}" type="checkbox">
+                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">MU</span>
                 </div>
                 <div class="mb-4">
                     <label for="pagename" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Page Name</label>

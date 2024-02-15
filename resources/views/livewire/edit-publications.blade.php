@@ -94,7 +94,7 @@
                 <div class="mb-4">
                     <input  wire:model="domestic" {{$domestic == 1 ?"checked":''}} class="text" value="{{$domestic}}" type="checkbox">
                     <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Domestic</span>
-                    <input  wire:model="international" {{$international == 0 ?"":'checked'}} class="text" value="{{$international}}" type="checkbox">
+                    <input  wire:model="international" {{$international == 0 ?"":'checked'}} class="text" value="{{$international}}" type="checkbox" style="margin-left: 50px;">
                     <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">International</span>
                 </div>
                 <div class="mb-4">
@@ -103,8 +103,10 @@
                 </div>
                
                 <div class="mb-4">
-                    <input  wire:model="restrictedmu" {{$domestic == 1 ?"checked":''}} class="text" value="{{$restrictedmu}}" type="checkbox">
+                    <input  wire:model="restrictedmu" {{$restrictedmu == 1 ?"checked":''}} class="text" value="{{$restrictedmu}}" type="checkbox">
                     <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Restricted MU</span>
+                    <input  wire:model="mu" {{$mu == 1 ?"checked":''}} class="text" value="{{$mu}}" type="checkbox" style="margin-left: 20px;">
+                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">MU</span>
                 </div>
 
                 <div class="mb-4">
