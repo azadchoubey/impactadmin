@@ -1,18 +1,36 @@
 <div>
 <form wire:submit.prevent="submitForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 p-4">
         <div class="bg-gray-300 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 p-4 dark:bg-gray-800 dark:border-gray-700">
-            <div class="grid grid-cols-2 gap-3">
+            <div class="grid grid-cols-3 gap-3">
 
+                <div class="mb-2" x-data="{isTyped: false}">
+                    <label for="name" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Publication</label>
+                    <input wire:model="pubid" type="text"   class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                </div>
+                <div class="mb-4">
+                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Web Universe</span>
+                    <br>
+                    <input disabled wire:model="webuniverse" {{$webuniverse == 1 ? "checked" : ''}} class="text" type="checkbox">
+                </div>   
+                <div class="mb-4">
+                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Primary</span>
+                    <div class="mt-1 flex items-center">
+                        <input disabled wire:model="primary" {{$primary == 1 ? "checked" : ''}} class="text" type="checkbox">
+                        <input wire:model="primary" type="text" id="primary" class="text ml-2 bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    </div>
+                </div>
+                
+                
+                 
+            </div>
+            <div class="grid grid-cols-1">
                 <div class="mb-2">
                     <label for="name" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Name</label>
                     <input wire:model="title" type="text"   id="name" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 
                 </div>
-                <div class="mb-2" x-data="{isTyped: false}">
-                    <label for="name" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Publication</label>
-                    <input wire:model="pubid" type="text"   class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                </div>
-            </div>
+            </div>    
+
             <div class="grid grid-cols-2 gap-3">
                 <div class="mb-4">
                     <label for="address1" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Address 1</label>
@@ -58,17 +76,6 @@
                     <label for="country" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Country</label>
                     <input wire:model="country" type="text"   id="country" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>
-
-                <div class="mb-4">
-                    <label for="phone" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Phone No.</label>
-                    <input wire:model="phone" type="text"   id="phone" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                </div>
-                <div class="mb-4">
-                    <input  wire:model="domestic" {{$domestic == 1 ?"checked":''}} class="text" value="{{$domestic}}" type="checkbox">
-                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Domestic</span>
-                    <input  wire:model="international" {{$international == 0 ?"":'checked'}} class="text" value="{{$international}}" type="checkbox">
-                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">International</span>
-                </div>
                 <div class="mb-4">
                     <label for="pagename" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Page Name</label>
                     @if(!empty($pagenames))
@@ -76,9 +83,28 @@
                     <div class="flex items-center space-x-2 mb-2">
                         <input  wire:model="pagenames.{{$pagename['PageNameID']}}" type="checkbox" class="text gap-4" {{$pagename['IsPre']?"checked":''}} value="{{$pagename['PageNameID']}}"> <span class="gap-2">{{$pagename['Name']}}</span>
                     </div>
+                    
+
                     @endforeach
                     @endif
 
+                </div>
+
+                
+                <div class="mb-4">
+                    <input  wire:model="domestic" {{$domestic == 1 ?"checked":''}} class="text" value="{{$domestic}}" type="checkbox">
+                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Domestic</span>
+                    <input  wire:model="international" {{$international == 0 ?"":'checked'}} class="text" value="{{$international}}" type="checkbox">
+                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">International</span>
+                </div>
+                <div class="mb-4">
+                    <label for="phone" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Phone No.</label>
+                    <input wire:model="phone" type="text"   id="phone" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                </div>
+               
+                <div class="mb-4">
+                    <input  wire:model="restrictedmu" {{$domestic == 1 ?"checked":''}} class="text" value="{{$restrictedmu}}" type="checkbox">
+                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Restricted MU</span>
                 </div>
 
                 <div class="mb-4">

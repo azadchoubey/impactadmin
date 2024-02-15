@@ -36,7 +36,7 @@ class EditPublications extends Component
     public $RateNC;
     public $RateNB;
     public $id;
-    public $masthead;
+    public $masthead,$primary,$webuniverse,$restrictedmu;
     public function mount($id)
     {
         $this->id = $id;
@@ -72,6 +72,8 @@ class EditPublications extends Component
               $this->RateNC = $data->RateNC;
               $this->RatePB = $data->RatePB;
               $this->masthead = $data->MastHead;
+              $this->primary = $data->PrimaryPubID;
+
             }else{
                 $this->skipRender();
             }

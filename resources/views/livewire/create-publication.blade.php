@@ -16,15 +16,6 @@
                     <label for="address1" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Address 1</label>
                     <input wire:model="address1" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>
-
-                <div class="mb-4">
-                    <label for="address2" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Address 2</label>
-                    <input wire:model="address2" type="text" id="address2" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                </div>
-                <div class="mb-4">
-                    <label for="address3" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Address 3</label>
-                    <input wire:model="address3" type="text" id="address3" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                </div>
                 <div class="mb-4">
                     <label for="edition" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Edition</label>
 
@@ -38,6 +29,11 @@
                 </div>
 
                 <div class="mb-4">
+                    <label for="address2" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Address 2</label>
+                    <input wire:model="address2" type="text" id="address2" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                </div>
+                
+                <div class="mb-4">
                     <label for="category" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Category</label>
                     <select wire:model="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         @forelse($data['Pub Category'] as $key=>$category)
@@ -47,32 +43,18 @@
                         @endforelse
                     </select>
                 </div>
+                <div class="mb-4">
+                    <label for="address3" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Address 3</label>
+                    <input wire:model="address3" type="text" id="address3" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                </div>
+                
+
 
                 <div class="mb-4">
                     <label for="type" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Type</label>
                     <select wire:model="type" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         @forelse($data['Pubtype'] as $key=>$pubtype)
                         <option value="{{$pubtype->ID}}">{{$pubtype->Name}}</option>
-                        @empty
-                        <option value="">Select option</option>
-                        @endforelse
-                    </select>
-                </div>
-                <div class="mb-4">
-                    <label for="country" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Country</label>
-                    <select wire:model="country" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        @forelse($data['Country'] as $key=>$country)
-                        <option value="{{$country->ID}}">{{$country->Name}}</option>
-                        @empty
-                        <option value="">Select option</option>
-                        @endforelse
-                    </select>
-                </div>
-                <div class="mb-4">
-                    <label for="state" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">State</label>
-                    <select wire:model="country" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        @forelse($data['State'] as $key=>$state)
-                        <option value="{{$state->ID}}">{{$state->Name}}</option>
                         @empty
                         <option value="">Select option</option>
                         @endforelse
@@ -98,7 +80,16 @@
                         @endforelse
                     </select>
                 </div>
-
+                <div class="mb-4">
+                    <label for="state" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">State</label>
+                    <select wire:model="country" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        @forelse($data['State'] as $key=>$state)
+                        <option value="{{$state->ID}}">{{$state->Name}}</option>
+                        @empty
+                        <option value="">Select option</option>
+                        @endforelse
+                    </select>
+                </div>
                 <div class="mb-4">
                     <label for="language" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Language</label>
                     <select wire:model="language" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -109,17 +100,15 @@
                         @endforelse
                     </select>
                 </div>
-
-
                 <div class="mb-4">
-                    <label for="phone" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Phone No.</label>
-                    <input wire:model="phone" type="text" id="phone" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                </div>
-                <div class="mb-4">
-                    <input wire:model="domestic" value="" type="checkbox">
-                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Domestic</span>
-                    <input wire:model="international" value="" type="checkbox">
-                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">International</span>
+                    <label for="country" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Country</label>
+                    <select wire:model="country" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        @forelse($data['Country'] as $key=>$country)
+                        <option value="{{$country->ID}}">{{$country->Name}}</option>
+                        @empty
+                        <option value="">Select option</option>
+                        @endforelse
+                    </select>
                 </div>
                 <div class="mb-4">
                     <label for="pagename" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Page Name</label>
@@ -134,6 +123,18 @@
                     @endforeach
 
                 </div>
+                <div class="mb-4">
+                    <label for="phone" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Phone No.</label>
+                    <input wire:model="phone" type="text" id="phone" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                </div>
+                <br>
+                <div class="mb-4">
+                    <input wire:model="domestic" value="" type="checkbox">
+                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Domestic</span>
+                    <input wire:model="international" value="" type="checkbox">
+                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">International</span>
+                </div>
+               
 
                 <div class="mb-4">
                     <label for="Masthead" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Mast Head File</label>
