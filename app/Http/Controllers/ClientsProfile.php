@@ -15,6 +15,10 @@ class ClientsProfile extends Controller
         $keywords = $data->keywords;
         $contacts = $data->contacts;
         $editing = '';
+<<<<<<< Updated upstream
         return view('clients', compact('data', 'contacts', 'keywords', 'editing'));
+=======
+       return view('clients',compact('contacts','keywords','editing','data'));
+>>>>>>> Stashed changes
     }
 }

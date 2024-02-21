@@ -247,6 +247,7 @@
                                     <input type="checkbox" onchange="updateEditButtonVisibility()" value="{{$contact->contactid}}" class="form-checkbox checkboxes">
                                 </td>
                                 <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $contact->ContactName}}</td>
+<<<<<<< Updated upstream
                                 @if($editing === $contact->contactid)
                                 <td class="px-6 py-4">
                                     <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="wm_enableforprint" {{ $contact->wm_enableforprint ? 'checked' : '' }} />
@@ -295,6 +296,10 @@
                                 </td>
                                 <td class="px-6 py-4"><a href="javascript:void(0);">Update</a></td>
                                 @else
+=======
+                              
+                        
+>>>>>>> Stashed changes
                                 <td class="px-6 py-4">{!! $contact->wm_enableforprint?$check:$cross !!}</td>
                                 <td class="px-6 py-4">{!! $contact->wm_enableforweb?$check:$cross !!}</td>
                                 <td class="px-6 py-4">{!! $contact->enableforqlikview?$check:$cross !!}</td>
@@ -310,8 +315,10 @@
                                 <td class="px-6 py-4">{!! $contact->delivery->isNotEmpty()?$check:$cross !!}</td>
                                 <td class="px-6 py-4">{!! $contact->regularDigestWeb->isNotEmpty() ?$check:$cross !!}</td>
                                 <td class="px-6 py-4">{!! $contact->regularDigestPrint->ID != 0 ?$check:$cross !!}</td>
-                                <td wire:click="startEditing({{ $contact->contactid }})" class="px-6 py-4"><a href="javascript:void(0);">Edit</a></td>
-                                @endif
+                                <td wire:click="startEditing({{ $contact->contactid }})" class="px-6 py-4">
+                                    <a href="javascript:void(0);" class="edit-contact" onclick="updateEditButton(this)">Edit</a>
+                                </td>
+                        
                             </tr>
                             @endforeach
 
@@ -698,6 +705,7 @@
             </div>
         </div>
     </div>
+<<<<<<< Updated upstream
     <script>
         function toggleSelectAll(checked) {
             let checkboxes = document.getElementsByClassName('checkboxes');
@@ -709,6 +717,120 @@
                 editButton.classList.remove('hidden');
             } else {
                 editButton.classList.add('hidden');
+=======
+</div>
+<script>
+    function toggleSelectAll(checked) {
+        let checkboxes = document.getElementsByClassName('checkboxes');
+        var editButton = document.getElementById('editbutton');
+        for (let i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = checked.checked;
+        }
+        if (checked.checked) {
+            editButton.classList.remove('hidden');
+        } else {
+            editButton.classList.add('hidden');
+        }
+    }
+
+    function toggleSelectAll1(checked) {
+        let checkboxes = document.getElementsByClassName('checkboxes1');
+        var editButton = document.getElementById('editbutton1');
+        for (let i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = checked.checked;
+        }
+        if (checked.checked) {
+            editButton.classList.remove('hidden');
+        } else {
+            editButton.classList.add('hidden');
+        }
+    }
+
+    function updateEditButtonVisibility() {
+
+        var checkboxes = document.querySelectorAll('.checkboxes');
+        var checkedCount = 0;
+        checkboxes.forEach(function(checkbox) {
+            if (checkbox.checked) {
+                checkedCount++;
+            }
+        });
+        var editButton = document.getElementById('editbutton');
+        if (checkedCount >= 2) {
+            editButton.classList.remove('hidden');
+        } else {
+            editButton.classList.add('hidden');
+        }
+    }
+    function updateEditButton(e) {
+        var data = `<td class="px-6 py-4 hidden editable-checkbox">
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="wm_enableforprint" {{ $contact->wm_enableforprint ? 'checked' : '' }} />
+                                </td>
+                                <td class="px-6 py-4 hidden editable-checkbox">
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="wm_enableforweb"  {{ $contact->wm_enableforweb ? 'checked' : '' }} />
+                                </td>
+                                <td class="px-6 py-4 hidden editable-checkbox">
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforqlikview"  {{ $contact->enableforqlikview ? 'checked' : '' }} />
+                                </td>
+                                <td class="px-6 py-4 hidden editable-checkbox">
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enabletoqualify"  {{ $contact->enabletoqualify ? 'checked' : '' }} />
+                                </td>
+                                <td class="px-6 py-4 hidden editable-checkbox">
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="getcriticalalert"  {{ $contact->getcriticalalert ? 'checked' : '' }} />
+                                </td>
+                                <td class="px-6 py-4 hidden editable-checkbox">
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforcharts"  {{ $contact->enableforcharts ? 'checked' : '' }} />
+                                </td>
+                                <td class="px-6 py-4 hidden editable-checkbox">
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforbr"  {{ $contact->enableforbr ? 'checked' : '' }} />
+                                </td>
+                                <td class="px-6 py-4 hidden editable-checkbox">
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforbb"  {{ $contact->enableforbb ? 'checked' : '' }} />
+                                </td>
+                                <td class="px-6 py-4 hidden editable-checkbox">
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableformobile"  {{ $contact->enableformobile ? 'checked' : '' }} />
+                                </td>
+                                <td class="px-6 py-4 hidden editable-checkbox">
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforwhatsapp"  {{ $contact->enableforwhatsapp ? 'checked' : '' }} />
+                                </td>
+                                <td class="px-6 py-4 hidden editable-checkbox">
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableformediatouch"  {{ $contact->enableformediatouch ? 'checked' : '' }} />
+                                </td>
+                                <td class="px-6 py-4 hidden editable-checkbox">
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enablefordidyounotice"  {{ $contact->enablefordidyounotice ? 'checked' : '' }} />
+                                </td>
+                                <td class="px-6 py-4 hidden editable-checkbox">
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="delivery"  {{ $contact->delivery->isNotEmpty() ? 'checked' : '' }} />
+                                </td>
+                                <td class="px-6 py-4 hidden editable-checkbox">
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="regularDigestWeb"  {{ $contact->regularDigestWeb->isNotEmpty() ? 'checked' : '' }} />
+                                </td>
+                                <td class="px-6 py-4 hidden editable-checkbox">
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="regularDigestPrint"  {{ $contact->regularDigestPrint->ID != 0 ? 'checked' : '' }} />
+                                </td>
+                                <td  class="px-6 py-4"><a href="javascript:void(0);">Update</a></td>`;
+        var targetTd = e.closest('tr').querySelector('.font-medium');
+    if (targetTd) {
+        var siblings = targetTd.nextElementSibling;
+        
+        // Remove all siblings
+        while (siblings) {
+            var nextSibling = siblings.nextElementSibling;
+            siblings.remove();
+            siblings = nextSibling;
+        }
+       // targetTd.insertAdjacentHTML('afterend', data);
+    }
+        
+    }
+
+    function updateEditButtonVisibility1() {
+        var checkboxes = document.querySelectorAll('.checkboxes1');
+        var checkedCount = 0;
+        checkboxes.forEach(function(checkbox) {
+            if (checkbox.checked) {
+                checkedCount++;
+>>>>>>> Stashed changes
             }
         }
 
