@@ -14,7 +14,7 @@ class ClientsProfile extends Controller
 {
     public function index($id)
     {
-        $data = Clinetprofile::with('contacts', 'contacts.delivery', 'contacts.regularDigestPrint', 'contacts.regularDigestWeb', 'Country', 'region', 'sector', 'keywords')->find($id);;
+        $data = Clinetprofile::with('contacts', 'contacts.delivery', 'contacts.regularDigestPrint', 'contacts.regularDigestWeb', 'Country', 'region', 'sector', 'keywords','billingcycle')->find($id);;
         $keywords = $data->keywords;
         $contacts = $data->contacts;
         $editing = '';
