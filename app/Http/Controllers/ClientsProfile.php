@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Clinetprofile;
+use App\Models\Deliverymethodmaster;
+use App\Models\Picklist;
+use App\Models\Wmwebdeliverymethodmaster;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -15,6 +18,9 @@ class ClientsProfile extends Controller
         $keywords = $data->keywords;
         $contacts = $data->contacts;
         $editing = '';
-        return view('clients', compact('data', 'contacts', 'keywords', 'editing'));
+        $picklist = Picklist::whereIn('Type',['City','Country','Delivery Method','Sector Summary Delivery','contacttype'])->get()->groupBy('Type');
+        $webdeliverymaster = Wmwebdeliverymethodmaster::all();
+        $deliverymaster = Deliverymethodmaster::all();
+        return view('clients', compact('data', 'contacts', 'keywords', 'editing','picklist','webdeliverymaster','deliverymaster'));
     }
 }

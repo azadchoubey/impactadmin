@@ -203,8 +203,8 @@
             <div class="rounded-lg bg-gray-50 dark:bg-gray-800" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <button id="editbutton" data-modal-target="large-modal" data-modal-toggle="large-modal" class="hidden px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Edit</button>
-                    <div  id="createcontacts" class="hidden">
-                        <button  data-modal-target="large-modal2" data-modal-toggle="large-modal2" class="right-0 px-3 py-2 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create Contact</button>
+                    <div id="createcontacts">
+                        <button data-modal-target="large-modal2" data-modal-toggle="large-modal2" class="right-0 px-3 py-2 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create Contact</button>
                     </div>
                     @php
                     $currentPage = request()->input('contacts', 1);
@@ -247,71 +247,73 @@
                                     <input type="checkbox" onchange="updateEditButtonVisibility()" value="{{$contact->contactid}}" class="form-checkbox checkboxes">
                                 </td>
                                 <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $contact->ContactName}}</td>
-                                @if($editing === $contact->contactid)
-                                <td class="px-6 py-4">
+                                <td class="editSection{{$contact->contactid}} px-6 py-4 hidden">
                                     <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="wm_enableforprint" {{ $contact->wm_enableforprint ? 'checked' : '' }} />
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="editSection{{$contact->contactid}} px-6 py-4 hidden">
                                     <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="wm_enableforweb" {{ $contact->wm_enableforweb ? 'checked' : '' }} />
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="editSection{{$contact->contactid}} px-6 py-4 hidden ">
                                     <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforqlikview" {{ $contact->enableforqlikview ? 'checked' : '' }} />
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="editSection{{$contact->contactid}} px-6 py-4 hidden">
                                     <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enabletoqualify" {{ $contact->enabletoqualify ? 'checked' : '' }} />
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="editSection{{$contact->contactid}} px-6 py-4 hidden">
                                     <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="getcriticalalert" {{ $contact->getcriticalalert ? 'checked' : '' }} />
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="editSection{{$contact->contactid}} px-6 py-4 hidden ">
                                     <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforcharts" {{ $contact->enableforcharts ? 'checked' : '' }} />
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="editSection{{$contact->contactid}} px-6 py-4 hidden">
                                     <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforbr" {{ $contact->enableforbr ? 'checked' : '' }} />
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="editSection{{$contact->contactid}} px-6 py-4 hidden">
                                     <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforbb" {{ $contact->enableforbb ? 'checked' : '' }} />
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="editSection{{$contact->contactid}} px-6 py-4 hidden">
                                     <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableformobile" {{ $contact->enableformobile ? 'checked' : '' }} />
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="editSection{{$contact->contactid}} px-6 py-4 hidden">
                                     <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforwhatsapp" {{ $contact->enableforwhatsapp ? 'checked' : '' }} />
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="editSection{{$contact->contactid}} px-6 py-4 hidden">
                                     <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableformediatouch" {{ $contact->enableformediatouch ? 'checked' : '' }} />
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="editSection{{$contact->contactid}} px-6 py-4 hidden">
                                     <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enablefordidyounotice" {{ $contact->enablefordidyounotice ? 'checked' : '' }} />
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="editSection{{$contact->contactid}} px-6 py-4 hidden">
                                     <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="delivery" {{ $contact->delivery->isNotEmpty() ? 'checked' : '' }} />
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="editSection{{$contact->contactid}} px-6 py-4 hidden">
                                     <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="regularDigestWeb" {{ $contact->regularDigestWeb->isNotEmpty() ? 'checked' : '' }} />
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="editSection{{$contact->contactid}} px-6 py-4 hidden">
                                     <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="regularDigestPrint" {{ $contact->regularDigestPrint->ID != 0 ? 'checked' : '' }} />
                                 </td>
-                                <td class="px-6 py-4"><a href="javascript:void(0);">Update</a></td>
-                                @else
-                                <td class="px-6 py-4">{!! $contact->wm_enableforprint?$check:$cross !!}</td>
-                                <td class="px-6 py-4">{!! $contact->wm_enableforweb?$check:$cross !!}</td>
-                                <td class="px-6 py-4">{!! $contact->enableforqlikview?$check:$cross !!}</td>
-                                <td class="px-6 py-4">{!! $contact->enabletoqualify?$check:$cross !!}</td>
-                                <td class="px-6 py-4">{!! $contact->getcriticalalert?$check:$cross !!}</td>
-                                <td class="px-6 py-4">{!! $contact->enableforcharts?$check:$cross !!}</td>
-                                <td class="px-6 py-4">{!! $contact->enableforbr?$check:$cross !!}</td>
-                                <td class="px-6 py-4">{!! $contact->enableforbb?$check:$cross !!}</td>
-                                <td class="px-6 py-4">{!! $contact->enableformobile?$check:$cross !!}</td>
-                                <td class="px-6 py-4">{!! $contact->enableforwhatsapp?$check:$cross !!}</td>
-                                <td class="px-6 py-4">{!! $contact->enableformediatouch?$check:$cross !!}</td>
-                                <td class="px-6 py-4">{!! $contact->enablefordidyounotice?$check:$cross !!}</td>
-                                <td class="px-6 py-4">{!! $contact->delivery->isNotEmpty()?$check:$cross !!}</td>
-                                <td class="px-6 py-4">{!! $contact->regularDigestWeb->isNotEmpty() ?$check:$cross !!}</td>
-                                <td class="px-6 py-4">{!! $contact->regularDigestPrint->ID != 0 ?$check:$cross !!}</td>
-                                <td wire:click="startEditing({{ $contact->contactid }})" class="px-6 py-4"><a href="javascript:void(0);">Edit</a></td>
-                                @endif
+                                <td class="editSection{{$contact->contactid}} px-6 py-4 hidden"><a href="javascript:void(0);">Update</a></td>
+
+
+
+                                <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->wm_enableforprint?$check:$cross !!}</td>
+                                <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->wm_enableforweb?$check:$cross !!}</td>
+                                <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->enableforqlikview?$check:$cross !!}</td>
+                                <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->enabletoqualify?$check:$cross !!}</td>
+                                <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->getcriticalalert?$check:$cross !!}</td>
+                                <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->enableforcharts?$check:$cross !!}</td>
+                                <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->enableforbr?$check:$cross !!}</td>
+                                <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->enableforbb?$check:$cross !!}</td>
+                                <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->enableformobile?$check:$cross !!}</td>
+                                <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->enableforwhatsapp?$check:$cross !!}</td>
+                                <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->enableformediatouch?$check:$cross !!}</td>
+                                <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->enablefordidyounotice?$check:$cross !!}</td>
+                                <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->delivery->isNotEmpty()?$check:$cross !!}</td>
+                                <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->regularDigestWeb->isNotEmpty() ?$check:$cross !!}</td>
+                                <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->regularDigestPrint->ID != 0 ?$check:$cross !!}</td>
+                                <td id="editButton" class="withoutEditSection{{$contact->contactid}} px-6 py-4"><a onclick="toggleEditMode({{$contact->contactid}})" href="javascript:void(0);">Edit</a></td>
+
+
                             </tr>
                             @endforeach
 
@@ -343,9 +345,9 @@
             <div class="rounded-lg bg-gray-50 dark:bg-gray-800" id="settings" role="tabpanel" aria-labelledby="settings-tab">
                 <div class="mt-5 relative overflow-x-auto shadow-md sm:rounded-lg">
                     <button id="editbutton1" data-modal-target="large-modal1" data-modal-toggle="large-modal1" class="hidden px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Edit</button>
-                    <div dir="rtl" id="createkeywords" class="hidden">
+                    {{-- <div dir="rtl" id="createkeywords" class="hidden">
                         <button id="createkeyword" data-modal-target="large-modal1" data-modal-toggle="large-modal1" class="right-0 px-3 py-2 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create Keyword</button>
-                    </div>
+                    </div>  --}}
                     <div>
                         @php
                         $currentPage = request()->input('keywords', 1);
@@ -531,7 +533,7 @@
             </div>
         </div>
     </div>
-    <div id="large-modal2" wire:ignore tabindex="-1" class="fixed top-0 left-60 right-0 z-50 w-full p-4 hidden overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div id="large-modal2" tabindex="-1" class="fixed top-0 left-60 right-0 z-50 w-full p-4 hidden overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative w-full max-w-4xl max-h-full">
 
             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -547,149 +549,307 @@
                     </button>
                 </div>
 
-                <div class="p-5 md:p-5 grid grid-cols-2 gap-4">
-                    <div>
-                        <label for="type" class="block text-sm font-medium text-gray-700">Contact Name</label>
-                        <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label for="type" class="block text-sm font-medium text-gray-700">Mobile</label>
-                        <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label for="type" class="block text-sm font-medium text-gray-700">E-mail</label>
-                        <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label for="type" class="block text-sm font-medium text-gray-700">Contact Type</label>
-                        <select class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" >
-                            <option value="">Select option</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="type" class="block text-sm font-medium text-gray-700">Designation</label>
-                        <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label for="type" class="block text-sm font-medium text-gray-700">Phone</label>
-                        <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label for="type" class="block text-sm font-medium text-gray-700">Company</label>
-                        <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label for="type" class="block text-sm font-medium text-gray-700">Fax</label>
-                        <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label for="type" class="block text-sm font-medium text-gray-700">Address 1</label>
-                        <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label for="type" class="block text-sm font-medium text-gray-700">Address 2</label>
-                        <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label for="type" class="block text-sm font-medium text-gray-700">Address 3</label>
-                        <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label for="type" class="block text-sm font-medium text-gray-700">Country</label>
-                        <select class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" >
-                            <option value="">Select option</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="type" class="block text-sm font-medium text-gray-700">City</label>
-                        <select class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" >
-                            <option value="">Select option</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="type" class="block text-sm font-medium text-gray-700">Country Code</label>
-                        <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label for="type" class="block text-sm font-medium text-gray-700">Area Code</label>
-                        <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label for="type" class="block text-sm font-medium text-gray-700">Sector delivery method</label>
-                        <select class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" >
-                            <option value="">Select option</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="type" class="block text-sm font-medium text-gray-700">Delivery Method</label>
-                        <select class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" >
-                            <option value="">Select option</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="type" class="block text-sm font-medium text-gray-700">Sector Summary for Sectors</label>
-                        <select multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" >
-                            <option value="">Select option</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="type" class="block text-sm font-medium text-gray-700">Delivery Method</label>
-                        <select multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" >
-                            <option value="">Select option</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="type" class="block text-sm font-medium text-gray-700">Enable for Print</label>
-                        <input type="checkbox" >
-                    </div>
-                    <div>
-                        <label for="type" class="block text-sm font-medium text-gray-700">Enable for Twitter</label>
-                        <input type="checkbox" >
-                    </div>
-                    <div>
-                        <label for="type" class="block text-sm font-medium text-gray-700">Enable for Web</label>
-                        <input type="checkbox" >
-                    </div>
-                    <div>
-                        <label for="type" class="block text-sm font-medium text-gray-700">Enable for Whatsapp</label>
-                        <input type="checkbox" >
-                    </div>
-                    <div>
-                        <label for="type" class="block text-sm font-medium text-gray-700">Enable for Media Touch</label>
-                        <input type="checkbox" >
-                    </div>
-                    <div>
-                        <label for="type" class="block text-sm font-medium text-gray-700">Enable for DYNA</label>
-                        <input type="checkbox" >
-                    </div>
-                    <div>
-                        <label for="type" class="block text-sm font-medium text-gray-700">Enable for QLIKVIEW</label>
-                        <input type="checkbox" >
-                    </div>
-                    <div>
-                        <label for="type" class="block text-sm font-medium text-gray-700">Enable for QUALIFY</label>
-                        <input type="checkbox" >
-                    </div>
-                    <div>
-                        <label for="type" class="block text-sm font-medium text-gray-700">Enable for ALERT</label>
-                        <input type="checkbox" >
-                    </div>
-                    <div>
-                        <label for="type" class="block text-sm font-medium text-gray-700">Enable for CHARTS</label>
-                        <input type="checkbox" >
-                    </div>
-                    <div>
-                        <label for="type" class="block text-sm font-medium text-gray-700">Enable for BR</label>
-                        <input type="checkbox" >
-                    </div>
-                    <div>
-                        <label for="type" class="block text-sm font-medium text-gray-700">Enable for BB</label>
-                        <input type="checkbox" >
-                    </div>
-                    <div>
-                        <label for="type" class="block text-sm font-medium text-gray-700">Enable for Mobile</label>
-                        <input type="checkbox" >
-                    </div>
+                <div class="p-4 md:p-3">
+                    <fieldset class="border border-gray-300 p-6 rounded-lg">
+                        <legend class="text-sm font-medium text-gray-900">Personal Details</legend>
+                        <div class="grid grid-cols-3 gap-4 p-5">
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Contact Name</label>
+                                <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Mobile</label>
+                                <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">E-mail</label>
+                                <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Contact Type</label>
+                                <select class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <option value="">Select option</option>
+                                    @if(isset($picklist['contacttype']))
+                                    @foreach($picklist['contacttype'] as $contacttype)
+                                    <option value="{{$contacttype->ID}}">{{$contacttype->Name}}</option>
+                                    @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Designation</label>
+                                <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Phone</label>
+                                <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Company</label>
+                                <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Fax</label>
+                                <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Address 1</label>
+                                <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Address 2</label>
+                                <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Address 3</label>
+                                <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Country</label>
+                                <select class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <option value="">Select option</option>
+                                    @foreach($picklist['Country'] as $country)
+                                    <option value="{{$country->ID}}">{{$country->Name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">City</label>
+                                <select class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <option value="">Select option</option>
+                                    @foreach($picklist['City'] as $City)
+                                    <option value="{{$City->ID}}">{{$City->Name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Country Code</label>
+                                <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Area Code</label>
+                                <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset class="border border-gray-300 p-6 rounded-lg">
+                        <legend class="text-sm font-medium text-gray-900">Print Monitoring Parameters</legend>
+                        <div class="grid grid-cols-3 gap-4 mt-4 p-5">
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Enable for Print</label>
+                                <input type="checkbox">
+                            </div>
+
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Delivery Method Print</label>
+                                <select class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <option value="">Select option</option>
+                                    @foreach($deliverymaster as $Delivery)
+                                    <option value="{{$Delivery->id}}">{{$Delivery->deliverytime}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Sector delivery method</label>
+                                <select multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <option value="">Select option</option>
+                                    @foreach($picklist['Delivery Method'] as $Delivery)
+                                    <option value="{{$Delivery->ID}}">{{$Delivery->Name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset class="border border-gray-300 p-6 rounded-lg">
+                        <legend class="text-sm font-medium text-gray-900">Web Monitoring Parameters</legend>
+                        <div class="grid grid-cols-4 gap-4 mt-3 p-5">
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Enable for Web</label>
+                                <input type="checkbox">
+                            </div>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Enable for Twitter</label>
+                                <input type="checkbox">
+                            </div>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Delivery Method Web</label>
+                                <select class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <option value="">Select option</option>
+                                    @foreach($webdeliverymaster as $delivery)
+                                    <option value="{{$delivery->id}}">{{$delivery->deliverytime}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Sector Summary for Sectors</label>
+                                <select multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <option value="">Select option</option>
+                                    @foreach($picklist['Sector Summary Delivery'] as $Delivery)
+                                    <option value="{{$Delivery->ID}}">{{$Delivery->Name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset class="border border-gray-300 p-6 rounded-lg">
+                        <legend class="text-sm font-medium text-gray-900">WhatsApp Monitoring Parameters</legend>
+                        <div class="grid grid-cols-3 gap-4 mt-3 p-5">
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Enable for Whatsapp</label>
+                                <input type="checkbox">
+                            </div>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Send welcome message</label>
+                                <input type="checkbox">
+                            </div>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Phone No</label>
+                                <input type="text" placeholder="E.g. 919811223344" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            </div>
+
+                        </div>
+                        <fieldset class="border border-gray-300 p-6 rounded-lg">
+                            <legend class="text-sm font-medium text-gray-900">Print</legend>
+                            <div class="grid grid-cols-4 gap-4 mt-3 p-5">
+                                <div>
+                                    <label for="type" class="block text-sm font-medium text-gray-700">Company News</label>
+                                </div>
+                                <div>
+                                    <label for="type" class="block text-sm font-small text-gray-700">None</label>
+                                    <input name="pcomanynews" type="radio">
+                                </div>
+                                <div>
+                                    <label for="type" class="block text-sm font-small text-gray-700">All News</label>
+                                    <input name="pcomanynews" type="radio">
+                                </div>
+                                <div>
+                                    <label for="type" class="block text-sm font-small text-gray-700">Prominent News</label>
+                                    <input name="pcomanynews" type="radio">
+                                </div>
+                                <div>
+                                    <label for="type" class="block text-sm font-medium text-gray-700">Competitor News</label>
+                                </div>
+                                <div>
+                                    <label for="type" class="block text-sm font-small text-gray-700">None</label>
+                                    <input name="pcomnews" type="radio">
+                                </div>
+                                <div>
+                                    <label for="type" class="block text-sm font-small text-gray-700">All News</label>
+                                    <input name="pcomnews" type="radio">
+                                </div>
+                                <div>
+                                    <label for="type" class="block text-sm font-small text-gray-700">Prominent News</label>
+                                    <input name="pcomnews" type="radio">
+                                </div>
+                                <div>
+                                    <label for="type" class="block text-sm font-medium text-gray-700">Industry News </label>
+                                </div>
+                                <div>
+                                    <label for="type" class="block text-sm font-small text-gray-700">None</label>
+                                    <input name="pindnews" type="radio">
+                                </div>
+                                <div>
+                                    <label for="type" class="block text-sm font-small text-gray-700">All News</label>
+                                    <input name="pindnews" type="radio">
+                                </div>
+                                <div>
+                                    <label for="type" class="block text-sm font-small text-gray-700">Prominent News</label>
+                                    <input name="pindnews" type="radio">
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="border border-gray-300 p-6 rounded-lg">
+                            <legend class="text-sm font-medium text-gray-900">Web</legend>
+                            <div class="grid grid-cols-4 gap-4 mt-3 p-5">
+                                <div>
+                                    <label for="type" class="block text-sm font-medium text-gray-700">Company News</label>
+                                </div>
+                                <div>
+                                    <label for="type" class="block text-sm font-small text-gray-700">None</label>
+                                    <input name="wcomanynews" type="radio">
+                                </div>
+                                <div>
+                                    <label for="type" class="block text-sm font-small text-gray-700">All News</label>
+                                    <input name="wcomanynews" type="radio">
+                                </div>
+                                <div>
+                                    <label for="type" class="block text-sm font-small text-gray-700">Prominent News</label>
+                                    <input name="wcomanynews" type="radio">
+                                </div>
+                                <div>
+                                    <label for="type" class="block text-sm font-medium text-gray-700">Competitor News</label>
+                                </div>
+                                <div>
+                                    <label for="type" class="block text-sm font-small text-gray-700">None</label>
+                                    <input name="wcomnews" type="radio">
+                                </div>
+                                <div>
+                                    <label for="type" class="block text-sm font-small text-gray-700">All News</label>
+                                    <input name="wcomnews" type="radio">
+                                </div>
+                                <div>
+                                    <label for="type" class="block text-sm font-small text-gray-700">Prominent News</label>
+                                    <input name="wcomnews" type="radio">
+                                </div>
+                                <div>
+                                    <label for="type" class="block text-sm font-medium text-gray-700">Industry News </label>
+                                </div>
+                                <div>
+                                    <label for="type" class="block text-sm font-small text-gray-700">None</label>
+                                    <input name="windnews" type="radio">
+                                </div>
+                                <div>
+                                    <label for="type" class="block text-sm font-small text-gray-700">All News</label>
+                                    <input name="windnews" type="radio">
+                                </div>
+                                <div>
+                                    <label for="type" class="block text-sm font-small text-gray-700">Prominent News</label>
+                                    <input name="windnews" type="radio">
+                                </div>
+                            </div>
+                        </fieldset>
+                    </fieldset>
+                    <fieldset class="border border-gray-300 p-6 rounded-lg">
+                        <legend class="text-sm font-medium text-gray-900">Others Parameters</legend>
+                        <div class="grid grid-cols-3 gap-4 mt-3 p-5">
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Enable for Media Touch</label>
+                                <input type="checkbox">
+                            </div>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Enable for DYNA</label>
+                                <input type="checkbox">
+                            </div>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Enable for QLIKVIEW</label>
+                                <input type="checkbox">
+                            </div>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Enable for QUALIFY</label>
+                                <input type="checkbox">
+                            </div>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Enable for ALERT</label>
+                                <input type="checkbox">
+                            </div>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Enable for CHARTS</label>
+                                <input type="checkbox">
+                            </div>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Enable for BR</label>
+                                <input type="checkbox">
+                            </div>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Enable for BB</label>
+                                <input type="checkbox">
+                            </div>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Enable for Mobile</label>
+                                <input type="checkbox">
+                            </div>
+                        </div>
+                    </fieldset>
                 </div>
 
                 <div class="flex items-center p-4 md:p-5 space-x-3 rtl:space-x-reverse border-t border-gray-200 rounded-b dark:border-gray-600">
@@ -771,6 +931,24 @@
                 element.removeAttribute('disabled');
             });
             document.getElementById('editbtn').style.display = "none";
+        }
+
+        function toggleEditMode(contactId) {
+            var editSections = document.getElementsByClassName('editSection' + contactId);
+            var withoutEditSections = document.getElementsByClassName('withoutEditSection' + contactId);
+
+            for (var i = 0; i < editSections.length; i++) {
+                var editSection = editSections[i];
+                var withoutEditSection = withoutEditSections[i];
+
+                if (!editSection.classList.contains('hidden')) {
+                    editSection.classList.add('hidden');
+                    withoutEditSection.classList.remove('hidden');
+                } else {
+                    editSection.classList.remove('hidden');
+                    withoutEditSection.classList.add('hidden');
+                }
+            }
         }
         window.onload = (event) => {
             document.getElementById('settings-tab').addEventListener('click', function() {
