@@ -85,8 +85,9 @@
                 <select name="id" onchange="selectuser(this.value)" id="userlist" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     <option value=""></option>
                     @foreach($users as $user)
-                    <option value="{{$user}}">{{$user->UserName}}</option>
+                    <option {{ old('id') == $user->Id ? 'selected' : '' }} value="{{ json_encode($user) }}">{{ $user->UserName }}</option>
                     @endforeach
+                
                 </select>
                 @if($errors->has('id'))
                 <div class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $errors->first('id') }}</div>
@@ -138,5 +139,11 @@
         document.getElementById('manageuser').action = `{{route('adduser')}}`;
         document.getElementById('manageuser').submit();
     });
+
+    document.getElementById('edituser').addEventListener('click', function() {
+    document.getElementById('manageuser').action = `{{ route('edituser') }}`;
+    document.getElementById('manageuser').submit();
+    });
+
 </script>
 @endsection

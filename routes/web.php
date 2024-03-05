@@ -29,6 +29,7 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/dashboard', function () {return view('admin');})->name('dashboard');
 Route::get('/manageusers',[ManageUsers::class,'index']); 
 Route::post('/adduser',[ManageUsers::class,'adduser'])->name('adduser');
+Route::post('/edituser',[ManageUsers::class,'edituser'])->name('edituser');
 Route::view('/change-password', 'change-password')->name('changepassword');
 // client profile routes
 Route::get('/clients',ShowClientProfile::class);
