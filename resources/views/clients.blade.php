@@ -172,7 +172,7 @@
                         </div>
                         <div>
                             <label for="region" class="block text-sm font-medium text-gray-700">Region</label>
-                            <input id="currency" value="{{$data->region}}" type="text" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <input id="currency" value="{{$data->region->Name}}" type="text" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         </div>
                         <div>
                             <label for="billingrate" class="block text-sm font-medium text-gray-700">Billing Rate</label>
@@ -316,8 +316,6 @@
 
                             </tr>
                             @endforeach
-
-
                         </tbody>
                     </table>
 
@@ -362,9 +360,9 @@
                         @endphp
                         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                <th scope="col" class="px-6 py-3">
+                            {{--        <th scope="col" class="px-6 py-3">
                                     <input type="checkbox" onchange="toggleSelectAll1(this)" class="form-checkbox">
-                                </th>
+                                </th>  --}}
                                 <th scope="col" class="px-6 py-3">Keyword</th>
                                 <th scope="col" class="px-6 py-3">Filter</th>
                                 <th scope="col" class="px-6 py-3">Filter String</th>
@@ -376,9 +374,9 @@
                             <tbody>
                                 @foreach($currentPageItems as $keyword)
                                 <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                                    <td class="px-6 py-4">
+                             {{--     <td class="px-6 py-4">
                                         <input type="checkbox" onchange="updateEditButtonVisibility1()" value="{{$keyword->keyID}}" class="form-checkbox checkboxes1">
-                                    </td>
+                                    </td>  --}}  
                                     <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $keyword->KeyWord}}</td>
                                     <td class="px-6 py-4">{{ $keyword->Filter}}</td>
                                     <td class="px-6 py-4">{{ $keyword->Filter_String}}</td>
@@ -949,17 +947,17 @@
                                 </td>
                                 <td  class="px-6 py-4"><a href="javascript:void(0);">Update</a></td>`;
         var targetTd = e.closest('tr').querySelector('.font-medium');
-    if (targetTd) {
-        var siblings = targetTd.nextElementSibling;
-        
-        // Remove all siblings
-        while (siblings) {
-            var nextSibling = siblings.nextElementSibling;
-            siblings.remove();
-            siblings = nextSibling;
+        if (targetTd) {
+            var siblings = targetTd.nextElementSibling;
+            
+            // Remove all siblings
+            while (siblings) {
+                var nextSibling = siblings.nextElementSibling;
+                siblings.remove();
+                siblings = nextSibling;
+            }
+        // targetTd.insertAdjacentHTML('afterend', data);
         }
-       // targetTd.insertAdjacentHTML('afterend', data);
-    }
         
     }
 
@@ -970,7 +968,8 @@
             if (checkbox.checked) {
                 checkedCount++;
             }
-        }
+        })
+    }
 
         function toggleSelectAll1(checked) {
             let checkboxes = document.getElementsByClassName('checkboxes1');

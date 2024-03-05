@@ -1,8 +1,12 @@
 <?php
 
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ClientsProfile;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ManageUsers;
+use App\Livewire\Articles;
 use App\Livewire\EditPublications;
+use App\Livewire\KeywordSearch;
 use App\Livewire\ShowClientProfile;
 use Illuminate\Support\Facades\Route;
 use App\Models\Pubmaster;
@@ -23,18 +27,22 @@ Route::middleware(['guest'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
 Route::get('/dashboard', function () {return view('admin');})->name('dashboard');
+Route::get('/manageusers',[ManageUsers::class,'index']); 
+Route::post('/adduser',[ManageUsers::class,'adduser'])->name('adduser');
 Route::view('/change-password', 'change-password')->name('changepassword');
-Route::view('/publications','publications/index');
 // client profile routes
 Route::get('/clients',ShowClientProfile::class);
 Route::get('/clients/{id}',[ClientsProfile::class,'index'])->name('clients');
 
-
+//  publications routes
+Route::view('/publications','publications/index');
 Route::view('/createpublication','createpublication')->name('createpub');
 Route::get('/editpublication/{id}',EditPublications::class)->name('editpublication');
-});
 
-Route::get('/publication',function(){
-return Pubmaster::with('Type','City','Country','State','Language')->select('PubId','Title','Type','CityID','countryID','stateID','Language')->find(8773);
+// article routes 
+Route::get('/articles',Articles::class);
+Route::get('/article/{id}',[ArticleController::class,'viewarticle'])->name('viewarticle');
+
+Route::get('/keywordsearch',KeywordSearch::class);
 });
 

@@ -14,4 +14,7 @@ class Clientkeyword extends Model
     public function keywords(){
         return $this->belongsTo(Keywordmaster::class,'KeywordID','keyID');
     }
+    public function clients(){
+        return $this->belongsTo(Clinetprofile::class,'ClientID','ClientID');
+    }
 }

@@ -39,7 +39,7 @@ class Publications extends Component
     public $id;
     public $pubshow = false;
     public $masthead;
-    public $page = 10;
+    public $page = 20;
     public function render()
     {
         

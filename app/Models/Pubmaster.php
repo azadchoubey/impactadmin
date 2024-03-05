@@ -38,4 +38,5 @@ class Pubmaster extends Model
     public function region(){
         return $this->belongsTo(Picklist::class,'Region','ID')->select('ID','Name');
     }
+
 }

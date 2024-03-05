@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Picklist;
 use App\Models\Pubmaster;
 use Livewire\Component;
 class EditPublications extends Component
@@ -45,22 +46,22 @@ class EditPublications extends Component
     {
         if($this->id){
             $data = Pubmaster::with('Type','city','country','state','cat','lang','pub_pages','edition')->find($this->id);
-            //dd($data);
+         
              $this->title = $data->Title;
               $this->pubid = $data->PubId;
               $this->address1 = $data->address1;
               $this->address2 = $data->address2;
               $this->address3 = $data->address3;
-              $this->city = $data->city?->Name;
-              $this->state = $data->state->Name;
-              $this->country = $data->country->Name;
-              $this->edition = $data->edition->Name;
-              $this->language = $data->Lang->Name;
+              $this->city = $data->city?->ID;
+              $this->state = $data->state->ID;
+              $this->country = $data->country->ID;
+              $this->edition = $data->edition->ID;
+              $this->language = $data->Lang->ID;
               $this->issn = $data->Issn_Num;
-              $this->type = $data->type->Name;
-              $this->category = $data->cat->Name;
+              $this->type = $data->type->ID;
+              $this->category = $data->cat->ID;
               $this->website = $data->WebSite;
-              $this->region = $data->region->Name;
+              $this->region = $data->region->ID;
               $this->size = $data->Size;
               $this->phone = $data->phone;
               $this->domestic = $data->IsDomestic;
@@ -73,11 +74,12 @@ class EditPublications extends Component
               $this->RatePB = $data->RatePB;
               $this->masthead = $data->MastHead;
               $this->primary = $data->PrimaryPubID;
-
+              $picklist = Picklist::whereIn('Type',['City','Region','Language','Country','State','Pub Category','Pubtype'])->get()->groupBy('Type');
+             
             }else{
                 $this->skipRender();
             }
-        return view('livewire.edit-publications');
+        return view('livewire.edit-publications',compact('picklist'));
     }
 
 }

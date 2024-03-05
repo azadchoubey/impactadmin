@@ -10,4 +10,8 @@ class Keywordmaster extends Model
     use HasFactory;
     protected $table = "keyword_master";
     protected $primaryKey = 'keyID';
+
+    public function clientskeywords(){
+        return $this->hasMany(Clientkeyword::class,'KeywordID','keyID');
+    }
 }

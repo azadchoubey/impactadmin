@@ -4,11 +4,11 @@
         <div>
         <label for="table-search" >Page </label>
             <select wire:model.live="page" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                <option value="10">10</option>
-                <option value="20">20</option>
-                <option value="30">30</option>
-                <option value="40">40</option>
-                <option value="50">50</option>
+            <option value="20">20</option>
+            <option value="30">30</option>
+            <option value="40">40</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
             </select>
         </div>
         <a href="{{route('createpub')}}" wire:navigate class="p-2 text-sm font-medium text-white bg-gray-700 rounded-lg border border-gray-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create Client</a>
@@ -44,8 +44,8 @@
             @foreach($Results as $result)
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">                          
             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-            <a href="{{route('clients', $result->ClientID)}}">{{$result->Name}}</a> 
-          
+          {{$result->Name}}
+    
                 <td class="px-6 py-4">
                     <div class="flex items-center">
                         {{$result->Email}}
@@ -53,6 +53,7 @@
                 </td>        
                 <td class="px-6 py-4">
                     <div class="flex items-center">
+                    <a href="{{route('clients', $result->ClientID)}}" class="mr-3 bg-green-800 text-white px-4 py-2 rounded hover:bg-green-600">View</a>  
                     <button type="button"  class="bg-red-800 text-white px-4 py-2 rounded hover:bg-blue-600">Delete</button>
 
                     </div>
@@ -61,7 +62,6 @@
             @endforeach
         </tbody>
     </table>
-    {{$Results->links(data: ['scrollTo' => false])}}
 
 </div>
 </div>
