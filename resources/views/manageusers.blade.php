@@ -112,7 +112,7 @@
         document.getElementById('confirmpassword').value = value.Password;
         let selectElement = document.getElementById('profile');
         for (var i = 0; i < selectElement.options.length; i++) {
-            if (selectElement.options[i].value == value.Profile) {
+            if (selectElement.options[i].value == value.ProfileId) {
                 selectElement.selectedIndex = i;
                 break;
             }
