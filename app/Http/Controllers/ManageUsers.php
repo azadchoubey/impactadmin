@@ -12,7 +12,7 @@ class ManageUsers extends Controller
     {
 
         return view('manageusers', [
-            'users' => User::select('Id', 'UserName', 'UserId', 'Password', 'ProfileId', 'RemoteProfileID')
+            'users' => User::select('Id', 'UserName', 'UserId', 'Password', 'ProfileId', 'RemoteProfileID','status')
                 ->get(),
             'profiles' => Picklist::select('ID', 'Type', 'Name')->whereIn('Type', ['profile', 'Remote Profile'])->get()
                 ->groupBy(function ($item) {
@@ -22,6 +22,7 @@ class ManageUsers extends Controller
     }
     public function adduser(Request $request)
     {
+     
         $request->validate(
             [
                 'userid' => 'required|string',
@@ -43,6 +44,12 @@ class ManageUsers extends Controller
         $user->Md5Pass = md5($request->password);
         $user->AllowRemote = 0;
         $user->LastUpdate = now();
+        if(isset($request->status)){
+            $user->status = $request->status;
+        }else{
+            $user->status = 0;
+        }
+      
         if ($user->save()) {
             return redirect()->back()->with('success', 'Record Added Successfully!');
         }
@@ -51,6 +58,7 @@ class ManageUsers extends Controller
     }
     public function edituser(Request $request)
     {
+        
         $request->validate([
             'userid' => 'required|string',
             'username' => 'required',
@@ -59,7 +67,7 @@ class ManageUsers extends Controller
             'profile' => 'required',
             'remoteprofile' => 'required|numeric'
         ]);
-
+       
         $profile = Picklist::find($request->profile);
         $id = json_decode($request->id,true)['Id'];
         $user = User::findOrFail($id);
@@ -72,7 +80,11 @@ class ManageUsers extends Controller
         $user->Md5Pass = md5($request->password);
         $user->AllowRemote = 0;
         $user->LastUpdate = now();
-
+        if(isset($request->status)){
+            $user->status = $request->status;
+        }else{
+            $user->status = 0;
+        }
         if ($user->save()) {
             return redirect()->back()->with('success', 'Record Updated Successfully!');
         }

@@ -9,7 +9,7 @@ class ArticleController extends Controller
 {
     public function viewarticle($id){
         $article = Article::with('publication','keywords.clients','keywords.keywordname','articleimage','type','sector','subsector')->where(['ArticleID'=>$id])->first();
-        //dd($article);
+        // dd($article);
         return view('viewarticle',compact('article'));
     }
 }
