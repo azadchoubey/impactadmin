@@ -10,6 +10,8 @@ class Pubmaster extends Model
     use HasFactory;
     protected $table = "pub_master";
     protected $primaryKey = 'PubId';
+    protected $guarded = [];
+    public $timestamps = false;
 
     public function Type(){
         return $this->belongsTo(Picklist::class,'Type','ID')->select('ID','Name','Type');

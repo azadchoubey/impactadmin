@@ -2,11 +2,10 @@
     <form wire:submit.prevent="submitForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 p-4">
         <div class="bg-gray-300 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 p-4 dark:bg-gray-800 dark:border-gray-700">
             <div class="grid grid-cols-3 gap-3">
-
                 <div class="mb-2" x-data="{isTyped: false}">
                     <label for="name" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Publication</label>
-                    <input wire:model="pubid" type="text" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                </div>
+                    <input wire:model="pubid" type="text" disabled class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                </div>                
                 <div class="mb-4">
                     <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Web Universe</span>
                     <br>
@@ -114,10 +113,15 @@
                 </div>
                 <div class="mb-4">
                     <label for="pagename" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Page Name</label>
-                    @if(!empty($pagenames))
-                    @foreach($pagenames as $pagename)
                     <div class="flex items-center space-x-2 mb-2">
-                        <input wire:model="pagenames.{{$pagename['PageNameID']}}" type="checkbox" class="text gap-4" {{$pagename['IsPre']?"checked":''}} value="{{$pagename['PageNameID']}}"> <span class="gap-2">{{$pagename['Name']}}</span>
+                        <input wire:model="page" wire:keydown.enter.prevent="addCheckbox" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" id="pagename">
+                    </div>
+                    @if(!empty($pagenames))
+                    {{count($checkboxes)}}
+                    @foreach($pagenames as $pagename)
+                    
+                    <div class="flex items-center space-x-2 mb-2">
+                        <input wire:model="checkboxes.{{$pagename['PageNameID']}}" type="checkbox" class="text gap-4"  > <span class="gap-2">{{$pagename['Name']}}</span>
                     </div>
 
 
@@ -147,10 +151,22 @@
 
                 <div class="mb-4">
                     <label for="Masthead" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Mast Head File</label>
-                    <input type="{{$masthead?'text':'file'}}" {{$masthead?'':''}} wire:model="masthead" class="text" />
+                    <input type="file" accept="image/jpeg" wire:model="masthead" class="text" />
                 </div>
+                
                 <div class="col-span-2 mt-4">
                     <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Save</button>
+                @if (session()->has('success'))
+                    <div id="popup" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+                        <div class="bg-white p-8 rounded-lg shadow-lg">
+                            <span class="block text-3xl text-green-500 mb-4">&check;</span>
+                            <p class="text-lg text-gray-800">{{ session('success') }}</p>
+                            <button class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" onclick="closePopup()">Close</button>
+                        </div>
+                    </div>
+                    <!-- Clear the success message from the session -->
+                    @php session()->forget('success') @endphp
+                @endif
                     <button type="button" id="cancel" onclick="desableAllDisabledItems()" class="hidden bg-red-500 text-white px-4 py-2 rounded hover:bg-blue-600">Cancel</button>
                     <button type="button" class="bg-gray-800 text-white px-4 py-2 rounded hover:bg-blue-600">Set AVE</button>
 
@@ -217,6 +233,22 @@
             </fieldset>
 
         </div>
-
     </form>
 </div>
+<script>
+    // Function to close the popup
+    function closePopup() {
+        // Hide the popup
+        document.getElementById('popup').style.display = 'none';
+    }
+
+    // Show the popup when the page loads
+    window.onload = function () {
+        // Check if the success message is present
+        var successMessage = "{{ session()->get('success') }}";
+        if (successMessage) {
+            // Show the popup
+            document.getElementById('popup').style.display = 'block';
+        }
+    };
+</script>
