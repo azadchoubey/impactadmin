@@ -1,167 +1,380 @@
 @extends('layouts.default')
 
 @section('content')
-@if(session()->has('success'))
-<div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
-  <span class="font-medium">{{ session()->get('success') }}</span> 
-</div>
-@endif
-@if($errors->has('error'))
-<div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
-<span class="font-medium">{{ $errors->first('error') }}</span> 
 
-</div>
-@endif
-<form id="manageuser" method="POST">
-    @csrf
-    <div class="grid grid-cols-2">
-        <div class="grid grid-cols-1 mt-4 mx-auto w-80 gap-3">
-            <div>
-                <label for="userid" class="block text-sm font-medium text-gray-700">Users Id</label>
-                <input id="userid" name="userid" value="{{old('userid')}}" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                @if($errors->has('userid'))
-                <div class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $errors->first('userid') }}</div>
-                @endif
-            </div>
-            <div>
-                <label for="username" class="block text-sm font-medium text-gray-700">User Name</label>
-                <input id="username" name="username" value="{{old('username')}}" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                @if($errors->has('username'))
-                <div class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $errors->first('username') }}</div>
-                @endif
-            </div>
-            <div>
-                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                <input id="password" name="password" value="{{old('password')}}" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                @if($errors->has('password'))
-                <div class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $errors->first('password') }}</div>
-                @endif
-            </div>
-            <div>
-                <label for="confirmpassword" class="block text-sm font-medium text-gray-700">Confirm Password</label>
-                <input id="confirmpassword" value="{{old('confirmpassword')}}" name="confirmpassword" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                @if($errors->has('confirmpassword'))
-                <div class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $errors->first('confirmpassword') }}</div>
-                @endif
-            </div>
-          
-            <div>
-                <label for="profile" class="block text-sm font-medium text-gray-700">Profile</label>
-                <select id="profile" name="profile" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                @if(!old('profile'))  
-                <option value=""></option>
-                @endif
-                    @foreach($profiles['profile'] as $profile)
-                    <option {{old('profile') == $profile->ID ? 'seleted':''}} value="{{$profile->ID}}">{{$profile->Name}}</option>
-                    @endforeach
-                </select>
-                @if($errors->has('profile'))
-                <div class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $errors->first('profile') }}</div>
-                @endif
-            </div>
-           
-            <div>
-                <label for="remoteprofile" class="block text-sm font-medium text-gray-700">Remote Profile</label>
-                <select id="remoteprofile" name="remoteprofile" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                @if(!old('remoteprofile')) 
-                <option value=""></option>
-                @endif
-                    @foreach($profiles['remote profile'] as $profile)
-                    <option {{old('remoteprofile') == $profile->ID ? 'seleted':''}} value="{{$profile->ID}}">{{$profile->Name}}</option>
-                    @endforeach
-                </select>
-                @if($errors->has('remoteprofile'))
-                <div class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $errors->first('remoteprofile') }}</div>
-                @endif
-            </div>
-            <div class="mt-4 flex items-center">
-                <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
-                <input id="status" value="1" name="status" {{ old('status') ? 'checked' : '' }} checked type="checkbox" class="text-blue-500 focus:ring-blue-500 dark:text-blue-300">
-            </div>                          
-            <div class="grid grid-cols-3 mt-4 mx-auto w-80">
-       
-                <button type="button" id="edituser" class="hidden focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-gray-700 dark:focus:ring-blue-800">Edit</button>
-                <button type="button" id="saveuser" class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Save</button>
-                <button type="button" id="deleteuser" class="hidden focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">Delete</button>
-                <button type="button" id="cancel" class="hidden focus:outline-none text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800">Cancel</button>
+<div class="w-9/12 mx-auto p-8">
+    @if(session()->has('success'))
+    <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
+        <span class="font-medium">{{ session()->get('success') }}</span>
+    </div>
+    @endif
+    @if($errors->has('error'))
+    <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+        <span class="font-medium">{{ $errors->first('error') }}</span>
+    </div>
+    @endif
+
+    <table id="users" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">
+                    User ID
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    User Name
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Profile
+                </th>
+
+                <th scope="col" class="px-6 py-3">
+                    Remote Profile
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Status
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Action
+                </th>
+            </tr>
+        </thead>
+        <tbody id="user-table-body">
+            @foreach($users as $user)
+
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    {{$user->UserId}}
+                </th>
+                <td class="px-6 py-4">
+                    {{$user->UserName}}
+                </td>
+                <td class="px-6 py-4">
+                    {{$user->Profile}}
+                </td>
+                <td class="px-6 py-4">
+                    {{$user->Remoteuser[0]->Name}}
+                </td>
+                <td class="px-6 py-4 flex">
+                    {!! $user->status?'<div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div> Active':'<div class="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div> Deactive' !!}
+                </td>
+                <td class="px-6 py-4">
+                    <button data-modal-target="edituser" data-modal-toggle="edituser" class="px-4 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        <div class="flex items-center">
+                            <svg class="h-4 w-4 text-white-600" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" />
+                                <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />
+                                <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />
+                                <line x1="16" y1="5" x2="19" y2="8" />
+                            </svg> Edit
+                        </div>
+                    </button>
+                    <button  class="px-3 py-2 text-xs font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
+                        <div class="flex items-center">
+                            <svg class="h-4 w-4 text-white-500" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" />
+                                <line x1="4" y1="7" x2="20" y2="7" />
+                                <line x1="10" y1="11" x2="10" y2="17" />
+                                <line x1="14" y1="11" x2="14" y2="17" />
+                                <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                                <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                            </svg> Delete
+                        </div>
+                    </button>
+
+
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+          <!-- Add Main modal -->
+          <div id="adduser" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative p-4 w-full max-w-md max-h-full">
+            <!-- Modal content -->
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                        Add User
+                    </h3>
+                    <button type="button" class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="adduser">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <div class="p-4 md:p-5">
+                    <form id="adduserform" >
+                        @csrf
+                        <div class="grid grid-cols-2">
+                            <div class="grid grid-cols-1 mt-4 mx-auto w-80 gap-3">
+                                <div>
+                                    <label for="userid" class="block text-sm font-medium text-gray-700">Users Id</label>
+                                    <input autocomplete="off"  name="userid" value="{{old('userid')}}" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                  
+                                    <div id="userid-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+                                </div>
+                                <div>
+                                    <label for="username" class="block text-sm font-medium text-gray-700">User Name</label>
+                                    <input autocomplete="off" 
+                                    
+                                     name="username" value="{{old('username')}}" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                   
+                                    <div id="username-error"  class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+                                   
+                                </div>
+                                <div>
+                                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                                    <input autocomplete="off" 
+                                    
+                                     name="password" value="{{old('password')}}" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                   
+                                    <div id="password-error"  class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+                                   
+                                </div>
+                                <div>
+                                    <label for="profile" class="block text-sm font-medium text-gray-700">Profile</label>
+                                    <select name="profile" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <option></option>
+                                        @foreach($profiles['profile'] as $profile)
+                                        <option {{old('profile') == $profile->ID ? 'seleted':''}} value="{{$profile->ID}}">{{$profile->Name}}</option>
+                                        @endforeach
+                                    </select>
+                               
+                                    <div  id="profile-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+                                   
+                                </div>
+
+                                <div>
+                                    <label for="remoteprofile" class="block text-sm font-medium text-gray-700">Remote Profile</label>
+                                    <select  name="remoteprofile" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        <option></option>
+                                        @foreach($profiles['remote profile'] as $profile)
+                                        <option {{old('remoteprofile') == $profile->ID ? 'seleted':''}} value="{{$profile->ID}}">{{$profile->Name}}</option>
+                                        @endforeach
+                                    </select>
+                                    <div  id="remoteprofile-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+                                </div>
+                                <div class="mt-4 flex items-center">
+                                    <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+                                    <input id="status" class="ml-2"  name="status" {{ old('status') ? 'checked' : '' }}  type="checkbox" class="text-blue-500 focus:ring-blue-500 dark:text-blue-300">
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="text-right">
+                            <button type="button" onclick="adduser()" class="mt-4 px-4 py-3 text-xs font-medium text-right text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                <div class="flex items-center">
+                                <svg class="h-4 w-4 text-white-600 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /> <circle cx="8.5" cy="7" r="4" /> <line x1="20" y1="8" x2="20" y2="14" /> <line x1="23" y1="11" x2="17" y2="11" /></svg>
+                                    Add User
+                                </div>
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-        <div class="grid grid-cols-1 mt-4 mx-auto w-80">
-            <div>
-                <label for="userlist" class="block text-sm font-medium text-gray-700">User List</label>
-                <select name="id" onchange="selectuser(this.value)" id="userlist" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    <option value=""></option>
-                    @foreach($users as $user)
-                    <option {{ old('id') == $user->Id ? 'selected' : '' }} value="{{ json_encode($user) }}">{{ $user->UserName }}</option>
-                    @endforeach
-                
-                </select>
-                @if($errors->has('id'))
-                <div class="mt-2 text-xs text-red-600 dark:text-red-400">{{ $errors->first('id') }}</div>
-                @endif
+    </div> 
+    <!-- Edit Main modal -->
+    <div id="edituser" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative p-4 w-full max-w-md max-h-full">
+            <!-- Modal content -->
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                        Edit User
+                    </h3>
+                    <button type="button" class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="edituser">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <div class="p-4 md:p-5">
+                    <form id="manageuser" >
+                        @csrf
+                        <div class="grid grid-cols-2">
+                            <div class="grid grid-cols-1 mt-4 mx-auto w-80 gap-3">
+                                <div>
+                                    <label for="userid" class="block text-sm font-medium text-gray-700">Users Id</label>
+                                    <input autocomplete="off" id="userid" name="userid" value="{{old('userid')}}" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                  
+                                    <div id="userid-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+                                </div>
+                                <div>
+                                    <label for="username" class="block text-sm font-medium text-gray-700">User Name</label>
+                                    <input autocomplete="off" 
+                                    
+                                    id="username" name="username" value="{{old('username')}}" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                   
+                                    <div id="username-error"  class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+                                   
+                                </div>
+
+                                <div>
+                                    <label for="profile" class="block text-sm font-medium text-gray-700">Profile</label>
+                                    <select id="profile" name="profile" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+
+                                        @foreach($profiles['profile'] as $profile)
+                                        <option {{old('profile') == $profile->ID ? 'seleted':''}} value="{{$profile->ID}}">{{$profile->Name}}</option>
+                                        @endforeach
+                                    </select>
+                               
+                                    <div  id="profile-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+                                   
+                                </div>
+
+                                <div>
+                                    <label for="remoteprofile" class="block text-sm font-medium text-gray-700">Remote Profile</label>
+                                    <select id="remoteprofile" name="remoteprofile" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                        @foreach($profiles['remote profile'] as $profile)
+                                        <option {{old('remoteprofile') == $profile->ID ? 'seleted':''}} value="{{$profile->ID}}">{{$profile->Name}}</option>
+                                        @endforeach
+                                    </select>
+                                    <div  id="remoteprofile-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+                                </div>
+                                <div class="mt-4 flex items-center">
+                                    <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+                                    <input id="status" class="ml-2"  name="status" {{ old('status') ? 'checked' : '' }}  type="checkbox" class="text-blue-500 focus:ring-blue-500 dark:text-blue-300">
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="text-right">
+                            <button type="button" onclick="editsuer()" class="mt-4 px-4 py-3 text-xs font-medium text-right text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                <div class="flex items-center">
+                                    <svg class="h-4 w-4 text-white-600" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" />
+                                        <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />
+                                        <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />
+                                        <line x1="16" y1="5" x2="19" y2="8" />
+                                    </svg>
+                                    Edit User
+                                </div>
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</form>
+
+</div>
 
 @endsection
+
+@section('style')
+<style>
+    div.dt-container.dt-empty-footer tbody>tr:last-child>* {
+        border-bottom: none !important;
+    }
+</style>
+@endsection
 @section('scripts')
+
 <script>
-    function selectuser(value) {
-        document.getElementById("edituser").classList.remove("hidden");
-        document.getElementById("cancel").classList.remove("hidden");
-        document.getElementById("deleteuser").classList.remove("hidden");
-        document.getElementById('saveuser').classList.add("hidden");
-        value = JSON.parse(value);
-        document.getElementById('userid').value = value.UserId;
-        document.getElementById('username').value = value.UserName;
-        document.getElementById('password').value = value.Password;
-        document.getElementById('confirmpassword').value = value.Password;
-        document.getElementById('status').checked = value.status;
-        document.getElementById('status').value = value.status;
-        let selectElement = document.getElementById('profile');
-        for (var i = 0; i < selectElement.options.length; i++) {
-            if (selectElement.options[i].value == value.ProfileId) {
-                selectElement.selectedIndex = i;
-                break;
+    $(document).ready(function() {
+        $('#users').DataTable({
+            pagingType: 'full',
+            layout: {
+                topStart: {
+                    buttons: [{
+                        text: '<div class="flex items-center" data-modal-target="adduser" data-modal-toggle="adduser" ><svg class="h-4 w-4 text-white-600 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /> <circle cx="8.5" cy="7" r="4" /> <line x1="20" y1="8" x2="20" y2="14" /> <line x1="23" y1="11" x2="17" y2="11" /></svg> Add User</div>',
+                        className: 'px-3 py-2 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800',
+                        
+                    }]
+                }
             }
+        });
+    });
+
+    // Event listener for the edit user button
+    $('#users tbody').on('click', 'button[data-modal-target="edituser"]', function() {
+        var profileOptions = {!! json_encode($profiles['profile']) !!};
+        var remoteprofileOptions = {!! json_encode($profiles['remote profile']) !!};
+        var rowData = $(this).closest('tr').find('td, th').map(function() {
+            return $(this).text().trim();
+        }).get();
+        var profileSelect = $('#profile');
+        profileSelect.empty();
+        profileSelect.append('<option></option>')
+        $('#userid').val(rowData[0]);
+        $('#username').val(rowData[1]);
+        profileOptions.forEach(function(option) {
+            var selected = option.Name == rowData[2] ? 'selected' : '';
+            profileSelect.append('<option value="' + option.ID + '" ' + selected + '>' + option.Name + '</option>');
+        });
+        var remoteprofile = $('#remoteprofile');
+        remoteprofile.empty();
+        remoteprofile.append('<option></option>')
+        remoteprofileOptions.forEach(function(option) {
+            var selected = option.Name == rowData[3] ? 'selected' : '';
+            remoteprofile.append('<option value="' + option.ID + '" ' + selected + '>' + option.Name + '</option>');
+        });
+        var status = rowData[4];
+        if (status.toLowerCase() === 'active') {
+            $('#status').prop('checked', true); 
+        } else {
+            $('#status').prop('checked', false); 
         }
-        let selectElement1 = document.getElementById('remoteprofile');
 
-        for (var i = 0; i < selectElement1.options.length; i++) {
+    });
+    function editsuer(){
+        var formData =  $('#manageuser').serialize();
+            $.ajax({
+            type: 'POST',
+            url: `{{route('edituser')}}`,
+            data: formData, 
+            success: function(response) {
+                if (response.errors) {
+                    console.log(response.errors);
+                    $.each(response.errors, function(key, value) {
+                     
+                        $('#' + key + '-error').text(value);
+                    });
+                } else if(response.success) {
+                    window.location.reload();
+                }
+                console.log(response);
+            },
+            error: function(xhr, status, error) {
 
-            if (selectElement1.options[i].value == value.RemoteProfileID) {
-                selectElement1.selectedIndex = i;
-                break;
+                console.error(xhr.responseText);
             }
-        }
-    }
-    document.getElementById('cancel').addEventListener('click', function() {
-        document.getElementById('manageuser').reset();
-        document.getElementById("saveuser").classList.remove("hidden");
-        document.getElementById('edituser').classList.add("hidden");
-        document.getElementById('cancel').classList.add("hidden");
-        document.getElementById('deleteuser').classList.add("hidden");
-    });
-
-    document.getElementById('saveuser').addEventListener('click', function() {
-        document.getElementById('manageuser').action = `{{route('adduser')}}`;
-        document.getElementById('manageuser').submit();
-    });
-
-    document.getElementById('edituser').addEventListener('click', function() {
-    document.getElementById('manageuser').action = `{{ route('edituser') }}`;
-    document.getElementById('manageuser').submit();
-    });
-    document.getElementById('status').addEventListener('change', function(e) {
-   
-    if (this.checked) {
-     
-        this.value  = 1;
-    } else {
-        this.value =  0;
-    }
+        });
   
-});
+    }
+    function adduser(){
+        var formData1 =  $('#adduserform').serialize();
+        console.log(formData1);
+        $.ajax({
+            url: '{{ route("adduser") }}',
+            method: 'POST',
+            data: formData1,
+            success: function(response) {
+                if (response.success) {
+                    window.location.reload();
+                } else {
+                    // Handle validation errors or other errors
+                    if (response.errors) {
+                        $.each(response.errors, function(key, value) {
+                     
+                     $('#' + key + '-error').text(value);
+                 });
+                    } 
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    }
 </script>
 @endsection

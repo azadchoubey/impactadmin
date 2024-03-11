@@ -7,7 +7,7 @@
                 <div class="mb-2">
                     <label for="name" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Name</label>
                     <input wire:model="title" type="text" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-
+                    @error('title')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
                 </div>
 
             </div>
@@ -15,6 +15,8 @@
                 <div class="mb-4">
                     <label for="address1" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Address 1</label>
                     <input wire:model="address1" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    @error('address1')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
+
                 </div>
                 <div class="mb-4">
                     <label for="edition" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Edition</label>
@@ -26,6 +28,8 @@
                         <option value="">Select option</option>
                         @endforelse
                     </select>
+                    @error('edition')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
+
                 </div>
 
                 <div class="mb-4">
@@ -42,6 +46,8 @@
                         <option value="">Select option</option>
                         @endforelse
                     </select>
+                    @error('category')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
+
                 </div>
                 <div class="mb-4">
                     <label for="address3" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Address 3</label>
@@ -59,6 +65,7 @@
                         <option value="">Select option</option>
                         @endforelse
                     </select>
+                    @error('type')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
                 </div>
                 <div class="mb-4">
                     <label for="city" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">City</label>
@@ -69,6 +76,8 @@
                         <option value="">Select option</option>
                         @endforelse
                     </select>
+                    @error('city')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
+
                 </div>
                 <div class="mb-4">
                     <label for="region" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Region</label>
@@ -79,9 +88,11 @@
                         <option value="">Select option</option>
                         @endforelse
                     </select>
+                    @error('region')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
+
                 </div>
                 <div class="mb-4">
-                    <label for="state" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">State</label>
+                    <label for="country" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">State</label>
                     <select wire:model="country" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         @forelse($data['State'] as $key=>$state)
                         <option value="{{$state->ID}}">{{$state->Name}}</option>
@@ -89,6 +100,8 @@
                         <option value="">Select option</option>
                         @endforelse
                     </select>
+                    @error('country')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
+
                 </div>
                 <div class="mb-4">
                     <label for="language" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Language</label>
@@ -99,6 +112,8 @@
                         <option value="">Select option</option>
                         @endforelse
                     </select>
+                    @error('language')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
+
                 </div>
                 <div class="mb-4">
                     <label for="country" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Country</label>
@@ -109,6 +124,8 @@
                         <option value="">Select option</option>
                         @endforelse
                     </select>
+                    @error('country')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
+
                 </div>
                 <div class="mb-4">
                     <label for="pagename" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Page Name</label>

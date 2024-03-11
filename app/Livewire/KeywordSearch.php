@@ -26,6 +26,6 @@ class KeywordSearch extends Component
     }
     public function exportToExcel()
     {
-        return Excel::download(new KeywordsExport($this->keywords), rand(0000,99999).'.csv',\Maatwebsite\Excel\Excel::CSV);
+        return Excel::download(new KeywordsExport($this->keywords), rand(0000,99999).'.Xlsx',\Maatwebsite\Excel\Excel::XLSX);
     }
 }

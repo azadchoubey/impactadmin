@@ -7,7 +7,6 @@ use Livewire\Component;
 
 class CreatePublication extends Component
 {
-    public $pubid;
     public $title;
     public $address1;
     public $address2;
@@ -35,6 +34,23 @@ class CreatePublication extends Component
     public $RateNB;
     public $masthead;
     public $checkboxes =[];
+    protected $rules = [
+        'title' => 'required',
+        'address1'=>'required',
+        'city'=>'required',
+        'state'=>'required',
+        'country'=>'required',
+        'phone'=>'required',
+        'edition'=>'required',
+        'category'=>'required',
+        'mu'=>'required',
+        'restrictedmu'=>'required',
+
+    ];
+    protected $messages = [
+        'title.required' => 'The Name cannot be empty.',
+        'address1.required' => 'The Address 1 cannot be empty.',
+    ];
     public function render()
     {
         $data = Picklist::whereIn('Type',['City','Region','Language','Country','State','Pub Category','Pubtype'])->get()->groupBy('Type');
@@ -47,5 +63,9 @@ class CreatePublication extends Component
             $this->checkboxes[] = $this->pagenames;
             $this->pagenames = ''; 
         }
+    }
+    public function submitForm(){
+        $validatedData = $this->validate();
+        dd($validatedData);
     }
 }

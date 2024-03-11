@@ -57,4 +57,7 @@ class User extends Authenticatable
     // public function user_role(){
     //     return $this->hasMany(Picklist::class,'ID','role');
     // }
+    public function Remoteuser (){
+        return $this->hasMany(Picklist::class,'ID','RemoteProfileID');
+    }
 }
