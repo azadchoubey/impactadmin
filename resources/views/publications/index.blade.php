@@ -2,6 +2,9 @@
 
 @section('content')
     <livewire:publications/>
+
+@endsection
+@section('scripts')
 <script>
     function enableAllDisabledItems() {
     let disabledElements = document.querySelectorAll('[disabled]');
@@ -22,6 +25,9 @@
  
 
  }
+
+
+ 
 
 </script>
 @endsection
