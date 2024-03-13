@@ -1,7 +1,7 @@
-<div>
+<div class="w-10/12 mx-auto">
     <h5 class="text-center text-xl font-bold dark:text-white">Create Publication</h5>
     <form wire:submit.prevent="submitForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 p-4">
-        <div class="bg-gray-300 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 p-4 dark:bg-gray-800 dark:border-gray-700">
+        <div class="mr-3 bg-white-300 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 p-4 dark:bg-gray-800 dark:border-gray-700">
             <div class="grid grid-cols-1 gap-3">
 
                 <div class="mb-2">
@@ -173,7 +173,7 @@
                 </div>
             </div>
         </div>
-        <div class="bg-gray-300 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
+        <div class="bg-white-300 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
             <div class="grid grid-cols-2 gap-3">
                 <div class="mb-4">
                     <label for="circulation" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Circulation</label>

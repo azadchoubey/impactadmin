@@ -121,7 +121,7 @@ class EditPublications extends Component
             'RateNB' => $this->RateNB,
         ]);
         session()->flash('success', 'Your changes have been saved successfully!');
-
+        return redirect()->to('/publications');
         // $PubPageName = PubPageName::where('PubId', $this->pubid)->update();
     }
     public function addCheckbox()

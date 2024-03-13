@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Picklist;
+use App\Models\Pubmaster;
 use Livewire\Component;
 
 class CreatePublication extends Component
@@ -45,6 +46,8 @@ class CreatePublication extends Component
         'category'=>'required',
         'mu'=>'required',
         'restrictedmu'=>'required',
+        'pagename'=>'required',
+        
 
     ];
     protected $messages = [
@@ -67,5 +70,39 @@ class CreatePublication extends Component
     public function submitForm(){
         $validatedData = $this->validate();
         dd($validatedData);
+        Pubmaster::create([
+            'PubId' => $this->pubid,
+            'PrimaryPubID' => $this->primary,
+            'Title' => $this->title,
+            'address1' => $this->address1,
+            'place' => $this->edition,
+            'address2' => $this->address2,
+            'Category' => $this->category,
+            'address3' => $this->address3,
+            'Type' => $this->type,
+            'CityID' => $this->city,
+            'Region' => $this->region,
+            'stateID' => $this->state,
+            'Language' => $this->language,
+            'countryID' => $this->country,
+            // 'pagenames' => $this->pagenames,
+            'IsDomestic' => $this->domestic??0,
+            // 'international' => $this->international,
+            'phone' => $this->phone,
+            // 'restrictedmu' => $this->restrictedmu,
+            // 'mu' => $this->mu,
+            'MastHead' => $this->masthead,
+            'Circulation' => $this->circulation,
+            'Issn_Num' => $this->issn,
+            // 'frequency' => $this->frequency,
+            'WebSite' => $this->website,
+            'Size' => $this->size,
+            'RatePC' => $this->RatePC,
+            'RateNC' => $this->RateNC,
+            'RatePB' => $this->RatePB,
+            'RateNB' => $this->RateNB,
+        ]);
+        session()->flash('success', 'Record Added successfully!');
+        return redirect()->to('/publications');
     }
 }

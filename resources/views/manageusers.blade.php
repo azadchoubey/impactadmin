@@ -319,7 +319,7 @@
             remoteprofile.append('<option value="' + option.ID + '" ' + selected + '>' + option.Name + '</option>');
         });
         var status = rowData[4];
-        if (status.toLowerCase() === 'active') {
+        if (status.toLowerCase() == 'active') {
             $('#status').prop('checked', true); 
         } else {
             $('#status').prop('checked', false); 
