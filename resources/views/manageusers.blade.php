@@ -159,7 +159,7 @@
                                 </div>
                                 <div class="mt-4 flex items-center">
                                     <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
-                                    <input id="status" class="ml-2"  name="status" {{ old('status') ? 'checked' : '' }}  type="checkbox" class="text-blue-500 focus:ring-blue-500 dark:text-blue-300">
+                                    <input class="ml-2"  name="status"  type="checkbox" class="text-blue-500 focus:ring-blue-500 dark:text-blue-300">
                                 </div>
 
                             </div>
@@ -282,7 +282,7 @@
 <script>
     $(document).ready(function() {
         $('#users').DataTable({
-            pagingType: 'full',
+            pagingType: 'first_last_numbers',
             layout: {
                 topStart: {
                     buttons: [{
@@ -319,6 +319,7 @@
             remoteprofile.append('<option value="' + option.ID + '" ' + selected + '>' + option.Name + '</option>');
         });
         var status = rowData[4];
+      
         if (status.toLowerCase() == 'active') {
             $('#status').prop('checked', true); 
         } else {

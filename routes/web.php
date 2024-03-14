@@ -9,7 +9,7 @@ use App\Livewire\EditPublications;
 use App\Livewire\KeywordSearch;
 use App\Livewire\ShowClientProfile;
 use Illuminate\Support\Facades\Route;
-use App\Models\Pubmaster;
+use App\Models\Mongo\ClientContact;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -45,5 +45,9 @@ Route::get('/articles',Articles::class);
 Route::get('/article/{id}',[ArticleController::class,'viewarticle'])->name('viewarticle');
 
 Route::get('/keywordsearch',KeywordSearch::class);
+
+Route::get('/test',function(){
+    return ClientContact::where('Client_Name','Accenture')->get();
+});
 });
 
