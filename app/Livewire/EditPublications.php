@@ -41,6 +41,32 @@ class EditPublications extends Component
     public $RateNB;
     public $id;
     public $masthead, $primary, $webuniverse, $restrictedmu, $mu;
+
+    protected $rules = [
+        'title' => 'required',
+        'address1'=>'required',
+        'city'=>'required',
+        'state'=>'required',
+        'country'=>'required',
+        'phone'=>'required',
+        'edition'=>'required',
+        'category'=>'required',
+        'region'=>'required',
+        'language'=>'required',
+    ];
+    protected $messages = [
+        'title.required' => 'The Name cannot be empty.',
+        'address1.required' => 'The Address 1 cannot be empty.',
+        'city.required' => 'The city cannot be empty.',
+        'state.required' => 'The state cannot be empty.',
+        'country.required' => 'The country cannot be empty.',
+        'phone.required' => 'Phone number cannot be empty.',
+        'edition.required' => 'The edition cannot be empty.',
+        'category.required' => 'The category cannot be empty.',
+        'region.required' => 'The region cannot be empty.',
+        'language.required' => 'The language cannot be empty.',
+
+    ];
     public function mount($id)
     {
         $this->id = $id;
@@ -86,6 +112,7 @@ class EditPublications extends Component
 
     public function submitForm()
     {
+        $validatedData = $this->validate();
         //dd($this->pagenames);
         $pubmaster = Pubmaster::findOrFail($this->pubid);
         $pubmaster->update([

@@ -26,7 +26,7 @@
                 <div class="mb-2">
                     <label for="name" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Name</label>
                     <input wire:model="title" type="text" id="name" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-
+                    @error('title')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
                 </div>
             </div>
 
@@ -34,6 +34,7 @@
                 <div class="mb-4">
                     <label for="address1" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Address 1</label>
                     <input wire:model="address1" type="text" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    @error('address1')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
                 </div>
                 <div class="mb-4">
 
@@ -44,6 +45,7 @@
                         <option {{$edtion->ID == $edition ?'selected':'' }} value="{{$edtion->ID}}">{{$edtion->Name}}</option>
                         @endforeach
                     </select>
+                    @error('edition')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
                 </div>
                 <div class="mb-4">
                     <label for="address2" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Address 2</label>
@@ -54,9 +56,9 @@
                     <select wire:model="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         @foreach($picklist['Pub Category'] as $key=>$cat)
                         <option {{$cat->ID == $category?'seleted':''}} value="{{$cat->ID}}">{{$cat->Name}}</option>
-
                         @endforeach
                     </select>
+                    @error('category')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
                 </div>
                 <div class="mb-4">
                     <label for="address3" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Address 3</label>
@@ -78,6 +80,7 @@
                         <option {{$city->ID == ($city?0:'')? 'selected' : ''}} value="{{$city->ID}}">{{$city->Name}}</option>
                         @endforeach
                     </select>
+                    @error('city')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
                 </div>
                 <div class="mb-4">
                     <label for="region" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Region</label>
@@ -86,6 +89,8 @@
                         <option {{$region->ID ==($region?0:'')? 'selected': ''}} value="{{$region->ID}}">{{$region->Name}}</option>
                         @endforeach
                     </select>
+                    @error('region')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
+
                 </div>
                 <div class="mb-4">
                     <label for="state" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">State</label>
@@ -94,6 +99,7 @@
                         <option {{$states->ID == ($state?0:'') ? 'selected': ''}} value="{{$states->ID}}">{{$states->Name}}</option>
                         @endforeach
                     </select>
+                    @error('state')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
                 </div>
                 <div class="mb-4">
                     <label for="language" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Language</label>
@@ -102,6 +108,7 @@
                         <option {{$lang->ID == $language ?  'selected': ''}} value="{{$lang->ID}}">{{$lang->Name}}</option>
                         @endforeach
                     </select>
+                    @error('language')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
                 </div>
                 <div class="mb-4">
                     <label for="country" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Country</label>
@@ -110,6 +117,7 @@
                         <option {{$cont->ID == $country ?  'selected': ''}} value="{{$cont->ID}}">{{$cont->Name}}</option>
                         @endforeach
                     </select>
+                    @error('country')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
                 </div>
                 <div class="mb-4">
                     <label for="pagename" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Page Name</label>
@@ -140,6 +148,7 @@
                 <div class="mb-4">
                     <label for="phone" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Phone No.</label>
                     <input wire:model="phone" type="text" id="phone" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    @error('phone')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
                 </div>
 
                 <div class="mb-4">

@@ -5,9 +5,12 @@ namespace App\Livewire;
 use App\Models\Picklist;
 use App\Models\Pubmaster;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class CreatePublication extends Component
 {
+    use WithFileUploads;
+
     public $title;
     public $address1;
     public $address2;
@@ -44,15 +47,21 @@ class CreatePublication extends Component
         'phone'=>'required',
         'edition'=>'required',
         'category'=>'required',
-        'mu'=>'required',
-        'restrictedmu'=>'required',
-        'pagename'=>'required',
-        
-
+        'region'=>'required',
+        'language'=>'required'
     ];
     protected $messages = [
         'title.required' => 'The Name cannot be empty.',
         'address1.required' => 'The Address 1 cannot be empty.',
+        'city.required' => 'The city cannot be empty.',
+        'state.required' => 'The state cannot be empty.',
+        'country.required' => 'The country cannot be empty.',
+        'phone.required' => 'Phone number cannot be empty.',
+        'edition.required' => 'The edition cannot be empty.',
+        'category.required' => 'The category cannot be empty.',
+        'region.required' => 'The region cannot be empty.',
+        'language.required' => 'The language cannot be empty.'
+
     ];
     public function render()
     {
@@ -68,11 +77,11 @@ class CreatePublication extends Component
         }
     }
     public function submitForm(){
-        $validatedData = $this->validate();
-        dd($validatedData);
-        Pubmaster::create([
-            'PubId' => $this->pubid,
-            'PrimaryPubID' => $this->primary,
+       $validatedData = $this->validate();
+    // dd($this->state);
+
+        Pubmaster::insert([
+            'PrimaryPubID' => $this->primary??0,
             'Title' => $this->title,
             'address1' => $this->address1,
             'place' => $this->edition,
@@ -91,7 +100,7 @@ class CreatePublication extends Component
             'phone' => $this->phone,
             // 'restrictedmu' => $this->restrictedmu,
             // 'mu' => $this->mu,
-            'MastHead' => $this->masthead,
+            'MastHead' => $this->masthead->store('photos'),
             'Circulation' => $this->circulation,
             'Issn_Num' => $this->issn,
             // 'frequency' => $this->frequency,
@@ -101,6 +110,8 @@ class CreatePublication extends Component
             'RateNC' => $this->RateNC,
             'RatePB' => $this->RatePB,
             'RateNB' => $this->RateNB,
+            'CreateDateTime'=>now(),
+            'EditDateTime'=>now()
         ]);
         session()->flash('success', 'Record Added successfully!');
         return redirect()->to('/publications');

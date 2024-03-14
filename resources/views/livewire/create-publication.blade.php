@@ -40,6 +40,8 @@
                 <div class="mb-4">
                     <label for="category" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Category</label>
                     <select wire:model="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <option value="">Select option</option>
+
                         @forelse($data['Pub Category'] as $key=>$category)
                         <option value="{{$category->ID}}">{{$category->Name}}</option>
                         @empty
@@ -93,14 +95,14 @@
                 </div>
                 <div class="mb-4">
                     <label for="country" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">State</label>
-                    <select wire:model="country" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <select wire:model="state" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         @forelse($data['State'] as $key=>$state)
                         <option value="{{$state->ID}}">{{$state->Name}}</option>
                         @empty
                         <option value="">Select option</option>
                         @endforelse
                     </select>
-                    @error('country')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
+                    @error('state')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
 
                 </div>
                 <div class="mb-4">
@@ -143,6 +145,7 @@
                 <div class="mb-4">
                     <label for="phone" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Phone No.</label>
                     <input wire:model="phone" type="text" id="phone" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    @error('phone')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
                 </div>
                 <br>
                 <div class="mb-4">
