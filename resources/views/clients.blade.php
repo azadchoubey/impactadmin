@@ -41,7 +41,8 @@
 
         <div id="default-tab-content">
             <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                <form>
+                <form id="clientForm" action="{{ route('editclient',$data->ClientID) }}" method="POST">
+                    @csrf
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                         <div>
                             <label for="client_id" class="block text-sm font-medium text-gray-700">Client ID</label>
@@ -86,6 +87,8 @@
                         <div>
                             <label for="address1" class="block text-sm font-medium text-gray-700">Address 1</label>
                             <input name="address1" id="address" value="{{$data->AddressLine1}}" type="text" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            @error('address1')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
+
                         </div>
                         <div>
                             <label for="fax" class="block text-sm font-medium text-gray-700">FAX</label>
