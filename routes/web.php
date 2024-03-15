@@ -34,7 +34,7 @@ Route::view('/change-password', 'change-password')->name('changepassword');
 // client profile routes
 Route::get('/clients',ShowClientProfile::class);
 Route::get('/clients/{id}',[ClientsProfile::class,'index'])->name('clients');
-
+Route::post('/editclient/{id}', [ClientsProfile::class,'edit'])->name('editclient');
 //  publications routes
 Route::view('/publications','publications/index');
 Route::view('/createpublication','createpublication')->name('createpub');
