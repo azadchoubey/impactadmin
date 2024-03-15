@@ -41,7 +41,7 @@
 
         <div id="default-tab-content">
             <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                <form>
+                <form >
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                         <div>
                             <label for="client_id" class="block text-sm font-medium text-gray-700">Client ID</label>
