@@ -4,9 +4,11 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Clinetprofile;
+use Livewire\WithPagination; 
 
 class ShowClientProfile extends Component
 {
+    use WithPagination;
     public $name,$page;
     public function render()
     {

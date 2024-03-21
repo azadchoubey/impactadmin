@@ -10,6 +10,8 @@ use App\Livewire\KeywordSearch;
 use App\Livewire\ShowClientProfile;
 use Illuminate\Support\Facades\Route;
 use App\Models\Mongo\ClientContact;
+use Maatwebsite\Excel\Row;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -35,6 +37,12 @@ Route::view('/change-password', 'change-password')->name('changepassword');
 Route::get('/clients',ShowClientProfile::class);
 Route::get('/clients/{id}',[ClientsProfile::class,'index'])->name('clients');
 Route::post('/editclient/{id}', [ClientsProfile::class,'edit'])->name('editclient');
+Route::get('/addclient',[ClientsProfile::class,'addclient'])->name('addclient');
+Route::post('/createclient',[ClientsProfile::class,'create'])->name('createclient');
+Route::get('/get-subsectors/{industry}', [ClientsProfile::class,'getSubsectors']);
+Route::post('/addcontact',[ClientsProfile::class,'addcontact'])->name('addcontact');
+
+
 //  publications routes
 Route::view('/publications','publications/index');
 Route::view('/createpublication','createpublication')->name('createpub');

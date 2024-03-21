@@ -2,6 +2,16 @@
 
 @section('content')
 <div class="container mx-auto p-6 bg-white rounded-md shadow-md">
+@if(session()->has('success'))
+    <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
+        <span class="font-medium">{{ session()->get('success') }}</span>
+    </div>
+    @endif
+    @if($errors->has('error'))
+    <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+        <span class="font-medium">{{ $errors->first('error') }}</span>
+    </div>
+    @endif
     @php
 
     $cross = '<div>
@@ -154,7 +164,7 @@
 
                         <div>
                             <label for="billingcycle" class="block text-sm font-medium text-gray-700">Billing Cycle</label>
-                            <input name="billingcycle" id="billingcycle" value="{{$data->Billingcycle->Name}}" type="text" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <input name="billingcycle" id="billingcycle" value="{{$data->Billingcycle?->Name}}" type="text" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         </div>
                         <div>
                             <label for="Country" class="block text-sm font-medium text-gray-700">Country</label>
@@ -551,26 +561,34 @@
                         <span class="sr-only">Close modal</span>
                     </button>
                 </div>
-
+                <form id="addcontact">
+                    @csrf
+                    <input type="hidden" name="clientid" value="{{$data->ClientID}}">
                 <div class="p-4 md:p-3">
                     <fieldset class="border border-gray-300 p-6 rounded-lg">
                         <legend class="text-sm font-medium text-gray-900">Personal Details</legend>
                         <div class="grid grid-cols-3 gap-4 p-5">
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Contact Name</label>
-                                <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <input name="ContactName" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <div id="ContactName-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Mobile</label>
-                                <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <input name="Mobile" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <div id="Mobile-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">E-mail</label>
-                                <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <input name="Email" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <div id="Email-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Contact Type</label>
-                                <select class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <select name="ContactType" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     <option value="">Select option</option>
                                     @if(isset($picklist['contacttype']))
                                     @foreach($picklist['contacttype'] as $contacttype)
@@ -581,57 +599,62 @@
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Designation</label>
-                                <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <input name="Designation" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Phone</label>
-                                <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <input name="Phone" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Company</label>
-                                <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <input name="Company" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Fax</label>
-                                <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <input name="Fax" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Address 1</label>
-                                <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <input name="Address1" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <div id="Address1-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Address 2</label>
-                                <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <input name="Address2" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <div id="Address2-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Address 3</label>
-                                <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <input name="Address3" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <div id="Address3-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Country</label>
-                                <select class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <select name="CountryID" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     <option value="">Select option</option>
                                     @foreach($picklist['Country'] as $country)
                                     <option value="{{$country->ID}}">{{$country->Name}}</option>
                                     @endforeach
                                 </select>
+                                <div id="CountryID-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">City</label>
-                                <select class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <select name="CityID" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     <option value="">Select option</option>
                                     @foreach($picklist['City'] as $City)
                                     <option value="{{$City->ID}}">{{$City->Name}}</option>
                                     @endforeach
                                 </select>
+                                <div id="CityID-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Country Code</label>
-                                <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <input name="CountryCode" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Area Code</label>
-                                <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <input name="Pin" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             </div>
                         </div>
                     </fieldset>
@@ -640,12 +663,12 @@
                         <div class="grid grid-cols-3 gap-4 mt-4 p-5">
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for Print</label>
-                                <input type="checkbox">
+                                <input name="wm_enableforprint" value="1" type="checkbox">
                             </div>
 
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Delivery Method Print</label>
-                                <select class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <select name="wm_deliverymethod" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     <option value="">Select option</option>
                                     @foreach($deliverymaster as $Delivery)
                                     <option value="{{$Delivery->id}}">{{$Delivery->deliverytime}}</option>
@@ -654,7 +677,7 @@
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Sector delivery method</label>
-                                <select multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <select name="sectordeliveryid" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     <option value="">Select option</option>
                                     @foreach($picklist['Delivery Method'] as $Delivery)
                                     <option value="{{$Delivery->ID}}">{{$Delivery->Name}}</option>
@@ -668,15 +691,15 @@
                         <div class="grid grid-cols-4 gap-4 mt-3 p-5">
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for Web</label>
-                                <input type="checkbox">
+                                <input name="wm_enableforweb" type="checkbox" value="1">
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for Twitter</label>
-                                <input type="checkbox">
+                                <input name="enablefortwitter" type="checkbox" value="1">
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Delivery Method Web</label>
-                                <select class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <select name="deliveryid[]" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     <option value="">Select option</option>
                                     @foreach($webdeliverymaster as $delivery)
                                     <option value="{{$delivery->id}}">{{$delivery->deliverytime}}</option>
@@ -685,7 +708,7 @@
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Sector Summary for Sectors</label>
-                                <select multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <select name="SectorID[]" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     <option value="">Select option</option>
                                     @foreach($picklist['Sector Summary Delivery'] as $Delivery)
                                     <option value="{{$Delivery->ID}}">{{$Delivery->Name}}</option>
@@ -699,15 +722,15 @@
                         <div class="grid grid-cols-3 gap-4 mt-3 p-5">
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for Whatsapp</label>
-                                <input type="checkbox">
+                                <input name="enableforwhatsapp" value="1" type="checkbox">
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Send welcome message</label>
-                                <input type="checkbox">
+                                <input name="whatsappwelcomemsg" value="1" type="checkbox">
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Phone No</label>
-                                <input type="text" placeholder="E.g. 919811223344" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <input name="whatsappnumber" type="text" placeholder="E.g. 919811223344" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             </div>
 
                         </div>
@@ -719,45 +742,45 @@
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">None</label>
-                                    <input name="pcomanynews" type="radio">
+                                    <input name="whatsapp_print_company" value="0" type="radio">
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">All News</label>
-                                    <input name="pcomanynews" type="radio">
+                                    <input name="whatsapp_print_company" value="1"  type="radio">
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">Prominent News</label>
-                                    <input name="pcomanynews" type="radio">
+                                    <input name="whatsapp_print_company" value="2" type="radio">
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-medium text-gray-700">Competitor News</label>
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">None</label>
-                                    <input name="pcomnews" type="radio">
+                                    <input name="whatsapp_print_competitor" value="0" type="radio">
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">All News</label>
-                                    <input name="pcomnews" type="radio">
+                                    <input name="whatsapp_print_competitor" value="1" type="radio">
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">Prominent News</label>
-                                    <input name="pcomnews" type="radio">
+                                    <input name="whatsapp_print_competitor" value="2" type="radio">
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-medium text-gray-700">Industry News </label>
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">None</label>
-                                    <input name="pindnews" type="radio">
+                                    <input name="whatsapp_print_industry" value="0" type="radio">
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">All News</label>
-                                    <input name="pindnews" type="radio">
+                                    <input name="whatsapp_print_industry" value="1" type="radio">
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">Prominent News</label>
-                                    <input name="pindnews" type="radio">
+                                    <input name="whatsapp_print_industry" value="2" type="radio">
                                 </div>
                             </div>
                         </fieldset>
@@ -769,45 +792,45 @@
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">None</label>
-                                    <input name="wcomanynews" type="radio">
+                                    <input name="whatsapp_web_company" value="0"  type="radio">
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">All News</label>
-                                    <input name="wcomanynews" type="radio">
+                                    <input name="whatsapp_web_company" value="1"  type="radio">
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">Prominent News</label>
-                                    <input name="wcomanynews" type="radio">
+                                    <input name="whatsapp_web_company" value="2"  type="radio">
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-medium text-gray-700">Competitor News</label>
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">None</label>
-                                    <input name="wcomnews" type="radio">
+                                    <input name="whatsapp_web_competitor" value="0" type="radio">
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">All News</label>
-                                    <input name="wcomnews" type="radio">
+                                    <input name="whatsapp_web_competitor" value="1" type="radio">
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">Prominent News</label>
-                                    <input name="wcomnews" type="radio">
+                                    <input name="whatsapp_web_competitor" value="2" type="radio">
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-medium text-gray-700">Industry News </label>
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">None</label>
-                                    <input name="windnews" type="radio">
+                                    <input name="whatsapp_web_industry" value="0" type="radio">
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">All News</label>
-                                    <input name="windnews" type="radio">
+                                    <input name="whatsapp_web_industry" value="1" type="radio">
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">Prominent News</label>
-                                    <input name="windnews" type="radio">
+                                    <input name="whatsapp_web_industry" value="2" type="radio">
                                 </div>
                             </div>
                         </fieldset>
@@ -817,47 +840,48 @@
                         <div class="grid grid-cols-3 gap-4 mt-3 p-5">
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for Media Touch</label>
-                                <input type="checkbox">
+                                <input name="enableformediatouch" value="1" type="checkbox">
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for DYNA</label>
-                                <input type="checkbox">
+                                <input name="enablefordidyounotice" type="checkbox" value="1">
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for QLIKVIEW</label>
-                                <input type="checkbox">
+                                <input name="enableforqlikview" type="checkbox" value="1">
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for QUALIFY</label>
-                                <input type="checkbox">
+                                <input name="enabletoqualify" type="checkbox" value="1">
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for ALERT</label>
-                                <input type="checkbox">
+                                <input name="getcriticalalert" type="checkbox" value="1">
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for CHARTS</label>
-                                <input type="checkbox">
+                                <input name="enableforcharts" type="checkbox" value="1">
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for BR</label>
-                                <input type="checkbox">
+                                <input name="enableforbr" type="checkbox" value="1">
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for BB</label>
-                                <input type="checkbox">
+                                <input name="enableforbb" type="checkbox" value="1">
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for Mobile</label>
-                                <input type="checkbox">
+                                <input name="enableformediatouch" type="checkbox" value="1">
                             </div>
                         </div>
                     </fieldset>
                 </div>
 
                 <div class="flex items-center p-4 md:p-5 space-x-3 rtl:space-x-reverse border-t border-gray-200 rounded-b dark:border-gray-600">
-                    <button data-modal-hide="large-modal1" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save</button>
+                    <button  type="button" onclick="addcontact()" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save</button>
                 </div>
+                </form>
             </div>
         </div>
     </div>
@@ -1070,6 +1094,31 @@
 
             })
         };
+        function addcontact(){
+        var formData1 =  $('#addcontact').serialize();
+        console.log(formData1);
+        $.ajax({
+            url: '{{ route("addcontact") }}',
+            method: 'POST',
+            data: formData1,
+            success: function(response) {
+                if (response.success) {
+                    window.location.reload();
+                } else {
+                    // Handle validation errors or other errors
+                    if (response.errors) {
+                        $.each(response.errors, function(key, value) {
+                     
+                     $('#' + key + '-error').text(value);
+                 });
+                    } 
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    }
     </script>
 
     @endsection

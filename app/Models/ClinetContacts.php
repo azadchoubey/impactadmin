@@ -10,6 +10,7 @@ class ClinetContacts extends Model
     use HasFactory;
     protected $table = "clientcontacts";
     protected $primaryKey = 'contactid';
+    public $timestamps = false;
 
     public function clients(){
         return $this->belongsTo(Clinetprofile::class,'contactid','ClientID');

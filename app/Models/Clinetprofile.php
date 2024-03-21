@@ -26,7 +26,7 @@ class Clinetprofile extends Model
         return $this->belongsTo(Picklist::class,'Type','ID')->select('ID','Name');
     }
     public function billingcycle(){
-        return $this->belongsTo(Picklist::class,'wm_billingcycle','ID')->select('ID','Name');
+        return $this->belongsTo(Picklist::class,'Bill Cycle','ID')->select('ID','Name');
     }
     public function keywords(){
         return $this->hasManyThrough(

@@ -69,43 +69,45 @@ class EditPublications extends Component
     ];
     public function mount($id)
     {
-        $this->id = $id;
+        $this->id = base64_decode($id);
+
+        $data = Pubmaster::with('Type', 'city', 'country', 'state', 'cat', 'lang', 'pub_pages', 'edition')->find($this->id);
+
+        $this->title = $data->Title;
+        $this->pubid = $data->PubId;
+        $this->address1 = $data->address1;
+        $this->address2 = $data->address2;
+        $this->address3 = $data->address3;
+        $this->city = $data->city?->ID;
+        $this->state = $data->state->ID;
+        $this->country = $data->country->ID;
+        $this->edition = $data->edition->ID;
+        $this->language = $data->Lang->ID;
+        $this->issn = $data->Issn_Num;
+        $this->type = $data->type->ID;
+        $this->category = $data->cat->ID;
+        $this->website = $data->WebSite;
+        $this->region = $data->region->ID;
+        $this->size = $data->Size;
+        $this->phone = $data->phone;
+        $this->domestic = $data->IsDomestic;
+        $this->international = $data->IsDomestic ? 0 : 1;
+        $this->pagenames = $data->pub_pages->toArray();
+        $this->checkboxes = $data->pub_pages->pluck('IsPre', 'PageNameID')->toArray();
+        $this->circulation = $data->Circulation;
+        $this->RateNB = $data->RateNB;
+        $this->RatePC = $data->RatePC;
+        $this->RateNC = $data->RateNC;
+        $this->RatePB = $data->RatePB;
+        $this->masthead = $data->MastHead;
+        $this->primary = $data->PrimaryPubID;
     }
     public function render()
     {
         if ($this->id) {
-            $data = Pubmaster::with('Type', 'city', 'country', 'state', 'cat', 'lang', 'pub_pages', 'edition')->find($this->id);
 
-            $this->title = $data->Title;
-            $this->pubid = $data->PubId;
-            $this->address1 = $data->address1;
-            $this->address2 = $data->address2;
-            $this->address3 = $data->address3;
-            $this->city = $data->city?->ID;
-            $this->state = $data->state->ID;
-            $this->country = $data->country->ID;
-            $this->edition = $data->edition->ID;
-            $this->language = $data->Lang->ID;
-            $this->issn = $data->Issn_Num;
-            $this->type = $data->type->ID;
-            $this->category = $data->cat->ID;
-            $this->website = $data->WebSite;
-            $this->region = $data->region->ID;
-            $this->size = $data->Size;
-            $this->phone = $data->phone;
-            $this->domestic = $data->IsDomestic;
-            $this->international = $data->IsDomestic ? 0 : 1;
-            $this->pagenames = $data->pub_pages->toArray();
-            $this->checkboxes = $data->pub_pages->pluck('IsPre', 'PageNameID')->toArray();
-            $this->circulation = $data->Circulation;
-            $this->RateNB = $data->RateNB;
-            $this->RatePC = $data->RatePC;
-            $this->RateNC = $data->RateNC;
-            $this->RatePB = $data->RatePB;
-            $this->masthead = $data->MastHead;
-            $this->primary = $data->PrimaryPubID;
             $picklist = Picklist::whereIn('Type', ['City', 'Region', 'Language', 'Country', 'State', 'Pub Category', 'Pubtype'])->get()->groupBy('Type');
-           // dd($this->checkboxes);
+          
         } 
         return view('livewire.edit-publications', compact('picklist'));
     }
@@ -132,7 +134,6 @@ class EditPublications extends Component
             'countryID' => $this->country,
             // 'pagenames' => $this->pagenames,
             'IsDomestic' => $this->domestic??0,
-            // 'international' => $this->international,
             'phone' => $this->phone,
             // 'restrictedmu' => $this->restrictedmu,
             // 'mu' => $this->mu,
@@ -147,19 +148,23 @@ class EditPublications extends Component
             'RatePB' => $this->RatePB,
             'RateNB' => $this->RateNB,
         ]);
+        foreach($this->pagenames as $pagename){
+            PubPageName::updateOrCreate([
+                "PubId"=>$pagename['PubId'],
+                "Name"=>$pagename["Name"]
+    
+            ],$this->pagenames);
+        }
+        
+
         session()->flash('success', 'Your changes have been saved successfully!');
         return redirect()->to('/publications');
         // $PubPageName = PubPageName::where('PubId', $this->pubid)->update();
     }
     public function addCheckbox()
     {
-      
-            $rand = rand(00000,9999);
-            $this->checkboxes [ $rand]= true;
-            $this->pagenames[]=[ 'PageNameID' =>  $rand,'Name' =>  $this->page];
-            $this->page = '';
-           //dd($this->pagenames);
-        
+        $this->pagenames[]=['Name' =>  $this->page,'IsPre'=>1 ,'PubId'=>$this->pubid,'CreateDateTime'=>"0000-00-00 00:00:00",'EditDateTime'=>"0000-00-00 00:00:00"];
+        $this->page = '';
     }
 
 }

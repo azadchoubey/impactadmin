@@ -10,4 +10,12 @@ class PubPageName extends Model
     use HasFactory;
     protected $table = "pub_page_name";
     protected $primaryKey = 'PageNameID';
+    public $timestamps = false;
+    protected $fillable = [
+        "PubId",
+        "IsPre",
+        "Name",
+        "CreateDateTime",
+        "EditDateTime"
+    ];
 }

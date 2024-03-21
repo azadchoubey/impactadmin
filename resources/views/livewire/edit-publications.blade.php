@@ -125,14 +125,10 @@
                         <input wire:model="page" wire:keydown.enter.prevent="addCheckbox" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" id="pagename">
                     </div>
                     @if(!empty($pagenames))
-                    {{count($checkboxes)}}
-                    @foreach($pagenames as $pagename)
-                    
+                    @foreach($pagenames as $pagename)   
                     <div class="flex items-center space-x-2 mb-2">
-                        <input wire:model="checkboxes.{{$pagename['PageNameID']}}" type="checkbox" class="text gap-4"  > <span class="gap-2">{{$pagename['Name']}}</span>
+                        <input wire:model="pagename.{{$pagename['IsPre']}}" type="checkbox" class="text gap-4"  > <span class="gap-2">{{$pagename['Name']}}</span>
                     </div>
-
-
                     @endforeach
                     @endif
 
