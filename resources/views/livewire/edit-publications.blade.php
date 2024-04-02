@@ -1,21 +1,21 @@
 <div class="w-10/12 mx-auto">
     <form wire:submit.prevent="submitForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 p-4">
         <div class="mr-3 bg-white-300 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 p-4 dark:bg-gray-800 dark:border-gray-700">
-            <div class="grid grid-cols-3 gap-3">
+            <div class="grid grid-cols-2 gap-3">
                 <div class="mb-2" x-data="{isTyped: false}">
                     <label for="name" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Publication</label>
                     <input wire:model="pubid" type="text" disabled class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>                
-                <div class="mb-4">
+             {{--    <div class="mb-4">
                     <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Web Universe</span>
                     <br>
                     <input disabled wire:model="webuniverse" {{$webuniverse == 1 ? "checked" : ''}} class="text" type="checkbox">
-                </div>
+                </div> --}}
                 <div class="mb-4">
                     <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Primary</span>
                     <div class="mt-1 flex items-center">
                         <input disabled wire:model="primary" {{$primary == 1 ? "checked" : ''}} class="text" type="checkbox">
-                        <input wire:model="primary" type="text" id="primary" class="text ml-2 bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <input wire:model="primaryname" type="text" id="primary" class="text ml-2 bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     </div>
                 </div>
 
@@ -32,11 +32,6 @@
 
             <div class="grid grid-cols-2 gap-3">
                 <div class="mb-4">
-                    <label for="address1" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Address 1</label>
-                    <input wire:model="address1" type="text" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    @error('address1')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
-                </div>
-                <div class="mb-4">
 
                     <label for="edition" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Edition</label>
                     <select wire:model="edition" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -48,10 +43,6 @@
                     @error('edition')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
                 </div>
                 <div class="mb-4">
-                    <label for="address2" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Address 2</label>
-                    <input wire:model="address2" type="text" id="address2" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                </div>
-                <div class="mb-4">
                     <label for="category" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Category</label>
                     <select wire:model="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         @foreach($picklist['Pub Category'] as $key=>$cat)
@@ -60,10 +51,7 @@
                     </select>
                     @error('category')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
                 </div>
-                <div class="mb-4">
-                    <label for="address3" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Address 3</label>
-                    <input wire:model="address3" type="text" id="address3" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                </div>
+
                 <div class="mb-4">
 
                     <label for="type" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Type</label>
@@ -72,15 +60,6 @@
                         <option {{ $pubtype->ID == $type ? 'selected' : '' }} value="{{ $pubtype->ID }}">{{ $pubtype->Name }}</option>
                         @endforeach
                     </select>
-                </div>
-                <div class="mb-4">
-                    <label for="city" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">City</label>
-                    <select wire:model="city" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        @forelse($picklist['city'] as $key=>$city)
-                        <option {{$city->ID == ($city?0:'')? 'selected' : ''}} value="{{$city->ID}}">{{$city->Name}}</option>
-                        @endforeach
-                    </select>
-                    @error('city')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
                 </div>
                 <div class="mb-4">
                     <label for="region" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Region</label>
@@ -92,15 +71,7 @@
                     @error('region')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
 
                 </div>
-                <div class="mb-4">
-                    <label for="state" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">State</label>
-                    <select wire:model="state" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        @foreach($picklist['State'] as $key=>$states)
-                        <option {{$states->ID == ($state?0:'') ? 'selected': ''}} value="{{$states->ID}}">{{$states->Name}}</option>
-                        @endforeach
-                    </select>
-                    @error('state')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
-                </div>
+
                 <div class="mb-4">
                     <label for="language" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Language</label>
                     <select wire:model="language" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -110,41 +81,20 @@
                     </select>
                     @error('language')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
                 </div>
-                <div class="mb-4">
-                    <label for="country" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Country</label>
-                    <select wire:model="country" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        @foreach($picklist['Country'] as $key=>$cont)
-                        <option {{$cont->ID == $country ?  'selected': ''}} value="{{$cont->ID}}">{{$cont->Name}}</option>
-                        @endforeach
-                    </select>
-                    @error('country')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
-                </div>
+
                 <div class="mb-4">
                     <label for="pagename" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Page Name</label>
                     <div class="flex items-center space-x-2 mb-2">
                         <input wire:model="page" wire:keydown.enter.prevent="addCheckbox" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" id="pagename">
                     </div>
                     @if(!empty($pagenames))
-                    @foreach($pagenames as $pagename)   
+                    @foreach($pagenames as $key=>$pagename)   
                     <div class="flex items-center space-x-2 mb-2">
-                        <input wire:model="pagename.{{$pagename['IsPre']}}" type="checkbox" class="text gap-4"  > <span class="gap-2">{{$pagename['Name']}}</span>
+                        <input wire:model="pagenames.{{$key}}.IsPre" type="checkbox" class="text gap-4"  > <span class="gap-2">{{$pagename['Name']}}</span>
                     </div>
                     @endforeach
                     @endif
 
-                </div>
-
-
-                <div class="mb-4">
-                    <input wire:model="domestic" {{$domestic == 1 ?"checked":''}} class="text" value="{{$domestic}}" type="checkbox">
-                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Domestic</span>
-                    <input wire:model="international" {{$international == 0 ?"":'checked'}} class="text" value="{{$international}}" type="checkbox" style="margin-left: 50px;">
-                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">International</span>
-                </div>
-                <div class="mb-4">
-                    <label for="phone" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Phone No.</label>
-                    <input wire:model="phone" type="text" id="phone" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    @error('phone')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
                 </div>
 
                 <div class="mb-4">
@@ -161,17 +111,6 @@
                 
                 <div class="col-span-2 mt-4">
                     <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Save</button>
-                @if (session()->has('success'))
-                    <div id="popup" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-                        <div class="bg-white p-8 rounded-lg shadow-lg">
-                            <span class="block text-3xl text-green-500 mb-4">&check;</span>
-                            <p class="text-lg text-gray-800">{{ session('success') }}</p>
-                            <button class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" onclick="closePopup()">Close</button>
-                        </div>
-                    </div>
-                    <!-- Clear the success message from the session -->
-                    @php session()->forget('success') @endphp
-                @endif
                     <button type="button" id="cancel" onclick="desableAllDisabledItems()" class="hidden bg-red-500 text-white px-4 py-2 rounded hover:bg-blue-600">Cancel</button>
                     <button type="button" class="bg-gray-800 text-white px-4 py-2 rounded hover:bg-blue-600">Set AVE</button>
 
@@ -191,10 +130,6 @@
                 <div class="mb-4">
                     <label for="frequency" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Frequency</label>
                     <input wire:model="frequency" type="text" id="frequency" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                </div>
-                <div class="mb-4">
-                    <label for="website" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Website</label>
-                    <input wire:model="website" type="text" id="website" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>
                 <div class="mb-4">
                     <label for="size" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Size</label>

@@ -12,15 +12,6 @@
                 @error('Name') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
 
             </div>
-
-            <div class="ml-3">
-
-                <label for="primary" class="block text-sm font-medium text-gray-700">Primary Client</label>
-                <div class="flex items-center">
-                    <input type="checkbox" checked id="primaryCheckbox" class="mr-2">
-                    <input id="primary" type="text" name="PriClientID" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-5 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                </div>
-            </div>
             <div>
                 <label for="broadcast" class="block text-sm font-medium text-gray-700">Broadcast</label>
                 <div class="flex items-center">
@@ -29,17 +20,6 @@
                     <input id="broadcast" name="broadcastcid" disabled type="text" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-5 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>
 
-            </div>
-
-            <div>
-                <label for="csrsince" class="block text-sm font-medium text-gray-700">Customer Since</label>
-                <input name="customersince" type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            </div>
-
-
-            <div>
-                <label for="phone" class="block text-sm font-medium text-gray-700">Phone No</label>
-                <input id="phone" name="Phone" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             </div>
             <div>
                 <label for="sector" class="block text-sm font-medium text-gray-700">Industory / Sector</label>
@@ -53,48 +33,13 @@
                 @error('SectorPid') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
             </div>
 
-            <div>
-                <label for="address1" class="block text-sm font-medium text-gray-700">Address 1</label>
-                <input name="AddressLine1" id="address" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                @error('AddressLine1') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
-
-            </div>
-
-            <div>
-                <label for="address2" class="block text-sm font-medium text-gray-700">Address 2</label>
-                <input id="address" name="AddressLine2" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                @error('AddressLine2') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
-
-            </div>
-            <div>
-                <label for="address3" class="block text-sm font-medium text-gray-700">Address 3</label>
-                <input name="AddressLine3" id="address" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                @error('AddressLine3') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
-
-            </div>
-            <div>
-                <label for="fax" class="block text-sm font-medium text-gray-700">Fax</label>
-                <input name="Fax" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-
-            </div>
-            <div>
-                <label for="subsector" class="block text-sm font-medium text-gray-700">Sub Sector</label>
-                <select name="subsector[]" multiple id="subsector" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                  
-                </select>
-                @error('subsector') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
-
-            </div>
+            
             <div>
                 <label for="mobile" class="block text-sm font-medium text-gray-700">Mobile No</label>
                 <input name="Mobile" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             </div>
 
 
-            <div>
-                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                <input name="Email" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            </div>
             <div>
                 <label for="reference" class="block text-sm font-medium text-gray-700">Reference</label>
                 <select name="Source" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -106,16 +51,7 @@
                 </select>
                 @error('Source') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
             </div>
-            <div>
-                <label for="city" class="block text-sm font-medium text-gray-700">City</label>
-                <select name="City" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    <option>Select Option</option>
-                    @foreach($picklist['city'] as $city)
-                    <option value="{{$city->ID}}">{{$city->Name}}</option>
-                    @endforeach
-                </select>
-                @error('City') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
-            </div>
+           
             <div>
                 <label for="contractstart" class="block text-sm font-medium text-gray-700">Contract Start</label>
                 <input name="wm_contractstartdate" id="contractstart" type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -132,25 +68,13 @@
                 </select>
                 @error('Type') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
             </div>
-            <div>
-                <label for="state" class="block text-sm font-medium text-gray-700">State</label>
-                <select name="State" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    <option>Select Option</option>
-                    @foreach($picklist['state'] as $state)
-                    <option value="{{$state->ID}}">{{$state->Name}}</option>
-                    @endforeach
-                </select>
-                @error('State') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
-            </div>
-            <div>
-                <label for="pincode" class="block text-sm font-medium text-gray-700">Pincode</label>
-                <input name="pin" id="pincode" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-5 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            </div>
+         
+
           
 
 
 
-            <div>
+        {{--     <div>
                 <label for="Country" class="block text-sm font-medium text-gray-700">Country</label>
                 <select name="CountryID" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     <option>Select Option</option>
@@ -159,7 +83,7 @@
                     @endforeach
                 </select>
                 @error('CountryID') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
-            </div>
+            </div> --}}
 
 
             <div>

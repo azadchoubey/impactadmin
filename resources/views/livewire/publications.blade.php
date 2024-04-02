@@ -35,7 +35,7 @@
         </div>
 
     </div>
-    <table id="publications" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+    <table id="publications" class="w-lg text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
                 <th scope="col" class="px-6 py-3">
@@ -53,15 +53,15 @@
         <tbody>
             @foreach($Results as $result)
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">                          
-            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            <th  scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
             <a wire:click="fetchAll('{{ $result->PubId }}')" href="javascript:void(0);">{{$result->Title}}</a> 
           
-                <td class="px-6 py-4">
+                <td class="px-6 py-4" >
                     <div class="flex items-center">
                        {{$result->edition->Name}}
                     </div>
                 </td>        
-                <td class="px-6 py-4">
+                <td class="px-6 py-4" >
                     <div class="flex items-center">
                     <a wire:navigate href="{{route('editpublication',base64_encode($result->PubId ))}}" class="mr-2 px-4 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"> <div class="flex items-center">
                             <svg class="h-4 w-4 text-white-600" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -111,61 +111,38 @@
                 </div>
             </div>
             <div class="grid grid-cols-2 gap-3">
-                <div class="mb-4">
-                    <label for="address1" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Address 1</label>
-                    <input wire:model="address1" type="text"  disabled class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                </div>
+
                 <div class="mb-4">
                     <label for="edition" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Edition</label>
                     <input wire:model="edition" type="text"  disabled id="edition" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>
-                <div class="mb-4">
-                    <label for="address2" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Address 2</label>
-                    <input wire:model="address2" type="text"  disabled id="address2" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                </div>
+
                 <div class="mb-4">
                     <label for="category" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Category</label>
                     <input wire:model="category" type="text"  disabled id="category" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>
-                <div class="mb-4">
-                    <label for="address3" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Address 3</label>
-                    <input wire:model="address3" type="text"  disabled id="address3" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                </div>
+
                 <div class="mb-4">
                     <label for="type" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Type</label>
                     <input wire:model="type" type="text"  disabled id="type" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>
-                <div class="mb-4">
-                    <label for="city" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">City</label>
-                    <input wire:model="city" type="text"  disabled id="city" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                </div>
+
                 <div class="mb-4">
                     <label for="region" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Region</label>
                     <input wire:model="region" type="text"  disabled id="region" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>
-                <div class="mb-4">
-                    <label for="state" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">State</label>
-                    <input wire:model="state" type="text"  disabled id="state" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                </div>
+ 
                 <div class="mb-4">
                     <label for="language" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Language</label>
                     <input wire:model="language" type="text"  disabled id="language" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>
-                <div class="mb-4">
-                    <label for="country" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Country</label>
-                    <input wire:model="country" type="text"  disabled id="country" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                </div>
+
 
                 <div class="mb-4">
                     <label for="phone" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Phone No.</label>
                     <input wire:model="phone" type="text"  disabled id="phone" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>
                 <div class="mb-4">
-                    <input disabled wire:model="domestic" {{$domestic == 1 ?"checked":''}} class="text" value="{{$domestic}}" type="checkbox">
-                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Domestic</span>
-                    <input disabled wire:model="international" {{$international == 0 ?"":'checked'}} class="text" value="{{$international}}" type="checkbox">
-                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">International</span>
-                    <br>
                     <input disabled wire:model="primary" {{$primary == 1 ? "checked" : ''}} class="text" value="{{$primary}}" type="checkbox">
                     <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Primary</span>
                     <input  wire:model="restrictedmu" {{$restrictedmu == 1 ?"checked":''}} class="text" value="{{$restrictedmu}}" type="checkbox"style="margin-left: 10px;">
