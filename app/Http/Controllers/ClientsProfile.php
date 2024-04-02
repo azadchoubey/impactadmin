@@ -22,8 +22,9 @@ class ClientsProfile extends Controller
         $keywords = $data->keywords;
         $contacts = $data->contacts;
         $editing = '';
-        $picklist = Picklist::whereIn('Type', ['City', 'Country', 'Delivery Method', 'Sector Summary Delivery', 'contacttype'])->get()->groupBy('Type');
-        $webdeliverymaster = Wmwebdeliverymethodmaster::all();
+   $picklist = Picklist::whereIn('Type', ['City', 'Country', 'Bill Cycle','Delivery Method','Sector Summary Delivery', 'Sector', 'State', 'Client Status', 'Region', 'Client Type', 'Client Source','subsector'])->get()->groupBy(function ($query) {
+            return strtolower($query->Type);
+        });        $webdeliverymaster = Wmwebdeliverymethodmaster::all();
         $deliverymaster = Deliverymethodmaster::all();
         return view('clients', compact('data', 'contacts', 'keywords', 'editing', 'picklist', 'webdeliverymaster', 'deliverymaster'));
     }
