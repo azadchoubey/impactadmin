@@ -68,7 +68,7 @@
                                    </select>
                                 </div>
                             </div>
-                            <div>
+                            {{-- <div>
                                 <label for="primary" class="block text-sm font-medium text-gray-700">Primary Client</label>
                                 <div class="flex items-center">
                                     <input type="checkbox" name="primary" {{$data->PriClientID ?'checked':''}} id="primaryCheckbox" class="mr-2">
@@ -709,6 +709,7 @@
                                 <select name="CountryID" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     <option value="">Select option</option>
                                     @foreach($picklist['country'] as $country)
+                                    @foreach($picklist['country'] as $country)
                                     <option value="{{$country->ID}}">{{$country->Name}}</option>
                                     @endforeach
                                 </select>
@@ -718,6 +719,7 @@
                                 <label for="type" class="block text-sm font-medium text-gray-700">City</label>
                                 <select name="CityID" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     <option value="">Select option</option>
+                                    @foreach($picklist['city'] as $City)
                                     @foreach($picklist['city'] as $City)
                                     <option value="{{$City->ID}}">{{$City->Name}}</option>
                                     @endforeach
@@ -751,6 +753,18 @@
                                     @endforeach
                                 </select>
                             </div>
+<<<<<<< Updated upstream
+=======
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Sector delivery method</label>
+                                <select name="sectordeliveryid" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <option value="">Select option</option>
+                                    @foreach($picklist['delivery method'] as $Delivery)
+                                    <option value="{{$Delivery->ID}}">{{$Delivery->Name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+>>>>>>> Stashed changes
                         </div>
                     </fieldset>
                     <fieldset class="border border-gray-300 p-6 rounded-lg">
@@ -773,7 +787,19 @@
                                     @endforeach
                                 </select>
                             </div>
+<<<<<<< Updated upstream
 
+=======
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Sector Summary for Sectors</label>
+                                <select name="SectorID[]" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <option value="">Select option</option>
+                                    @foreach($picklist['sector summary delivery'] as $Delivery)
+                                    <option value="{{$Delivery->ID}}">{{$Delivery->Name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+>>>>>>> Stashed changes
                         </div>
                     </fieldset>
                     <fieldset class="border border-gray-300 p-6 rounded-lg">
