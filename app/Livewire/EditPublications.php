@@ -32,11 +32,16 @@ class EditPublications extends Component
 
     protected $rules = [
         'title' => 'required',
-        'address1'=>'required',
         'edition'=>'required',
         'category'=>'required',
         'region'=>'required',
         'language'=>'required',
+        'circulation'=>'numeric',
+        'size'=>'numeric',
+        'RateNB'=>'numeric',
+        'RatePC'=>'numeric',
+        'RateNC'=>'numeric',
+        'RatePB'=>'numeric',
     ];
     protected $messages = [
         'title.required' => 'The Name cannot be empty.',
@@ -70,17 +75,23 @@ class EditPublications extends Component
         $this->RatePB = $data->RatePB;
         $this->masthead = $data->MastHead;
         $this->primary = $data->PrimaryPubID;
+        $this->primaryname = $this->primary == 0 ? false:true;
+       
     }
     public function render()
     {
         if ($this->id) {
 
             $picklist = Picklist::whereIn('Type', [ 'City', 'Region', 'Language', 'Pub Category', 'Pubtype'])->get()->groupBy('Type');
-          
-        } 
-        return view('livewire.edit-publications', compact('picklist'));
-    }
+            $data['pubmaster'] = Pubmaster::where('deleted',0)->get(); 
 
+        } 
+        return view('livewire.edit-publications', compact('picklist','data'));
+    }
+    public function togglePrimary()
+    {
+        $this->primaryname = !$this->primaryname;
+    }
     public function submitForm()
     {
         $validatedData = $this->validate();
@@ -95,7 +106,6 @@ class EditPublications extends Component
             'Region' => $this->region,
             'Language' => $this->language,
             'IsDomestic' => $this->domestic??0,
-            'phone' => $this->phone,
             // 'restrictedmu' => $this->restrictedmu,
             // 'mu' => $this->mu,
             'MastHead' => $this->masthead,
@@ -112,7 +122,8 @@ class EditPublications extends Component
         foreach($this->pagenames as $pagename){
             if($pagename["IsPre"] == true || $pagename["IsPre"] == false){
                 $pagename["IsPre"] = $pagename["IsPre"] == true?"1":"0";
-            }         
+            }     
+          
             PubPageName::updateOrCreate([
                 "PubId"=>$pagename['PubId'],
                 "Name"=>$pagename["Name"]
@@ -120,7 +131,7 @@ class EditPublications extends Component
             ],$pagename);
            
         }
-        
+    
 
         session()->flash('success', 'Your changes have been saved successfully!');
         return redirect()->to('/publications');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Picklist;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -12,14 +13,12 @@ class ManageUsers extends Controller
 {
     public function index()
     {
-
+        $profiles['remote profile'] = Picklist::select('ID', 'Type', 'Name')->whereIn('id',[523, 524, 525, 526, 527, 528, 547, 685, 1087, 1195, 1201, 1300])->get();
+        $profiles['profile'] = User::select('profile')->distinct()->orderBy('profile')->get();
         return view('manageusers', [
             'users' => User::select('Id', 'UserName', 'UserId', 'Password', 'ProfileId', 'RemoteProfileID', 'status', 'Profile')
                 ->orderBy('UserId')->with('Remoteuser')->get(),
-            'profiles' => Picklist::select('ID', 'Type', 'Name')->whereIn('Type', ['profile', 'Remote Profile'])->get()
-                ->groupBy(function ($item) {
-                    return strtolower($item->Type);
-                })
+            'profiles'=>$profiles
         ]);
     }
     public function adduser(Request $request)
@@ -30,21 +29,18 @@ class ManageUsers extends Controller
                 'username' => 'required',
                 'profile' => 'required',
                 'password' => 'required',
-                'remoteprofile' => 'required|numeric'
             ]);
     
-            $profile = Picklist::find($request->profile);
             $user = new User();
             $user->UserID = $request->userid;
             $user->UserName = $request->username;
-            $user->ProfileId = $request->profile;
-            $user->Profile = $profile->Name;
-            $user->RemoteProfileID = $request->remoteprofile;
+            $user->Profile = $request->profile;
+            $user->RemoteProfileID = $request->remoteprofile??0;
             $user->Md5Pass = md5($request->password);
             $user->Password = $request->password;
             $user->AllowRemote = 0;
             $user->LastUpdate = now();
-            $user->status = $request->status ?1: 0;
+            $user->status = 1;
     
             if ($user->save()) {
                 session()->flash('success', 'Record Added Successfully!');
@@ -63,14 +59,11 @@ class ManageUsers extends Controller
             'userid' => 'required|string',
             'username' => 'required',
             'profile' => 'required',
-            'remoteprofile' => 'required|numeric'
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()]);
         }
-
-        $profile = Picklist::find($request->profile);
         $user = User::where('UserID', $request->userid)->first();
 
         if (!$user) {
@@ -78,13 +71,12 @@ class ManageUsers extends Controller
         }
 
         $user->UserName = $request->username;
-        $user->ProfileId = $request->profile;
-        $user->Profile = $profile->Name;
-        $user->RemoteProfileID = $request->remoteprofile;
+        $user->Profile = $request->profile;
+        $user->RemoteProfileID = $request->remoteprofile??0;
         $user->Md5Pass = md5($request->password);
         $user->AllowRemote = 0;
         $user->LastUpdate = now();
-        $user->status = $request->has('status') ? 1 : 0;
+        $user->status = 1;
 
         if ($user->save()) {
             session()->flash('success', 'Record Updated Successfully!');
@@ -94,5 +86,12 @@ class ManageUsers extends Controller
         session()->flash('error', 'Operation Failed!');
 
         return response()->json(['error' => 'Operation Failed!'], 500);
+    }
+    public function enabledisable($id) {
+        $user = User::findOrFail($id);
+        $user->status = !$user->status;
+        $user->update();
+        session()->flash('success', 'Record Updated Successfully!');
+        return response()->json(['success' => true]);
     }
 }

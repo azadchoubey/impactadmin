@@ -6,6 +6,9 @@ use App\Models\Picklist;
 use App\Models\Pubmaster;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use App\Models\PubPageName;
+use Exception;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class CreatePublication extends Component
@@ -30,12 +33,14 @@ class CreatePublication extends Component
     public $RateNB;
     public $masthead;
     public $checkboxes =[];
+    public $primaryDisabled = true; 
     protected $rules = [
         'title' => 'required',
         'edition'=>'required',
         'category'=>'required',
         'region'=>'required',
-        'language'=>'required'
+        'language'=>'required',
+        'masthead' => 'image'
     ];
     protected $messages = [
         'title.required' => 'The Name cannot be empty.',
@@ -44,36 +49,43 @@ class CreatePublication extends Component
         'language.required' => 'The language cannot be empty.'
 
     ];
+    public function togglePrimary()
+    {
+        $this->primaryDisabled = !$this->primaryDisabled;
+    }
     public function render()
     {
-        $data = Picklist::whereIn('Type',['Region','Language','Pub Category','Pubtype'])->get()->groupBy('Type');
+        $data = Picklist::whereIn('Type',['Region','Language','Pub Category','Pubtype'])->get()->groupBy('Type');   
+        $data['pubmaster'] = Pubmaster::where('deleted',0)->get(); 
         return view('livewire.create-publication',compact('data'));
     }
     public function addCheckbox()
     {
         if (!empty($this->pagenames)) {
-            $this->checkboxes[] = $this->pagenames;
+            $this->checkboxes[] = ['Name' =>  $this->pagenames,'IsPre'=> 1];
             $this->pagenames = ''; 
         }
     }
     public function submitForm(){
-        dd($this->checkboxes);
-       $validatedData = $this->validate();
-        Pubmaster::insert([
-            'PrimaryPubID' => $this->primary??0,
+
+       try{
+        DB::beginTransaction();
+        $pubid = Pubmaster::insertGetId([
+            'PrimaryPubID' => $this->primaryDisabled?$this->primary:0,
             'Title' => $this->title,
-            'place' => $this->edition,
+            'Place' => 0,
             'Category' => $this->category,
             'Type' => $this->type,
             'Region' => $this->region,
             'Language' => $this->language,
             // 'restrictedmu' => $this->restrictedmu,
             // 'mu' => $this->mu,
-            'MastHead' => $this->masthead->store('photos'),
+            'MastHead' => $this->masthead->store('images/publications/masthead'),
             'Circulation' => $this->circulation,
             'Issn_Num' => $this->issn,
             // 'frequency' => $this->frequency,
             'Size' => $this->size,
+            'WebSite'=>'',
             'RatePC' => $this->RatePC,
             'RateNC' => $this->RateNC,
             'RatePB' => $this->RatePB,
@@ -81,9 +93,25 @@ class CreatePublication extends Component
             'CreateDateTime'=>now(),
             'EditDateTime'=>now()
         ]);
-        
-        Log::info('created new publication name: {name} by user: {user} ',['name'=>$this->title,'user'=>auth()->user()->UserID]);
+        foreach($this->checkboxes as $pagename){
+            if($pagename["IsPre"] == true || $pagename["IsPre"] == false){
+                $pagename["IsPre"] = $pagename["IsPre"] == true?"1":"0";
+            }       
+            PubPageName::updateOrCreate([
+                "PubId"=>$pubid,
+                "Name"=>$pagename["Name"]
+    
+            ],$pagename);
+           
+        }
+        Log::info('created new publication name: {name} and Pubid: {pubid} by user: {user} ',['name'=>$this->title,'user'=>auth()->user()->UserID,'pubid'=>$pubid]);
         session()->flash('success', 'Record Added successfully!');
         return redirect()->to('/publications');
+       }catch(Exception $e){
+        Log::error('Error while creating publication: {error}', ['error' => $e->getMessage()]);
+        session()->flash('error', 'An error occurred while adding the record.');
+
+       }
+
     }
 }

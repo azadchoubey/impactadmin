@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Livewire\ClientProfile;
 use App\Models\ClinetContacts;
 use App\Models\Clinetprofile;
 use App\Models\ContactSector;
@@ -18,14 +19,17 @@ class ClientsProfile extends Controller
 {
     public function index($id)
     {
-        $data = Clinetprofile::with('contacts', 'contacts.delivery', 'contacts.regularDigestPrint', 'contacts.regularDigestWeb', 'Country', 'region', 'sector', 'keywords', 'billingcycle')->find(base64_decode($id));
+        $data = Clinetprofile::with('contacts', 'contacts.delivery', 'contacts.regularDigestPrint', 'contacts.regularDigestWeb', 'Country', 'Region', 'sector', 'keywords', 'billingcycle')->find(base64_decode($id));
         $keywords = $data->keywords;
         $contacts = $data->contacts;
         $editing = '';
-        $picklist = Picklist::whereIn('Type', ['City', 'Country', 'Delivery Method', 'Sector Summary Delivery', 'contacttype'])->get()->groupBy('Type');
+        $picklist = Picklist::whereIn('Type', ['City', 'Country', 'Delivery Method', 'Sector Summary Delivery', 'contacttype','client type','client source','Region','bill cycle','client status'])->get()->groupBy(function ($query) {
+            return strtolower($query->Type);
+        });;
         $webdeliverymaster = Wmwebdeliverymethodmaster::all();
         $deliverymaster = Deliverymethodmaster::all();
-        return view('clients', compact('data', 'contacts', 'keywords', 'editing', 'picklist', 'webdeliverymaster', 'deliverymaster'));
+        $clients = Clinetprofile::where('deleted','!=',1)->get();
+        return view('clients', compact('data', 'contacts', 'keywords', 'editing', 'picklist', 'webdeliverymaster', 'deliverymaster','clients'));
     }
 
     public function edit(Request $request, $id)

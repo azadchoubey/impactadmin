@@ -14,8 +14,13 @@
                 <div class="mb-4">
                     <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Primary</span>
                     <div class="mt-1 flex items-center">
-                        <input disabled wire:model="primary" {{$primary == 1 ? "checked" : ''}} class="text" type="checkbox">
-                        <input wire:model="primaryname" type="text" id="primary" class="text ml-2 bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <input  wire:model="togglePrimary" wire:click="togglePrimary" {{$primary != 0 ? "checked" : ''}} class="text" type="checkbox">
+                        <select wire:model="primary" {{ ( !$primaryname  && $primary == 0  ) ? 'disabled' : ''}} class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <option></option>
+                        @foreach($data['pubmaster'] as $pubmaster)
+                        <option value="{{$pubmaster->PubId}}">{{$pubmaster->Title}}</option>
+                        @endforeach
+                    </select>
                     </div>
                 </div>
 
@@ -90,7 +95,7 @@
                     @if(!empty($pagenames))
                     @foreach($pagenames as $key=>$pagename)   
                     <div class="flex items-center space-x-2 mb-2">
-                        <input wire:model="pagenames.{{$key}}.IsPre" type="checkbox" class="text gap-4"  > <span class="gap-2">{{$pagename['Name']}}</span>
+                        <input wire:model="pagenames.{{$key}}.IsPre" {{$pagename['IsPre'] == "1" ? "checked":""}} type="checkbox" class="text gap-4"  > <span class="gap-2">{{$pagename['Name']}}</span>
                     </div>
                     @endforeach
                     @endif
@@ -122,18 +127,26 @@
                 <div class="mb-4">
                     <label for="circulation" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Circulation</label>
                     <input wire:model="circulation" type="text" id="circulation" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    @error('circulation')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
+
                 </div>
                 <div class="mb-4">
                     <label for="issn" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">ISSN</label>
                     <input wire:model="issn" type="text" id="issn" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    @error('issn')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
+
                 </div>
                 <div class="mb-4">
                     <label for="frequency" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Frequency</label>
                     <input wire:model="frequency" type="text" id="frequency" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    @error('frequency')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
+
                 </div>
                 <div class="mb-4">
                     <label for="size" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Size</label>
                     <input wire:model="size" type="text" id="size" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    @error('size')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
+
                 </div>
 
             </div>
@@ -153,19 +166,26 @@
                                 <label class=" block text-sm font-medium text-gray-700 gap-2">Color </label>
 
                                 <input type="text" wire:model="RatePC" class="text border border-gray-300 p-2 rounded w-full">
+                                @error('RatePC')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
+
                             </td>
                             <td class="">
                                 <input type="text" wire:model="RateNC" class="text border border-gray-300 p-2 rounded w-full">
+                                @error('RateNC')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
+
                             </td>
                         </tr>
                         <tr>
                             <td class="flex items-center">
                                 <label class="block text-sm font-medium text-gray-700 mb-2 gap-3">B&W</label>
                                 <input type="text" wire:model="RatePB" class="text border border-gray-300 p-2 rounded w-full">
+                                @error('RatePB')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
 
                             </td>
                             <td class="">
                                 <input type="text" wire:model="RateNB" class="text border border-gray-300 p-2 rounded w-full">
+                                @error('RateNB')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
+
                             </td>
                         </tr>
                     </tbody>

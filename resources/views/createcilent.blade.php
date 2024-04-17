@@ -68,24 +68,6 @@
                 </select>
                 @error('Type') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
             </div>
-         
-
-          
-
-
-
-        {{--     <div>
-                <label for="Country" class="block text-sm font-medium text-gray-700">Country</label>
-                <select name="CountryID" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    <option>Select Option</option>
-                    @foreach($picklist['country'] as $country)
-                    <option value="{{$country->ID}}">{{$country->Name}}</option>
-                    @endforeach
-                </select>
-                @error('CountryID') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
-            </div> --}}
-
-
             <div>
                 <label for="currency" class="block text-sm font-medium text-gray-700">Currency</label>
                 <input id="currency" type="text" name="Currency" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">

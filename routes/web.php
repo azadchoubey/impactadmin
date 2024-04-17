@@ -5,6 +5,7 @@ use App\Http\Controllers\ClientsProfile;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ManageUsers;
 use App\Livewire\Articles;
+use App\Livewire\CreatePublication;
 use App\Livewire\EditPublications;
 use App\Livewire\KeywordSearch;
 use App\Livewire\ShowClientProfile;
@@ -33,6 +34,9 @@ Route::get('/manageusers',[ManageUsers::class,'index']);
 Route::post('/adduser',[ManageUsers::class,'adduser'])->name('adduser');
 Route::post('/edituser',[ManageUsers::class,'edituser'])->name('edituser');
 Route::view('/change-password', 'change-password')->name('changepassword');
+Route::get('/enabledisable/{id}',[ManageUsers::class,'enabledisable'])->name('enabledisable');
+
+
 // client profile routes
 Route::get('/clients',ShowClientProfile::class);
 Route::get('/clients/{id}',[ClientsProfile::class,'index'])->name('clients');
@@ -45,7 +49,7 @@ Route::post('/addcontact',[ClientsProfile::class,'addcontact'])->name('addcontac
 
 //  publications routes
 Route::view('/publications','publications/index');
-Route::view('/createpublication','createpublication')->name('createpub');
+Route::get('/createpublication',CreatePublication::class)->name('createpub');
 Route::get('/editpublication/{id}',EditPublications::class)->name('editpublication');
 
 // article routes 

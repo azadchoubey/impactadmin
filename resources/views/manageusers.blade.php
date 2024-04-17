@@ -55,7 +55,7 @@
                     {{$user->Remoteuser[0]->Name}}
                 </td>
                 <td class="px-6 py-4 flex">
-                    {!! $user->status?'<div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div> Active':'<div class="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div> Deactive' !!}
+                    {!! $user->status?'<div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div> Enable':'<div class="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div> Disable' !!}
                 </td>
                 <td class="px-6 py-4">
                     <button data-modal-target="edituser" data-modal-toggle="edituser" class="px-4 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
@@ -68,7 +68,8 @@
                             </svg> Edit
                         </div>
                     </button>
-                    <button  class="px-3 py-2 text-xs font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
+                    @if($user->status)
+                    <button onclick="enabledisable(`{{route('enabledisable',$user->Id)}}`)" class="px-3 py-2 text-xs font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
                         <div class="flex items-center">
                             <svg class="h-4 w-4 text-white-500" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" />
@@ -77,11 +78,23 @@
                                 <line x1="14" y1="11" x2="14" y2="17" />
                                 <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
                                 <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
-                            </svg> Delete
+                            </svg> Disable
                         </div>
-                    </button>
-
-
+                    </button >
+                        @else
+                        <button onclick="enabledisable(`{{route('enabledisable',$user->Id)}}`)" class="px-3 py-2 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                        <div class="flex items-center">
+                            <svg class="h-4 w-4 text-white-500" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" />
+                                <line x1="4" y1="7" x2="20" y2="7" />
+                                <line x1="10" y1="11" x2="10" y2="17" />
+                                <line x1="14" y1="11" x2="14" y2="17" />
+                                <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                                <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                            </svg> Enable
+                        </div>
+                        </button>
+                        @endif
                 </td>
             </tr>
             @endforeach
@@ -136,10 +149,9 @@
                                 </div>
                                 <div>
                                     <label for="profile" class="block text-sm font-medium text-gray-700">Profile</label>
-                                    <select name="profile" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                    <option></option>
+                                    <select id="addprofile" name="profile" onchange="profileaddchange(this.value)"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                         @foreach($profiles['profile'] as $profile)
-                                        <option {{old('profile') == $profile->ID ? 'seleted':''}} value="{{$profile->ID}}">{{$profile->Name}}</option>
+                                        <option {{old('profile') == $profile->profile ? 'seleted':''}} value="{{$profile->profile}}">{{$profile->profile}}</option>
                                         @endforeach
                                     </select>
                                
@@ -147,20 +159,16 @@
                                    
                                 </div>
 
-                                <div>
+                                <div  class="hidden addremoteprofile">
                                     <label for="remoteprofile" class="block text-sm font-medium text-gray-700">Remote Profile</label>
-                                    <select  name="remoteprofile" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                        <option></option>
+                                    <select id="addremoteprofile" disabled  name="remoteprofile" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                         @foreach($profiles['remote profile'] as $profile)
                                         <option {{old('remoteprofile') == $profile->ID ? 'seleted':''}} value="{{$profile->ID}}">{{$profile->Name}}</option>
                                         @endforeach
                                     </select>
                                     <div  id="remoteprofile-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                                 </div>
-                                <div class="mt-4 flex items-center">
-                                    <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
-                                    <input class="ml-2"  name="status"  type="checkbox" class="text-blue-500 focus:ring-blue-500 dark:text-blue-300">
-                                </div>
+                               
 
                             </div>
 
@@ -219,7 +227,7 @@
 
                                 <div>
                                     <label for="profile" class="block text-sm font-medium text-gray-700">Profile</label>
-                                    <select id="profile" name="profile" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <select id="profile" onchange="profileeditchange(this.value)" name="profile" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 
                                         @foreach($profiles['profile'] as $profile)
                                         <option {{old('profile') == $profile->ID ? 'seleted':''}} value="{{$profile->ID}}">{{$profile->Name}}</option>
@@ -230,19 +238,16 @@
                                    
                                 </div>
 
-                                <div>
+                                <div class="hidden editremoteprofile" >
                                     <label for="remoteprofile" class="block text-sm font-medium text-gray-700">Remote Profile</label>
-                                    <select id="remoteprofile" name="remoteprofile" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <select disabled id="remoteprofile" name="remoteprofile" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                         @foreach($profiles['remote profile'] as $profile)
                                         <option {{old('remoteprofile') == $profile->ID ? 'seleted':''}} value="{{$profile->ID}}">{{$profile->Name}}</option>
                                         @endforeach
                                     </select>
                                     <div  id="remoteprofile-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                                 </div>
-                                <div class="mt-4 flex items-center">
-                                    <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
-                                    <input id="status" class="ml-2"  name="status" {{ old('status') ? 'checked' : '' }}  type="checkbox" class="text-blue-500 focus:ring-blue-500 dark:text-blue-300">
-                                </div>
+                               
 
                             </div>
 
@@ -281,7 +286,7 @@
 
 <script>
     $(document).ready(function() {
-        $('#users').DataTable({
+        $('#users1').DataTable({
             pagingType: 'first_last_numbers',
             layout: {
                 topStart: {
@@ -307,9 +312,16 @@
         profileSelect.append('<option></option>')
         $('#userid').val(rowData[0]);
         $('#username').val(rowData[1]);
+        if(rowData[2] == 'Reader'){
+            $('.editremoteprofile').removeClass('hidden');
+            $('#remoteprofile').prop('disabled', false);
+        }else{
+            $('.editremoteprofile').addClass('hidden');
+            $('#remoteprofile').prop('disabled', true); 
+        }
         profileOptions.forEach(function(option) {
-            var selected = option.Name == rowData[2] ? 'selected' : '';
-            profileSelect.append('<option value="' + option.ID + '" ' + selected + '>' + option.Name + '</option>');
+            var selected = option.profile == rowData[2] ? 'selected' : '';
+            profileSelect.append('<option value="' + option.profile + '" ' + selected + '>' + option.profile + '</option>');
         });
         var remoteprofile = $('#remoteprofile');
         remoteprofile.empty();
@@ -354,7 +366,6 @@
     }
     function adduser(){
         var formData1 =  $('#adduserform').serialize();
-        console.log(formData1);
         $.ajax({
             url: '{{ route("adduser") }}',
             method: 'POST',
@@ -371,6 +382,40 @@
                  });
                     } 
                 }
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    }
+    function profileaddchange(value){
+        if(value == 'Reader'){
+            $('.addremoteprofile').removeClass('hidden');
+            $('#addremoteprofile').prop('disabled', false);
+        }else{
+            $('.addremoteprofile').addClass('hidden');
+            $('#addremoteprofile').prop('disabled', true);
+
+        }
+    }
+    function profileeditchange(value){
+        if(value == 'Reader'){
+            $('.editremoteprofile').removeClass('hidden');
+            $('#remoteprofile').prop('disabled', false);
+        }else{
+            $('.editremoteprofile').addClass('hidden');
+            $('#remoteprofile').prop('disabled', true);
+
+        }
+    }
+    function enabledisable(url){
+        $.ajax({
+            url:url,
+            method: 'GET',
+            success: function(response) {
+                if (response.success) {
+                    window.location.reload();
+                } 
             },
             error: function(xhr, status, error) {
                 console.error(xhr.responseText);
