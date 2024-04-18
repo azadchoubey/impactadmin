@@ -22,48 +22,31 @@ class ClientsProfile extends Controller
         $data = Clinetprofile::with('contacts', 'contacts.delivery', 'contacts.regularDigestPrint', 'contacts.regularDigestWeb', 'Country', 'Region', 'sector', 'keywords', 'billingcycle')->find(base64_decode($id));
         $keywords = $data->keywords;
         $contacts = $data->contacts;
-        $editing = '';
         $picklist = Picklist::whereIn('Type', ['City', 'Country', 'Delivery Method', 'Sector Summary Delivery', 'contacttype','client type','client source','Region','bill cycle','client status'])->get()->groupBy(function ($query) {
             return strtolower($query->Type);
-        });;
+        });
         $webdeliverymaster = Wmwebdeliverymethodmaster::all();
         $deliverymaster = Deliverymethodmaster::all();
         $clients = Clinetprofile::where('deleted','!=',1)->get();
-        return view('clients', compact('data', 'contacts', 'keywords', 'editing', 'picklist', 'webdeliverymaster', 'deliverymaster','clients'));
+        return view('clients', compact('data', 'contacts', 'keywords', 'picklist', 'webdeliverymaster', 'deliverymaster','clients'));
     }
 
     public function edit(Request $request, $id)
     {
         $request->validate([
-            'address1'  => 'required',
             'Name'  => 'required',
-            'City'  => 'required',
-            'state'  => 'required',
-            'pincode'  => 'required',
             'currency'  => 'required',
             'Mobile'  => 'required',
             'Email'  => 'required',
             'StartDate'  => 'required',
-            'contractend'  => 'required'
-
         ]);
         $clientProfile = Clinetprofile::findOrFail($id);
         $clientProfile->Name = $request->Name;
         $clientProfile->broadcastcid = $request->broadcast;
         $clientProfile->customersince = $request->csrsince;
-        $clientProfile->Phone = $request->Phone;
-        $clientProfile->AddressLine1 = $request->address1;
-        $clientProfile->Fax = $request->Fax;
-        $clientProfile->AddressLine2 = $request->address2;
         $clientProfile->Mobile = $request->Mobile;
-        $clientProfile->AddressLine3 = $request->address3;
-        $clientProfile->Email = $request->Email;
         $clientProfile->Reference = $request->reference;
-        $clientProfile->City = $request->City;
         $clientProfile->contractstart = $request->StartDate;
-        $clientProfile->State = $request->state;
-        $clientProfile->Pin = $request->pincode;
-        $clientProfile->EndDate = $request->contractend;
         $clientProfile->billingdate = $request->BillDate;
         $clientProfile->Currency = $request->currency;
         $clientProfile->update();
