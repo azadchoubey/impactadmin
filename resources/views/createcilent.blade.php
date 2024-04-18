@@ -282,7 +282,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const checkbox = document.getElementById('primaryCheckbox');
-        const dropdown = document.querySelector('select[name="primary_client_id"]');
+        const dropdown = document.querySelector('select[name="PriClientID"]');
 
         checkbox.addEventListener('change', function() {
             if (checkbox.checked) {
