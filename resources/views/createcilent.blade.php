@@ -22,6 +22,19 @@
 
             </div>
             <div>
+                <label for="primary" class="block text-sm font-medium text-gray-700">Primary Client</label>
+                <div class="flex items-center">
+                    <input type="checkbox" name="primary" id="primaryCheckbox" class="mr-2">
+                    <select name="primary_client_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled>
+                        <option value="">Select Primary Client</option>
+                        @foreach($clients as $client)
+                        <option value="{{$client->ClientID}}">{{$client->Name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            
+            <div>
                 <label for="sector" class="block text-sm font-medium text-gray-700">Industory / Sector</label>
                 <select name="SectorPid" id="SectorPid" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     <option>Select Option</option>
@@ -265,5 +278,19 @@
     });
     })
 
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const checkbox = document.getElementById('primaryCheckbox');
+        const dropdown = document.querySelector('select[name="primary_client_id"]');
+
+        checkbox.addEventListener('change', function() {
+            if (checkbox.checked) {
+                dropdown.disabled = false;
+            } else {
+                dropdown.disabled = true;
+            }
+        });
+    });
 </script>
 @endsection

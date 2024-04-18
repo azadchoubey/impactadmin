@@ -72,11 +72,13 @@ class ClientsProfile extends Controller
     }
     public function addclient()
     {
-        $picklist = Picklist::whereIn('Type', ['City', 'Country', 'Bill Cycle', 'Sector', 'State', 'Client Status', 'Region', 'Client Type', 'Client Source','subsector'])->get()->groupBy(function ($query) {
+        $clients = Clinetprofile::where('deleted', '!=', 1)->get();
+        $picklist = Picklist::whereIn('Type', ['City', 'Country', 'Bill Cycle', 'Sector', 'State', 'Client Status', 'Region', 'Client Type', 'Client Source', 'subsector'])->get()->groupBy(function ($query) {
             return strtolower($query->Type);
         });
-        return view('createcilent', compact('picklist'));
+        return view('createcilent', compact('clients', 'picklist'));
     }
+    
     public function getSubsectors($industry)
     {
         $subsectors = Picklist::select('ID', 'Name')
