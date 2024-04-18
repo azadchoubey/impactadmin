@@ -24,8 +24,8 @@
             <div>
                 <label for="primary" class="block text-sm font-medium text-gray-700">Primary Client</label>
                 <div class="flex items-center">
-                    <input type="checkbox" name="primary" id="primaryCheckbox" class="mr-2">
-                    <select name="primary_client_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled>
+                    <input type="checkbox"  id="primaryCheckbox" class="mr-2">
+                    <select name="PriClientID" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled>
                         <option value="">Select Primary Client</option>
                         @foreach($clients as $client)
                         <option value="{{$client->ClientID}}">{{$client->Name}}</option>
@@ -64,13 +64,13 @@
                 </select>
                 @error('Source') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
             </div>
-           
+{{--            
             <div>
                 <label for="contractstart" class="block text-sm font-medium text-gray-700">Contract Start</label>
-                <input name="wm_contractstartdate" id="contractstart" type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                @error('wm_contractstartdate') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
+                <input name="BillDate" id="BillDate" type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                @error('BillDate') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
 
-            </div>
+            </div> --}}
             <div>
                 <label for="type" class="block text-sm font-medium text-gray-700">Type</label>
                 <select name="Type" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
