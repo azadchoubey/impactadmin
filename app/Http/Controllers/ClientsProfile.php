@@ -74,18 +74,12 @@ class ClientsProfile extends Controller
     public function create(Request $request)
     {
 
-        // $request->validate([
-        //     'AddressLine1'  => 'required',
-        //     'AddressLine2'  => 'required',
-        //     'Name'  => 'required',
-        //     'City'  => 'required',
-        //     'State'  => 'required',
-        //     'pin'  => 'required',
-        //     'Currency'  => 'required',
-        //     'Mobile'  => 'required',
-        //     'Email'  => 'required',
-        //     'Source' => 'required'
-        // ]);
+        $request->validate([
+            'Name'  => 'required',
+            'currency'  => 'required',
+            'Mobile'  => 'required',
+            'SectorPid'=>'required'
+        ]);
         $input = $request->except('_token');
         if ($request->hasFile('Logo')) {
             $filename = $request->file('Logo')->getClientOriginalName();
@@ -108,6 +102,7 @@ class ClientsProfile extends Controller
         Clinetprofile::insert($input);
         return redirect('clients')->with('success', 'Client Added successfully.');
     }
+
     public function addcontact(Request $request){
         $validator = Validator::make($request->all(), [
             'ContactName' => 'required|string',
