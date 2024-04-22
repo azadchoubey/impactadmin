@@ -106,7 +106,7 @@ class ClientsProfile extends Controller
     public function addcontact(Request $request){
         $validator = Validator::make($request->all(), [
             'ContactName' => 'required|string',
-            'Mobile' => 'required',
+            'Mobile' => 'required|digits:10', // Modified validation rule for 'Mobile' field
             'Email' => 'required|email',
             'Address1' => 'required',
             'Address2' => 'required',
@@ -116,6 +116,8 @@ class ClientsProfile extends Controller
         ],[
             'CountryID.required'=>'Country field is required',
             'CityID.required'=>'City field is required',
+            'Mobile.required' => 'Mobile must be 10 digits.',
+            'Email.required' => 'Please enter a valid email address.', // Custom error message for 'Email' field
         ]);
         
         if ($validator->fails()) {
