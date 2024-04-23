@@ -64,7 +64,7 @@
                     <option {{old('Source') == $source->ID ?'selected':''}} value="{{$source->ID}}">{{$source->Name}}</option>
                     @endforeach
                 </select>
-                @error('Source') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
+                {{-- @error('Source') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror --}}
             </div>
 {{--            
             <div>
@@ -81,7 +81,7 @@
                     <option  {{old('Type') == $type->ID ?'selected':''}}  value="{{$type->ID}}">{{$type->Name}}</option>
                     @endforeach
                 </select>
-                @error('Type') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
+                {{-- @error('Type') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror --}}
             </div>
             <div>
                 <label for="currency" class="block text-sm font-medium text-gray-700">Currency</label>
@@ -97,7 +97,7 @@
                     <option  {{old('Region') == $region->ID ?'selected':''}}  value="{{$region->ID}}">{{$region->Name}}</option>
                     @endforeach
                 </select>
-                @error('Region') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
+                {{-- @error('Region') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror --}}
             </div>
 
             <div>
@@ -131,7 +131,7 @@
                             <option {{old('BillCycleID') == $billingcycle->ID ?'selected':''}}  value="{{$billingcycle->ID}}">{{$billingcycle->Name}}</option>
                             @endforeach
                         </select>
-                        @error('BillCycleID') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
+                        {{-- @error('BillCycleID') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror --}}
                     </div>
                     <div>
                         <label for="billingdate" class="block text-sm font-medium text-gray-700">Billing Date</label>
@@ -149,7 +149,7 @@
                             <option {{old('Status') == $status->ID ?'selected':''}} value="{{$status->ID}}">{{$status->Name}}</option>
                             @endforeach
                         </select>
-                        @error('Status') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
+                        {{-- @error('Status') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror --}}
                     </div>
 
                 </div>
@@ -194,7 +194,7 @@
                             <option {{old('wm_status') == $status->ID ?'selected':''}}  value="{{$status->ID}}">{{$status->Name}}</option>
                             @endforeach
                         </select>
-                        @error('wm_status') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
+                        {{-- @error('wm_status') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror --}}
                     </div>
                 </div>
             </fieldset>

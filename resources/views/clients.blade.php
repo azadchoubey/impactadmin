@@ -1,5 +1,20 @@
 @extends('layouts.default')
+<style>
+    /* Style for disabled elements */
+    fieldset[disabled] {
+        opacity: 0.5; /* Reduce opacity for disabled fieldsets */
+        pointer-events: none; /* Disable pointer events on disabled fieldsets */
+    }
+    .disabled{
+        opacity: 0.5; /* Reduce opacity for disabled fieldsets */
+        pointer-events: none; /* Disable pointer events on disabled fieldsets */
+    }
 
+    fieldset[disabled] input,
+    fieldset[disabled] label {
+        cursor: not-allowed; /* Change cursor style for disabled inputs and labels */
+    }
+</style>
 @section('content')
 <div class="container mx-auto p-6 bg-white rounded-md shadow-md">
 @if(session()->has('success'))
@@ -650,7 +665,6 @@
                                 <label for="type" class="block text-sm font-medium text-gray-700">Contact Name</label>
                                 <input name="ContactName" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <div id="ContactName-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
-
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Mobile</label>
@@ -736,17 +750,17 @@
                             </div>
                         </div>
                     </fieldset>
-                    <fieldset class="border border-gray-300 p-6 rounded-lg">
+                    <fieldset class="border border-gray-300 p-6 rounded-lg"{{$data->wm_enableforprint == 1 ? '' : 'disabled'}}>
                         <legend class="text-sm font-medium text-gray-900">Print Monitoring Parameters</legend>
                         <div class="grid grid-cols-3 gap-4 mt-4 p-5">
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for Print</label>
-                                <input name="wm_enableforprint" value="1" type="checkbox">
+                                <input name="wm_enableforprint" value="1" type="checkbox" {{$data->wm_enableforprint == 1 ? 'checked' : ''}} {{$data->wm_enableforprint == 1 ? '' : 'disabled'}}>
                             </div>
-
+                    
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Delivery Method Print</label>
-                                <select name="wm_deliverymethod" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <select name="wm_deliverymethod" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" {{$data->wm_enableforprint == 1 ? '' : 'disabled'}}>
                                     <option value="">Select option</option>
                                     @foreach($deliverymaster as $Delivery)
                                     <option value="{{$Delivery->id}}">{{$Delivery->deliverytime}}</option>
@@ -755,16 +769,17 @@
                             </div>
                         </div>
                     </fieldset>
+                    
                     <fieldset class="border border-gray-300 p-6 rounded-lg">
                         <legend class="text-sm font-medium text-gray-900">Web Monitoring Parameters</legend>
                         <div class="grid grid-cols-4 gap-4 mt-3 p-5">
-                            <div>
+                            <div class="{{$data->wm_enableforweb == 1 ? '' : 'disabled'}}">
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for Web</label>
-                                <input name="wm_enableforweb" type="checkbox" value="1">
+                                <input name="wm_enableforweb" type="checkbox" value="1" {{$data->wm_enableforweb == 1 ? 'checked' : ''}} {{$data->wm_enableforweb == 1 ? '' : 'disabled'}}>
                             </div>
-                            <div>
+                            <div class="{{$data->wm_enablefortwitter == 1 ? '' : 'disabled'}}">
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for Twitter</label>
-                                <input name="enablefortwitter" type="checkbox" value="1">
+                                <input name="wm_enablefortwitter" type="checkbox" value="1" {{$data->wm_enablefortwitter == 1 ? 'checked' : ''}} {{$data->wm_enablefortwitter == 1 ? '' : 'disabled'}}>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Delivery Method Web</label>
@@ -775,23 +790,23 @@
                                     @endforeach
                                 </select>
                             </div>
-
                         </div>
                     </fieldset>
-                    <fieldset class="border border-gray-300 p-6 rounded-lg">
+
+                    <fieldset class="border border-gray-300 p-6 rounded-lg"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                         <legend class="text-sm font-medium text-gray-900">WhatsApp Monitoring Parameters</legend>
                         <div class="grid grid-cols-3 gap-4 mt-3 p-5">
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for Whatsapp</label>
-                                <input name="enableforwhatsapp" value="1" type="checkbox">
+                                <input name="enableforwhatsapp" value="1" type="checkbox" value="1" {{$data->enableforwhatsapp == 1 ? 'checked' : ''}} {{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Send welcome message</label>
-                                <input name="whatsappwelcomemsg" value="1" type="checkbox">
+                                <input name="whatsappwelcomemsg" value="1" type="checkbox"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Phone No</label>
-                                <input name="whatsappnumber" type="text" placeholder="E.g. 919811223344" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <input name="whatsappnumber" type="text" placeholder="E.g. 919811223344" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                             </div>
 
                         </div>
@@ -803,45 +818,45 @@
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">None</label>
-                                    <input name="whatsapp_print_company" value="0" type="radio">
+                                    <input name="whatsapp_print_company" value="0" type="radio"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">All News</label>
-                                    <input name="whatsapp_print_company" value="1"  type="radio">
+                                    <input name="whatsapp_print_company" value="1"  type="radio"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">Prominent News</label>
-                                    <input name="whatsapp_print_company" value="2" type="radio">
+                                    <input name="whatsapp_print_company" value="2" type="radio"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-medium text-gray-700">Competitor News</label>
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">None</label>
-                                    <input name="whatsapp_print_competitor" value="0" type="radio">
+                                    <input name="whatsapp_print_competitor" value="0" type="radio"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">All News</label>
-                                    <input name="whatsapp_print_competitor" value="1" type="radio">
+                                    <input name="whatsapp_print_competitor" value="1" type="radio"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">Prominent News</label>
-                                    <input name="whatsapp_print_competitor" value="2" type="radio">
+                                    <input name="whatsapp_print_competitor" value="2" type="radio"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-medium text-gray-700">Industry News </label>
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">None</label>
-                                    <input name="whatsapp_print_industry" value="0" type="radio">
+                                    <input name="whatsapp_print_industry" value="0" type="radio"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">All News</label>
-                                    <input name="whatsapp_print_industry" value="1" type="radio">
+                                    <input name="whatsapp_print_industry" value="1" type="radio"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">Prominent News</label>
-                                    <input name="whatsapp_print_industry" value="2" type="radio">
+                                    <input name="whatsapp_print_industry" value="2" type="radio"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                                 </div>
                             </div>
                         </fieldset>
@@ -853,49 +868,50 @@
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">None</label>
-                                    <input name="whatsapp_web_company" value="0"  type="radio">
+                                    <input name="whatsapp_web_company" value="0"  type="radio"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">All News</label>
-                                    <input name="whatsapp_web_company" value="1"  type="radio">
+                                    <input name="whatsapp_web_company" value="1"  type="radio"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">Prominent News</label>
-                                    <input name="whatsapp_web_company" value="2"  type="radio">
+                                    <input name="whatsapp_web_company" value="2"  type="radio"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-medium text-gray-700">Competitor News</label>
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">None</label>
-                                    <input name="whatsapp_web_competitor" value="0" type="radio">
+                                    <input name="whatsapp_web_competitor" value="0" type="radio"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">All News</label>
-                                    <input name="whatsapp_web_competitor" value="1" type="radio">
+                                    <input name="whatsapp_web_competitor" value="1" type="radio"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">Prominent News</label>
-                                    <input name="whatsapp_web_competitor" value="2" type="radio">
+                                    <input name="whatsapp_web_competitor" value="2" type="radio"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-medium text-gray-700">Industry News </label>
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">None</label>
-                                    <input name="whatsapp_web_industry" value="0" type="radio">
+                                    <input name="whatsapp_web_industry" value="0" type="radio"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">All News</label>
-                                    <input name="whatsapp_web_industry" value="1" type="radio">
+                                    <input name="whatsapp_web_industry" value="1" type="radio"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">Prominent News</label>
-                                    <input name="whatsapp_web_industry" value="2" type="radio">
+                                    <input name="whatsapp_web_industry" value="2" type="radio"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                                 </div>
                             </div>
                         </fieldset>
                     </fieldset>
+                
                     <fieldset class="border border-gray-300 p-6 rounded-lg">
                         <legend class="text-sm font-medium text-gray-900">Others Parameters</legend>
                         <div class="grid grid-cols-3 gap-4 mt-3 p-5">
