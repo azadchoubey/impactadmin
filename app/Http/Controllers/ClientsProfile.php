@@ -14,6 +14,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Exception;
+use Illuminate\Support\Facades\Log;
 
 class ClientsProfile extends Controller
 {
@@ -74,19 +76,25 @@ class ClientsProfile extends Controller
     public function create(Request $request)
     {
 
-        // $request->validate([
-        //     'AddressLine1'  => 'required',
-        //     'AddressLine2'  => 'required',
-        //     'Name'  => 'required',
-        //     'City'  => 'required',
-        //     'State'  => 'required',
-        //     'pin'  => 'required',
-        //     'Currency'  => 'required',
-        //     'Mobile'  => 'required',
-        //     'Email'  => 'required',
-        //     'Source' => 'required'
-        // ]);
-        $input = $request->except('_token');
+        $request->validate([
+            'Name'  => 'required',
+            'Currency'  => 'required|alpha',
+            'Mobile'  => 'required|regex:/^[0-9]{10}$/',
+            'Source' => 'required',
+            'Region'=> 'required',
+            'SectorPid'=>'required',
+            'Type'=>'required',
+        ],
+        [
+            'SectorPid.required' => 'Industory / Sector field is required',
+            'Source.required' => 'Reference field is required',
+        ]
+    );
+
+    try{
+        DB::beginTransaction();
+        $input = $request->except(['_token']);
+       
         if ($request->hasFile('Logo')) {
             $filename = $request->file('Logo')->getClientOriginalName();
             $request->file('Logo')->storeAs('client', $filename);
@@ -103,10 +111,29 @@ class ClientsProfile extends Controller
             $a = $maxNumber + 1;
             $clientid = $s2 . str_pad($a, 4, '0', STR_PAD_LEFT);
         }
+        
         $input['ClientID']= $clientid;
-
+        $input['Edit_By']= auth()->user()->UserID;
+        if ( !$input['StartDate']) {
+            unset($input['StartDate']);
+        }
+        if ( !$input['EndDate']) {
+            unset($input['EndDate']);
+        }
+        if ( !$input['BillCycleID']) {
+            unset($input['BillCycleID']);
+        }
+        if ( !$input['Status']) {
+            unset($input['Status']);
+        }
         Clinetprofile::insert($input);
+        Log::info('created new client name: {name} and clientid: {clientid} by user: {user} ',['clientid'=>$clientid,'user'=>auth()->user()->UserID,'name'=>$input['Name']]);
         return redirect('clients')->with('success', 'Client Added successfully.');
+    }catch(Exception $e){
+        Log::error('Error while creating clientprofile: {error}', ['error' => $e->getMessage()]);
+        session()->flash('error', 'An error occurred while adding the record.');
+
+       }
     }
     public function addcontact(Request $request){
         $validator = Validator::make($request->all(), [

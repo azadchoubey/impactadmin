@@ -162,7 +162,7 @@
                     <div>
                         <label for="billingcycle" class="block text-sm font-medium text-gray-700">Billing Cycle</label>
                         <select name="BillCycleID" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option>Select Option</option>
+                            <option value=""></option>
                             @foreach($picklist['bill cycle'] as $billingcycle)
                             <option value="{{$billingcycle->ID}}" {{$billingcycle->ID == $data->BillCycleID ? 'selected' : ''}}>{{$billingcycle->Name}}</option>
                             @endforeach
@@ -254,7 +254,7 @@
                     <div>
                         <label for="webstatus" class="block text-sm font-medium text-gray-700">Twitter Status</label>
                         <select name="wm_twitter_status" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option>Select Option</option>
+                            <option></option>
                             @foreach($picklist['client status'] as $status)
                             <option {{$data->wm_twitter_status == $status->ID ? 'selected' : ''}} value="{{$status->ID}}">{{$status->Name}}</option>
                             @endforeach
