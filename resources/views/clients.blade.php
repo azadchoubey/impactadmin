@@ -1,20 +1,5 @@
 @extends('layouts.default')
-<style>
-    /* Style for disabled elements */
-    fieldset[disabled] {
-        opacity: 0.5; /* Reduce opacity for disabled fieldsets */
-        pointer-events: none; /* Disable pointer events on disabled fieldsets */
-    }
-    .disabled{
-        opacity: 0.5; /* Reduce opacity for disabled fieldsets */
-        pointer-events: none; /* Disable pointer events on disabled fieldsets */
-    }
 
-    fieldset[disabled] input,
-    fieldset[disabled] label {
-        cursor: not-allowed; /* Change cursor style for disabled inputs and labels */
-    }
-</style>
 @section('content')
 <div class="container mx-auto p-6 bg-white rounded-md shadow-md">
 @if(session()->has('success'))
@@ -24,7 +9,7 @@
     @endif
     @if($errors->has('error'))
     <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
-        <span class="font-medium">{{ $errors->first('error') }}</span>
+        <span class="font-medium">{{ session()->get('error') }}</span>
     </div>
     @endif
     @php
@@ -66,7 +51,7 @@
 
         <div id="default-tab-content">
             <div class="p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                <form id="clientForm" action="{{ route('editclient',$data->ClientID) }}" method="POST">
+                <form id="clientForm" action="{{ route('editclient',$data->ClientID) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4 mb-6">
                         <div>
@@ -86,11 +71,12 @@
                             <div>
                                 <label for="primary" class="block text-sm font-medium text-gray-700">Primary Client</label>
                                 <div class="flex items-center">
+                            
                                     <input type="checkbox" name="primary" {{$data->PriClientID ? 'checked' : ''}} id="primaryCheckbox" class="mr-2">
                                     <select name="primary_client_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" {{$data->PriClientID ? '' : 'disabled'}}>
-                                        <option value="">Select Primary Client</option>
+                                        
                                         @foreach($clients as $client)
-                                        <option value="{{$client->ClientID}}">{{$client->Name}}</option>
+                                        <option {{$data->PriClientID == $client->ClientID}} value="{{$client->ClientID}}">{{$client->Name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -105,16 +91,25 @@
                         
                         <div>
                             <label for="sector" class="block text-sm font-medium text-gray-700">Industory / Sector</label>
-                            <input name="sector" value="{{$data->sector->Name}}" type="text" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        </div>
+                                        <select name="SectorPid" id="SectorPid" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option value="">Select Option</option>
+
+                                @foreach($picklist['sector'] as $sector)
+                                <option {{$data->sector->ID == $sector->ID ?'selected':''}} value="{{$sector->ID}}">{{$sector->Name}}</option>
+                                @endforeach
+                            </select>
+                            @error('SectorPid') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
+                                    
+                                    </div>
                         <div>
                             <label for="mobile" class="block text-sm font-medium text-gray-700">Mobile No</label>
                             <input name="Mobile"  value="{{$data->Mobile}}"type="text" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            @error('Mobile') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
+
                         </div>
                         <div>
                             <label for="reference" class="block text-sm font-medium text-gray-700">Reference</label>
                             <select disabled name="Reference" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option>Select Option</option>
 
                             @foreach($picklist['client source'] as $source)
                             <option {{$data->Reference == $source->ID ?'selected':''}} value="{{$source->ID}}">{{$source->Name}}</option>
@@ -130,7 +125,7 @@
                         <div>
                             <label for="type" class="block text-sm font-medium text-gray-700">Type</label>
                             <select disabled name="Type" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option>Select Option</option>
+                            <option value="">Select Option</option>
                             @foreach($picklist['client type'] as $type)
                             <option {{$type->ID ==$data->Type ? 'selected':''}} value="{{$type->ID}}">{{$type->Name}}</option>
                             @endforeach
@@ -139,12 +134,13 @@
                         </div>                    
                         <div>
                             <label for="currency" class="block text-sm font-medium text-gray-700">Currency</label>
-                            <input id="currency" value="{{$data->Currency}}" type="text" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <input id="currency" name="Currency" value="{{$data->Currency}}" type="text" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            @error('Currency') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
+
                         </div>
                         <div>
                             <label for="region" class="block text-sm font-medium text-gray-700">Region</label>
                             <select disabled name="Region" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option>Select Option</option>
                             @foreach($picklist['region'] as $region)
                             <option value="{{$region->ID}}">{{$region->Name}}</option>
                             @endforeach
@@ -154,7 +150,7 @@
                        
                         <div>
                             <label for="client" class="block text-sm font-medium text-gray-700">Client Logo</label>
-                            <input id="client" type="file" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <input id="client" type="file" name="Logo" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-6">
@@ -196,7 +192,6 @@
                     <div>
                         <label for="print" class="block text-sm font-medium text-gray-700">Print Status</label>
                         <select name="Status" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option>Select Option</option>
                             @foreach($picklist['client status'] as $status)
                             <option {{$data->Status == $status->ID ?'selected':''}} value="{{$status->ID}}">{{$status->Name}}</option>
                             @endforeach
@@ -224,7 +219,6 @@
                     <div>
                         <label for="billingcycle" class="block text-sm font-medium text-gray-700">Billing Cycle</label>
                         <select name="wm_billingcycle" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option>Select Option</option>
                             @foreach($picklist['bill cycle'] as $billingcycle)
                             <option value="{{$billingcycle->ID}}" {{$billingcycle->ID == $data->wm_billingcycle ? 'selected' : ''}}>{{$billingcycle->Name}}</option>
                             @endforeach
@@ -236,12 +230,11 @@
                     </div>
                     <div>
                         <label for="billingrate" class="block text-sm font-medium text-gray-700">Billing Rate</label>
-                        <input id="" type="text" name="wm_billingrate" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{$data->wm_billingrate ?? ''}}">
+                        <input id="" type="text" name="wm_billingrate" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{$data->wm_billingrate}}">
                     </div>
                     <div>
                         <label for="webstatus" class="block text-sm font-medium text-gray-700">Web Status</label>
                         <select name="wm_status" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option>Select Option</option>
                             @foreach($picklist['client status'] as $status)
                             <option value="{{$status->ID}}" {{$data->wm_status == $status->ID ? 'selected' : ''}}>{{$status->Name}}</option>
                             @endforeach
@@ -1005,7 +998,7 @@
             editButton.classList.add('hidden');
         }
     }
-    function updateEditButton(e) {
+  {{--  function updateEditButton(e) {
         var data = `<td class="px-6 py-4 hidden editable-checkbox">
                                     <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="wm_enableforprint" {{ $contact->wm_enableforprint ? 'checked' : '' }} />
                                 </td>
@@ -1065,7 +1058,7 @@
         // targetTd.insertAdjacentHTML('afterend', data);
         }
         
-    }
+    } --}}
 
     function updateEditButtonVisibility1() {
         var checkboxes = document.querySelectorAll('.checkboxes1');
@@ -1218,3 +1211,18 @@
     </script>
 
     @endsection
+    <style>
+    fieldset[disabled] {
+        opacity: 0.5; 
+        pointer-events: none; 
+    }
+    .disabled{
+        opacity: 0.5;
+        pointer-events: none; 
+    }
+
+    fieldset[disabled] input,
+    fieldset[disabled] label {
+        cursor: not-allowed;
+    }
+</style>

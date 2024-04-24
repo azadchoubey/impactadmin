@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Livewire\ClientProfile;
 use App\Models\ClinetContacts;
 use App\Models\Clinetprofile;
 use App\Models\ContactSector;
@@ -11,7 +10,6 @@ use App\Models\Picklist;
 use App\Models\Wmwebdeliverymethod;
 use App\Models\Wmwebdeliverymethodmaster;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Exception;
@@ -24,7 +22,7 @@ class ClientsProfile extends Controller
         $data = Clinetprofile::with('contacts', 'contacts.delivery', 'contacts.regularDigestPrint', 'contacts.regularDigestWeb', 'Country', 'Region', 'sector', 'keywords', 'billingcycle')->find(base64_decode($id));
         $keywords = $data->keywords;
         $contacts = $data->contacts;
-        $picklist = Picklist::whereIn('Type', ['City', 'Country', 'Delivery Method', 'Sector Summary Delivery', 'contacttype','client type','client source','Region','bill cycle','client status'])->get()->groupBy(function ($query) {
+        $picklist = Picklist::whereIn('Type', ['City', 'Country', 'Delivery Method', 'Sector Summary Delivery', 'contacttype','client type','client source','Region','bill cycle','client status','sector'])->get()->groupBy(function ($query) {
             return strtolower($query->Type);
         });
         $webdeliverymaster = Wmwebdeliverymethodmaster::all();
@@ -35,25 +33,63 @@ class ClientsProfile extends Controller
 
     public function edit(Request $request, $id)
     {
-        $request->validate([
-            'Name'  => 'required',
-            'currency'  => 'required',
-            'Mobile'  => 'required',
-            'Email'  => 'required',
-            'StartDate'  => 'required',
-        ]);
+        $request->validate(['Name'  => 'required',
+        'Currency'  => 'alpha',
+        'Mobile'  => 'regex:/^[0-9]{10}$/',
+    ],
+   );
         $clientProfile = Clinetprofile::findOrFail($id);
-        $clientProfile->Name = $request->Name;
-        $clientProfile->broadcastcid = $request->broadcast;
-        $clientProfile->customersince = $request->csrsince;
-        $clientProfile->Mobile = $request->Mobile;
-        $clientProfile->Reference = $request->reference;
-        $clientProfile->contractstart = $request->StartDate;
-        $clientProfile->billingdate = $request->BillDate;
-        $clientProfile->Currency = $request->currency;
-        $clientProfile->update();
+        try{
+            $clientProfile->Name = $request->Name;
+            $clientProfile->broadcastcid = $request->broadcast;
+            $clientProfile->PriClientID = $request->primary_client_id??'';
+            $clientProfile->SectorPid = $request->SectorPid??0;
+            $clientProfile->Mobile = $request->Mobile;
+            $clientProfile->Reference = $request->reference??0;
+            $clientProfile->StartDate = $request->StartDate??'0000-00-00';
+            $clientProfile->EndDate = $request->EndDate??'0000-00-00';
+            $clientProfile->BillDate = $request->BillDate??'0000-00-00';
+            $clientProfile->Currency = $request->Currency;
+            $clientProfile->Type = $request->Type;
+            $clientProfile->Region = $request->Region??0;
+            $clientProfile->wm_enableforprint = $request->wm_enableforprint??0;
+            $clientProfile->BillCycleID = $request->BillCycleID??0;
+            $clientProfile->BillRate = $request->BillRate??0;
+            $clientProfile->Status = $request->Status??0;
+            $clientProfile->wm_enableforweb = $request->wm_enableforweb??0;
+            $clientProfile->wm_contractstartdate = $request->wm_contractstartdate??'0000-00-00';
+            $clientProfile->wm_contractenddate = $request->wm_contractenddate??'0000-00-00';
+            $clientProfile->wm_billingcycle = $request->wm_billingcycle??0;
+            $clientProfile->wm_billingdate = $request->wm_billingdate??'0000-00-00';
+            $clientProfile->wm_billingrate = $request->wm_billingrate??0;
+            $clientProfile->wm_status = $request->wm_status??0;
+            $clientProfile->wm_enablefortwitter = $request->wm_enablefortwitter??0;
+            $clientProfile->wm_twitter_contractstartdate = $request->wm_twitter_contractstartdate;
+            $clientProfile->wm_twitter_contractenddate = $request->wm_twitter_contractenddate;
+            $clientProfile->wm_twitter_status = $request->wm_twitter_status??0;
+            $clientProfile->enableforwhatsapp = $request->enableforwhatsapp??0;
+            $clientProfile->enableforyoutube = $request->enableforyoutube??0;
+            $clientProfile->enablefordidyounotice = $request->enablefordidyounotice??0;
+            $clientProfile->enableforfulltext = $request->enableforfulltext??0;
+            $clientProfile->EditDateTime=now();
+            $clientProfile->Edit_By=auth()->user()->UserID;
+            if ($request->hasFile('Logo')) {
+              
+                $filename = $request->file('Logo')->getClientOriginalName();
+                $request->file('Logo')->storeAs('client', $filename);
+                $clientProfile->Logo = $filename;
+            }
+            $clientProfile->update();
+            Log::info('Record updated client name: {name} and clientid: {clientid} by user: {user} ',['clientid'=>$id,'user'=>auth()->user()->UserID,'name'=>$request->Name]);
+            return redirect()->route('clients', ['id' => base64_encode($id)])->with('success', 'Client profile updated successfully.');
 
-        return redirect()->route('client.profile', ['id' => $id])->with('success', 'Client profile updated successfully.');
+        }catch(Exception $e){
+            Log::error('Error while creating clientprofile: {error}', ['error' => $e->getMessage()]);
+            session()->flash('error', 'An error occurred while adding the record.');
+            return redirect()->back();
+        }
+       
+
     }
     public function addclient()
     {
@@ -183,7 +219,7 @@ class ClientsProfile extends Controller
                 }
         
                 DB::commit();
-        
+                Log::info('created new client contact: {name} and contactid: {contactid} by user: {user} ',['contactid'=>$contactid,'user'=>auth()->user()->UserID,'name'=>$input['ContactName']]);
                 session()->flash('success', 'Contact Added Successfully!');
                 return response()->json(['success' => true]);
             } else {
@@ -191,8 +227,9 @@ class ClientsProfile extends Controller
                 session()->flash('error', 'Operation Failed!');
                 return response()->json(['error' => 'Operation Failed!'], 500);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollback();
+            Log::error('Error while creating clientprofile: {error}', ['error' => $e->getMessage()]);
             session()->flash('error', 'Operation Failed!');
             return response()->json(['error' => $e->getMessage()], 500);
         }
