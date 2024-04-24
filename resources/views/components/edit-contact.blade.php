@@ -26,13 +26,13 @@
                         </div>
                         <div>
                             <label for="type" class="block text-sm font-medium text-gray-700">Mobile</label>
-                            <input name="Mobile" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <input name="Mobile" type="text" value="{{ $contact->Mobile}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             <div id="Mobile-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
 
                         </div>
                         <div>
                             <label for="type" class="block text-sm font-medium text-gray-700">E-mail</label>
-                            <input name="Email" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <input name="Email" type="text" value="{{ $contact->Email}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             <div id="Email-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
 
                         </div>
@@ -40,20 +40,20 @@
                             <label for="type" class="block text-sm font-medium text-gray-700">Contact Type</label>
                             <select name="ContactType" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <option value="">Select option</option>
-                                @if(isset($picklist['contacttype']))
-                                @foreach($picklist['contacttype'] as $contacttype)
-                                <option value="{{$contacttype->ID}}">{{$contacttype->Name}}</option>
+                                @if(isset($picklist['contactType']))
+                                @foreach($picklist['contactType'] as $contacttype)
+                                <option value="{{$contactType->ID}}">{{$contactType->Name}}</option>
                                 @endforeach
                                 @endif
                             </select>
                         </div>
                         <div>
                             <label for="type" class="block text-sm font-medium text-gray-700">Designation</label>
-                            <input name="Designation" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <input name="Designation" type="text"  value="{{ $contact->Designation}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         </div>
                         <div>
                             <label for="type" class="block text-sm font-medium text-gray-700">Phone</label>
-                            <input name="Phone" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <input name="Phone" type="text" value="{{ $contact->Phone}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         </div>
                         <div>
                             <label for="type" class="block text-sm font-medium text-gray-700">Company</label>
@@ -61,29 +61,28 @@
                         </div>
                         <div>
                             <label for="type" class="block text-sm font-medium text-gray-700">Fax</label>
-                            <input name="Fax" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <input name="Fax" type="text" value="{{ $contact->Fax}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         </div>
                         <div>
                             <label for="type" class="block text-sm font-medium text-gray-700">Address 1</label>
-                            <input name="Address1" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <input name="Address1" type="text" value="{{ $contact->Address1}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             <div id="Address1-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                         </div>
                         <div>
                             <label for="type" class="block text-sm font-medium text-gray-700">Address 2</label>
-                            <input name="Address2" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <input name="Address2" type="text" value="{{ $contact->Address2}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             <div id="Address2-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                         </div>
                         <div>
                             <label for="type" class="block text-sm font-medium text-gray-700">Address 3</label>
-                            <input name="Address3" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <input name="Address3" type="text" value="{{ $contact->Address3}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             <div id="Address3-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                         </div>
                         <div>
                             <label for="type" class="block text-sm font-medium text-gray-700">Country</label>
                             <select name="CountryID" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                <option value="">Select option</option>
                                 @foreach($picklist['country'] as $country)
-                                <option value="{{$country->ID}}">{{$country->Name}}</option>
+                                <option {{$contact->CountryID == $country->ID?'selected':''}} value="{{$country->ID}}">{{$country->Name}}</option>
                                 @endforeach
                             </select>
                             <div id="CountryID-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
@@ -91,16 +90,15 @@
                         <div>
                             <label for="type" class="block text-sm font-medium text-gray-700">City</label>
                             <select name="CityID" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                <option value="">Select option</option>
                                 @foreach($picklist['city'] as $City)
-                                <option value="{{$City->ID}}">{{$City->Name}}</option>
+                                <option {{$contact->CITYID == $City->ID?'selected':''}} value="{{$City->ID}}">{{$City->Name}}</option>
                                 @endforeach
                             </select>
                             <div id="CityID-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                         </div>
                         <div>
                             <label for="type" class="block text-sm font-medium text-gray-700">Country Code</label>
-                            <input name="CountryCode" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <input name="CountryCode" type="text" value="{{ $contact->CountryCode}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         </div>
                         <div>
                             <label for="type" class="block text-sm font-medium text-gray-700">Area Code</label>
@@ -121,7 +119,7 @@
                             <select name="wm_deliverymethod" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" {{$client->wm_enableforprint == 1 ? '' : 'disabled'}}>
                                 <option value="">Select option</option>
                                 @foreach($deliverymaster as $Delivery)
-                                <option value="{{$Delivery->id}}">{{$Delivery->deliverytime}}</option>
+                                <option {{ $contact->wm_deliverymethod == $Delivery->ID ? 'selected' : '' }} value="{{$Delivery->id}}">{{$Delivery->deliverytime}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -142,12 +140,12 @@
                         <div>
                             <label for="type" class="block text-sm font-medium text-gray-700">Delivery Method Web</label>
                             <select name="deliveryid[]" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                <option value="">Select option</option>
                                 @foreach($webdeliverymaster as $delivery)
-                                <option value="{{$delivery->id}}">{{$delivery->deliverytime}}</option>
+                                <option {{ $contact->DeliveryID == $delivery->ID ? 'selected' : '' }} value="{{$delivery->id}}">{{$delivery->deliverytime}}</option>
                                 @endforeach
                             </select>
                         </div>
+                        
                     </div>
                 </fieldset>
 
@@ -164,7 +162,7 @@
                         </div>
                         <div>
                             <label for="type" class="block text-sm font-medium text-gray-700">Phone No</label>
-                            <input name="whatsappnumber" type="text" placeholder="E.g. 919811223344" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"{{$client->enableforwhatsapp == 1 ? '' : 'disabled'}}>
+                            <input name="whatsappnumber" type="text"  value="{{ $contact->whatsappnumber }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"{{$client->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                         </div>
 
                     </div>
@@ -176,45 +174,45 @@
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-small text-gray-700">None</label>
-                                <input name="whatsapp_print_company" value="0" type="radio"{{$client->enableforwhatsapp == 1 ? '' : 'disabled'}}>
+                                <input name="whatsapp_print_company" value="0" type="radio"{{$contact->whatsapp_print_company ==0 ? 'checked' : ' '}}>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-small text-gray-700">All News</label>
-                                <input name="whatsapp_print_company" value="1"  type="radio"{{$client->enableforwhatsapp == 1 ? '' : 'disabled'}}>
+                                <input name="whatsapp_print_company" value="1"  type="radio"{{$contact->whatsapp_print_company ==1 ? 'checked' : ' '}}>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-small text-gray-700">Prominent News</label>
-                                <input name="whatsapp_print_company" value="2" type="radio"{{$client->enableforwhatsapp == 1 ? '' : 'disabled'}}>
+                                <input name="whatsapp_print_company" value="2" type="radio"{{$contact->whatsapp_print_company ==2 ? 'checked' : ' '}}>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Competitor News</label>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-small text-gray-700">None</label>
-                                <input name="whatsapp_print_competitor" value="0" type="radio"{{$client->enableforwhatsapp == 1 ? '' : 'disabled'}}>
+                                <input name="whatsapp_print_competitor" value="0" type="radio"{{$contact->whatsapp_print_competitor == 0 ? 'checked' : ' '}}>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-small text-gray-700">All News</label>
-                                <input name="whatsapp_print_competitor" value="1" type="radio"{{$client->enableforwhatsapp == 1 ? '' : 'disabled'}}>
+                                <input name="whatsapp_print_competitor" value="1" type="radio"{{$contact->whatsapp_print_competitor == 1 ? 'checked' : ' '}}>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-small text-gray-700">Prominent News</label>
-                                <input name="whatsapp_print_competitor" value="2" type="radio"{{$client->enableforwhatsapp == 1 ? '' : 'disabled'}}>
+                                <input name="whatsapp_print_competitor" value="2" type="radio"{{$contact->whatsapp_print_competitor == 2 ? 'checked' : ' '}}>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Industry News </label>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-small text-gray-700">None</label>
-                                <input name="whatsapp_print_industry" value="0" type="radio"{{$client->enableforwhatsapp == 1 ? '' : 'disabled'}}>
+                                <input name="whatsapp_print_industry" value="0" type="radio"{{$contact->whatsapp_print_industry == 0 ? 'checked' : ' '}}>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-small text-gray-700">All News</label>
-                                <input name="whatsapp_print_industry" value="1" type="radio"{{$client->enableforwhatsapp == 1 ? '' : 'disabled'}}>
+                                <input name="whatsapp_print_industry" value="1" type="radio"{{$contact->whatsapp_print_industry == 1 ? 'checked' : ' '}}>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-small text-gray-700">Prominent News</label>
-                                <input name="whatsapp_print_industry" value="2" type="radio"{{$client->enableforwhatsapp == 1 ? '' : 'disabled'}}>
+                                <input name="whatsapp_print_industry" value="2" type="radio"{{$contact->whatsapp_print_industry == 2 ? 'checked' : ' '}}>
                             </div>
                         </div>
                     </fieldset>
@@ -226,45 +224,45 @@
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-small text-gray-700">None</label>
-                                <input name="whatsapp_web_company" value="0"  type="radio"{{$client->enableforwhatsapp == 1 ? '' : 'disabled'}}>
+                                <input name="whatsapp_web_company" value="0"  type="radio"{{$contact->whatsapp_web_company == 0 ? 'checked' : ' '}}>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-small text-gray-700">All News</label>
-                                <input name="whatsapp_web_company" value="1"  type="radio"{{$client->enableforwhatsapp == 1 ? '' : 'disabled'}}>
+                                <input name="whatsapp_web_company" value="1"  type="radio"{{$contact->whatsapp_web_company == 1 ? 'checked' : ' '}}>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-small text-gray-700">Prominent News</label>
-                                <input name="whatsapp_web_company" value="2"  type="radio"{{$client->enableforwhatsapp == 1 ? '' : 'disabled'}}>
+                                <input name="whatsapp_web_company" value="2"  type="radio"{{$contact->whatsapp_web_company == 2 ? 'checked' : ' '}}>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Competitor News</label>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-small text-gray-700">None</label>
-                                <input name="whatsapp_web_competitor" value="0" type="radio"{{$client->enableforwhatsapp == 1 ? '' : 'disabled'}}>
+                                <input name="whatsapp_web_competitor" value="0" type="radio"{{$contact->whatsapp_web_competitor == 0 ? 'checked' : ' '}}>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-small text-gray-700">All News</label>
-                                <input name="whatsapp_web_competitor" value="1" type="radio"{{$client->enableforwhatsapp == 1 ? '' : 'disabled'}}>
+                                <input name="whatsapp_web_competitor" value="1" type="radio"{{$contact->whatsapp_web_competitor == 1 ? 'checked' : ' '}}>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-small text-gray-700">Prominent News</label>
-                                <input name="whatsapp_web_competitor" value="2" type="radio"{{$client->enableforwhatsapp == 1 ? '' : 'disabled'}}>
+                                <input name="whatsapp_web_competitor" value="2" type="radio"{{$contact->whatsapp_web_competitor == 2 ? 'checked' : ' '}}>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Industry News </label>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-small text-gray-700">None</label>
-                                <input name="whatsapp_web_industry" value="0" type="radio"{{$client->enableforwhatsapp == 1 ? '' : 'disabled'}}>
+                                <input name="whatsapp_web_industry" value="0" type="radio"{{$contact->whatsapp_web_industry == 0 ? 'checked' : ''}}>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-small text-gray-700">All News</label>
-                                <input name="whatsapp_web_industry" value="1" type="radio"{{$client->enableforwhatsapp == 1 ? '' : 'disabled'}}>
+                                <input name="whatsapp_web_industry" value="1" type="radio"{{$contact->whatsapp_web_industry == 1 ? 'checked' : ''}}>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-small text-gray-700">Prominent News</label>
-                                <input name="whatsapp_web_industry" value="2" type="radio"{{$client->enableforwhatsapp == 1 ? '' : 'disabled'}}>
+                                <input name="whatsapp_web_industry" value="2" type="radio"{{$contact->whatsapp_web_industry == 2 ? 'checked' : ''}}>
                             </div>
                         </div>
                     </fieldset>
@@ -275,51 +273,52 @@
                     <div class="grid grid-cols-3 gap-4 mt-3 p-5">
                         <div>
                             <label for="type" class="block text-sm font-medium text-gray-700">Enable for Media Touch</label>
-                            <input name="enableformediatouch" value="{{ $contact->enableformediatouch ? 'checked' : '' }}" type="checkbox" >
+                            <input name="enableformediatouch" {{ $contact->enableformediatouch ? 'checked' : '' }} type="checkbox" >
                         </div>
                         <div>
                             <label for="type" class="block text-sm font-medium text-gray-700">Enable for DYNA</label>
-                            <input name="enablefordidyounotice" type="checkbox" value="1">
+                            <input name="enablefordidyounotice" type="checkbox"  {{ $contact->enablefordidyounotice ? 'checked' : '' }}>
                         </div>
                         <div>
                             <label for="type" class="block text-sm font-medium text-gray-700">Enable for QLIKVIEW</label>
-                            <input name="enableforqlikview" type="checkbox" value="1">
+                            <input name="enableforqlikview" type="checkbox"  {{ $contact->enableforqlikview ? 'checked' : '' }}>
                         </div>
                         <div>
                             <label for="type" class="block text-sm font-medium text-gray-700">Enable for QUALIFY</label>
-                            <input name="enabletoqualify" type="checkbox" value="1">
+                            <input name="enabletoqualify" type="checkbox" {{ $contact->enabletoqualify ? 'checked' : '' }}>
                         </div>
                         <div>
                             <label for="type" class="block text-sm font-medium text-gray-700">Enable for YouTube</label>
-                            <input name="enableforyoutube" type="checkbox" value="1">
+                            <input name="enableforyoutube" type="checkbox"  {{ $contact->enableforyoutube ? 'checked' : '' }}>
                         </div>
                         <div>
                             <label for="type" class="block text-sm font-medium text-gray-700">Enable for Twitter</label>
-                            <input name="enablefortwitter" type="checkbox" value="1">
+                            <input name="enablefortwitter" type="checkbox"  {{ $contact->enablefortwitter ? 'checked' : '' }}>
                         </div>
                         <div>
                             <label for="type" class="block text-sm font-medium text-gray-700">Enable for BR</label>
-                            <input name="enableforbr" type="checkbox" value=" {{ $contact->enableforbr ? 'checked' : '' }}">
+                            <input name="enableforbr" type="checkbox" {{ $contact->enableforbr ? 'checked' : '' }}>
                         </div>
                         <div>
                             <label for="type" class="block text-sm font-medium text-gray-700">Enable for BB</label>
-                            <input name="enableforbb" type="checkbox" value="{{ $contact->enableforbb ? 'checked' : '' }}">
+                            <input name="enableforbb" type="checkbox" {{ $contact->enableforbb ? 'checked' : '' }}>
                         </div>
                         <div>
                             <label for="type" class="block text-sm font-medium text-gray-700">Enable for Mobile</label>
-                            <input name="enableformediatouch" type="checkbox" value=" {{ $contact->enableformobile ? 'checked' : '' }}">
+                            <input name="enableformobile" type="checkbox" {{ $contact->enableformobile ? 'checked' : '' }}>
                         </div>
+                        
                         <div>
                             <label for="type" class="block text-sm font-medium text-gray-700">Regular Print</label>
-                            <input name="regularDigestPrint" type="checkbox" value="1">
+                            <input name="regularDigestPrint" type="checkbox" {{ $contact->regularDigestPrint ? 'checked' : '' }}>
                         </div>
                         <div>
                             <label for="type" class="block text-sm font-medium text-gray-700">Regular Web</label>
-                            <input name="regularDigestWeb" type="checkbox" value="1">
+                            <input name="regularDigestWeb" type="checkbox"  {{ $contact->regularDigestWeb ? 'checked' : '' }}>
                         </div>
                         <div>
                             <label for="type" class="block text-sm font-medium text-gray-700">Custom Digest</label>
-                            <input name="delivery" type="checkbox" value="1">
+                            <input name="delivery" type="checkbox"  {{ $contact->delivery ? 'checked' : '' }}>
                         </div>
                     </div>
                 </fieldset>
