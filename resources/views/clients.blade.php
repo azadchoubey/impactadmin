@@ -402,8 +402,8 @@
                                 <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->delivery->isNotEmpty()?$check:$cross !!}</td>
                                 <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->regularDigestWeb->isNotEmpty() ?$check:$cross !!}</td>
                                 <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->regularDigestPrint->ID != 0 ?$check:$cross !!}</td>
-                                <td id="editButton" class="withoutEditSection{{$contact->contactid}} px-6 py-4"><a onclick="toggleEditMode({{$contact->contactid}})" href="javascript:void(0);">Edit</a></td>
-
+                                <td id="editButton" class="withoutEditSection{{$contact->contactid}} px-6 py-4"><a  data-modal-target="large-modal{{$contact->contactid}}" data-modal-toggle="large-modal{{$contact->contactid}}" href="javascript:void(0);">Edit</a></td>
+                                <x-edit-contact :contact="$contact" :picklist="$picklist" :deliverymaster="$deliverymaster" :webdeliverymaster="$webdeliverymaster" :client="$data" />
 
                             </tr>
                             @endforeach
@@ -933,6 +933,18 @@
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for Mobile</label>
                                 <input name="enableformediatouch" type="checkbox" value="1">
+                            </div>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Regular Print</label>
+                                <input name="regularDigestPrint" type="checkbox" value="1">
+                            </div>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Regular Web</label>
+                                <input name="regularDigestWeb" type="checkbox" value="1">
+                            </div>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Custom Digest</label>
+                                <input name="delivery" type="checkbox" value="1">
                             </div>
                         </div>
                     </fieldset>
