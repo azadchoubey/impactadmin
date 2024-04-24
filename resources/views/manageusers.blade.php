@@ -286,7 +286,7 @@
 
 <script>
     $(document).ready(function() {
-        $('#users1').DataTable({
+        $('#users').DataTable({
             pagingType: 'first_last_numbers',
             layout: {
                 topStart: {

@@ -12,6 +12,7 @@ class Clinetprofile extends Model
     protected $primaryKey = 'ClientID';
     public $incrementing = false;
     protected $keyType = 'string';
+    public $timestamps = false;
 
     public function contacts(){
         return $this->hasMany(ClinetContacts::class,'ClientID','ClientID');
