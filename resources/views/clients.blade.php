@@ -69,17 +69,18 @@
                             </div>
                         </div>
                         
-                            <div>
-                                <label for="primary" class="block text-sm font-medium text-gray-700">Primary Client</label>
-                                <div class="flex items-center">
-                                    <input type="checkbox" name="primary" {{$data->PriClientID ? 'checked' : ''}} id="primaryCheckbox" class="mr-2" {{$data->PriClientID ? '' : 'disabled'}}>
-                                    <select name="primary_client_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" {{$data->PriClientID ? '' : 'disabled'}}>
-                                        @foreach($clients as $client)
-                                        <option {{$data->PriClientID == $client->ClientID}} value="{{$client->ClientID}}">{{$client->Name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>                        
+                        <div>
+                            <label for="primary" class="block text-sm font-medium text-gray-700">Primary Client</label>
+                            <div class="flex items-center">
+                                <input type="checkbox" name="primary" {{$data->PriClientID ? 'checked' : ''}} id="primaryCheckbox" class="mr-2" disabled>
+                                <select name="primary_client_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled>
+                                    @foreach($clients as $client)
+                                    <option {{$data->PriClientID == $client->ClientID}} value="{{$client->ClientID}}">{{$client->Name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                                           
                         <div>
                             <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
                             <input id="name" name="Name" value="{{$data->Name}}" type="text" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
