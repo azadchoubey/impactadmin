@@ -50,31 +50,28 @@
                             <label for="client_id" class="block text-sm font-medium text-gray-700">Client ID</label>
                             <input value="{{$data->ClientID}}" id="client_id" name="client_id" type="text" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         </div>
-                            <div>
-                                <label for="broadcast" class="block text-sm font-medi   um text-gray-700">Broadcast</label>
-                                <div class="flex items-center">
-                                    <input type="checkbox" {{$data->broadcastcid?'checked':''}} id="broadcastCheckbox" class="mr-2">
-                                    <select class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <div disabled>
+                            <label for="broadcast" class="block text-sm font-medium text-gray-700">Broadcast</label>
+                            <div class="flex items-center">
+                                <input type="checkbox" {{$data->broadcastcid?'checked':''}} id="broadcastCheckbox" class="mr-2" disabled>
+                                <select class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled>
                                     <option></option>
-                                   
-                                   </select>
-                                </div>
+                                    
+                                </select>
                             </div>
+                        </div>
+                        
                             <div>
                                 <label for="primary" class="block text-sm font-medium text-gray-700">Primary Client</label>
                                 <div class="flex items-center">
-                            
-                                    <input type="checkbox" name="primary" {{$data->PriClientID ? 'checked' : ''}} id="primaryCheckbox" class="mr-2">
+                                    <input type="checkbox" name="primary" {{$data->PriClientID ? 'checked' : ''}} id="primaryCheckbox" class="mr-2" {{$data->PriClientID ? '' : 'disabled'}}>
                                     <select name="primary_client_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" {{$data->PriClientID ? '' : 'disabled'}}>
-                                        
                                         @foreach($clients as $client)
                                         <option {{$data->PriClientID == $client->ClientID}} value="{{$client->ClientID}}">{{$client->Name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
-                            </div>
-                         
-
+                            </div>                        
                         <div>
                             <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
                             <input id="name" name="Name" value="{{$data->Name}}" type="text" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -83,16 +80,15 @@
                         
                         <div>
                             <label for="sector" class="block text-sm font-medium text-gray-700">Industory / Sector</label>
-                                        <select name="SectorPid" id="SectorPid" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <select name="SectorPid" id="SectorPid" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled>
                                 <option value="">Select Option</option>
-
                                 @foreach($picklist['sector'] as $sector)
-                                <option {{$data->sector->ID == $sector->ID ?'selected':''}} value="{{$sector->ID}}">{{$sector->Name}}</option>
+                                    <option {{$data->sector->ID == $sector->ID ? 'selected' : ''}} value="{{$sector->ID}}">{{$sector->Name}}</option>
                                 @endforeach
                             </select>
                             @error('SectorPid') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
-                                    
-                                    </div>
+                        </div>
+                        
                         <div>
                             <label for="mobile" class="block text-sm font-medium text-gray-700">Mobile No</label>
                             <input name="Mobile"  value="{{$data->Mobile}}"type="text" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -143,57 +139,58 @@
                         <div>
                             <label for="client" class="block text-sm font-medium text-gray-700">Client Logo</label>
                             <input id="client" type="file" name="Logo" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        </div>
+                        </div>                        
+                        
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-6">
-            <fieldset class="border border-gray-300 p-6 rounded-lg">
-                <legend class="text-sm font-medium text-gray-900">Print Monitoring Parameters</legend>
-                <div>
-                    <label for="type" class="block text-sm font-medium text-gray-700">Enable for Print</label>
-                    <input type="checkbox" name="wm_enableforprint" value="1" {{$data->wm_enableforprint == 1 ? 'checked' : ''}}>
-                </div>                
-                <div class="grid grid-cols-2 gap-4 mt-4">
-                    <div>
-                        <label for="type" class="block text-sm font-medium text-gray-700">Contract S-Date</label>
-                        <input type="date" name="StartDate" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{ $data->StartDate ?? '' }}">
-                    </div>
-                    
-                    <div>
-                        <label for="type" class="block text-sm font-medium text-gray-700">Contract E-Date</label>
-                        <input type="date" name="EndDate" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{ $data->EndDate ?? '' }}">
-                    </div>
-                    <div>
-                        <label for="billingcycle" class="block text-sm font-medium text-gray-700">Billing Cycle</label>
-                        <select name="BillCycleID" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option value=""></option>
-                            @foreach($picklist['bill cycle'] as $billingcycle)
-                            <option value="{{$billingcycle->ID}}" {{$billingcycle->ID == $data->BillCycleID ? 'selected' : ''}}>{{$billingcycle->Name}}</option>
-                            @endforeach
-                        </select>
-                        @error('BillCycleID') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
-                    </div>
-                    
-                    <div>
-                        <label for="billingdate" class="block text-sm font-medium text-gray-700">Billing Date</label>
-                        <input name="BillDate" id="billingcycle" type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"value="{{ $data->BillDate ?? '' }}">
-                    </div>
-                    <div>
-                        <label for="billingrate" class="block text-sm font-medium text-gray-700">Billing Rate</label>
-                        <input id="billingrate" type="text" name="BillRate" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"value="{{ $data->BillRate ?? '' }}">
-                    </div>
-                    <div>
-                        <label for="print" class="block text-sm font-medium text-gray-700">Print Status</label>
-                        <select name="Status" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            @foreach($picklist['client status'] as $status)
-                            <option {{$data->Status == $status->ID ?'selected':''}} value="{{$status->ID}}">{{$status->Name}}</option>
-                            @endforeach
-                        </select>
-                        @error('Status') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
-                    </div>
-
-                </div>
-            </fieldset>
-            <fieldset class="border border-gray-300 p-6 rounded-lg">
+                        <fieldset class="border border-gray-300 p-6 rounded-lg" disabled>
+                            <legend class="text-sm font-medium text-gray-900">Print Monitoring Parameters</legend>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Enable for Print</label>
+                                <input type="checkbox" name="wm_enableforprint" value="1" {{$data->wm_enableforprint == 1 ? 'checked' : ''}} disabled>
+                            </div>                
+                            <div class="grid grid-cols-2 gap-4 mt-4">
+                                <div>
+                                    <label for="type" class="block text-sm font-medium text-gray-700">Contract S-Date</label>
+                                    <input type="date" name="StartDate" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{ $data->StartDate ?? '' }}" disabled>
+                                </div>
+                                
+                                <div>
+                                    <label for="type" class="block text-sm font-medium text-gray-700">Contract E-Date</label>
+                                    <input type="date" name="EndDate" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{ $data->EndDate ?? '' }}" disabled>
+                                </div>
+                                <div>
+                                    <label for="billingcycle" class="block text-sm font-medium text-gray-700">Billing Cycle</label>
+                                    <select name="BillCycleID" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled>
+                                        <option value=""></option>
+                                        @foreach($picklist['bill cycle'] as $billingcycle)
+                                        <option value="{{$billingcycle->ID}}" {{$billingcycle->ID == $data->BillCycleID ? 'selected' : ''}}>{{$billingcycle->Name}}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('BillCycleID') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
+                                </div>
+                                
+                                <div>
+                                    <label for="billingdate" class="block text-sm font-medium text-gray-700">Billing Date</label>
+                                    <input name="BillDate" id="billingcycle" type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{ $data->BillDate ?? '' }}" disabled>
+                                </div>
+                                <div>
+                                    <label for="billingrate" class="block text-sm font-medium text-gray-700">Billing Rate</label>
+                                    <input id="billingrate" type="text" name="BillRate" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"value="{{ $data->BillRate ?? '' }}" disabled>
+                                </div>
+                                <div>
+                                    <label for="print" class="block text-sm font-medium text-gray-700">Print Status</label>
+                                    <select name="Status" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled>
+                                        @foreach($picklist['client status'] as $status)
+                                        <option {{$data->Status == $status->ID ?'selected':''}} value="{{$status->ID}}">{{$status->Name}}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('Status') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
+                                </div>
+                            </div>
+                        </fieldset>
+                        
+            <fieldset class="border border-gray-300 p-6 rounded-lg" disabled>
                 <legend class="text-sm font-medium text-gray-900">Web Monitoring Parameters</legend>
                 <div>
                     <label for="type" class="block text-sm font-medium text-gray-700">Enable for Web</label>
@@ -236,7 +233,7 @@
                 </div>
             </fieldset>
             
-            <fieldset class="border border-gray-300 p-6 rounded-lg">
+            <fieldset class="border border-gray-300 p-6 rounded-lg" disabled>
                 <legend class="text-sm font-medium text-gray-900">Twitter Monitoring Parameters</legend>
                 <div>
                     <label for="type" class="block text-sm font-medium text-gray-700">Enable for Twitter</label>
@@ -263,7 +260,7 @@
                 </div>
             </fieldset>
             
-            <fieldset class="border border-gray-300 p-6 rounded-lg">
+            <fieldset class="border border-gray-300 p-6 rounded-lg" disabled>
                 <legend class="text-sm font-medium text-gray-900">Other Monitoring Parameters</legend>
                 <div>
                     <label for="type" class="block text-sm font-medium text-gray-700">Enable for WhatsApp</label>
@@ -1126,14 +1123,29 @@
         }
 
         function enableAllDisabledItems() {
-            const disabledElements = document.querySelectorAll('[disabled]');
-            disabledElements.forEach(element => {
-                element.removeAttribute('disabled');
-            });
-            document.getElementById('editbtn').style.display = "none";
-            document.getElementById('save').classList.remove('hidden');
-            document.getElementById('client_id').setAttribute('disabled','');
+    const checkbox = document.getElementById('primaryCheckbox');
+    const select = document.querySelector('select[name="primary_client_id"]');
+    
+    // Check if the checkbox is checked
+    if (checkbox.checked) {
+        select.removeAttribute('disabled');
+    } else {
+        select.setAttribute('disabled', '');
+    }
+
+    const disabledElements = document.querySelectorAll('[disabled]');
+    disabledElements.forEach(element => {
+        // Check if the element is not the primary client dropdown
+        if (element !== select) {
+            element.removeAttribute('disabled');
         }
+    });
+
+    document.getElementById('editbtn').style.display = "none";
+    document.getElementById('save').classList.remove('hidden');
+    document.getElementById('client_id').setAttribute('disabled', '');
+}
+
 
         function toggleEditMode(contactId) {
             var editSections = document.getElementsByClassName('editSection' + contactId);
