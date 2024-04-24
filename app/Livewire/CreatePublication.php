@@ -26,7 +26,7 @@ class CreatePublication extends Component
     public $language;
     public $mu,$restrictedmu,$primary;
     public $pagenames;
-    public $circulation = '';
+    public $circulation;
     public $RatePC;
     public $RatePB;
     public $RateNC;
@@ -40,13 +40,23 @@ class CreatePublication extends Component
         'category'=>'required',
         'region'=>'required',
         'language'=>'required',
-        'masthead' => 'image'
+        'masthead' => 'image',
+        'RatePC'=>'numeric',
+        'RatePB'=>'numeric',
+        'RateNC'=>'numeric',
+        'RateNB'=>'numeric',
+        'size'=>'numeric',
+        'circulation'=>'numeric',
     ];
     protected $messages = [
         'title.required' => 'The Name cannot be empty.',
         'category.required' => 'The category cannot be empty.',
         'region.required' => 'The region cannot be empty.',
-        'language.required' => 'The language cannot be empty.'
+        'language.required' => 'The language cannot be empty.',
+        'RatePC.numeric' => 'The Premium color field must be a number',
+        'RatePB.numeric' => 'The Premium B&W field must be a number',
+        'RateNC.numeric' => 'The Non Premium color field must be a number',
+        'RateNB.numeric' => 'The Non Premium B&W field must be a number',
 
     ];
     public function togglePrimary()
@@ -56,7 +66,7 @@ class CreatePublication extends Component
     public function render()
     {
         $data = Picklist::whereIn('Type',['Region','Language','Pub Category','Pubtype'])->get()->groupBy('Type');   
-        $data['pubmaster'] = Pubmaster::where('deleted',0)->get(); 
+        $data['pubmaster'] = Pubmaster::where('deleted',0)->orderBy('Title')->get(); 
         return view('livewire.create-publication',compact('data'));
     }
     public function addCheckbox()
@@ -67,7 +77,7 @@ class CreatePublication extends Component
         }
     }
     public function submitForm(){
-
+        $this->validate();
        try{
         DB::beginTransaction();
         $pubid = Pubmaster::insertGetId([

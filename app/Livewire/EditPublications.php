@@ -6,6 +6,9 @@ use App\Models\Picklist;
 use App\Models\Pubmaster;
 use App\Models\PubPageName;
 use Livewire\Component;
+use Exception;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class EditPublications extends Component
 {
@@ -22,8 +25,8 @@ class EditPublications extends Component
     public $language;
     public $pagenames = [], $checkboxes = [];
     public $circulation = '';
-    public $RatePC;
     public $page;
+    public $RatePC;
     public $RatePB;
     public $RateNC;
     public $RateNB;
@@ -31,17 +34,18 @@ class EditPublications extends Component
     public $masthead, $primary, $webuniverse, $restrictedmu, $mu, $primaryname;
 
     protected $rules = [
+        'RatePC'=>'required|numeric',
+        'RatePB'=>'required|numeric',
+        'RateNC'=>'required|numeric',
+        'RateNB'=>'required|numeric',
+        'size'=>'required|numeric',
+        'circulation'=>'required|numeric',
         'title' => 'required',
         'edition'=>'required',
         'category'=>'required',
         'region'=>'required',
-        'language'=>'required',
-        'circulation'=>'numeric',
-        'size'=>'numeric',
-        'RateNB'=>'numeric',
-        'RatePC'=>'numeric',
-        'RateNC'=>'numeric',
-        'RatePB'=>'numeric',
+        'language'=>'required'
+,
     ];
     protected $messages = [
         'title.required' => 'The Name cannot be empty.',
@@ -49,12 +53,19 @@ class EditPublications extends Component
         'category.required' => 'The category cannot be empty.',
         'region.required' => 'The region cannot be empty.',
         'language.required' => 'The language cannot be empty.',
+        'RatePC.numeric' => 'The Premium color field must be a number',
+        'RatePB.numeric' => 'The Premium B&W field must be a number',
+        'RateNC.numeric' => 'The Non Premium color field must be a number',
+        'RateNB.numeric' => 'The Non Premium B&W field must be a number',
+        'RatePC.required' => 'The Premium color field cannot be empty',
+        'RatePB.required' => 'The Premium B&W field cannot be empty',
+        'RateNC.required' => 'The Non Premium color field cannot be empty',
+        'RateNB.required' => 'The Non Premium B&W field cannot be empty',
 
     ];
     public function mount($id)
     {
         $this->id = base64_decode($id);
-
         $data = Pubmaster::with('Type', 'city', 'country', 'state', 'cat', 'lang', 'pub_pages', 'edition')->find($this->id);
 
         $this->title = $data->Title;
@@ -80,12 +91,11 @@ class EditPublications extends Component
     }
     public function render()
     {
-        if ($this->id) {
+
 
             $picklist = Picklist::whereIn('Type', [ 'City', 'Region', 'Language', 'Pub Category', 'Pubtype'])->get()->groupBy('Type');
             $data['pubmaster'] = Pubmaster::where('deleted',0)->get(); 
-
-        } 
+     
         return view('livewire.edit-publications', compact('picklist','data'));
     }
     public function togglePrimary()
@@ -94,8 +104,10 @@ class EditPublications extends Component
     }
     public function submitForm()
     {
-        $validatedData = $this->validate();
+        $this->validate();
         $pubmaster = Pubmaster::findOrFail($this->pubid);
+        try{
+        DB::beginTransaction();
         $pubmaster->update([
             'PubId' => $this->pubid,
             'PrimaryPubID' => $this->primary,
@@ -132,9 +144,14 @@ class EditPublications extends Component
            
         }
     
-
+        Log::info('Record updaterd publication name: {name} and Pubid: {pubid} by user: {user} ',['name'=>$this->title,'user'=>auth()->user()->UserID,'pubid'=>$this->pubid]);
         session()->flash('success', 'Your changes have been saved successfully!');
         return redirect()->to('/publications');
+    }catch(Exception $e){
+        Log::error('Error while creating publication: {error}', ['error' => $e->getMessage()]);
+        session()->flash('error', 'An error occurred while adding the record.');
+
+       }
     }
     public function addCheckbox()
     {

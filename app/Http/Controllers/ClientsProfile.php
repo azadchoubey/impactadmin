@@ -235,7 +235,7 @@ class ClientsProfile extends Controller
         }
 
     }
-    public function editContact(Request $request, $contactId){
+    public function editContact(Request $request){
         $validator = Validator::make($request->all(), [
             'ContactName' => 'required|string',
             'Mobile' => 'required|digits:10',
@@ -258,7 +258,7 @@ class ClientsProfile extends Controller
     
         try {
             DB::beginTransaction();
-    
+            $contactId = $request->clientid;
             $deliveryIds = $request->only('deliveryid');
             $sectorIds = $request->only('SectorID');
             $input = $request->except(['_token','deliveryid','SectorID']);
