@@ -235,4 +235,65 @@ class ClientsProfile extends Controller
         }
 
     }
+    public function editContact(Request $request, $contactId){
+        $validator = Validator::make($request->all(), [
+            'ContactName' => 'required|string',
+            'Mobile' => 'required|digits:10',
+            'Email' => 'required|email',
+            'Address1' => 'required',
+            'Address2' => 'required',
+            'Address3' => 'required',
+            'CountryID' => 'required',
+            'CityID' => 'required',
+        ],[
+            'CountryID.required'=>'Country field is required',
+            'CityID.required'=>'City field is required',
+            'Mobile.required' => 'Mobile must be 10 digits.',
+            'Email.required' => 'Please enter a valid email address.',
+        ]);
+    
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()]);
+        }
+    
+        try {
+            DB::beginTransaction();
+    
+            $deliveryIds = $request->only('deliveryid');
+            $sectorIds = $request->only('SectorID');
+            $input = $request->except(['_token','deliveryid','SectorID']);
+            $input['ContactType'] = 0; 
+    
+            ClinetContacts::where('ContactID', $contactId)->update($input);
+    
+            Wmwebdeliverymethod::where('contactid', $contactId)->delete();
+            if ($deliveryIds) {
+                $wmWebDeliveryMethod = [];
+                foreach ($deliveryIds['deliveryid'] as $sectorId) {
+                    $wmWebDeliveryMethod[] = ['deliveryid'=>$sectorId,'contactid'=>$contactId];
+                }
+                Wmwebdeliverymethod::insert($wmWebDeliveryMethod);
+            }
+    
+            ContactSector::where('ContactID', $contactId)->delete();
+            if ($sectorIds) {
+                $contactSector = [];
+                foreach ($sectorIds['SectorID'] as $sectorId) {
+                    $contactSector[] = ['SectorID'=>$sectorId,'ContactID'=>$contactId];
+                }
+                ContactSector::insert($contactSector);
+            }
+    
+            DB::commit();
+            Log::info('updated client contact: {name} and contactid: {contactid} by user: {user} ',['contactid'=>$contactId,'user'=>auth()->user()->UserID,'name'=>$input['ContactName']]);
+            session()->flash('success', 'Contact Updated Successfully!');
+            return response()->json(['success' => true]);
+        } catch (Exception $e) {
+            DB::rollback();
+            Log::error('Error while updating client contact: {error}', ['error' => $e->getMessage()]);
+            session()->flash('error', 'Operation Failed!');
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+    
 }
