@@ -267,7 +267,41 @@
                         </div>
                     </fieldset>
                 </fieldset>
-            
+                <fieldset class="border border-gray-300 p-6 rounded-lg">
+                    <legend class="text-sm font-medium text-gray-900">Custom Digest</legend>
+                    
+                    <div class="grid grid-cols-4 gap-4 mt-4 p-5">
+                        <div>
+                            <label for="type" class="block text-sm font-medium text-gray-700">Enable for custom digest</label>
+                            <input name="wm_enableforprint" value="1" type="checkbox" {{$contact->delivery->isNotEmpty() ? 'checked' : ''}} >
+                        </div>
+                        <div>
+                            <label for="type" class="block text-sm font-medium text-gray-700">Formats </label>
+                            <select name="format" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option value="">Select option</option>
+                                @foreach($formats as $format)
+                                <option value="{{$format->id}}">{{$format->format_name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label for="type" class="block text-sm font-medium text-gray-700">Delivery Method</label>
+                            <select name="wm_deliverymethod[]" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" >
+                                <option value="">Select option</option>
+                                @foreach($deliverymaster as $Delivery)
+                                <option  value="{{$Delivery->id}}">{{$Delivery->deliverytime}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <button data-modal-target="static-modal" data-modal-toggle="static-modal" onclick="closeModal()" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                                Toggle modal
+                            </button>                            
+                              
+                            </div>
+
+                    </div>
+                </fieldset>
                 <fieldset class="border border-gray-300 p-6 rounded-lg">
                     <legend class="text-sm font-medium text-gray-900">Others Parameters</legend>
                     <div class="grid grid-cols-3 gap-4 mt-3 p-5">
@@ -331,3 +365,16 @@
         </div>
     </div>
 </div>
+<x-digestpopup/>
+
+<script>
+
+    function closeModal() {
+        const $targetEl =  document.getElementById('large-modal{{$contact->contactid}}');
+
+        const modal = new Modal($targetEl);
+        console.log(modal);
+        modal.hide();
+
+    }
+</script>

@@ -8,17 +8,18 @@ use Illuminate\View\Component;
 
 class EditContact extends Component
 {
-    public $contact,$picklist,$deliverymaster,$webdeliverymaster,$client;
+    public $contact,$picklist,$deliverymaster,$webdeliverymaster,$client,$formats;
     /**
      * Create a new component instance.
      */
-    public function __construct($contact,$picklist,$deliverymaster,$webdeliverymaster,$client)
+    public function __construct($contact,$picklist,$deliverymaster,$webdeliverymaster,$client,$formats)
     {
        $this->contact= $contact;  
        $this->picklist= $picklist;  
        $this->deliverymaster= $deliverymaster;  
        $this->webdeliverymaster= $webdeliverymaster;  
-       $this->client = $client;  
+       $this->client = $client;
+       $this->formats = $formats;  
 
     }
 

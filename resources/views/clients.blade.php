@@ -401,7 +401,7 @@
                                 <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->regularDigestWeb->isNotEmpty() ?$check:$cross !!}</td>
                                 <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->regularDigestPrint->ID != 0 ?$check:$cross !!}</td>
                                 <td id="editButton" class="withoutEditSection{{$contact->contactid}} px-6 py-4"><a  data-modal-target="large-modal{{$contact->contactid}}" data-modal-toggle="large-modal{{$contact->contactid}}" href="javascript:void(0);">Edit</a></td>
-                                <x-edit-contact :contact="$contact" :picklist="$picklist" :deliverymaster="$deliverymaster" :webdeliverymaster="$webdeliverymaster" :client="$data" />
+                                <x-edit-contact :contact="$contact" :picklist="$picklist" :deliverymaster="$deliverymaster" :webdeliverymaster="$webdeliverymaster" :client="$data" :formats="$formats" />
 
                             </tr>
                             @endforeach
@@ -750,7 +750,7 @@
                             </div>
                         </div>
                     </fieldset>
-                    <fieldset class="border border-gray-300 p-6 rounded-lg"{{$data->wm_enableforprint == 1 ? '' : 'disabled'}}>
+                    <fieldset class="border border-gray-300 p-6 rounded-lg">
                         <legend class="text-sm font-medium text-gray-900">Custom Digest</legend>
                         <div class="grid grid-cols-3 gap-4 mt-4 p-5">
                             <div>
@@ -758,24 +758,25 @@
                                 <input name="wm_enableforprint" value="1" type="checkbox" {{$data->wm_enableforprint == 1 ? 'checked' : ''}} {{$data->wm_enableforprint == 1 ? '' : 'disabled'}}>
                             </div>
                             <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700">Delivery Method </label>
-                                <select name="wm_deliverymethod" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" {{$data->wm_enableforprint == 1 ? '' : 'disabled'}}>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Formats </label>
+                                <select name="format" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     <option value="">Select option</option>
-                                    @foreach($deliverymaster as $Delivery)
-                                    <option value="{{$Delivery->id}}">{{$Delivery->deliverytime}}</option>
+                                    @foreach($formats as $format)
+                                    <option value="{{$format->id}}">{{$format->format_name}}</option>
                                     @endforeach
                                 </select>
                             </div>
                     
                             <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700">Delivery Method </label>
-                                <select name="wm_deliverymethod" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" {{$data->wm_enableforprint == 1 ? '' : 'disabled'}}>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Delivery Method</label>
+                                <select name="wm_deliverymethod[]" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" >
                                     <option value="">Select option</option>
                                     @foreach($deliverymaster as $Delivery)
                                     <option value="{{$Delivery->id}}">{{$Delivery->deliverytime}}</option>
                                     @endforeach
                                 </select>
                             </div>
+                            
                         </div>
                     </fieldset>
                     
