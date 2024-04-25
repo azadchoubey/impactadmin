@@ -9,6 +9,7 @@ use App\Livewire\CreatePublication;
 use App\Livewire\EditPublications;
 use App\Livewire\KeywordSearch;
 use App\Livewire\ShowClientProfile;
+use App\Models\CustomDigestFormat;
 use Illuminate\Support\Facades\Route;
 use App\Models\Mongo\ClientContact;
 use Maatwebsite\Excel\Row;
@@ -60,7 +61,7 @@ Route::get('/article/{id}',[ArticleController::class,'viewarticle'])->name('view
 Route::get('/keywordsearch',KeywordSearch::class);
 
 Route::get('/test',function(){
-    return ClientContact::where('Client_Name','Accenture')->get();
+    return CustomDigestFormat::all();
 });
 });
 

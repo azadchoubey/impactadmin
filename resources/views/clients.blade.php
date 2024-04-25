@@ -1248,6 +1248,7 @@
     </script>
 
     @endsection
+    @section('style')
     <style>
     fieldset[disabled] {
         opacity: 0.5; 
@@ -1263,3 +1264,4 @@
         cursor: not-allowed;
     }
 </style>
+@endsection
