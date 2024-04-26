@@ -400,7 +400,7 @@
                                 <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->delivery->isNotEmpty()?$check:$cross !!}</td>
                                 <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->regularDigestWeb->isNotEmpty() ?$check:$cross !!}</td>
                                 <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->regularDigestPrint->ID != 0 ?$check:$cross !!}</td>
-                                <td id="editButton" class="withoutEditSection{{$contact->contactid}} px-6 py-4"><a  data-modal-target="large-modal{{$contact->contactid}}" data-modal-toggle="large-modal{{$contact->contactid}}" href="javascript:void(0);">Edit</a></td>
+                                <td id="editButton" class="withoutEditSection{{$contact->contactid}} px-6 py-4"><a onclick="openmodal({{$contact->contactid}})"  data-modal-target="large-modal{{$contact->contactid}}" data-modal-toggle="large-modal{{$contact->contactid}}" href="javascript:void(0);">Edit</a></td>
                                 <x-edit-contact :contact="$contact" :picklist="$picklist" :deliverymaster="$deliverymaster" :webdeliverymaster="$webdeliverymaster" :client="$data" :formats="$formats" />
 
                             </tr>
@@ -1176,6 +1176,11 @@
     document.getElementById('client_id').setAttribute('disabled', '');
 }
 
+function openmodal(id){
+        const $targetEl =  document.getElementById(`large-modal${id}`);
+        const modal = new Modal($targetEl);
+        modal.show();
+}
 
         function toggleEditMode(contactId) {
             var editSections = document.getElementsByClassName('editSection' + contactId);

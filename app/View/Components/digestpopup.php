@@ -8,12 +8,10 @@ use Illuminate\View\Component;
 
 class digestpopup extends Component
 {
-    /**
-     * Create a new component instance.
-     */
-    public function __construct()
+    public $digest;
+    public function __construct($digest)
     {
-        //
+        $this->digest = $digest;
     }
 
     /**

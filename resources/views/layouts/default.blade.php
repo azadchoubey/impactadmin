@@ -15,6 +15,8 @@
 <body>
     <livewire:navbar />
     @yield('content')
+ 
+
     <script src="{{asset('js/jquery.min.js')}}" ></script>
     <script src="{{asset('js/dataTables.min.js')}}" ></script>
     <script src="{{asset('js/dataTables.tailwindcss.js')}}"></script>

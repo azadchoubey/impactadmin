@@ -31,8 +31,8 @@
 
         $('#publications').DataTable({
             paging: false,
-            searching: false,
-            info: false
+    searching: false,
+    info: false
         });
     });
 </script>

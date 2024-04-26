@@ -35,7 +35,7 @@
         </div>
 
     </div>
-    <table id="publications" class="w-lg text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+    <table id="publications" class="w-lg text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400" style="width:100%;">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
                 <th scope="col" class="px-6 py-3">
@@ -56,14 +56,14 @@
             <th  scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
             <a wire:click="fetchAll('{{ $result->PubId }}')" href="javascript:void(0);">{{$result->Title}}</a> 
           
-                <td class="px-6 py-4" >
+                <td class="px-2 py-2" >
                     <div class="flex items-center">
                        {{$result->edition->Name}}
                     </div>
                 </td>        
-                <td class="px-6 py-4" >
+                <td class="px-2 py-2" >
                     <div class="flex items-center">
-                    <a wire:navigate href="{{route('editpublication',base64_encode($result->PubId ))}}" class="mr-2 px-4 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"> <div class="flex items-center">
+                    <a  href="{{route('editpublication',base64_encode($result->PubId ))}}" class="mr-2 px-4 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"> <div class="flex items-center">
                             <svg class="h-4 w-4 text-white-600" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" />
                                 <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />
@@ -92,7 +92,5 @@
     {{$Results->links(data: ['scrollTo' => false])}}
 
 </div>
-
-
 @endif
 </div>
