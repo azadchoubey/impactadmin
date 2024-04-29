@@ -47,6 +47,7 @@ Route::post('/createclient',[ClientsProfile::class,'create'])->name('createclien
 Route::get('/get-subsectors/{industry}', [ClientsProfile::class,'getSubsectors']);
 Route::post('/addcontact',[ClientsProfile::class,'addcontact'])->name('addcontact');
 Route::post('/editcontact',[ClientsProfile::class,'editContact'])->name('editcontact');
+Route::get('/get-delivery-times', [ClientsProfile::class, 'getDeliveryTimes']);
 
 
 //  publications routes
@@ -63,5 +64,7 @@ Route::get('/keywordsearch',KeywordSearch::class);
 Route::get('/test',function(){
     return CustomDigestFormat::all();
 });
+
+
 });
 

@@ -276,16 +276,16 @@
                             </div>
                             <div>
                                 <label for="format" class="block text-sm font-medium text-gray-700">Format</label>
-                                <select name="format" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <select name="format" id="format" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     <option value="">Select format</option>
                                     @foreach($formats as $format)
-                                    <option value="{{$format->id}}">{{$format->format_name}}</option>
+                                    <option value="{{$format->id}}" data-delivery="{{$format->deliverymethod}}">{{$format->format_name}}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div>
                                 <label for="delivery_method" class="block text-sm font-medium text-gray-700">Delivery Method</label>
-                                <select name="wm_deliverymethod[]" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <select name="wm_deliverymethod[]" id="delivery_method" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     <option value="">Select delivery method(s)</option>
                                     @foreach($deliverymaster as $delivery)
                                     <option value="{{$delivery->id}}">{{$delivery->deliverytime}}</option>
@@ -387,3 +387,23 @@
         modal.hide();
     }
 </script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#format').change(function() {
+            var selectedFormatId = $(this).val();
+            if (selectedFormatId !== '') {
+                var deliveryMethods = $('#format option:selected').data('delivery').split(',').map(Number);
+                $('#delivery_method option').prop('selected', false); // Deselect all options first
+                $('#delivery_method option').each(function() {
+                    if (deliveryMethods.includes(parseInt($(this).val()))) {
+                        $(this).prop('selected', true); // Select the delivery method options associated with the selected format
+                    }
+                });
+            } else {
+                $('#delivery_method').val([]); // If no format is selected, deselect all delivery methods
+            }
+        });
+    });
+</script>
+

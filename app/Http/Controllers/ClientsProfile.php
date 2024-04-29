@@ -104,7 +104,16 @@ class ClientsProfile extends Controller
         });
         return view('createcilent', compact('clients', 'picklist'));
     }
-    
+    public function getDeliveryTimes(Request $request)
+    {
+        $formatId = $request->input('formatId');
+
+        // Fetch delivery times associated with the format ID from your database
+        $deliveryTimes = Deliverymethodmaster::where('format_id', $formatId)->pluck('id');
+
+        return response()->json($deliveryTimes);
+    }
+
     public function getSubsectors($industry)
     {
         $subsectors = Picklist::select('ID', 'Name')
