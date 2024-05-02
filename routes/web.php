@@ -47,7 +47,7 @@ Route::post('/createclient',[ClientsProfile::class,'create'])->name('createclien
 Route::get('/get-subsectors/{industry}', [ClientsProfile::class,'getSubsectors']);
 Route::post('/addcontact',[ClientsProfile::class,'addcontact'])->name('addcontact');
 Route::post('/editcontact',[ClientsProfile::class,'editContact'])->name('editcontact');
-Route::get('/get-delivery-times', [ClientsProfile::class, 'getDeliveryTimes']);
+Route::post('/get-delivery-times', [ClientsProfile::class, 'getDeliveryTimes'])->name('getdelivery');
 
 
 //  publications routes

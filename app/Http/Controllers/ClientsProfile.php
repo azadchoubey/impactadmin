@@ -106,10 +106,8 @@ class ClientsProfile extends Controller
     }
     public function getDeliveryTimes(Request $request)
     {
-        $formatId = $request->input('formatId');
 
-        // Fetch delivery times associated with the format ID from your database
-        $deliveryTimes = Deliverymethodmaster::where('format_id', $formatId)->pluck('id');
+        $deliveryTimes = Deliverymethod1::where(['format'=> $request->id,'contactid'=>$request->contactid])->pluck('deliveryid');
 
         return response()->json($deliveryTimes);
     }
@@ -250,6 +248,7 @@ class ClientsProfile extends Controller
 
     }
     public function editContact(Request $request){
+        return  $request;
         $validator = Validator::make($request->all(), [
             'ContactName' => 'required|string',
             'Mobile' => 'required|digits:10',
