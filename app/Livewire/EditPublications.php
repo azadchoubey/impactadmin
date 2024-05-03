@@ -66,7 +66,7 @@ class EditPublications extends Component
     public function mount($id)
     {
         $this->id = base64_decode($id);
-        $data = Pubmaster::with('Type', 'city', 'country', 'state', 'cat', 'lang', 'pub_pages', 'edition')->find($this->id);
+        $data = Pubmaster::with('Type', 'city', 'country', 'state', 'cat', 'lang', 'pub_pages', 'edition','frequency')->find($this->id);
 
         $this->title = $data->Title;
         $this->pubid = $data->PubId;
@@ -75,6 +75,7 @@ class EditPublications extends Component
         $this->issn = $data->Issn_Num;
         $this->type = $data->type->ID;
         $this->category = $data->cat->ID;
+        $this->frequency = $data->Periodicity;
         $this->region = $data->region->ID;
         $this->size = $data->Size;
         $this->pagenames = $data->pub_pages->toArray();
@@ -93,7 +94,7 @@ class EditPublications extends Component
     {
 
 
-            $picklist = Picklist::whereIn('Type', [ 'City', 'Region', 'Language', 'Pub Category', 'Pubtype'])->get()->groupBy('Type');
+            $picklist = Picklist::whereIn('Type', [ 'City', 'Region', 'Language', 'Pub Category', 'Pubtype','Periodicity'])->get()->groupBy('Type');
             $data['pubmaster'] = Pubmaster::where('deleted',0)->get(); 
      
         return view('livewire.edit-publications', compact('picklist','data'));
@@ -155,8 +156,17 @@ class EditPublications extends Component
     }
     public function addCheckbox()
     {
-        $this->pagenames[]=['Name' =>  $this->page,'IsPre'=> '1' ,'PubId'=>$this->pubid];
-        $this->page = '';
+        if ($this->page) {
+            $this->pagenames[] = ['Name' => $this->page, 'IsPre' => 0];
+            $this->page = '';
+        }
     }
+
+    public function removePage($index)
+    {
+        unset($this->pagenames[$index]);
+        $this->pagenames = array_values($this->pagenames); // Re-index array after deletion
+    }
+
 
 }

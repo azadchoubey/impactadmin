@@ -269,12 +269,12 @@
                     </fieldset>
                     <fieldset class="border border-gray-300 p-6 rounded-lg">
                         <legend class="text-sm font-medium text-gray-900">Custom Digest</legend>
-                        <div class="grid grid-cols-4 gap-4 mt-4 p-5">
-                            <div>
+                        <div class="flex flex-wrap justify-between items-center mt-4 p-5">
+                            <div class="w-full sm:w-auto mb-4 sm:mb-0">
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for custom digest</label>
                                 <input name="custom_digest" value="1" type="checkbox" {{$contact->delivery->isNotEmpty() ? 'checked' : ''}}>
                             </div>
-                            <div>
+                            <div class="w-full sm:w-auto mb-4 sm:mb-0">
                                 <label for="format" class="block text-sm font-medium text-gray-700">Format</label>
                                 <select name="format" onchange="selectFormat(this.value,'{{$contact->contactid}}')" id="format" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     <option value="">Select format</option>
@@ -283,7 +283,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div>
+                            <div class="w-full sm:w-auto mb-4 sm:mb-0">
                                 <label for="delivery_method" class="block text-sm font-medium text-gray-700">Delivery Method</label>
                                 <select name="wm_deliverymethod[]" id="delivery_method" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     <option value="">Select delivery method(s)</option>
@@ -292,13 +292,14 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div>
-                                <button data-modal-target="static-modal{{$contact->contactid}}" data-modal-toggle="static-modal{{$contact->contactid}}" onclick="closeModal({{$contact->contactid}})" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-                                    Toggle modal
+                            <div class="w-full sm:w-auto">
+                                <button data-modal-target="static-modal{{$contact->contactid}}" data-modal-toggle="static-modal{{$contact->contactid}}" onclick="closeModal({{$contact->contactid}})" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                                    View Formats
                                 </button>
                             </div>
                         </div>
                     </fieldset>
+                    
 
                     <fieldset class="border border-gray-300 p-6 rounded-lg">
                         <legend class="text-sm font-medium text-gray-900">Others Parameters</legend>
@@ -311,14 +312,14 @@
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for DYNA</label>
                                 <input name="enablefordidyounotice" type="checkbox" {{ $contact->enablefordidyounotice ? 'checked' : '' }}>
                             </div>
-                            <div>
+                            {{-- <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for QLIKVIEW</label>
                                 <input name="enableforqlikview" type="checkbox" {{ $contact->enableforqlikview ? 'checked' : '' }}>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for QUALIFY</label>
                                 <input name="enabletoqualify" type="checkbox" {{ $contact->enabletoqualify ? 'checked' : '' }}>
-                            </div>
+                            </div> --}}
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for YouTube</label>
                                 <input name="enableforyoutube" type="checkbox" {{ $contact->enableforyoutube ? 'checked' : '' }}>
@@ -327,38 +328,21 @@
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for Twitter</label>
                                 <input name="enablefortwitter" type="checkbox" {{ $contact->enablefortwitter ? 'checked' : '' }}>
                             </div>
-                            <div>
+                            {{-- <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for BR</label>
                                 <input name="enableforbr" type="checkbox" {{ $contact->enableforbr ? 'checked' : '' }}>
-                            </div>
-                            <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700">Enable for BB</label>
-                                <input name="enableforbb" type="checkbox" {{ $contact->enableforbb ? 'checked' : '' }}>
-                            </div>
+                            </div> --}}
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for Mobile</label>
                                 <input name="enableformobile" type="checkbox" {{ $contact->enableformobile ? 'checked' : '' }}>
                             </div>
-
-                            <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700">Regular Print</label>
-                                <input name="regularDigestPrint" type="checkbox" {{ $contact->regularDigestPrint ? 'checked' : '' }}>
-                            </div>
-                            <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700">Regular Web</label>
-                                <input name="regularDigestWeb" type="checkbox" {{ $contact->regularDigestWeb ? 'checked' : '' }}>
-                            </div>
-                            <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700">Custom Digest</label>
-                                <input name="delivery" type="checkbox" {{ $contact->delivery ? 'checked' : '' }}>
-                            </div>
-                        </div>
                     </fieldset>
                 </div>
 
-                <div class="flex items-center p-4 md:p-5 space-x-3 rtl:space-x-reverse border-t border-gray-200 rounded-b dark:border-gray-600">
+                <div class="flex items-center justify-end p-4 md:p-5 space-x-3 rtl:space-x-reverse border-t border-gray-200 rounded-b dark:border-gray-600">
                     <button type="button" onclick="editcontact()" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save</button>
                 </div>
+                
             </form>
         </div>
     </div>
