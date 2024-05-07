@@ -46,7 +46,7 @@ class ClientsProfile extends Controller
         $clientProfile = Clinetprofile::findOrFail($id);
         try{
             $clientProfile->Name = $request->Name;
-            $clientProfile->broadcastcid = $request->broadcast;
+            $clientProfile->broadcastcid = $request->broadcastid;
             $clientProfile->PriClientID = $request->primary_client_id??'';
             $clientProfile->SectorPid = $request->SectorPid??0;
             $clientProfile->Mobile = $request->Mobile;

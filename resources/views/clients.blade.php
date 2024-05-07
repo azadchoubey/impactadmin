@@ -12,6 +12,16 @@
         <span class="font-medium">{{ session()->get('error') }}</span>
     </div>
     @endif
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
     @php
 
     $cross = '<div>
@@ -54,13 +64,10 @@
                             <label for="broadcast" class="block text-sm font-medium text-gray-700">Broadcast</label>
                             <div class="flex items-center">
                                 <input type="checkbox" {{$data->broadcastcid?'checked':''}} id="broadcastCheckbox" class="mr-2" disabled>
-                                <select class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled>
-                                    <option></option>
-                                    
-                                </select>
+                                <input type="text" value="{{ $data->broadcastcid }}" id="broadcastText" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled>
                             </div>
                         </div>
-                        
+
                         <div>
                             <label for="primary" class="block text-sm font-medium text-gray-700">Primary Client</label>
                             <div class="flex items-center">
@@ -1207,6 +1214,51 @@ function openmodal(id){
             }
         });
     }
+    </script>
+    <script>
+        // Function to enable/disable broadcast fields
+        function enableBroadcastFields() {
+            var checkbox = document.getElementById("broadcastCheckbox");
+            var textBox = document.getElementById("broadcastText");
+    
+            // Enable/disable text box based on checkbox state
+            textBox.disabled = !checkbox.checked;
+        }
+    
+        // Function to handle edit button click
+        function handleEditButtonClick() {
+            enableBroadcastFields(); // Enable broadcast fields
+        }
+    
+        // Function to handle checkbox change event
+        function handleCheckboxChange() {
+            enableBroadcastFields(); // Enable/disable text box
+        }
+    
+        // Function to handle primary checkbox change event
+        function handlePrimaryCheckboxChange() {
+            var checkbox = document.getElementById('primaryCheckbox');
+            var dropdown = document.querySelector('select[name="primary_client_id"]');
+    
+            dropdown.disabled = !checkbox.checked; // Enable/disable dropdown
+        }
+    
+        window.onload = function() {
+            // Add event listener to the "Edit" button
+            document.getElementById("editbtn").addEventListener("click", function() {
+                handleEditButtonClick();
+            });
+    
+            // Add event listener to the broadcast checkbox
+            document.getElementById("broadcastCheckbox").addEventListener("change", function() {
+                handleCheckboxChange();
+            });
+    
+            // Add event listener to the primary checkbox
+            document.getElementById('primaryCheckbox').addEventListener('change', function() {
+                handlePrimaryCheckboxChange();
+            });
+        };
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
