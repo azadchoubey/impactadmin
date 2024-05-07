@@ -439,9 +439,9 @@
             <div class="rounded-lg bg-gray-50 dark:bg-gray-800" id="settings" role="tabpanel" aria-labelledby="settings-tab">
                 <div class="mt-5 relative overflow-x-auto shadow-md sm:rounded-lg">
                     <button id="editbutton1" data-modal-target="large-modal1" data-modal-toggle="large-modal1" class="hidden px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Edit</button>
-                    {{-- <div dir="rtl" id="createkeywords" class="hidden">
+                    <div dir="rtl" id="createkeywords">
                         <button id="createkeyword" data-modal-target="large-modal1" data-modal-toggle="large-modal1" class="right-0 px-3 py-2 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create Keyword</button>
-                    </div>  --}}
+                    </div>
                     <div>
                         @php
                         $currentPage = request()->input('keywords', 1);
@@ -602,11 +602,11 @@
     </div>
     <div id="large-modal1" wire:ignore tabindex="-1" class="fixed top-0 left-60 right-0 z-50 w-full p-4 hidden overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative w-full max-w-4xl max-h-full">
-
+    
             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                     <h3 class="text-xl font-medium text-gray-900 dark:text-white">
-                        Client Keyword Create
+                        Client keyword
                     </h3>
                     <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="large-modal1">
                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -615,18 +615,84 @@
                         <span class="sr-only">Close modal</span>
                     </button>
                 </div>
-
+    
                 <div class="p-4 md:p-5 space-y-4">
-
-
+                    <!-- Autocomplete input with the name "keyword" -->
+                    <div>
+                        <label for="keyword" class="block text-sm font-medium text-gray-700">Keyword:</label>
+                        <div x-data="{ isOpen: false, keyword: '' }">
+                            <input type="text" id="keyword" name="keyword" x-model="keyword" placeholder="Type to search..." class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500" @click="isOpen = true">
+                            <div x-show="isOpen" @click.away="isOpen = false" class="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-lg shadow-lg">
+                                <!-- Autocomplete list -->
+                                <ul>
+                                    @foreach($keywords as $keyword)
+                                    <li class="px-3 py-2 hover:bg-gray-100 cursor-pointer">{{ $keyword->KeyWord }}</li>
+                                @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Dropdown for filter -->
+                    <div>
+                        <label for="filter" class="block text-sm font-medium text-gray-700">Filter:</label>
+                        <select id="filter" name="filter" class="mt-1 block w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                            <option value="option1">Option 1</option>
+                            <option value="option2">Option 2</option>
+                            <option value="option3">Option 3</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Dropdown for filter string -->
+                    <div>
+                        <label for="filterString" class="block text-sm font-medium text-gray-700">Filter String:</label>
+                        <select id="filterString" name="filterString" class="mt-1 block w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                            <option value="string1">String 1</option>
+                            <option value="string2">String 2</option>
+                            <option value="string3">String 3</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Dropdown for type -->
+                    <div>
+                        <label for="type" class="block text-sm font-medium text-gray-700">Type:</label>
+                        <select id="type" name="type" class="mt-1 block w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                            <option value="type1">Type 1</option>
+                            <option value="type2">Type 2</option>
+                            <option value="type3">Type 3</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Dropdown for category -->
+                    <div>
+                        <label for="category" class="block text-sm font-medium text-gray-700">Category:</label>
+                        <select id="category" name="category" class="mt-1 block w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                            <option value="category1">Category 1</option>
+                            <option value="category2">Category 2</option>
+                            <option value="category3">Category 3</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Text box for company string -->
+                    <div>
+                        <label for="companyString" class="block text-sm font-medium text-gray-700">Company String:</label>
+                        <input type="text" id="companyString" name="companyString" placeholder="Enter company string..." class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    
+                    <!-- Text box for brand string -->
+                    <div>
+                        <label for="brandString" class="block text-sm font-medium text-gray-700">Brand String:</label>
+                        <input type="text" id="brandString" name="brandString" placeholder="Enter brand string..." class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </div>
                 </div>
-
+    
                 <div class="flex items-center p-4 md:p-5 space-x-3 rtl:space-x-reverse border-t border-gray-200 rounded-b dark:border-gray-600">
                     <button data-modal-hide="large-modal1" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save</button>
                 </div>
             </div>
         </div>
     </div>
+    
     <div id="large-modal2" tabindex="-1" class="fixed top-0 left-60 right-0 z-50 w-full p-4 hidden overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative w-full max-w-4xl max-h-full">
 
