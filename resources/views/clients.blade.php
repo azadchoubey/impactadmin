@@ -1027,67 +1027,7 @@
             editButton.classList.add('hidden');
         }
     }
-  {{--  function updateEditButton(e) {
-        var data = `<td class="px-6 py-4 hidden editable-checkbox">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="wm_enableforprint" {{ $contact->wm_enableforprint ? 'checked' : '' }} />
-                                </td>
-                                <td class="px-6 py-4 hidden editable-checkbox">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="wm_enableforweb"  {{ $contact->wm_enableforweb ? 'checked' : '' }} />
-                                </td>
-                                <td class="px-6 py-4 hidden editable-checkbox">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforqlikview"  {{ $contact->enableforqlikview ? 'checked' : '' }} />
-                                </td>
-                                <td class="px-6 py-4 hidden editable-checkbox">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enabletoqualify"  {{ $contact->enabletoqualify ? 'checked' : '' }} />
-                                </td>
-                                <td class="px-6 py-4 hidden editable-checkbox">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="getcriticalalert"  {{ $contact->getcriticalalert ? 'checked' : '' }} />
-                                </td>
-                                <td class="px-6 py-4 hidden editable-checkbox">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforcharts"  {{ $contact->enableforcharts ? 'checked' : '' }} />
-                                </td>
-                                <td class="px-6 py-4 hidden editable-checkbox">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforbr"  {{ $contact->enableforbr ? 'checked' : '' }} />
-                                </td>
-                                <td class="px-6 py-4 hidden editable-checkbox">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforbb"  {{ $contact->enableforbb ? 'checked' : '' }} />
-                                </td>
-                                <td class="px-6 py-4 hidden editable-checkbox">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableformobile"  {{ $contact->enableformobile ? 'checked' : '' }} />
-                                </td>
-                                <td class="px-6 py-4 hidden editable-checkbox">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforwhatsapp"  {{ $contact->enableforwhatsapp ? 'checked' : '' }} />
-                                </td>
-                                <td class="px-6 py-4 hidden editable-checkbox">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableformediatouch"  {{ $contact->enableformediatouch ? 'checked' : '' }} />
-                                </td>
-                                <td class="px-6 py-4 hidden editable-checkbox">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enablefordidyounotice"  {{ $contact->enablefordidyounotice ? 'checked' : '' }} />
-                                </td>
-                                <td class="px-6 py-4 hidden editable-checkbox">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="delivery"  {{ $contact->delivery->isNotEmpty() ? 'checked' : '' }} />
-                                </td>
-                                <td class="px-6 py-4 hidden editable-checkbox">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="regularDigestWeb"  {{ $contact->regularDigestWeb->isNotEmpty() ? 'checked' : '' }} />
-                                </td>
-                                <td class="px-6 py-4 hidden editable-checkbox">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="regularDigestPrint"  {{ $contact->regularDigestPrint->ID != 0 ? 'checked' : '' }} />
-                                </td>
-                                <td  class="px-6 py-4"><a href="javascript:void(0);">Update</a></td>`;
-        var targetTd = e.closest('tr').querySelector('.font-medium');
-        if (targetTd) {
-            var siblings = targetTd.nextElementSibling;
-            
-            // Remove all siblings
-            while (siblings) {
-                var nextSibling = siblings.nextElementSibling;
-                siblings.remove();
-                siblings = nextSibling;
-            }
-        // targetTd.insertAdjacentHTML('afterend', data);
-        }
-        
-    } --}}
+ 
 
     function updateEditButtonVisibility1() {
         var checkboxes = document.querySelectorAll('.checkboxes1');
@@ -1156,7 +1096,6 @@
     const checkbox = document.getElementById('primaryCheckbox');
     const select = document.querySelector('select[name="primary_client_id"]');
     
-    // Check if the checkbox is checked
     if (checkbox.checked) {
         select.removeAttribute('disabled');
     } else {
