@@ -153,20 +153,42 @@ class EditPublications extends Component
         session()->flash('error', 'An error occurred while adding the record.');
 
        }
-    }
-    public function addCheckbox()
+    }public function addCheckbox()
     {
         if ($this->page) {
-            $this->pagenames[] = ['Name' => $this->page, 'IsPre' => 0];
+            // Create a new record in the database
+            $newPageName = PubPageName::create([
+                'Name' => $this->page,
+                'IsPre' => 0, // Assuming a default value for IsPre
+            ]);
+    
+            // Add the new page name to the Livewire component's state
+            $this->pagenames[] = [
+                'PageNameID' => $newPageName->id, // Assuming 'id' is the primary key of PubPageName
+                'Name' => $this->page,
+                'IsPre' => 0, // Assuming a default value for IsPre
+            ];
+    
+            // Clear the text box
             $this->page = '';
         }
     }
+    
 
     public function removePage($index)
     {
+        // If the page name exists in the database (has an ID), delete it
+        if (isset($this->pagenames[$index]['PageNameID'])) {
+            PubPageName::find($this->pagenames[$index]['PageNameID'])->delete();
+        }
+    
+        // Remove the page name from the array
         unset($this->pagenames[$index]);
-        $this->pagenames = array_values($this->pagenames); // Re-index array after deletion
+    
+        // Re-index array after deletion
+        $this->pagenames = array_values($this->pagenames);
     }
+    
 
 
 }

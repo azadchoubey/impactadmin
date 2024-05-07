@@ -302,14 +302,14 @@
                     
 
                     <fieldset class="border border-gray-300 p-6 rounded-lg">
-                        <legend class="text-sm font-medium text-gray-900">Others Parameters</legend>
+                        <legend class="text-sm font-medium text-gray-900">Enable Others Parameters</legend>
                         <div class="grid grid-cols-3 gap-4 mt-3 p-5">
                             <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700">Enable for Media Touch</label>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Media Touch</label>
                                 <input name="enableformediatouch" {{ $contact->enableformediatouch ? 'checked' : '' }} type="checkbox">
                             </div>
                             <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700">Enable for DYNA</label>
+                                <label for="type" class="block text-sm font-medium text-gray-700">DYNA</label>
                                 <input name="enablefordidyounotice" type="checkbox" {{ $contact->enablefordidyounotice ? 'checked' : '' }}>
                             </div>
                             {{-- <div>
@@ -321,11 +321,11 @@
                                 <input name="enabletoqualify" type="checkbox" {{ $contact->enabletoqualify ? 'checked' : '' }}>
                             </div> --}}
                             <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700">Enable for YouTube</label>
+                                <label for="type" class="block text-sm font-medium text-gray-700">YouTube</label>
                                 <input name="enableforyoutube" type="checkbox" {{ $contact->enableforyoutube ? 'checked' : '' }}>
                             </div>
                             <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700">Enable for Twitter</label>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Twitter</label>
                                 <input name="enablefortwitter" type="checkbox" {{ $contact->enablefortwitter ? 'checked' : '' }}>
                             </div>
                             {{-- <div>
@@ -333,7 +333,15 @@
                                 <input name="enableforbr" type="checkbox" {{ $contact->enableforbr ? 'checked' : '' }}>
                             </div> --}}
                             <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700">Enable for Mobile</label>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Mobile</label>
+                                <input name="enableformobile" type="checkbox" {{ $contact->enableformobile ? 'checked' : '' }}>
+                            </div>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Dashboard</label>
+                                <input name="enableformobile" type="checkbox" {{ $contact->enableformobile ? 'checked' : '' }}>
+                            </div>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Broadcast</label>
                                 <input name="enableformobile" type="checkbox" {{ $contact->enableformobile ? 'checked' : '' }}>
                             </div>
                     </fieldset>

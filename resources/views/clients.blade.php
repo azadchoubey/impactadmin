@@ -923,45 +923,45 @@
                     </fieldset>
                 
                     <fieldset class="border border-gray-300 p-6 rounded-lg">
-                        <legend class="text-sm font-medium text-gray-900">Others Parameters</legend>
+                        <legend class="text-sm font-medium text-gray-900">Enable Others Parameters</legend>
                         <div class="grid grid-cols-3 gap-4 mt-3 p-5">
                             <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700">Enable for Media Touch</label>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Media Touch</label>
                                 <input name="enableformediatouch" value="1" type="checkbox">
                             </div>
                             <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700">Enable for DYNA</label>
+                                <label for="type" class="block text-sm font-medium text-gray-700">DYNA</label>
                                 <input name="enablefordidyounotice" type="checkbox" value="1">
                             </div>
-                            <div>
+                            {{-- <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for QLIKVIEW</label>
                                 <input name="enableforqlikview" type="checkbox" value="1">
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for QUALIFY</label>
                                 <input name="enabletoqualify" type="checkbox" value="1">
-                            </div>
+                            </div> --}}
                             <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700">Enable for YouTube</label>
+                                <label for="type" class="block text-sm font-medium text-gray-700">YouTube</label>
                                 <input name="enableforyoutube" type="checkbox" value="1">
                             </div>
                             <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700">Enable for Twitter</label>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Twitter</label>
                                 <input name="enablefortwitter" type="checkbox" value="1">
                             </div>
-                            <div>
+                            {{-- <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for BR</label>
                                 <input name="enableforbr" type="checkbox" value="1">
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for BB</label>
                                 <input name="enableforbb" type="checkbox" value="1">
-                            </div>
+                            </div> --}}
                             <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700">Enable for Mobile</label>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Mobile</label>
                                 <input name="enableformediatouch" type="checkbox" value="1">
                             </div>
-                            <div>
+                            {{-- <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Regular Print</label>
                                 <input name="regularDigestPrint" type="checkbox" value="1">
                             </div>
@@ -972,6 +972,14 @@
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Custom Digest</label>
                                 <input name="delivery" type="checkbox" value="1">
+                            </div> --}}
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Dashboard</label>
+                                <input name="enableformediatouch" type="checkbox" value="1">
+                            </div>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Broadcast</label>
+                                <input name="enableformediatouch" type="checkbox" value="1">
                             </div>
                         </div>
                     </fieldset>
