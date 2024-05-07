@@ -98,18 +98,26 @@
 
                 <div class="mb-4">
                     <label for="pagename" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Page Name</label>
-                    <div class="flex items-center space-x-2 mb-2">
+                    <div>
                         <input wire:model="page" wire:keydown.enter.prevent="addCheckbox" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" id="pagename">
                     </div>
-                    @if(!empty($pagenames))
-                    @foreach($pagenames as $key=>$pagename)   
-                    <div class="flex items-center space-x-2 mb-2">
-                        <input wire:model="pagenames.{{$key}}.IsPre" {{$pagename['IsPre'] == "1" ? "checked":""}} type="checkbox" class="text gap-4"  > <span class="gap-2">{{$pagename['Name']}}</span>
+                    <div class="overflow-auto max-h-48 mt-3"> <!-- Set max height and enable overflow scrolling -->
+                        @if(!empty($pagenames))
+                            @foreach($pagenames as $key => $pagename)   
+                                <div class="flex items-center justify-between space-x-2 mb-2">
+                                    <div class="flex items-center space-x-2">
+                                        <input wire:model="pagenames.{{$key}}.IsPre" {{$pagename['IsPre'] == "1" ? "checked":""}} type="checkbox" class="text gap-4"> 
+                                        <span class="gap-2">{{$pagename['Name']}}</span>
+                                    </div>
+                                    <button wire:click="removePage({{$key}})" type="button" class="text-red-600 dark:text-red-500">❌</button>
+                                </div>
+                            @endforeach
+                        @endif
                     </div>
-                    @endforeach
-                    @endif
-
                 </div>
+                
+                
+                
 
                 <div class="mb-4">
                     <input wire:model="restrictedmu" {{$restrictedmu == 1 ?"checked":''}} class="text" value="{{$restrictedmu}}" type="checkbox">
@@ -147,7 +155,11 @@
                 </div>
                 <div class="mb-4">
                     <label for="frequency" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Frequency</label>
-                    <input wire:model="frequency" type="text" id="frequency" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <select wire:model="frequency" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        @foreach($picklist['periodicity'] as $freq)
+                        <option {{$freq->ID == $frequency ? 'seleted':''}}  value="{{$freq->ID}}">{{$freq->Name}}</option>
+                        @endforeach
+                    </select>
                     @error('frequency')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
 
                 </div>

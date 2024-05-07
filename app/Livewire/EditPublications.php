@@ -66,7 +66,7 @@ class EditPublications extends Component
     public function mount($id)
     {
         $this->id = base64_decode($id);
-        $data = Pubmaster::with('Type', 'city', 'country', 'state', 'cat', 'lang', 'pub_pages', 'edition')->find($this->id);
+        $data = Pubmaster::with('Type', 'city', 'country', 'state', 'cat', 'lang', 'pub_pages', 'edition','frequency')->find($this->id);
 
         $this->title = $data->Title;
         $this->pubid = $data->PubId;
@@ -75,6 +75,7 @@ class EditPublications extends Component
         $this->issn = $data->Issn_Num;
         $this->type = $data->type->ID;
         $this->category = $data->cat->ID;
+        $this->frequency = $data->Periodicity;
         $this->region = $data->region->ID;
         $this->size = $data->Size;
         $this->pagenames = $data->pub_pages->toArray();
@@ -93,7 +94,7 @@ class EditPublications extends Component
     {
 
 
-            $picklist = Picklist::whereIn('Type', [ 'City', 'Region', 'Language', 'Pub Category', 'Pubtype'])->get()->groupBy('Type');
+            $picklist = Picklist::whereIn('Type', [ 'City', 'Region', 'Language', 'Pub Category', 'Pubtype','Periodicity'])->get()->groupBy('Type');
             $data['pubmaster'] = Pubmaster::where('deleted',0)->get(); 
      
         return view('livewire.edit-publications', compact('picklist','data'));
@@ -152,11 +153,42 @@ class EditPublications extends Component
         session()->flash('error', 'An error occurred while adding the record.');
 
        }
-    }
-    public function addCheckbox()
+    }public function addCheckbox()
     {
-        $this->pagenames[]=['Name' =>  $this->page,'IsPre'=> '1' ,'PubId'=>$this->pubid];
-        $this->page = '';
+        if ($this->page) {
+            // Create a new record in the database
+            $newPageName = PubPageName::create([
+                'Name' => $this->page,
+                'IsPre' => 0, // Assuming a default value for IsPre
+            ]);
+    
+            // Add the new page name to the Livewire component's state
+            $this->pagenames[] = [
+                'PageNameID' => $newPageName->id, // Assuming 'id' is the primary key of PubPageName
+                'Name' => $this->page,
+                'IsPre' => 0, // Assuming a default value for IsPre
+            ];
+    
+            // Clear the text box
+            $this->page = '';
+        }
     }
+    
+
+    public function removePage($index)
+    {
+        // If the page name exists in the database (has an ID), delete it
+        if (isset($this->pagenames[$index]['PageNameID'])) {
+            PubPageName::find($this->pagenames[$index]['PageNameID'])->delete();
+        }
+    
+        // Remove the page name from the array
+        unset($this->pagenames[$index]);
+    
+        // Re-index array after deletion
+        $this->pagenames = array_values($this->pagenames);
+    }
+    
+
 
 }

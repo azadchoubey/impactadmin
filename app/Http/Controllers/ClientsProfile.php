@@ -248,7 +248,6 @@ class ClientsProfile extends Controller
 
     }
     public function editContact(Request $request){
-        return  $request;
         $validator = Validator::make($request->all(), [
             'ContactName' => 'required|string',
             'Mobile' => 'required|digits:10',

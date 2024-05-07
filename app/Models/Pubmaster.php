@@ -34,6 +34,9 @@ class Pubmaster extends Model
     public function edition(){
         return $this->belongsTo(Picklist::class,'Place','ID')->select('ID','Name','Type');
     }
+    public function frequency(){
+        return $this->belongsTo(Picklist::class,'Periodicity','ID')->select('ID','Name','Type');
+    }
     public function pub_pages(){
         return $this->hasMany(PubPageName::class,'PubId','PubId');
     }
