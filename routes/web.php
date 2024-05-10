@@ -12,6 +12,7 @@ use App\Livewire\ShowClientProfile;
 use App\Models\CustomDigestFormat;
 use Illuminate\Support\Facades\Route;
 use App\Models\Mongo\ClientContact;
+use App\Models\Picklist;
 use Maatwebsite\Excel\Row;
 
 /*
@@ -62,7 +63,7 @@ Route::get('/article/{id}',[ArticleController::class,'viewarticle'])->name('view
 Route::get('/keywordsearch',KeywordSearch::class);
 
 Route::get('/test',function(){
-    return CustomDigestFormat::all();
+    return Picklist::where('type','keyword category')->orderBy('name')->get();
 });
 
 

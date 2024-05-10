@@ -156,36 +156,29 @@ class EditPublications extends Component
     }public function addCheckbox()
     {
         if ($this->page) {
-            // Create a new record in the database
             $newPageName = PubPageName::create([
                 'Name' => $this->page,
-                'IsPre' => 0, // Assuming a default value for IsPre
+                'IsPre' => 0, 
             ]);
     
-            // Add the new page name to the Livewire component's state
             $this->pagenames[] = [
-                'PageNameID' => $newPageName->id, // Assuming 'id' is the primary key of PubPageName
+                'PageNameID' => $newPageName->id, 
                 'Name' => $this->page,
-                'IsPre' => 0, // Assuming a default value for IsPre
+                'IsPre' => 0, 
             ];
-    
-            // Clear the text box
-            $this->page = '';
+                $this->page = '';
         }
     }
     
 
     public function removePage($index)
     {
-        // If the page name exists in the database (has an ID), delete it
         if (isset($this->pagenames[$index]['PageNameID'])) {
             PubPageName::find($this->pagenames[$index]['PageNameID'])->delete();
         }
     
-        // Remove the page name from the array
         unset($this->pagenames[$index]);
     
-        // Re-index array after deletion
         $this->pagenames = array_values($this->pagenames);
     }
     
