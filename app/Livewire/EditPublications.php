@@ -88,6 +88,10 @@ class EditPublications extends Component
         $this->masthead = $data->MastHead;
         $this->primary = $data->PrimaryPubID;
         $this->primaryname = $this->primary == 0 ? false:true;
+        foreach ($this->pagenames as &$pagename) {
+            $pagename['editing'] = false; // Set editing to false by default
+        }
+    
        
     }
     public function render()
@@ -153,7 +157,8 @@ class EditPublications extends Component
         session()->flash('error', 'An error occurred while adding the record.');
 
        }
-    }public function addCheckbox()
+    }
+    public function addCheckbox()
     {
         if ($this->page) {
             // Create a new record in the database
@@ -188,7 +193,22 @@ class EditPublications extends Component
         // Re-index array after deletion
         $this->pagenames = array_values($this->pagenames);
     }
-    
+    public function toggleEditPageName($index)
+{
+    $this->pagenames[$index]['editing'] = !$this->pagenames[$index]['editing'];
+}
 
+public function savePageName($index)
+{
+    $this->validate([
+        "pagenames.$index.Name" => 'required', // Add validation rules if needed
+    ]);
 
+    $pageName = $this->pagenames[$index];
+    $pageNameModel = PubPageName::findOrFail($pageName['PageNameID']); // Assuming 'id' is the primary key of PubPageName
+    $pageNameModel->update(['Name' => $pageName['Name']]);
+
+    // Reset the edit state
+    $this->toggleEditPageName($index);
+}
 }
