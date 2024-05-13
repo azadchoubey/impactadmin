@@ -38,6 +38,11 @@
                     <!-- Dropdown for filter string -->
                     <div>
                         <label for="filterString" class="block text-sm font-medium text-gray-700">Filter String:</label>
+                        <input type="text" id="filterString" autocomplete="off" name="filterString" placeholder="" class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <div id="autocomplete-list1" class="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-lg shadow-lg" style="display: none;">
+                            <!-- Autocomplete list -->
+                           
+                        </div>
                         <select id="filterString" name="filterString" class="mt-1 block w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                            
                         </select>
@@ -80,8 +85,9 @@
                 </div>
 
                 <div class="flex items-center p-4 md:p-5 space-x-3 rtl:space-x-reverse border-t border-gray-200 rounded-b dark:border-gray-600">
-                    <button data-modal-hide="large-modal1" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save</button>
+                    <button id="saveKeywordBtn" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save</button>
                 </div>
+            </div>
             </div>
         </div>
     </div>
@@ -105,6 +111,7 @@
                         if (response.length > 0) {
                             $.each(response, function(index, result) {
                                 const li = $('<li>').text(result.KeyWord);
+                              
                                 li.css('padding', '8px')
                                 li.on('click', function() {
                                     selectResult(result.KeyWord);
@@ -141,8 +148,8 @@
                     filter.empty();
                     if (response.length > 0) {
                         $.each(response, function(index, filterString) {
-                            const option = $('<option>').val(filterString.keyID).text(filterString.Filter_String);
-                            const option1 = $('<option>').val(filterString.keyID).text(filterString.filter);
+                            const option = $('<option>').val(filterString.Filter_String).text(filterString.Filter_String);
+                            const option1 = $('<option>').val(filterString.filter).text(filterString.filter);
                             filterStringDropdown.append(option);
                             filter.append(option1);
                         });
@@ -159,5 +166,47 @@
 
         // Attach the fetchResults function to the input field's input event
         $('#keyword').on('input', fetchResults);
+
+        $(document).ready(function() {
+            // console.log('Save button clicked'); // Check if this message appears in the console
+
+        // Handle "Save" button click
+        $('#saveKeywordBtn').click(function() {
+            // Gather form data
+            const keyword = $('#keyword').val();
+            const filter = $('#filter').val();
+            const filterString = $('#filterString').val();
+            const type = $('#type').val();
+            const category = $('#category').val();
+            const companyString = $('#companyString').val();
+            const brandString = $('#brandString').val();
+
+            // Send AJAX request to save the keyword
+            $.ajax({
+                url: '/save-keyword',
+                method: 'POST',
+                data: {
+                    keyword: keyword,
+                    filter: filter,
+                    filterString: filterString,
+                    type: type,
+                    category: category,
+                    companyString: companyString,
+                    brandString: brandString,
+                    _token: '{{ csrf_token() }}' 
+                },
+                success: function(response) {
+                    // Handle success response
+                    console.log(response);
+                    // Optionally, you can show a success message or redirect the user
+                },
+                error: function(xhr, status, error) {
+                    // Handle error response
+                    console.error('Error saving keyword:', error);
+                    // Optionally, you can show an error message to the user
+                }
+            });
+        });
+    });
     </script>
 @endsection

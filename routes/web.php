@@ -1,19 +1,20 @@
 <?php
 
-use App\Http\Controllers\ArticleController;
+use App\Models\Picklist;
+use App\Livewire\Articles;
+use Maatwebsite\Excel\Row;
+use App\Livewire\KeywordSearch;
+use App\Livewire\EditPublications;
+use App\Models\CustomDigestFormat;
+use App\Livewire\CreatePublication;
+use App\Livewire\ShowClientProfile;
+use App\Models\Mongo\ClientContact;
+use App\Http\Controllers\ManageUsers;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClientsProfile;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\ManageUsers;
-use App\Livewire\Articles;
-use App\Livewire\CreatePublication;
-use App\Livewire\EditPublications;
-use App\Livewire\KeywordSearch;
-use App\Livewire\ShowClientProfile;
-use App\Models\CustomDigestFormat;
-use Illuminate\Support\Facades\Route;
-use App\Models\Mongo\ClientContact;
-use App\Models\Picklist;
-use Maatwebsite\Excel\Row;
+use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\KeywordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,11 +62,10 @@ Route::get('/articles',Articles::class);
 Route::get('/article/{id}',[ArticleController::class,'viewarticle'])->name('viewarticle');
 
 Route::get('/keywordsearch',KeywordSearch::class);
-
+Route::post('/save-keyword', [KeywordController::class, 'saveKeyword'])->name('save.keyword');
 Route::get('/test',function(){
     return Picklist::where('type','keyword category')->orderBy('name')->get();
 });
-
 
 });
 
