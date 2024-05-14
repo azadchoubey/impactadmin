@@ -31,6 +31,7 @@ class KeywordController extends Controller
     public function saveKeyword(Request $request)
     {
         $keywordData = [
+            'KeyWord' => $request->input('keyword'),
             'filter' => $request->input('filter'),
             'filter_string' => $request->input('filterString'),
             'type' => $request->input('type'),
@@ -42,14 +43,17 @@ class KeywordController extends Controller
 
         $keyword = $request->input('keyword');
 
-        // Use updateOrCreate to create or update the keyword
+        if(Keywordmaster::where(['keyword' => $keyword,'filter_string'=>$request->input('filterString')])->update($keywordData)){
+            
+        }
+
         $keywordRecord = Keywordmaster::updateOrCreate(
             ['keyword' => $keyword,'filter_string'=>$request->input('filterString')],
             $keywordData
         );
 
         if ($keywordRecord->wasRecentlyCreated) {
-            return response()->json(['message' => 'Keyword created successfully', 'keyword' => $keywordRecord->keyId]);
+            return response()->json(['message' => 'Keyword created successfully', 'keyword' => $keywordRecord->KeyWord]);
         } else {
             return response()->json(['message' => 'Keyword updated successfully', 'keyword' => $keywordRecord]);
         }

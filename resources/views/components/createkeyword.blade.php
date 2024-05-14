@@ -30,32 +30,37 @@
                     <!-- Dropdown for filter -->
                     <div>
                         <label for="filter" class="block text-sm font-medium text-gray-700">Filter:</label>
-                        <select id="filter" name="filter" class="mt-1 block w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                         
-                        </select>
+                        <input type="text" id="filterinput" list="filter" autocomplete="off" name="filter" placeholder="" class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <div id="autocomplete-list1" class="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-lg shadow-lg" style="display: none;">
+                            <!-- Autocomplete list -->
+                            <datalist id="filter">
+                             
+                            </datalist>
+                        </div>
+                      
                     </div>
 
                     <!-- Dropdown for filter string -->
                     <div>
                         <label for="filterString" class="block text-sm font-medium text-gray-700">Filter String:</label>
-                        <input type="text" id="filterString" autocomplete="off" name="filterString" placeholder="" class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <input type="text" id="filterStringinput"  list="filterString" autocomplete="off" name="filterString" placeholder="" class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                         <div id="autocomplete-list1" class="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-lg shadow-lg" style="display: none;">
                             <!-- Autocomplete list -->
-                           
+                            <datalist id="filterString">
+                             
+                            </datalist>
                         </div>
-                        <select id="filterString" name="filterString" class="mt-1 block w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                           
-                        </select>
+                      
                     </div>
-                  
+
                     <div>
                         <label for="type" class="block text-sm font-medium text-gray-700">Type:</label>
                         <select id="type" name="type" class="mt-1 block w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                           @forelse($keywordtypes as $keywordtype)
-                           <option value="{{ $keywordtype->ID }}">{{ $keywordtype->Name }}</option>
-                           @empty
+                            @forelse($keywordtypes as $keywordtype)
+                            <option value="{{ $keywordtype->ID }}">{{ $keywordtype->Name }}</option>
+                            @empty
 
-                           @endforelse
+                            @endforelse
                         </select>
                     </div>
 
@@ -63,24 +68,24 @@
                     <div>
                         <label for="category" class="block text-sm font-medium text-gray-700">Category:</label>
                         <select id="category" name="category" class="mt-1 block w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                        @forelse($keywordcategories as $keywordcategory)
-                           <option value="{{ $keywordcategory->ID }}">{{ $keywordcategory->Name }}</option>
-                           @empty
+                            @forelse($keywordcategories as $keywordcategory)
+                            <option value="{{ $keywordcategory->ID }}">{{ $keywordcategory->Name }}</option>
+                            @empty
 
-                           @endforelse
+                            @endforelse
                         </select>
                     </div>
 
                     <!-- Text box for company string -->
                     <div>
                         <label for="companyString" class="block text-sm font-medium text-gray-700">Company String:</label>
-                        <input type="text" id="companyString" name="companyString" placeholder="Enter company string..." class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <input type="text" id="companyString" autocomplete="off" name="companyString" placeholder="Enter company string..." class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                     </div>
 
                     <!-- Text box for brand string -->
                     <div>
                         <label for="brandString" class="block text-sm font-medium text-gray-700">Brand String:</label>
-                        <input type="text" id="brandString" name="brandString" placeholder="Enter brand string..." class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <input type="text" id="brandString" autocomplete="off" name="brandString" placeholder="Enter brand string..." class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                     </div>
                 </div>
 
@@ -88,94 +93,98 @@
                     <button id="saveKeywordBtn" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save</button>
                 </div>
             </div>
-            </div>
         </div>
     </div>
 </div>
+</div>
 @section('scripts')
 <script>
-        // Define the fetchResults function
-        function fetchResults() {
-            const keyword = $('#keyword').val().trim();
-            const autocompleteList = $('#autocomplete-list');
-            const resultsList = $('#results-list');
+    // Define the fetchResults function
+    function fetchResults() {
+        const keyword = $('#keyword').val().trim();
+        const autocompleteList = $('#autocomplete-list');
+        const resultsList = $('#results-list');
 
-            if (keyword.length > 2) {
-                // Make an AJAX request to fetch autocomplete results
-                $.ajax({
-                    url: '/api/keywordlist',
-                    method: 'GET',
-                    data: { keyword: keyword },
-                    success: function(response) {
-                        resultsList.empty(); // Clear previous results
-                        if (response.length > 0) {
-                            $.each(response, function(index, result) {
-                                const li = $('<li>').text(result.KeyWord);
-                              
-                                li.css('padding', '8px')
-                                li.on('click', function() {
-                                    selectResult(result.KeyWord);
-                                });
-                                resultsList.append(li);
-                            });
-                            autocompleteList.show(); // Show autocomplete list
-                        } else {
-                            autocompleteList.hide(); // Hide autocomplete list if no results
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error fetching results:', error);
-                    }
-                });
-            } else {
-                autocompleteList.hide(); // Hide autocomplete list if keyword length is less than 3
-            }
-        }
-
-        // Define the selectResult function
-        function selectResult(keyword) {
-            $('#keyword').val(keyword);
-            $('#autocomplete-list').hide();
+        if (keyword.length > 2) {
+            // Make an AJAX request to fetch autocomplete results
             $.ajax({
-                url: '/api/filter-strings',
+                url: '/api/keywordlist',
                 method: 'GET',
-                data: { keyword: keyword },
+                data: {
+                    keyword: keyword
+                },
                 success: function(response) {
-                    // Populate the filter string dropdown
-                    const filterStringDropdown = $('#filterString');
-                    const filter = $('#filter');
-                    filterStringDropdown.empty();
-                    filter.empty();
+                    resultsList.empty(); // Clear previous results
                     if (response.length > 0) {
-                        $.each(response, function(index, filterString) {
-                            const option = $('<option>').val(filterString.Filter_String).text(filterString.Filter_String);
-                            const option1 = $('<option>').val(filterString.filter).text(filterString.filter);
-                            filterStringDropdown.append(option);
-                            filter.append(option1);
+                        $.each(response, function(index, result) {
+                            const li = $('<li>').text(result.KeyWord);
+
+                            li.css('padding', '8px')
+                            li.on('click', function() {
+                                selectResult(result.KeyWord);
+                            });
+                            resultsList.append(li);
                         });
+                        autocompleteList.show(); // Show autocomplete list
                     } else {
-                        // If no filter strings found, disable the dropdown
-                        filterStringDropdown.prop('disabled', true);
+                        autocompleteList.hide(); // Hide autocomplete list if no results
                     }
                 },
                 error: function(xhr, status, error) {
-                    console.error('Error fetching filter strings:', error);
+                    console.error('Error fetching results:', error);
                 }
             });
+        } else {
+            autocompleteList.hide(); // Hide autocomplete list if keyword length is less than 3
         }
+    }
 
-        // Attach the fetchResults function to the input field's input event
-        $('#keyword').on('input', fetchResults);
+    // Define the selectResult function
+    function selectResult(keyword) {
+        $('#keyword').val(keyword);
+        $('#autocomplete-list').hide();
+        $.ajax({
+            url: '/api/filter-strings',
+            method: 'GET',
+            data: {
+                keyword: keyword
+            },
+            success: function(response) {
+                // Populate the filter string dropdown
+                const filterStringDropdown = $('#filterString');
+                const filter = $('#filter');
+                filterStringDropdown.empty();
+                filter.empty();
+                if (response.length > 0) {
+                    $.each(response, function(index, filterString) {
+                        const option = $('<option>').val(filterString.Filter_String).text(filterString.Filter_String);
+                        const option1 = $('<option>').val(filterString.filter).text(filterString.filter);
+                        filterStringDropdown.append(option);
+                        filter.append(option1);
+                    });
+                } else {
+                    // If no filter strings found, disable the dropdown
+                    filterStringDropdown.prop('disabled', true);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching filter strings:', error);
+            }
+        });
+    }
 
-        $(document).ready(function() {
-            // console.log('Save button clicked'); // Check if this message appears in the console
+    // Attach the fetchResults function to the input field's input event
+    $('#keyword').on('input', fetchResults);
+
+    $(document).ready(function() {
+        // console.log('Save button clicked'); // Check if this message appears in the console
 
         // Handle "Save" button click
         $('#saveKeywordBtn').click(function() {
             // Gather form data
             const keyword = $('#keyword').val();
-            const filter = $('#filter').val();
-            const filterString = $('#filterString').val();
+            const filter = $('#filterinput').val();
+            const filterString = $('#filterStringinput').val();
             const type = $('#type').val();
             const category = $('#category').val();
             const companyString = $('#companyString').val();
@@ -193,7 +202,7 @@
                     category: category,
                     companyString: companyString,
                     brandString: brandString,
-                    _token: '{{ csrf_token() }}' 
+                    _token: '{{ csrf_token() }}'
                 },
                 success: function(response) {
                     // Handle success response
@@ -208,5 +217,5 @@
             });
         });
     });
-    </script>
+</script>
 @endsection
