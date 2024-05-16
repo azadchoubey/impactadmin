@@ -245,7 +245,7 @@
                 <legend class="text-sm font-medium text-gray-900">Twitter Monitoring Parameters</legend>
                 <div>
                     <label for="type" class="block text-sm font-medium text-gray-700">Enable for Twitter</label>
-                    <input type="checkbox" name="wm_enablefortwitter" value="1" {{$data->wm_enablefortwitter == 1 ? 'checked' : ''}}>
+                    <input type="checkbox" name="enablefortwitter" value="1" {{$data->enablefortwitter == 1 ? 'checked' : ''}}>
                 </div>
                 <div class="grid grid-cols-2 gap-4 mt-4">
                     <div>
@@ -627,18 +627,18 @@
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Contact Name</label>
                                 <input name="ContactName" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                <div id="ContactName-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+                                <div id="ContactName-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Mobile</label>
                                 <input name="Mobile" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                <div id="Mobile-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+                                <div id="Mobile-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
 
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">E-mail</label>
                                 <input name="Email" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                <div id="Email-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+                                <div id="Email-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
 
                             </div>
                             <div>
@@ -655,33 +655,37 @@
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Designation</label>
                                 <input name="Designation" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <div id="Designation-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Phone</label>
                                 <input name="Phone" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <div id="Phone-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Company</label>
                                 <input name="Company" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <div id="Company-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Fax</label>
                                 <input name="Fax" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <div id="Fax-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Address 1</label>
                                 <input name="Address1" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                <div id="Address1-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+                                <div id="Address1-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Address 2</label>
                                 <input name="Address2" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                <div id="Address2-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+                                <div id="Address2-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Address 3</label>
                                 <input name="Address3" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                <div id="Address3-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+                                <div id="Address3-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Country</label>
@@ -691,7 +695,7 @@
                                     <option value="{{$country->ID}}">{{$country->Name}}</option>
                                     @endforeach
                                 </select>
-                                <div id="CountryID-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+                                <div id="CountryID-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">City</label>
@@ -701,15 +705,17 @@
                                     <option value="{{$City->ID}}">{{$City->Name}}</option>
                                     @endforeach
                                 </select>
-                                <div id="CityID-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+                                <div id="CityID-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Country Code</label>
                                 <input name="CountryCode" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <div id="CountryCode-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Area Code</label>
                                 <input name="Pin" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <div id="Pin-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                         </div>
                     </fieldset>
@@ -769,9 +775,9 @@
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for Web</label>
                                 <input name="wm_enableforweb" type="checkbox" value="1" {{$data->wm_enableforweb == 1 ? 'checked' : ''}} {{$data->wm_enableforweb == 1 ? '' : 'disabled'}}>
                             </div>
-                            <div class="{{$data->wm_enablefortwitter == 1 ? '' : 'disabled'}}">
+                            <div class="{{$data->enablefortwitter == 1 ? '' : 'disabled'}}">
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for Twitter</label>
-                                <input name="wm_enablefortwitter" type="checkbox" value="1" {{$data->wm_enablefortwitter == 1 ? 'checked' : ''}} {{$data->wm_enablefortwitter == 1 ? '' : 'disabled'}}>
+                                <input name="enablefortwitter" type="checkbox" value="1" {{$data->enablefortwitter == 1 ? 'checked' : ''}} {{$data->enablefortwitter == 1 ? '' : 'disabled'}}>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Delivery Method Web</label>
@@ -1155,8 +1161,7 @@ function openmodal(id){
                 } else {
                     if (response.errors) {
                         $.each(response.errors, function(key, value) {
-                     
-                     $('#' + key + '-error').text(value);
+                     $('#' + key + '-error1').text(value);
                  });
                     } 
                 }
@@ -1166,8 +1171,9 @@ function openmodal(id){
             }
         });
     }
-        function editcontact(){
-        var formData2 =  $('#editcontact').serialize();
+        function editcontact(id){
+        var formData2 =  $(`#editcontact${id}`).serialize();
+        formData2 += '&contactid=' + id;
         $.ajax({
             url: '{{ route("editcontact") }}',
             method: 'POST',
@@ -1177,9 +1183,10 @@ function openmodal(id){
                     window.location.reload();
                 } else {
                     if (response.errors) {
-                        $.each(response.errors, function(key, value) {
-                     
-                     $('#' + key + '-error').text(value);
+                    $.each(response.errors, function(key, value) {
+                        console.log($('#' + key + '-error'));
+
+                    $(`#${key}-error${id}`).text(value);
                  });
                     } 
                 }

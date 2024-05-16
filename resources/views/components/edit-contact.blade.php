@@ -12,7 +12,7 @@
                     <span class="sr-only">Close modal</span>
                 </button>
             </div>
-            <form id="editcontact">
+            <form id="editcontact{{$contact->contactid}}">
                 @csrf
                 <input type="hidden" name="clientid" value="{{$client->ClientID}}">
                 <div class="p-4 md:p-3">
@@ -27,13 +27,13 @@
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Mobile</label>
                                 <input name="Mobile" type="text" value="{{ $contact->Mobile}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                <div id="Mobile-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+                                <div id="Mobile-error{{$contact->contactid}}" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
 
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">E-mail</label>
                                 <input name="Email" type="text" value="{{ $contact->Email}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                <div id="Email-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+                                <div id="Email-error{{$contact->contactid}}" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
 
                             </div>
                             <div>
@@ -66,17 +66,17 @@
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Address 1</label>
                                 <input name="Address1" type="text" value="{{ $contact->Address1}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                <div id="Address1-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+                                <div id="Address1-error{{$contact->contactid}}" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Address 2</label>
                                 <input name="Address2" type="text" value="{{ $contact->Address2}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                <div id="Address2-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+                                <div id="Address2-error{{$contact->contactid}}" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Address 3</label>
                                 <input name="Address3" type="text" value="{{ $contact->Address3}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                <div id="Address3-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+                                <div id="Address3-error{{$contact->contactid}}" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Country</label>
@@ -85,7 +85,7 @@
                                     <option {{$contact->CountryID == $country->ID?'selected':''}} value="{{$country->ID}}">{{$country->Name}}</option>
                                     @endforeach
                                 </select>
-                                <div id="CountryID-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+                                <div id="CountryID-error{{$contact->contactid}}" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">City</label>
@@ -94,7 +94,7 @@
                                     <option {{$contact->CityID == $City->ID?'selected':''}} value="{{$City->ID}}">{{$City->Name}}</option>
                                     @endforeach
                                 </select>
-                                <div id="CityID-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+                                <div id="CityID-error{{$contact->contactid}}" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Country Code</label>
@@ -133,9 +133,9 @@
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for Web</label>
                                 <input name="wm_enableforweb" type="checkbox" value="1" {{$client->wm_enableforweb == 1 ? 'checked' : ''}} {{$client->wm_enableforweb == 1 ? '' : 'disabled'}}>
                             </div>
-                            <div class="{{$client->wm_enablefortwitter == 1 ? '' : 'disabled'}}">
+                            <div class="{{$client->enablefortwitter == 1 ? '' : 'disabled'}}">
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for Twitter</label>
-                                <input name="wm_enablefortwitter" type="checkbox" value="1" {{$client->wm_enablefortwitter == 1 ? 'checked' : ''}} {{$client->wm_enablefortwitter == 1 ? '' : 'disabled'}}>
+                                <input name="enablefortwitter" type="checkbox" value="1" {{$client->enablefortwitter == 1 ? 'checked' : ''}} {{$client->enablefortwitter == 1 ? '' : 'disabled'}}>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Delivery Method Web</label>
@@ -348,7 +348,7 @@
                 </div>
 
                 <div class="flex items-center justify-end p-4 md:p-5 space-x-3 rtl:space-x-reverse border-t border-gray-200 rounded-b dark:border-gray-600">
-                    <button type="button" onclick="editcontact()" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save</button>
+                    <button type="button" onclick="editcontact({{$contact->contactid}})" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save</button>
                 </div>
                 
             </form>

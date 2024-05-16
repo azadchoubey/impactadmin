@@ -194,6 +194,12 @@ class ClientsProfile extends Controller
             'Address3' => 'required',
             'CountryID' => 'required',
             'CityID' => 'required',
+            'Designation' => 'required',
+            'CountryCode' => 'required',
+            'Pin' => 'required',
+            'Fax' => 'required',
+            'Company' => 'required',
+            'Phone' => 'required',
         ],[
             'CountryID.required'=>'Country field is required',
             'CityID.required'=>'City field is required',
@@ -210,7 +216,8 @@ class ClientsProfile extends Controller
         
             $deliveryids = $request->only('deliveryid');
             $sectorids = $request->only('SectorID');
-            $input = $request->except(['_token','deliveryid','SectorID']);
+            $format = $request->only('format');
+            $input = $request->except(['_token','deliveryid','SectorID','format']);
             $input['ContactType'] = 0; 
             $contactid = ClinetContacts::insertGetId($input);
         
@@ -229,7 +236,7 @@ class ClientsProfile extends Controller
                     }
                     ContactSector::insert($contact_sector);
                 }
-        
+                
                 DB::commit();
                 Log::info('created new client contact: {name} and contactid: {contactid} by user: {user} ',['contactid'=>$contactid,'user'=>auth()->user()->UserID,'name'=>$input['ContactName']]);
                 session()->flash('success', 'Contact Added Successfully!');
@@ -270,10 +277,11 @@ class ClientsProfile extends Controller
     
         try {
             DB::beginTransaction();
-            $contactId = $request->clientid;
+            $contactId = $request->contactid;
             $deliveryIds = $request->only('deliveryid');
             $sectorIds = $request->only('SectorID');
-            $input = $request->except(['_token','deliveryid','SectorID']);
+            $format = $request->only('format');
+            $input = $request->except(['_token','deliveryid','SectorID','format']);
             $input['ContactType'] = 0; 
     
             ClinetContacts::where('ContactID', $contactId)->update($input);
