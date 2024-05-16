@@ -125,7 +125,6 @@
                             </div>
                         </div>
                     </fieldset>
-
                     <fieldset class="border border-gray-300 p-6 rounded-lg">
                         <legend class="text-sm font-medium text-gray-900">Web Monitoring Parameters</legend>
                         <div class="grid grid-cols-4 gap-4 mt-3 p-5">
@@ -141,7 +140,7 @@
                                 <label for="type" class="block text-sm font-medium text-gray-700">Delivery Method Web</label>
                                 <select name="deliveryid[]" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     @foreach($webdeliverymaster as $delivery)
-                                    <option {{ $contact->DeliveryID == $delivery->ID ? 'selected' : '' }} value="{{$delivery->id}}">{{$delivery->deliverytime}}</option>
+                                    <option {{ $contact->regularDigestWeb->pluck('deliveryid')->contains($delivery->ID)? 'selected' : '' }} value="{{$delivery->id}}">{{$delivery->deliverytime}}</option>
                                     @endforeach
                                 </select>
                             </div>
