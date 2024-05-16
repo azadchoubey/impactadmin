@@ -218,15 +218,15 @@ class ClientsProfile extends Controller
             $deliveryids = $request->only('deliveryid');
             $sectorids = $request->only('SectorID');
             $format = $request->only('format');
-            $wm_deliverymethod =  $request->only('wm_deliverymethod');
-            $input = $request->except(['_token','deliveryid','SectorID','format']);
+            $wm_deliverymethod =  $request->only('wm_deliveryids');
+            $input = $request->except(['_token','deliveryid','SectorID','format','wm_deliveryids']);
             $input['ContactType'] = 0; 
+            $input['wm_deliverymethod'] = $request->wm_enableforweb?1:0;
             $contactid = ClinetContacts::insertGetId($input);
-        
             if ($contactid) {
-                if ($deliveryids) {
+                if ($wm_deliverymethod) {
                     $wm_webdeliverymethod = [];
-                    foreach ($deliveryids['deliveryid'] as $SectorID) {
+                    foreach ($wm_deliverymethod['wm_deliveryids'] as $SectorID) {
                         $wm_webdeliverymethod[] = ['deliveryid'=>$SectorID,'contactid'=>$contactid];
                     }
                     Wmwebdeliverymethod::insert($wm_webdeliverymethod);
@@ -238,6 +238,17 @@ class ClientsProfile extends Controller
                     }
                     ContactSector::insert($contact_sector);
                 }
+                
+                if ($input['wm_deliverymethod'] == 1) {
+                    // Assuming $deliveryids is an array of delivery IDs
+                    foreach ($deliveryids['deliveryid'] as $deliveryid) {
+                        Deliverymethod1::insert([
+                            'contactid' => $contactid,
+                            'deliveryid' => $deliveryid,
+                            'format' => $format['format'],
+                        ]);
+                    }
+                }                
                 
                 DB::commit();
                 $clientname = Clinetprofile::find($input['clientid']);

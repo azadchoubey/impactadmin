@@ -743,7 +743,7 @@
                         <div class="grid grid-cols-3 gap-4 mt-4 p-5">
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for custom digest</label>
-                                <input name="wm_enableforprint" value="1" type="checkbox" {{$data->wm_enableforprint == 1 ? 'checked' : ''}} {{$data->wm_enableforprint == 1 ? '' : 'disabled'}}>
+                                <input name="wm_enableforweb" value="1" type="checkbox" {{$data->wm_enableforweb == 1 ? '' : 'disabled'}}>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Formats </label>
@@ -757,7 +757,7 @@
                     
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Delivery Method</label>
-                                <select name="wm_deliverymethod[]" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" >
+                                <select name="deliveryid[]" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" >
                                     <option value="">Select option</option>
                                     @foreach($deliverymaster as $Delivery)
                                     <option value="{{$Delivery->id}}">{{$Delivery->deliverytime}}</option>
@@ -781,7 +781,7 @@
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Delivery Method Web</label>
-                                <select name="deliveryid[]" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <select name="wm_deliveryids[]" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     <option value="">Select option</option>
                                     @foreach($webdeliverymaster as $delivery)
                                     <option value="{{$delivery->id}}">{{$delivery->deliverytime}}</option>
