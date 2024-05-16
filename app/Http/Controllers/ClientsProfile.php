@@ -240,15 +240,27 @@ class ClientsProfile extends Controller
                 }
                 
                 DB::commit();
-                $clientname = Clinetprofile::find($input['clientid']);
+                $client = Clinetprofile::find($input['clientid']);
                 ClientContact::insert([
-                    'Client_Name'=> $clientname->Name,
+                    'Client_Name'=> $client->Name,
                     'ContactName'=> $input['ContactName'],
                     'Email'=>$input['Email'],
                     'ClientId'=>$input['clientid'],
                     'contactid'=>$contactid,
                     'deliverytime'=>'',
-
+                    'deliverytime_web_automated'=>'',
+                    'deliverytime_Print_automated'=>'',
+                    'enableforqlikview'=>0,
+                    'wm_enableforprint'=>$request->wm_enableforprint?1:0,
+                    'wm_enableforweb'=>$request->wm_enableforweb?1:0,
+                    'dashboard'=>$request->dashboard?1:0,
+                    'enableforbr'=>$request->enableforbr?1:0,
+                    'enableforwhatsapp'=>$request->enableforwhatsapp?1:0,
+                    'whatsappnumber'=>$request->whatsappnumber?$request->whatsappnumber:'',
+                    'enableformediatouch'=>$request->enableformediatouch?1:0,
+                    'enablefordidyounotice'=>$request->enablefordidyounotice?1:0,
+                    'client_status'=>'Active',
+                    'wm_client_status'=>"Active"
                 ]);
                 Log::info('created new client contact: {name} and contactid: {contactid} by user: {user} ',['contactid'=>$contactid,'user'=>auth()->user()->UserID,'name'=>$input['ContactName']]);
                 session()->flash('success', 'Contact Added Successfully!');

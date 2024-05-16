@@ -963,11 +963,11 @@
                             </div> --}}
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Dashboard</label>
-                                <input name="enableformediatouch" type="checkbox" value="1">
+                                <input name="dashboard" type="checkbox" value="1">
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Broadcast</label>
-                                <input name="enableformediatouch" type="checkbox" value="1">
+                                <input name="broadcast" type="checkbox" value="1">
                             </div>
                         </div>
                     </fieldset>
