@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Clientkeyword;
 use Illuminate\Http\Request;
 use App\Models\Keywordmaster;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class KeywordController extends Controller
 {
@@ -30,33 +33,61 @@ class KeywordController extends Controller
     }
     public function saveKeyword(Request $request)
     {
+     
+        $request->validate([
+            'keyword'=>'required',
+            'filterString' => 'required',
+            'category'=>'required',
+            'type'=>'required',
+            'companyString'=>'required',
+            'brandString'=>'required'
+        ]);
+        try {
+        DB::beginTransaction();
         $keywordData = [
             'KeyWord' => $request->input('keyword'),
-            'filter' => $request->input('filter'),
-            'filter_string' => $request->input('filterString'),
-            'type' => $request->input('type'),
-            'category' => $request->input('category'),
-            'company_string' => $request->input('companyString'),
-            'brand_string' => $request->input('brandString'),
+            'Filter' => '',
+            'Filter_String' => $request->input('filterString'),
             'EditDateTime'=>now()
         ];
 
         $keyword = $request->input('keyword');
 
-        if(Keywordmaster::where(['keyword' => $keyword,'filter_string'=>$request->input('filterString')])->update($keywordData)){
-            
-        }
-
         $keywordRecord = Keywordmaster::updateOrCreate(
-            ['keyword' => $keyword,'filter_string'=>$request->input('filterString')],
+            ['KeyWord' => $keyword, 'Filter_String' => $request->input('filterString')],
             $keywordData
         );
-
         if ($keywordRecord->wasRecentlyCreated) {
-            return response()->json(['message' => 'Keyword created successfully', 'keyword' => $keywordRecord->KeyWord]);
+            $parentKeyword = Keywordmaster::where(['KeyWord' => $keyword, 'PrimaryKeyID' => 0])->first();
+            if ($parentKeyword) {
+                $keywordRecord->update(['PrimaryKeyID' => $parentKeyword->keyID]);
+            }
+            $message = ['message' => 'Keyword created successfully'];
         } else {
-            return response()->json(['message' => 'Keyword updated successfully', 'keyword' => $keywordRecord]);
+            $message = ['message' => 'Keyword updated successfully'];
         }
+        Clientkeyword::updateOrCreate([
+            'ClientID'=> base64_decode(request('clientid')),'KeywordID'=> $keywordRecord->keyID
+        ],[
+            'ClientID'=> base64_decode(request('clientid')),
+            'KeywordID'=> $keywordRecord->keyID,
+            'Category'=>$request->input('category'),
+            'Type'=> $request->input('type'),
+            'Filter'=> $request->input('filter')??'',
+            'CompanyS'=>$request->input('companyString'),
+            'BrandS'=>$request->input('brandString'),
+            'EditDateTime'=>now()
+        ]);
+        DB::commit();
+        session()->flash('success', $message['message']);
+        Log::info('keyword Name: {name} and keyid: {keyid} by user: {user} ',['keyid'=>$keywordRecord->keyID,'user'=>auth()->user()->UserID,'name'=>$keyword]);
+        return response()->json(['success' => true]);
+    } catch (\Exception $e) {
+        DB::rollBack();
+        session()->flash('error', 'Operation Failed!');
+        Log::error('Error while updating client contact: {error}', ['error' => $e->getMessage()]);
+        return response()->json(['message' => $e->getMessage()], 500);
+    }
     }
 }
 

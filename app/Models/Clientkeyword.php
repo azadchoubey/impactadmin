@@ -10,7 +10,18 @@ class Clientkeyword extends Model
     use HasFactory;
     protected $table = "clientkeyword";
     protected $primaryKey = 'KeywordID';
-
+    public $timestamps = false;
+    protected $fillable = [
+        'ClientID',
+        'KeywordID',
+        'Filter',
+        'Type',
+        'CompanyS',
+        'Category',
+        'CreateDateTime',
+        'EditDateTime',
+        'BrandS',
+    ];
     public function keywords(){
         return $this->belongsTo(Keywordmaster::class,'KeywordID','keyID');
     }

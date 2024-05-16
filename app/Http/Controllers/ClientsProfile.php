@@ -8,6 +8,7 @@ use App\Models\ContactSector;
 use App\Models\CustomDigestFormat;
 use App\Models\Deliverymethod1;
 use App\Models\Deliverymethodmaster;
+use App\Models\Mongo\ClientContact;
 use App\Models\Picklist;
 use App\Models\Wmwebdeliverymethod;
 use App\Models\Wmwebdeliverymethodmaster;
@@ -210,6 +211,7 @@ class ClientsProfile extends Controller
         
             $deliveryids = $request->only('deliveryid');
             $sectorids = $request->only('SectorID');
+            $wm_deliverymethod =  $request->only('wm_deliverymethod');
             $input = $request->except(['_token','deliveryid','SectorID']);
             $input['ContactType'] = 0; 
             $contactid = ClinetContacts::insertGetId($input);
@@ -231,6 +233,16 @@ class ClientsProfile extends Controller
                 }
         
                 DB::commit();
+                $clientname = Clinetprofile::find($input['clientid']);
+                ClientContact::insert([
+                    'Client_Name'=> $clientname->Name,
+                    'ContactName'=> $input['ContactName'],
+                    'Email'=>$input['Email'],
+                    'ClientId'=>$input['clientid'],
+                    'contactid'=>$contactid,
+                    'deliverytime'=>'',
+
+                ]);
                 Log::info('created new client contact: {name} and contactid: {contactid} by user: {user} ',['contactid'=>$contactid,'user'=>auth()->user()->UserID,'name'=>$input['ContactName']]);
                 session()->flash('success', 'Contact Added Successfully!');
                 return response()->json(['success' => true]);
@@ -297,6 +309,7 @@ class ClientsProfile extends Controller
             }
     
             DB::commit();
+
             Log::info('updated client contact: {name} and contactid: {contactid} by user: {user} ',['contactid'=>$contactId,'user'=>auth()->user()->UserID,'name'=>$input['ContactName']]);
             session()->flash('success', 'Contact Updated Successfully!');
             return response()->json(['success' => true]);

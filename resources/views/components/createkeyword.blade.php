@@ -20,6 +20,7 @@
                         <label for="keyword" class="block text-sm font-medium text-gray-700">Keyword:</label>
                         <div>
                             <input type="text" id="keyword" autocomplete="off" name="keyword" placeholder="Type to search..." class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                            <div id="keyword-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             <div id="autocomplete-list" class="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-lg shadow-lg" style="display: none;">
                                 <!-- Autocomplete list -->
                                 <ul id="results-list"></ul>
@@ -31,10 +32,12 @@
                     <div>
                         <label for="filter" class="block text-sm font-medium text-gray-700">Filter:</label>
                         <input type="text" id="filterinput" list="filter" autocomplete="off" name="filter" placeholder="" class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <div id="filter-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                         <div id="autocomplete-list1" class="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-lg shadow-lg" style="display: none;">
                             <!-- Autocomplete list -->
                             <datalist id="filter">
-                             
+                            <option value="Include">
+                            <option value="Exclude">
                             </datalist>
                         </div>
                       
@@ -44,6 +47,7 @@
                     <div>
                         <label for="filterString" class="block text-sm font-medium text-gray-700">Filter String:</label>
                         <input type="text" id="filterStringinput"  list="filterString" autocomplete="off" name="filterString" placeholder="" class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <div id="filterString-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                         <div id="autocomplete-list1" class="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-lg shadow-lg" style="display: none;">
                             <!-- Autocomplete list -->
                             <datalist id="filterString">
@@ -57,11 +61,13 @@
                         <label for="type" class="block text-sm font-medium text-gray-700">Type:</label>
                         <select id="type" name="type" class="mt-1 block w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                             @forelse($keywordtypes as $keywordtype)
-                            <option value="{{ $keywordtype->ID }}">{{ $keywordtype->Name }}</option>
+                            <option value="{{ $keywordtype->Name }}">{{ $keywordtype->Name }}</option>
                             @empty
 
                             @endforelse
                         </select>
+                        <div id="type-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+
                     </div>
 
                     <!-- Dropdown for category -->
@@ -69,23 +75,29 @@
                         <label for="category" class="block text-sm font-medium text-gray-700">Category:</label>
                         <select id="category" name="category" class="mt-1 block w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                             @forelse($keywordcategories as $keywordcategory)
-                            <option value="{{ $keywordcategory->ID }}">{{ $keywordcategory->Name }}</option>
+                            <option value="{{ $keywordcategory->Name }}">{{ $keywordcategory->Name }}</option>
                             @empty
 
                             @endforelse
                         </select>
+                        <div id="category-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+
                     </div>
 
                     <!-- Text box for company string -->
                     <div>
                         <label for="companyString" class="block text-sm font-medium text-gray-700">Company String:</label>
                         <input type="text" id="companyString" autocomplete="off" name="companyString" placeholder="Enter company string..." class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <div id="companyString-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+
                     </div>
 
                     <!-- Text box for brand string -->
                     <div>
                         <label for="brandString" class="block text-sm font-medium text-gray-700">Brand String:</label>
                         <input type="text" id="brandString" autocomplete="off" name="brandString" placeholder="Enter brand string..." class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <div id="brandString-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+
                     </div>
                 </div>
 
@@ -154,7 +166,6 @@
                 const filterStringDropdown = $('#filterString');
                 const filter = $('#filter');
                 filterStringDropdown.empty();
-                filter.empty();
                 if (response.length > 0) {
                     $.each(response, function(index, filterString) {
                         const option = $('<option>').val(filterString.Filter_String).text(filterString.Filter_String);
@@ -202,14 +213,31 @@
                     category: category,
                     companyString: companyString,
                     brandString: brandString,
-                    _token: '{{ csrf_token() }}'
+                    _token: '{{ csrf_token() }}',
+                    clientid:`{{request()->route()->parameter('id')}}`
                 },
                 success: function(response) {
-                    // Handle success response
-                    console.log(response);
-                    // Optionally, you can show a success message or redirect the user
+                    if(response.success){
+                        window.location.reload();
+                    }
+                    else {
+                       
+                    if (response.errors) {
+                        $.each(response.errors, function(key, value) {
+                     
+                     $('#' + key + '-error').text(value);
+                 });
+                    } 
+                }
                 },
                 error: function(xhr, status, error) {
+                    $.each(xhr.responseJSON.errors, function(key, value) {
+                     
+                     $('#' + key + '-error').text(value);
+                 });
+                    console.log(xhr.responseJSON);
+                   
+               
                     // Handle error response
                     console.error('Error saving keyword:', error);
                     // Optionally, you can show an error message to the user
