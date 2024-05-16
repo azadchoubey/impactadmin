@@ -729,7 +729,7 @@
                     
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Delivery Method Print</label>
-                                <select name="wm_deliverymethod" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" {{$data->wm_enableforprint == 1 ? '' : 'disabled'}}>
+                                <select name="deliverymethod" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" {{$data->wm_enableforprint == 1 ? '' : 'disabled'}}>
                                     <option value="">Select option</option>
                                     @foreach($deliverymaster as $Delivery)
                                     <option value="{{$Delivery->id}}">{{$Delivery->deliverytime}}</option>
@@ -933,10 +933,7 @@
                                 <label for="type" class="block text-sm font-medium text-gray-700">YouTube</label>
                                 <input name="enableforyoutube" type="checkbox" value="1">
                             </div>
-                            <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700">Twitter</label>
-                                <input name="enablefortwitter" type="checkbox" value="1">
-                            </div>
+                           
                             {{-- <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for BR</label>
                                 <input name="enableforbr" type="checkbox" value="1">
@@ -947,7 +944,7 @@
                             </div> --}}
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Mobile</label>
-                                <input name="enableformediatouch" type="checkbox" value="1">
+                                <input name="enableformobile" type="checkbox" value="1">
                             </div>
                             {{-- <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Regular Print</label>

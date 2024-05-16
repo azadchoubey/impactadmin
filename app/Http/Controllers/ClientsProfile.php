@@ -7,6 +7,7 @@ use App\Models\Clinetprofile;
 use App\Models\ContactSector;
 use App\Models\CustomDigestFormat;
 use App\Models\Deliverymethod1;
+use App\Models\Deliverymethod;
 use App\Models\Deliverymethodmaster;
 use App\Models\Mongo\ClientContact;
 use App\Models\Picklist;
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Rels;
 
 class ClientsProfile extends Controller
 {
@@ -219,6 +221,7 @@ class ClientsProfile extends Controller
             $sectorids = $request->only('SectorID');
             $format = $request->only('format');
             $wm_deliverymethod =  $request->only('wm_deliveryids');
+            $deliverymethod = $request->only('deliverymethod'); 
             $input = $request->except(['_token','deliveryid','SectorID','format','wm_deliveryids']);
             $input['ContactType'] = 0; 
             $input['wm_deliverymethod'] = $request->wm_enableforweb?1:0;
@@ -240,12 +243,19 @@ class ClientsProfile extends Controller
                 }
                 
                 if ($input['wm_deliverymethod'] == 1) {
-                    // Assuming $deliveryids is an array of delivery IDs
                     foreach ($deliveryids['deliveryid'] as $deliveryid) {
                         Deliverymethod1::insert([
                             'contactid' => $contactid,
                             'deliveryid' => $deliveryid,
                             'format' => $format['format'],
+                        ]);
+                    }
+                }                
+                if ($input['wm_enableforprint'] == 1) {
+                    foreach ($deliverymethod['deliverymethod'] as $deliveryid) {
+                        Deliverymethod::insert([
+                            'contactid' => $contactid,
+                            'deliveryid' => $deliveryid,
                         ]);
                     }
                 }                
