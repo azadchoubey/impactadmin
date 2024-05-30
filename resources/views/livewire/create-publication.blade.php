@@ -21,6 +21,31 @@
                     <input wire:model="title" type="text" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     @error('title')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
                 </div>
+                <div class="mb-4 flex flex-col">
+                    <span class="text-sm font-medium text-gray-900 dark:text-gray-300 mb-1">Primary</span>
+                    <div class="flex items-center">
+                        <input wire:model="togglePrimary" wire:click="togglePrimary" class="text" type="checkbox">
+                        <select wire:model="primary" {{ !$primaryDisabled ? 'disabled' : ''}} class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ms-3 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option></option>
+                            @foreach($data['pubmaster'] as $pubmaster)
+                            <option value="{{$pubmaster->PubId}}">{{$pubmaster->Title}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+
+                    <label for="edition" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Edition</label>
+                    <select wire:model="edition" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <option value="">Select option</option>
+                        @foreach($data['city'] as $edtion)
+                        <option {{$edtion->ID == $edition ?'selected':'' }} value="{{$edtion->ID}}">{{$edtion->Name}}</option>
+                        @endforeach
+                    </select>
+                    @error('edition')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
+                </div>
+                
 
             </div>
             <div class="grid grid-cols-2 gap-3 mt-4">       
@@ -81,34 +106,37 @@
                         <input wire:model="pagenames" wire:keydown.enter.prevent="addCheckbox" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" id="pagename">
                     </div>
                     @error('pagenames')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
-
+                <div class="overflow-auto max-h-40 mt-3"> <!-- Set max height and enable overflow scrolling -->
                     @forelse($checkboxes as $index => $label)
-                    <div>
-                        <input wire:model="checkboxes.{{$index}}.IsPre" type="checkbox" id="checkbox-{{ $index }}">
-                        <label for="checkbox-{{ $index }}">{{ $label['Name'] }}</label>
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center space-x-2">
+                            <input wire:model="checkboxes.{{$index}}.IsPre" type="checkbox" id="checkbox-{{ $index }}">
+                            <label for="checkbox-{{ $index }}">{{ $label['Name'] }}</label>
+                        </div>
+                        <button wire:click="removeCheckbox({{$index}})" class="text-red-500 dark:text-red-400">❌</button>
                     </div>
                     @empty
                     @endforelse
+                                      
+                </div>
+                
 
                 </div>
+                <div class="mb-4">
+                    <span class="block text-sm font-medium text-gray-900 dark:text-gray-300">Media Universe</span>
+                    <input wire:model="mu" {{$mu == 1 ? "checked" : ''}} class="text mt-2" value="{{$mu}}" type="checkbox">
+                </div>                
+                
 
                 <br>
 
-                <div class="mb-4">
+                {{-- <div class="mb-4">
                     <input  wire:model="restrictedmu" {{$restrictedmu == 1 ?"checked":''}} class="text" value="{{$restrictedmu}}" type="checkbox">
                     <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Restricted MU</span>
                     <input  wire:model="mu" {{$mu == 1 ?"checked":''}} class="text" value="{{$mu}}" type="checkbox" style="margin-left: 20px;">
                     <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">MU</span>
-                </div>
-                <div class="mb-4 flex">
-                    <input  wire:model="togglePrimary" wire:click="togglePrimary"  class="text" type="checkbox">
-                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Primary</span>
-                    <select wire:model="primary" {{$primaryDisabled ? 'disabled' : ''}} class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        @foreach($data['pubmaster'] as $pubmaster)
-                        <option value="{{$pubmaster->PubId}}">{{$pubmaster->Title}}</option>
-                        @endforeach
-                    </select>
-                </div>
+                </div> --}}
+               
                
 
                 <div class="mb-4">

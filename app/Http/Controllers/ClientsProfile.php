@@ -187,7 +187,8 @@ class ClientsProfile extends Controller
        }
     }
 
-    public function addcontact(Request $request){
+    public function addcontact(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'ContactName' => 'required|string',
             'Mobile' => 'required|digits:10',
@@ -203,46 +204,56 @@ class ClientsProfile extends Controller
             'Fax' => 'required',
             'Company' => 'required',
             'Phone' => 'required',
-        ],[
-            'CountryID.required'=>'Country field is required',
-            'CityID.required'=>'City field is required',
+        ], [
+            'CountryID.required' => 'Country field is required',
+            'CityID.required' => 'City field is required',
             'Mobile.required' => 'Mobile must be 10 digits.',
             'Email.required' => 'Please enter a valid email address.',
         ]);
-        
+    
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()]);
         }
-        
+    
         try {
             DB::beginTransaction();
-        
+    
             $deliveryids = $request->only('deliveryid');
             $sectorids = $request->only('SectorID');
             $format = $request->only('format');
             $wm_deliverymethod =  $request->only('wm_deliveryids');
             $deliverymethod = $request->only('deliverymethod'); 
-            $input = $request->except(['_token','deliveryid','SectorID','format','wm_deliveryids']);
+            $input = $request->except(['_token', 'deliveryid', 'SectorID', 'format', 'wm_deliveryids', 'deliverymethod']);
             $input['ContactType'] = 0; 
-            $input['wm_deliverymethod'] = $request->wm_enableforweb?1:0;
+            $input['wm_deliverymethod'] = $request->wm_enableforweb ? 1 : 0;
             $contactid = ClinetContacts::insertGetId($input);
+    
+            // Generate a 6-7 digit random password
+            $password = str_pad(rand(0, 9999999), 6, '0', STR_PAD_LEFT);
+    
             if ($contactid) {
+                // Update the newly created contact with userid and passwd
+                ClinetContacts::where('contactid', $contactid)->update([
+                    'userid' => $contactid,
+                    'passwd' => $password,
+                ]);
+    
                 if ($wm_deliverymethod) {
                     $wm_webdeliverymethod = [];
                     foreach ($wm_deliverymethod['wm_deliveryids'] as $SectorID) {
-                        $wm_webdeliverymethod[] = ['deliveryid'=>$SectorID,'contactid'=>$contactid];
+                        $wm_webdeliverymethod[] = ['deliveryid' => $SectorID, 'contactid' => $contactid];
                     }
                     Wmwebdeliverymethod::insert($wm_webdeliverymethod);
                 }
                 if ($sectorids) {
                     $contact_sector = [];
                     foreach ($sectorids['SectorID'] as $SectorID) {
-                        $contact_sector[] = ['SectorID'=>$SectorID,'ContactID'=>$contactid];
+                        $contact_sector[] = ['SectorID' => $SectorID, 'ContactID' => $contactid];
                     }
                     ContactSector::insert($contact_sector);
                 }
-                
-                if ($input['wm_deliverymethod'] == 1) {
+    
+                if (isset($input['wm_deliverymethod'])&& $input['wm_deliverymethod'] == 1) {
                     foreach ($deliveryids['deliveryid'] as $deliveryid) {
                         Deliverymethod1::insert([
                             'contactid' => $contactid,
@@ -251,39 +262,39 @@ class ClientsProfile extends Controller
                         ]);
                     }
                 }                
-                if ($input['wm_enableforprint'] == 1) {
+                if (isset($input['wm_enableforprint']) && $input['wm_enableforprint'] == 1) {
                     foreach ($deliverymethod['deliverymethod'] as $deliveryid) {
                         Deliverymethod::insert([
                             'contactid' => $contactid,
                             'deliveryid' => $deliveryid,
                         ]);
                     }
-                }                
-                
+                }
+    
                 DB::commit();
                 $client = Clinetprofile::find($input['clientid']);
                 ClientContact::insert([
-                    'Client_Name'=> $client->Name,
-                    'ContactName'=> $input['ContactName'],
-                    'Email'=>$input['Email'],
-                    'ClientId'=>$input['clientid'],
-                    'contactid'=>$contactid,
-                    'deliverytime'=>'',
-                    'deliverytime_web_automated'=>'',
-                    'deliverytime_Print_automated'=>'',
-                    'enableforqlikview'=>0,
-                    'wm_enableforprint'=>$request->wm_enableforprint?1:0,
-                    'wm_enableforweb'=>$request->wm_enableforweb?1:0,
-                    'dashboard'=>$request->dashboard?1:0,
-                    'enableforbr'=>$request->enableforbr?1:0,
-                    'enableforwhatsapp'=>$request->enableforwhatsapp?1:0,
-                    'whatsappnumber'=>$request->whatsappnumber?$request->whatsappnumber:'',
-                    'enableformediatouch'=>$request->enableformediatouch?1:0,
-                    'enablefordidyounotice'=>$request->enablefordidyounotice?1:0,
-                    'client_status'=>'Active',
-                    'wm_client_status'=>"Active"
+                    'Client_Name' => $client->Name,
+                    'ContactName' => $input['ContactName'],
+                    'Email' => $input['Email'],
+                    'ClientId' => $input['clientid'],
+                    'contactid' => $contactid,
+                    'deliverytime' => '',
+                    'deliverytime_web_automated' => '',
+                    'deliverytime_Print_automated' => '',
+                    'enableforqlikview' => 0,
+                    'wm_enableforprint' => $request->wm_enableforprint ? 1 : 0,
+                    'wm_enableforweb' => $request->wm_enableforweb ? 1 : 0,
+                    'dashboard' => $request->dashboard ? 1 : 0,
+                    'enableforbr' => $request->enableforbr ? 1 : 0,
+                    'enableforwhatsapp' => $request->enableforwhatsapp ? 1 : 0,
+                    'whatsappnumber' => $request->whatsappnumber ? $request->whatsappnumber : '',
+                    'enableformediatouch' => $request->enableformediatouch ? 1 : 0,
+                    'enablefordidyounotice' => $request->enablefordidyounotice ? 1 : 0,
+                    'client_status' => 'Active',
+                    'wm_client_status' => "Active"
                 ]);
-                Log::info('created new client contact: {name} and contactid: {contactid} by user: {user} ',['contactid'=>$contactid,'user'=>auth()->user()->UserID,'name'=>$input['ContactName']]);
+                Log::info('created new client contact: {name} and contactid: {contactid} by user: {user} ', ['contactid' => $contactid, 'user' => auth()->user()->UserID, 'name' => $input['ContactName']]);
                 session()->flash('success', 'Contact Added Successfully!');
                 return response()->json(['success' => true]);
             } else {
@@ -297,69 +308,120 @@ class ClientsProfile extends Controller
             session()->flash('error', 'Operation Failed!');
             return response()->json(['error' => $e->getMessage()], 500);
         }
-
     }
-    public function editContact(Request $request){
-        $validator = Validator::make($request->all(), [
-            'ContactName' => 'required|string',
-            'Mobile' => 'required|digits:10',
-            'Email' => 'required|email',
-            'Address1' => 'required',
-            'Address2' => 'required',
-            'Address3' => 'required',
-            'CountryID' => 'required',
-            'CityID' => 'required',
-        ],[
-            'CountryID.required'=>'Country field is required',
-            'CityID.required'=>'City field is required',
-            'Mobile.required' => 'Mobile must be 10 digits.',
-            'Email.required' => 'Please enter a valid email address.',
-        ]);
-    
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()]);
-        }
-    
-        try {
-            DB::beginTransaction();
-            $contactId = $request->contactid;
-            $deliveryIds = $request->only('deliveryid');
-            $sectorIds = $request->only('SectorID');
-            $format = $request->only('format');
-            $input = $request->except(['_token','deliveryid','SectorID','format']);
-            $input['ContactType'] = 0; 
-    
-            ClinetContacts::where('ContactID', $contactId)->update($input);
-    
+    public function editContact(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'ContactName' => 'required|string',
+        'Mobile' => 'required|digits:10',
+        'Email' => 'required|email',
+        'Address1' => 'required',
+        'Address2' => 'required',
+        'Address3' => 'required',
+        'CountryID' => 'required',
+        'CityID' => 'required',
+        'Designation' => 'required',
+        'CountryCode' => 'required',
+        'Pin' => 'required',
+        'Fax' => 'required',
+        'Company' => 'required',
+        'Phone' => 'required',
+    ],[
+        'CountryID.required'=>'Country field is required',
+        'CityID.required'=>'City field is required',
+        'Mobile.required' => 'Mobile must be 10 digits.',
+        'Email.required' => 'Please enter a valid email address.',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()]);
+    }
+    try {
+        DB::beginTransaction();
+        $contactId = $request->contactid;
+        $deliveryIds = $request->only('deliveryid');
+        $sectorIds = $request->only('SectorID');
+        $format = $request->only('format');
+        $wmDeliveryMethod = $request->only('wm_deliveryids');
+        $deliveryMethod = $request->only('deliverymethod');
+        $input = $request->except(['_token', 'contactid', 'deliveryid', 'SectorID', 'format', 'wm_deliveryids', 'deliverymethod']);
+        $input['ContactType'] = 0;
+        $input['wm_deliverymethod'] = $request->wm_enableforweb ? 1 : 0;
+        $input['enableformediatouch'] = $request->enableformediatouch ? 1 : 0;
+        $input['enablefortwitter'] = $request->enablefortwitter ? 1 : 0;
+        $input['enableformobile'] = $request->enableformobile ? 1 : 0;
+        $input['enableforqlikview'] = $request->enableforqlikview ? 1 : 0;
+
+        ClinetContacts::where('ContactID', $contactId)->update($input);
+
+        if ($wmDeliveryMethod) {
             Wmwebdeliverymethod::where('contactid', $contactId)->delete();
-            if ($deliveryIds) {
-                $wmWebDeliveryMethod = [];
-                foreach ($deliveryIds['deliveryid'] as $sectorId) {
-                    $wmWebDeliveryMethod[] = ['deliveryid'=>$sectorId,'contactid'=>$contactId];
-                }
-                Wmwebdeliverymethod::insert($wmWebDeliveryMethod);
-            }
-    
-            ContactSector::where('ContactID', $contactId)->delete();
-            if ($sectorIds) {
-                $contactSector = [];
-                foreach ($sectorIds['SectorID'] as $sectorId) {
-                    $contactSector[] = ['SectorID'=>$sectorId,'ContactID'=>$contactId];
-                }
-                ContactSector::insert($contactSector);
-            }
-    
-            DB::commit();
 
-            Log::info('updated client contact: {name} and contactid: {contactid} by user: {user} ',['contactid'=>$contactId,'user'=>auth()->user()->UserID,'name'=>$input['ContactName']]);
-            session()->flash('success', 'Contact Updated Successfully!');
-            return response()->json(['success' => true]);
-        } catch (Exception $e) {
-            DB::rollback();
-            Log::error('Error while updating client contact: {error}', ['error' => $e->getMessage()]);
-            session()->flash('error', 'Operation Failed!');
-            return response()->json(['error' => $e->getMessage()], 500);
+            $wmWebDeliveryMethod = [];
+            foreach ($wmDeliveryMethod['wm_deliveryids'] as $sectorId) {
+                $wmWebDeliveryMethod[] = ['deliveryid' => $sectorId, 'contactid' => $contactId];
+            }
+            Wmwebdeliverymethod::insert($wmWebDeliveryMethod);
         }
+
+        if ($sectorIds) {
+            ContactSector::where('ContactID', $contactId)->delete();
+
+            $contactSector = [];
+            foreach ($sectorIds['SectorID'] as $sectorId) {
+                $contactSector[] = ['SectorID' => $sectorId, 'ContactID' => $contactId];
+            }
+            ContactSector::insert($contactSector);
+        }
+
+        if (isset($input['wm_deliverymethod']) && $input['wm_deliverymethod'] == 1 && $deliveryIds) {
+            // Check if there are existing records for the contactid and format
+            $existingRecords = Deliverymethod1::where('contactid', $contactId)->where('format', $format['format'])->get();
+        
+            if ($existingRecords->isNotEmpty()) {
+                // If existing records are found, delete them
+                Deliverymethod1::where('contactid', $contactId)->where('format', $format['format'])->delete();
+            }
+        
+            // Insert new records for each deliveryId
+            foreach ($deliveryIds['deliveryid'] as $deliveryId) {
+                Deliverymethod1::insert([
+                    'contactid' => $contactId,
+                    'deliveryid' => $deliveryId,
+                    'format' => $format['format'],
+                ]);
+            }
+        } else {
+            // Handle the case where the conditions are not met, or provide alternative logic
+        }
+        
+
+        if (isset($input['wm_enableforprint']) && $input['wm_enableforprint'] == 1 && $deliveryMethod) {
+            Deliverymethod::where('contactid', $contactId)->delete();
+            foreach ($deliveryMethod['deliverymethod'] as $deliveryId) {
+                Deliverymethod::insert([
+                    'contactid' => $contactId,
+                    'deliveryid' => $deliveryId,
+                ]);
+            }
+        }
+
+        DB::commit();
+
+        Log::info('Updated client contact: {name} and contactid: {contactid} by user: {user}', [
+            'contactid' => $contactId,
+            'user' => auth()->user()->UserID,
+            'name' => $input['ContactName']
+        ]);
+        session()->flash('success', 'Contact Updated Successfully!');
+        return response()->json(['success' => true]);
+    } catch (Exception $e) {
+        DB::rollback();
+        Log::error('Error while updating client contact: {error}', ['error' => $e->getMessage()]);
+        session()->flash('error', 'Operation Failed!');
+        return response()->json(['error' => $e->getMessage()], 500);
     }
+}
+
     
 }

@@ -149,7 +149,7 @@ class EditPublications extends Component
            
         }
     
-        Log::info('Record updaterd publication name: {name} and Pubid: {pubid} by user: {user} ',['name'=>$this->title,'user'=>auth()->user()->UserID,'pubid'=>$this->pubid]);
+        Log::info('Record updated publication name: {name} and Pubid: {pubid} by user: {user} ',['name'=>$this->title,'user'=>auth()->user()->UserID,'pubid'=>$this->pubid]);
         session()->flash('success', 'Your changes have been saved successfully!');
         return redirect()->to('/publications');
     }catch(Exception $e){

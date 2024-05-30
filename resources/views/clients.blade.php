@@ -641,7 +641,7 @@
                                 <div id="Email-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
 
                             </div>
-                            <div>
+                            {{-- <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Contact Type</label>
                                 <select name="ContactType" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     <option value="">Select option</option>
@@ -651,7 +651,7 @@
                                     @endforeach
                                     @endif
                                 </select>
-                            </div>
+                            </div> --}}
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Designation</label>
                                 <input name="Designation" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -921,14 +921,14 @@
                                 <label for="type" class="block text-sm font-medium text-gray-700">DYNA</label>
                                 <input name="enablefordidyounotice" type="checkbox" value="1">
                             </div>
-                            {{-- <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700">Enable for QLIKVIEW</label>
-                                <input name="enableforqlikview" type="checkbox" value="1">
-                            </div>
                             <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">QLIKVIEW</label>
+                                <input name="enableforqlikview" type="checkbox" value="1">
+                            </div> 
+                            {{-- <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for QUALIFY</label>
                                 <input name="enabletoqualify" type="checkbox" value="1">
-                            </div> --}}
+                            </div>  --}}
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">YouTube</label>
                                 <input name="enableforyoutube" type="checkbox" value="1">
@@ -942,10 +942,10 @@
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for BB</label>
                                 <input name="enableforbb" type="checkbox" value="1">
                             </div> --}}
-                            <div>
+                            {{-- <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Mobile</label>
                                 <input name="enableformobile" type="checkbox" value="1">
-                            </div>
+                            </div> --}}
                             {{-- <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Regular Print</label>
                                 <input name="regularDigestPrint" type="checkbox" value="1">

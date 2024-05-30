@@ -65,14 +65,14 @@ class CreatePublication extends Component
     }
     public function render()
     {
-        $data = Picklist::whereIn('Type',['Region','Language','Pub Category','Pubtype'])->get()->groupBy('Type');   
+        $data = Picklist::whereIn('Type',['Region','Language','Pub Category','Pubtype','city'])->get()->groupBy('Type');   
         $data['pubmaster'] = Pubmaster::where('deleted',0)->orderBy('Title')->get(); 
         return view('livewire.create-publication',compact('data'));
     }
     public function addCheckbox()
     {
         if (!empty($this->pagenames)) {
-            $this->checkboxes[] = ['Name' =>  $this->pagenames,'IsPre'=> 1];
+            $this->checkboxes[] = ['Name' => $this->pagenames, 'IsPre' => 1];
             $this->pagenames = ''; 
         }
     }
@@ -123,5 +123,12 @@ class CreatePublication extends Component
 
        }
 
+    }
+
+
+    public function removeCheckbox($index)
+    {
+        unset($this->checkboxes[$index]);
+        $this->checkboxes = array_values($this->checkboxes); // Re-index the array
     }
 }
