@@ -36,7 +36,7 @@
                                 <div id="Email-error{{$contact->contactid}}" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
 
                             </div>
-                            <div>
+                            {{-- <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Contact Type</label>
                                 <select name="ContactType" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     <option value="">Select option</option>
@@ -46,22 +46,26 @@
                                     @endforeach
                                     @endif
                                 </select>
-                            </div>
+                            </div> --}}
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Designation</label>
                                 <input name="Designation" type="text" value="{{ $contact->Designation}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <div id="Designation-error{{$contact->contactid}}" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Phone</label>
                                 <input name="Phone" type="text" value="{{ $contact->Phone}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <div id="Phone-error{{$contact->contactid}}" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Company</label>
-                                <input name="Company" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <input name="Company" type="text" value="{{ $contact->Company}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <div id="Company-error{{$contact->contactid}}" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Fax</label>
                                 <input name="Fax" type="text" value="{{ $contact->Fax}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <div id="Fax-error{{$contact->contactid}}" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Address 1</label>
@@ -99,10 +103,12 @@
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Country Code</label>
                                 <input name="CountryCode" type="text" value="{{ $contact->CountryCode}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <div id="CountryCode-error{{$contact->contactid}}" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Area Code</label>
                                 <input name="Pin" type="text" value="{{ $contact->Pin}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <div id="Pin-error{{$contact->contactid}}" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                         </div>
                     </fieldset>
@@ -126,6 +132,38 @@
                         </div>
                     </fieldset>
                     <fieldset class="border border-gray-300 p-6 rounded-lg">
+                        <legend class="text-sm font-medium text-gray-900">Custom Digest</legend>
+                        <div class="flex flex-wrap justify-between items-center mt-4 p-5">
+                            <div class="w-full sm:w-auto mb-4 sm:mb-0">
+                                <label for="type" class="block text-sm font-medium text-gray-700">Enable for custom digest</label>
+                                <input name="wm_enableforweb" value="1" type="checkbox" {{$contact->delivery->isNotEmpty() ? 'checked' : ''}}>
+                            </div>
+                            <div class="w-full sm:w-auto mb-4 sm:mb-0">
+                                <label for="format" class="block text-sm font-medium text-gray-700">Format</label>
+                                <select name="format" onchange="selectFormat(this.value,'{{$contact->contactid}}')" id="format" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <option value="">Select format</option>
+                                    @foreach($formats as $format)
+                                    <option value="{{$format->id}}" data-delivery="{{$format->deliverymethod}}">{{$format->format_name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="w-full sm:w-auto mb-4 sm:mb-0">
+                                <label for="delivery_method" class="block text-sm font-medium text-gray-700">Delivery Method</label>
+                                <select name="deliveryid[]" id="delivery_method" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <option value="">Select delivery method(s)</option>
+                                    @foreach($deliverymaster as $delivery)
+                                    <option value="{{ $delivery->id }}">{{ $delivery->deliverytime }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="w-full sm:w-auto">
+                                <button data-modal-target="static-modal{{$contact->contactid}}" data-modal-toggle="static-modal{{$contact->contactid}}" onclick="closeModal({{$contact->contactid}})" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                                    View Formats
+                                </button>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset class="border border-gray-300 p-6 rounded-lg">
                         <legend class="text-sm font-medium text-gray-900">Web Monitoring Parameters</legend>
                         <div class="grid grid-cols-4 gap-4 mt-3 p-5">
                             <div class="{{$client->wm_enableforweb == 1 ? '' : 'disabled'}}">
@@ -138,12 +176,13 @@
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Delivery Method Web</label>
-                                <select name="deliveryid[]" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <select name="wm_deliveryids[]" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     @foreach($webdeliverymaster as $delivery)
-                                    <option {{ $contact->regularDigestWeb->pluck('deliveryid')->contains($delivery->ID)? 'selected' : '' }} value="{{$delivery->id}}">{{$delivery->deliverytime}}</option>
+                                    <option {{ $contact->regularDigestWeb->pluck('deliveryid')->contains($delivery->id) ? 'selected' : '' }} value="{{$delivery->id}}">{{$delivery->deliverytime}}</option>
                                     @endforeach
                                 </select>
                             </div>
+                            
 
                         </div>
                     </fieldset>
@@ -267,40 +306,6 @@
                         </fieldset>
                     </fieldset>
                     <fieldset class="border border-gray-300 p-6 rounded-lg">
-                        <legend class="text-sm font-medium text-gray-900">Custom Digest</legend>
-                        <div class="flex flex-wrap justify-between items-center mt-4 p-5">
-                            <div class="w-full sm:w-auto mb-4 sm:mb-0">
-                                <label for="type" class="block text-sm font-medium text-gray-700">Enable for custom digest</label>
-                                <input name="custom_digest" value="1" type="checkbox" {{$contact->delivery->isNotEmpty() ? 'checked' : ''}}>
-                            </div>
-                            <div class="w-full sm:w-auto mb-4 sm:mb-0">
-                                <label for="format" class="block text-sm font-medium text-gray-700">Format</label>
-                                <select name="format" onchange="selectFormat(this.value,'{{$contact->contactid}}')" id="format" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                    <option value="">Select format</option>
-                                    @foreach($formats as $format)
-                                    <option value="{{$format->id}}" data-delivery="{{$format->deliverymethod}}">{{$format->format_name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="w-full sm:w-auto mb-4 sm:mb-0">
-                                <label for="delivery_method" class="block text-sm font-medium text-gray-700">Delivery Method</label>
-                                <select name="wm_deliverymethod[]" id="delivery_method" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                    <option value="">Select delivery method(s)</option>
-                                    @foreach($deliverymaster as $delivery)
-                                    <option value="{{ $delivery->id }}">{{ $delivery->deliverytime }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="w-full sm:w-auto">
-                                <button data-modal-target="static-modal{{$contact->contactid}}" data-modal-toggle="static-modal{{$contact->contactid}}" onclick="closeModal({{$contact->contactid}})" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-                                    View Formats
-                                </button>
-                            </div>
-                        </div>
-                    </fieldset>
-                    
-
-                    <fieldset class="border border-gray-300 p-6 rounded-lg">
                         <legend class="text-sm font-medium text-gray-900">Enable Others Parameters</legend>
                         <div class="grid grid-cols-3 gap-4 mt-3 p-5">
                             <div>
@@ -311,30 +316,30 @@
                                 <label for="type" class="block text-sm font-medium text-gray-700">DYNA</label>
                                 <input name="enablefordidyounotice" type="checkbox" {{ $contact->enablefordidyounotice ? 'checked' : '' }}>
                             </div>
-                            {{-- <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700">Enable for QLIKVIEW</label>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">QLIKVIEW</label>
                                 <input name="enableforqlikview" type="checkbox" {{ $contact->enableforqlikview ? 'checked' : '' }}>
                             </div>
-                            <div>
+                            {{-- <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for QUALIFY</label>
                                 <input name="enabletoqualify" type="checkbox" {{ $contact->enabletoqualify ? 'checked' : '' }}>
-                            </div> --}}
+                            </div>  --}}
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">YouTube</label>
                                 <input name="enableforyoutube" type="checkbox" {{ $contact->enableforyoutube ? 'checked' : '' }}>
                             </div>
-                            <div>
+                            {{-- <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Twitter</label>
                                 <input name="enablefortwitter" type="checkbox" {{ $contact->enablefortwitter ? 'checked' : '' }}>
-                            </div>
+                            </div> --}}
                             {{-- <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for BR</label>
                                 <input name="enableforbr" type="checkbox" {{ $contact->enableforbr ? 'checked' : '' }}>
                             </div> --}}
-                            <div>
+                            {{-- <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Mobile</label>
                                 <input name="enableformobile" type="checkbox" {{ $contact->enableformobile ? 'checked' : '' }}>
-                            </div>
+                            </div> --}}
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Dashboard</label>
                                 <input name="enableformobile" type="checkbox" {{ $contact->enableformobile ? 'checked' : '' }}>

@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Deliverymethod1 extends Model
 {
+    public $timestamps = false;
+
     use HasFactory;
     protected $table = "deliverymethod1";
     protected $primaryKey = 'id';
