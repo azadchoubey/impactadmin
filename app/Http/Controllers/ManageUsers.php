@@ -13,6 +13,7 @@ class ManageUsers extends Controller
 {
     public function index()
     {
+        
         $profiles['remote profile'] = Picklist::select('ID', 'Type', 'Name')->whereIn('id',[523, 524, 525, 526, 527, 528, 547, 685, 1087, 1195, 1201, 1300])->get();
         $profiles['profile'] = User::select('profile')->distinct()->orderBy('profile')->get();
         return view('manageusers', [

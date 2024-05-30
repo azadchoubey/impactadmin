@@ -2,7 +2,7 @@
 
 namespace App\Livewire;
 
-use App\Models\Article;
+use App\Models\Mongo\Article;
 use App\Models\Pubmaster;
 use Livewire\Component;
 
@@ -39,7 +39,7 @@ class Articles extends Component
     public function getarticle(){
 
         if($this->id){
-            $this->Results = Article::where(['PubID'=>$this->id,'pubdate'=>$this->date])->with('publication.edition')->get();
+            $this->Results = Article::where(['pubid'=>$this->id,'pubdate'=>$this->date])->groupBy('articleid','headline','publication','pubid','city','pubdate')->get();
         }
     }
 }

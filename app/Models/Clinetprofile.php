@@ -42,4 +42,7 @@ class Clinetprofile extends Model
     public function sector(){
         return $this->belongsTo(Picklist::class,'SectorPid','ID')->select('ID','Name');   
     }
+    public function clientkeywords(){
+        return $this->hasMany(Clientkeyword::class,'ClientID','ClientID');
+    }
 }

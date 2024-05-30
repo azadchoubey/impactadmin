@@ -456,9 +456,7 @@
                         @endphp
                         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                            {{--        <th scope="col" class="px-6 py-3">
-                                    <input type="checkbox" onchange="toggleSelectAll1(this)" class="form-checkbox">
-                                </th>  --}}
+                        
                                 <th scope="col" class="px-6 py-3">Keyword</th>
                                 <th scope="col" class="px-6 py-3">Filter</th>
                                 <th scope="col" class="px-6 py-3">Filter String</th>
@@ -466,13 +464,12 @@
                                 <th scope="col" class="px-6 py-3">Category</th>
                                 <th scope="col" class="px-6 py-3">Company String</th>
                                 <th scope="col" class="px-6 py-3">Brand String</th>
+                                <th scope="col" class="px-6 py-3">Action</th>
                             </thead>
                             <tbody>
                                 @foreach($currentPageItems as $keyword)
                                 <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                             {{--     <td class="px-6 py-4">
-                                        <input type="checkbox" onchange="updateEditButtonVisibility1()" value="{{$keyword->keyID}}" class="form-checkbox checkboxes1">
-                                    </td>  --}}  
+                             
                                     <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $keyword->KeyWord}}</td>
                                     <td class="px-6 py-4">{{ $keyword->Filter}}</td>
                                     <td class="px-6 py-4">{{ $keyword->Filter_String}}</td>
@@ -480,12 +477,15 @@
                                     <td class="px-6 py-4">{{ $keyword->Category}}</td>
                                     <td class="px-6 py-4">{{ $keyword->CompanyS}}</td>
                                     <td class="px-6 py-4">{{ $keyword->BrandS}}</td>
+                                    <td class="px-6 py-4">
+                                        <a href="javascript:void(0)" class="editkeyword" data-id="{{ $keyword->id }}" data-modal-target="large-modal{{$keyword->keyID}}" data-modal-toggle="large-modal{{$keyword->keyID}}" >Edit</a>
+                                    </td>  
                                 </tr>
+                                <x-edit-keyword :keyword="$keyword" />
                                 @endforeach
                             </tbody>
                         </table>
 
-                        {{-- $keywords->links(data: ['scrollTo' => false])  --}}
                         <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4" aria-label="Table navigation">
                             <span class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">
                                 Showing <span class="font-semibold text-gray-900 dark:text-white">{{ $startIndex + 1 }}-{{ $endIndex + 1 }}</span> of <span class="font-semibold text-gray-900 dark:text-white">{{ $totalItems }}</span>
@@ -1193,6 +1193,130 @@ function openmodal(id){
             }
         });
     }
+    function saveKeywordBtn(id){
+            // Gather form data
+            const keyword = $(`#keyword${id}`).val();
+            const filter = $(`#filterinput${id}`).val();
+            const filterString = $(`#filterStringinput${id}`).val();
+            const type = $(`#type${id}`).val();
+            const category = $(`#category${id}`).val();
+            const companyString = $(`#companyString${id}`).val();
+            const brandString = $(`#brandString${id}`).val();
+
+            // Send AJAX request to save the keyword
+            $.ajax({
+                url: `{{route('edit.keyword')}}`,
+                method: 'POST',
+                data: {
+                    keyid:id,
+                    keyword: keyword,
+                    filter: filter,
+                    filterString: filterString,
+                    type: type,
+                    category: category,
+                    companyString: companyString,
+                    brandString: brandString,
+                    _token: '{{ csrf_token() }}',
+                    clientid:`{{request()->route()->parameter('id')}}`
+                },
+                success: function(response) {
+                    if(response.success){
+                        window.location.reload();
+                    }
+                    else {
+                       
+                    if (response.errors) {
+                        $.each(response.errors, function(key, value) {
+                     
+                     $('#' + key + '-error').text(value);
+                 });
+                    } 
+                }
+                },
+                error: function(xhr, status, error) {
+                    $.each(xhr.responseJSON.errors, function(key, value) {
+                     
+                     $('#' + key + '-error').text(value);
+                 });
+                    console.log(xhr.responseJSON);
+                   
+               
+                    console.error('Error saving keyword:', error);
+                }
+            });
+    }
+    function fetchResults() {
+        const keyword = $('#keyword').val().trim();
+        const autocompleteList = $('#autocomplete-list');
+        const resultsList = $('#results-list');
+        console.log(resultsList)
+        if (keyword.length > 2) {
+            // Make an AJAX request to fetch autocomplete results
+            $.ajax({
+                url: '/api/keywordlist',
+                method: 'GET',
+                data: {
+                    keyword: keyword
+                },
+                success: function(response) {
+                    resultsList.empty(); // Clear previous results
+                    if (response.length > 0) {
+                        $.each(response, function(index, result) {
+                            const li = $('<li>').text(result.KeyWord);
+
+                            li.css('padding', '8px')
+                            li.on('click', function() {
+                                selectResult(result.KeyWord);
+                            });
+                            resultsList.append(li);
+                        });
+                        autocompleteList.show(); // Show autocomplete list
+                    } else {
+                        autocompleteList.hide(); // Hide autocomplete list if no results
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching results:', error);
+                }
+            });
+        } else {
+            autocompleteList.hide(); // Hide autocomplete list if keyword length is less than 3
+        }
+    }
+
+    // Define the selectResult function
+    function selectResult(keyword) {
+        $('#keyword').val(keyword);
+        $('#autocomplete-list').hide();
+        $.ajax({
+            url: '/api/filter-strings',
+            method: 'GET',
+            data: {
+                keyword: keyword
+            },
+            success: function(response) {
+                // Populate the filter string dropdown
+                const filterStringDropdown = $('#filterString');
+                const filter = $('#filter');
+                filterStringDropdown.empty();
+                if (response.length > 0) {
+                    $.each(response, function(index, filterString) {
+                        const option = $('<option>').val(filterString.Filter_String).text(filterString.Filter_String);
+                        const option1 = $('<option>').val(filterString.filter).text(filterString.filter);
+                        filterStringDropdown.append(option);
+                        filter.append(option1);
+                    });
+                } else {
+                    // If no filter strings found, disable the dropdown
+                    filterStringDropdown.prop('disabled', true);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching filter strings:', error);
+            }
+        });
+    }
+
     </script>
     <script>
         // Function to enable/disable broadcast fields
@@ -1237,6 +1361,62 @@ function openmodal(id){
             document.getElementById('primaryCheckbox').addEventListener('change', function() {
                 handlePrimaryCheckboxChange();
             });
+            $('#keyword').on('input', fetchResults);
+
+                  // Handle "Save" button click
+        $('#saveKeywordBtn').click(function() {
+            // Gather form data
+            const keyword = $('#keyword').val();
+            const filter = $('#filterinput').val();
+            const filterString = $('#filterStringinput').val();
+            const type = $('#type').val();
+            const category = $('#category').val();
+            const companyString = $('#companyString').val();
+            const brandString = $('#brandString').val();
+
+            // Send AJAX request to save the keyword
+            $.ajax({
+                url: '/save-keyword',
+                method: 'POST',
+                data: {
+                    keyword: keyword,
+                    filter: filter,
+                    filterString: filterString,
+                    type: type,
+                    category: category,
+                    companyString: companyString,
+                    brandString: brandString,
+                    _token: '{{ csrf_token() }}',
+                    clientid:`{{request()->route()->parameter('id')}}`
+                },
+                success: function(response) {
+                    if(response.success){
+                        window.location.reload();
+                    }
+                    else {
+                       
+                    if (response.errors) {
+                        $.each(response.errors, function(key, value) {
+                     
+                     $('#' + key + '-error').text(value);
+                 });
+                    } 
+                }
+                },
+                error: function(xhr, status, error) {
+                    $.each(xhr.responseJSON.errors, function(key, value) {
+                     
+                     $('#' + key + '-error').text(value);
+                 });
+                    console.log(xhr.responseJSON);
+                   
+               
+                    // Handle error response
+                    console.error('Error saving keyword:', error);
+                    // Optionally, you can show an error message to the user
+                }
+            });
+        });
         };
     </script>
     <script>
@@ -1257,6 +1437,7 @@ function openmodal(id){
                 }
             });
         });
+
     </script>
 
     @endsection

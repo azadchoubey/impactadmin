@@ -36,11 +36,10 @@ class CreatePublication extends Component
     public $primaryDisabled = true; 
     protected $rules = [
         'title' => 'required',
-        'edition'=>'required',
+        'type'=>'required',
         'category'=>'required',
         'region'=>'required',
         'language'=>'required',
-        'masthead' => 'image',
         'RatePC'=>'numeric',
         'RatePB'=>'numeric',
         'RateNC'=>'numeric',
@@ -65,7 +64,7 @@ class CreatePublication extends Component
     }
     public function render()
     {
-        $data = Picklist::whereIn('Type',['Region','Language','Pub Category','Pubtype'])->get()->groupBy('Type');   
+        $data = Picklist::whereIn('Type',['Region','Language','Pub Category','Pubtype','periodicity'])->get()->groupBy('Type');   
         $data['pubmaster'] = Pubmaster::where('deleted',0)->orderBy('Title')->get(); 
         return view('livewire.create-publication',compact('data'));
     }
@@ -90,10 +89,10 @@ class CreatePublication extends Component
             'Language' => $this->language,
             // 'restrictedmu' => $this->restrictedmu,
             // 'mu' => $this->mu,
-            'MastHead' => $this->masthead->store('images/publications/masthead'),
+            'MastHead' => $this->masthead?$this->masthead->store('images/publications/masthead'):'',
             'Circulation' => $this->circulation,
             'Issn_Num' => $this->issn,
-            // 'frequency' => $this->frequency,
+            'Periodicity' => $this->frequency,
             'Size' => $this->size,
             'WebSite'=>'',
             'RatePC' => $this->RatePC,

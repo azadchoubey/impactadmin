@@ -89,7 +89,7 @@ class EditPublications extends Component
         $this->primary = $data->PrimaryPubID;
         $this->primaryname = $this->primary == 0 ? false:true;
         foreach ($this->pagenames as &$pagename) {
-            $pagename['editing'] = false; // Set editing to false by default
+            $pagename['editing'] = false; 
         }
     
        
@@ -128,7 +128,7 @@ class EditPublications extends Component
             'MastHead' => $this->masthead,
             'Circulation' => $this->circulation,
             'Issn_Num' => $this->issn,
-            // 'frequency' => $this->frequency,
+            'Periodicity' => $this->frequency,
             'Size' => $this->size,
             'RatePC' => $this->RatePC,
             'RateNC' => $this->RateNC,

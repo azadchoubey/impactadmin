@@ -59,10 +59,12 @@ Route::get('/editpublication/{id}',EditPublications::class)->name('editpublicati
 
 // article routes 
 Route::get('/articles',Articles::class);
-Route::get('/article/{id}',[ArticleController::class,'viewarticle'])->name('viewarticle');
+Route::get('/article/{id}/{id2}',[ArticleController::class,'viewarticle'])->name('viewarticle');
 
 Route::get('/keywordsearch',KeywordSearch::class);
+Route::post('/saveArticle', [ArticleController::class, 'saveArticle'])->name('keywords.saveArticle');
 Route::post('/save-keyword', [KeywordController::class, 'saveKeyword'])->name('save.keyword');
+Route::post('/edit-keyword', [KeywordController::class, 'editKeyword'])->name('edit.keyword');
 Route::get('/test',function(){
     return Picklist::where('type','keyword category')->orderBy('name')->get();
 });

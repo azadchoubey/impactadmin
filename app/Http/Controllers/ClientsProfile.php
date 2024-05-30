@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bmdeliverymethod;
 use App\Models\ClinetContacts;
 use App\Models\Clinetprofile;
 use App\Models\ContactSector;
@@ -188,6 +189,7 @@ class ClientsProfile extends Controller
     }
 
     public function addcontact(Request $request){
+       
         $validator = Validator::make($request->all(), [
             'ContactName' => 'required|string',
             'Mobile' => 'required|digits:10',
@@ -221,11 +223,25 @@ class ClientsProfile extends Controller
             $sectorids = $request->only('SectorID');
             $format = $request->only('format');
             $wm_deliverymethod =  $request->only('wm_deliveryids');
+            $broadcast = $request->broadcast;
             $deliverymethod = $request->only('deliverymethod'); 
-            $input = $request->except(['_token','deliveryid','SectorID','format','wm_deliveryids']);
+            $input = $request->except(['_token','deliveryid','SectorID','format','wm_deliveryids','deliverymethod','broadcast']);
             $input['ContactType'] = 0; 
             $input['wm_deliverymethod'] = $request->wm_enableforweb?1:0;
+            if(isset($deliveryids['deliveryid']) && count($deliveryids['deliveryid'])>0){
+                $deliverytimefordigest =  Deliverymethodmaster::select('deliverytime')->whereIn('id', $deliveryids['deliveryid'])->pluck('deliverytime')->toArray();
+               
+            }
+            if(isset($wm_deliverymethod['wm_deliveryids']) && count($wm_deliverymethod['wm_deliveryids'])>0){
+                $wm_deliveryids =  Wmwebdeliverymethodmaster::select('deliverytime')->whereIn('id', $wm_deliverymethod['wm_deliveryids'])->pluck('deliverytime')->toArray();
+               
+            }
+            if(isset($deliverymethod['deliverymethod']) && count($deliverymethod['deliverymethod'])>0){
+                $deliverymethodprint=  Deliverymethodmaster::select('deliverytime')->whereIn('id', $deliverymethod['deliverymethod'])->pluck('deliverytime')->toArray();
+               
+            }
             $contactid = ClinetContacts::insertGetId($input);
+         
             if ($contactid) {
                 if ($wm_deliverymethod) {
                     $wm_webdeliverymethod = [];
@@ -242,7 +258,7 @@ class ClientsProfile extends Controller
                     ContactSector::insert($contact_sector);
                 }
                 
-                if ($input['wm_deliverymethod'] == 1) {
+                if (isset($input['wm_deliverymethod']) && $input['wm_deliverymethod'] == 1) {
                     foreach ($deliveryids['deliveryid'] as $deliveryid) {
                         Deliverymethod1::insert([
                             'contactid' => $contactid,
@@ -251,15 +267,18 @@ class ClientsProfile extends Controller
                         ]);
                     }
                 }                
-                if ($input['wm_enableforprint'] == 1) {
-                    foreach ($deliverymethod['deliverymethod'] as $deliveryid) {
+                if (isset($input['wm_enableforprint']) && $input['wm_enableforprint'] == 1) {
                         Deliverymethod::insert([
                             'contactid' => $contactid,
-                            'deliveryid' => $deliveryid,
+                            'deliveryid' => $deliverymethod['deliverymethod'],
                         ]);
-                    }
                 }                
-                
+                if($broadcast){
+                    Bmdeliverymethod::insert([
+                        'contactid'=> $contactid,
+                        'deliveryid'=>24
+                    ]);
+                }
                 DB::commit();
                 $client = Clinetprofile::find($input['clientid']);
                 ClientContact::insert([
@@ -268,9 +287,9 @@ class ClientsProfile extends Controller
                     'Email'=>$input['Email'],
                     'ClientId'=>$input['clientid'],
                     'contactid'=>$contactid,
-                    'deliverytime'=>'',
-                    'deliverytime_web_automated'=>'',
-                    'deliverytime_Print_automated'=>'',
+                    'deliverytime'=>$deliverytimefordigest??'',
+                    'deliverytime_web_automated'=>$wm_deliveryids??'',
+                    'deliverytime_Print_automated'=>$deliverymethodprint??'',
                     'enableforqlikview'=>0,
                     'wm_enableforprint'=>$request->wm_enableforprint?1:0,
                     'wm_enableforweb'=>$request->wm_enableforweb?1:0,

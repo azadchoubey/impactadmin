@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArticleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KeywordController;
@@ -19,5 +20,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/keywordlist', [KeywordController::class, 'keywordlist']);
-Route::get('/filter-strings', [KeywordController::class, 'filterstrings']);
+Route::controller(KeywordController::class)->group(function () {
+    Route::get('/keywordlist', 'keywordlist')->name('keywords.list');
+    Route::get('/filter-strings', 'filterstrings')->name('keywords.filterstrings');
+    Route::get('/keywordClients', 'keywordClients')->name('keywords.clients');
+});
+
