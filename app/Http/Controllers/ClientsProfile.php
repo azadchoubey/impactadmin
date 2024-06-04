@@ -230,11 +230,9 @@ class ClientsProfile extends Controller
             $input['wm_deliverymethod'] = $request->wm_enableforweb ? 1 : 0;
             $contactid = ClinetContacts::insertGetId($input);
     
-            // Generate a 6-7 digit random password
             $password = str_pad(rand(0, 9999999), 6, '0', STR_PAD_LEFT);
     
             if ($contactid) {
-                // Update the newly created contact with userid and passwd
                 ClinetContacts::where('contactid', $contactid)->update([
                     'userid' => $contactid,
                     'passwd' => $password,

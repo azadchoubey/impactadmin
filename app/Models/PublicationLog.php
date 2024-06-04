@@ -22,5 +22,24 @@ class PublicationLog extends Model
         'date_time',
         'pcname',
         'userid',
-        'key_lock',];
+        'key_lock',
+    ];
+    public static function getLatestLogByPubId($pubid, $clientIp, $userid)
+    {
+        $latestLog =  self::where('pubid', $pubid)
+            ->orderBy('Sno', 'DESC')
+            ->first(['key_lock', 'date_time', 'userid']);
+            if ($latestLog) {
+                return $latestLog;
+            }
+            self::create([
+                'pubid' => $pubid,
+                'date_time' => now(),
+                'pcname' => $clientIp,
+                'userid' => $userid,
+                'key_lock' => 1,
+            ]);
+    
+            return false;
+    }
 }

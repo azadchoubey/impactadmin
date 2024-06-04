@@ -241,3 +241,11 @@
 
     </form>
 </div>
+@script
+<script>
+    $wire.on('alert', (event) => {
+  
+        alert(event);
+    });
+</script>
+@endscript

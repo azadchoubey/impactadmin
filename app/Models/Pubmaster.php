@@ -10,7 +10,14 @@ class Pubmaster extends Model
     use HasFactory;
     protected $table = "pub_master";
     protected $primaryKey = 'PubId';
-    protected $guarded = [];
+    protected $fillable = [
+        'Title', 'address1', 'address2', 'address3', 'CityID', 'stateID', 'countryID',
+        'IsDomestic', 'phone', 'PrimaryPubID', 'RatePC', 'RatePB', 'RateNC', 'RateNB',
+        'Type', 'Category', 'Language', 'Region', 'Periodicity', 'Size', 'MastHead',
+        'Circulation', 'WebSite', 'Issn_Num', 'Place', 'baseid', 'OldName', 'deleted',
+        'oldname2', 'CreateDateTime', 'EditDateTime', 'wm_website', 'IsMain', 'cspec',
+        'priority', 'tier'
+    ];
     public $timestamps = false;
 
     public function Type(){
@@ -43,5 +50,6 @@ class Pubmaster extends Model
     public function region(){
         return $this->belongsTo(Picklist::class,'Region','ID')->select('ID','Name');
     }
+ 
 
 }

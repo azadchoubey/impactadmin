@@ -107,14 +107,14 @@
                         <div class="flex items-center justify-between space-x-2 mb-2">
                             <div class="flex items-center space-x-2">
                                 <input wire:model="pagenames.{{$key}}.IsPre" {{$pagename['IsPre'] == "1" ? "checked":""}} type="checkbox" class="text gap-4"> 
-                                @if($pagename['editing'])
+                                @if(isset($pagename['editing']) && $pagename['editing'])
                                     <input wire:model="pagenames.{{$key}}.Name" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 @else
                                     <span class="gap-2">{{$pagename['Name']}}</span>
                                 @endif
                             </div>
                             <div>
-                                @if($pagename['editing'])
+                                @if(isset($pagename['editing']) && $pagename['editing'])
                                 <button wire:click="savePageName({{$key}})" type="button" class="px-2 py-1 text-sm font-semibold text-white bg-blue-500 rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Save</button>
                             @else
                                 <button wire:click="toggleEditPageName({{$key}})" type="button" class="px-2 py-1 text-sm font-semibold text-white bg-blue-500 rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Edit</button>
@@ -227,3 +227,11 @@
         </div>
     </form>
 </div>
+@script
+<script>
+    $wire.on('alert', (event) => {
+  
+        alert(event);
+    });
+</script>
+@endscript

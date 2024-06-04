@@ -4,7 +4,11 @@ namespace App\Livewire;
 
 use App\Models\Picklist;
 use App\Models\Pubmaster;
+use App\Models\MediaUniverseMaster;
+use App\Models\RemoteMediaMaster;
 use App\Models\PubPageName;
+use App\Models\Pubbase;
+use App\Models\PublicationLog;
 use Livewire\Component;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -65,7 +69,12 @@ class EditPublications extends Component
     ];
     public function mount($id)
     {
+
         $this->id = base64_decode($id);
+        $latestLog = PublicationLog::getLatestLogByPubId($this->id,request()->ip(),auth()->user()->UserID);
+        if($latestLog && $latestLog->userid != auth()->user()->UserID){
+            $this->dispatch('alert', 'Publication already updating by .',auth()->user()->UserID);
+        }
         $data = Pubmaster::with('Type', 'city', 'country', 'state', 'cat', 'lang', 'pub_pages', 'edition','frequency')->find($this->id);
 
         $this->title = $data->Title;
@@ -110,8 +119,23 @@ class EditPublications extends Component
     public function submitForm()
     {
         $this->validate();
-        $pubmaster = Pubmaster::findOrFail($this->pubid);
         try{
+            $pubmaster = Pubmaster::findOrFail($this->pubid);
+            $latestLog = PublicationLog::getLatestLogByPubId($this->pubid,request()->ip(),auth()->user()->UserID);
+            if($latestLog && $latestLog->userid != auth()->user()->UserID){
+                $this->dispatch('alert', 'Publication already updating by .',auth()->user()->UserID);
+                return;
+            }
+            $baseid = Pubbase::where('name',$this->title)->first();
+            if($baseid){
+                $baseid = $baseid->baseid;
+    
+            }else{
+                $baseid = Pubbase::insertGetId([
+                    'name' =>  $this->title,
+                    'webid'=>0
+                ]);
+            }
         DB::beginTransaction();
         $pubmaster->update([
             'PubId' => $this->pubid,
@@ -123,9 +147,8 @@ class EditPublications extends Component
             'Region' => $this->region,
             'Language' => $this->language,
             'IsDomestic' => $this->domestic??0,
-            // 'restrictedmu' => $this->restrictedmu,
-            // 'mu' => $this->mu,
-            'MastHead' => $this->masthead,
+            'IsMain' => $this->mu?1:0,
+            'MastHead' => '',
             'Circulation' => $this->circulation,
             'Issn_Num' => $this->issn,
             'Periodicity' => $this->frequency,
@@ -134,13 +157,19 @@ class EditPublications extends Component
             'RateNC' => $this->RateNC,
             'RatePB' => $this->RatePB,
             'RateNB' => $this->RateNB,
+            'EditDateTime'=>now()
         ]);
-       
+        if ($this->masthead) {
+            $mastheadPath = $this->masthead->storeAs('images/publications/masthead', $pubmaster->PubId . '.' . $this->masthead->getClientOriginalExtension());
+            Pubmaster::where('PubId',  $pubmaster->PubId)->update(['MastHead' => $mastheadPath]);
+        }
         foreach($this->pagenames as $pagename){
             if($pagename["IsPre"] == true || $pagename["IsPre"] == false){
-                $pagename["IsPre"] = $pagename["IsPre"] == true?"1":"0";
+                $pagename["IsPre"] = $pagename["IsPre"] ?"1":"0";
             }     
           
+            
+     
             PubPageName::updateOrCreate([
                 "PubId"=>$pagename['PubId'],
                 "Name"=>$pagename["Name"]
@@ -148,14 +177,22 @@ class EditPublications extends Component
             ],$pagename);
            
         }
-    
+        if($this->mu){
+            MediaUniverseMaster::where('pubid',$pubmaster->PubId)->delete();
+            RemoteMediaMaster::where('pubid',$pubmaster->PubId)->delete();
+            MediaUniverseMaster::insertFromQuery($pubmaster->PubId);
+            RemoteMediaMaster::insertFromQuery($pubmaster->PubId);
+           
+        }
+        DB::commit();
         Log::info('Record updated publication name: {name} and Pubid: {pubid} by user: {user} ',['name'=>$this->title,'user'=>auth()->user()->UserID,'pubid'=>$this->pubid]);
         session()->flash('success', 'Your changes have been saved successfully!');
         return redirect()->to('/publications');
     }catch(Exception $e){
+        DB::rollBack();
         Log::error('Error while creating publication: {error}', ['error' => $e->getMessage()]);
         session()->flash('error', 'An error occurred while adding the record.');
-
+        return redirect()->back();
        }
     }
     public function addCheckbox()
@@ -164,12 +201,14 @@ class EditPublications extends Component
             $newPageName = PubPageName::create([
                 'Name' => $this->page,
                 'IsPre' => 0, 
+                'PubId' => $this->pubid
             ]);
     
             $this->pagenames[] = [
-                'PageNameID' => $newPageName->id, 
+                'PageNameID' => $newPageName->PageNameID, 
                 'Name' => $this->page,
                 'IsPre' => 0, 
+                'PubId' => $this->pubid
             ];
                 $this->page = '';
         }
@@ -189,19 +228,20 @@ class EditPublications extends Component
     public function toggleEditPageName($index)
 {
     $this->pagenames[$index]['editing'] = !$this->pagenames[$index]['editing'];
+    
 }
 
 public function savePageName($index)
 {
     $this->validate([
-        "pagenames.$index.Name" => 'required', // Add validation rules if needed
+        "pagenames.$index.Name" => 'required', 
     ]);
 
     $pageName = $this->pagenames[$index];
-    $pageNameModel = PubPageName::findOrFail($pageName['PageNameID']); // Assuming 'id' is the primary key of PubPageName
+    $pageNameModel = PubPageName::findOrFail($pageName['PageNameID']);
     $pageNameModel->update(['Name' => $pageName['Name']]);
 
-    // Reset the edit state
     $this->toggleEditPageName($index);
+ 
 }
 }
