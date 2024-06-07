@@ -43,8 +43,9 @@ class ArticleController extends Controller
                     'clients' => $clients,
                 ];
             });
+         
         $groupedResults = $groupedResults->values()->first();
-
+       
         return view('viewarticle', ['article' => $groupedResults]);
     }
     public function saveArticle(Request $request)
@@ -147,7 +148,7 @@ class ArticleController extends Controller
         while ($i < count($results)) {
             $createdAt = Carbon::createFromTimestampMs(round(microtime(true) * 1000))->setTimezone('UTC');
             $clientid = $results[$i]['clientid'];
-
+           
             while ($i < count($results) && $clientid == $results[$i]['clientid']) {
                 $articleid = $results[$i]['articleid'];
                 $clientid = $results[$i]['clientid'];
@@ -181,6 +182,7 @@ class ArticleController extends Controller
                             'type' => $results[$i]['type'],
                             'captureddatetime' => $results[$i]['captureddatetime'],
                             'pubdate' => $results[$i]['pubdate'],
+                            // 'imageUrl' => $imageUrls, // Adding image URLs to article data
                             'lastupdated' => $results[$i]['lastupdated'],
                             'date_time_acquired' => $results[$i]['date_time_acquired'],
                             'userid' => $results[$i]['userid'],

@@ -20,95 +20,98 @@
     </div>
     <div id="default-tab-content">
         <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-            <div class="grid grid-cols-3 ">
-                <div>
-                    <label for="articleid" class="block text-sm font-medium text-gray-700">Article Id</label>
-                    <input disabled id="articleid" value="{{$article['article']->articleid}}" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <div class="grid grid-cols-2 gap-4">
+                <!-- Information Box -->
+                <div class="border p-4 rounded-lg bg-white dark:bg-gray-700">
+                    <div class="grid grid-cols-3 gap-4">
+                        <div>
+                            <label for="articleid" class="block text-sm font-medium text-gray-700">Article Id</label>
+                            <input disabled id="articleid" value="{{$article['article']->articleid}}" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
+                            <input id="title" value="{{$article['article']->headline}}" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label for="subtitle" class="block text-sm font-medium text-gray-700">Sub Title</label>
+                            <input id="subtitle" value="{{$article['article']->subtitle}}" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label for="publication" class="block text-sm font-medium text-gray-700">Publication</label>
+                            <input id="publication" value="{{$article['article']->publication}}" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label for="no" class="block text-sm font-medium text-gray-700">Number of</label>
+                            <input id="no" value="{{$article['article']->numberofpages}}" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label for="place" class="block text-sm font-medium text-gray-700">Place of</label>
+                            <input id="place" value="{{$article['article']->city}}" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label for="type" class="block text-sm font-medium text-gray-700">Type</label>
+                            <input id="type" value="{{$article['article']->type}}" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label for="date" class="block text-sm font-medium text-gray-700">Date of</label>
+                            <input id="date" value="{{$article['article']->pubdate}}" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label for="sector" class="block text-sm font-medium text-gray-700">Sector</label>
+                            <input id="sector" value="{{$article['article']->sector}}" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label for="totaltime" class="block text-sm font-medium text-gray-700">Total Time</label>
+                            <input id="totaltime" value="" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label for="totalave" class="block text-sm font-medium text-gray-700">Total AVE</label>
+                            <input id="totalave" value="{{$article['article']->ave}}" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4 mt-4">
+                        <div>
+                            <label for="preminum" class="block text-sm font-medium text-gray-700">Preminum</label>
+                            <input id="preminum" value="" type="checkbox">
+                        </div>
+                        <div>
+                            <label for="includes" class="block text-sm font-medium text-gray-700">Includes</label>
+                            <input id="includes" value="" type="checkbox">
+                        </div>
+                        <div>
+                            <label for="pot" class="block text-sm font-medium text-gray-700">Pot No</label>
+                            <input id="pot" value="" type="checkbox">
+                        </div>
+                        <div>
+                            <label for="epapar" class="block text-sm font-medium text-gray-700">E paper</label>
+                            <input id="epapar" value="" type="checkbox">
+                        </div>
+                        <div>
+                            <label for="color" class="block text-sm font-medium text-gray-700">Color</label>
+                            <input id="color" value="{{$article['article']->ispremium}}" {{$article['article']->ispremium?'checked':''}} type="checkbox">
+                        </div>
+                        <div>
+                            <label for="page" class="block text-sm font-medium text-gray-700">Pages</label>
+                            <input id="page" value="" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        </div>
+                    </div>
+                    <div class="mt-4 flex gap-2">
+                        <button class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save Article</button>
+                        <button class="px-3 py-2 text-xs font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">Delete</button>
+                        <button class="px-3 py-2 text-xs font-medium text-center text-white bg-gray-700 rounded-lg hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800" data-modal-target="large-modal1" data-modal-toggle="large-modal1">Add to </button>
+                        <button class="px-3 py-2 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Mail </button>
+                        <button class="px-3 py-2 text-xs font-medium text-center text-white bg-purple-700 rounded-lg hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800">Qc </button>
+                    </div>
                 </div>
-
-                <div>
-                    <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
-                    <input id="title" value="{{$article['article']->headline}}" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <!-- Image Box -->
+                <div class="border p-4 rounded-lg bg-white dark:bg-gray-700">
+                    <img src="{{ 'https://myimpact.in/backup/'.$article['article']->imagedirectory.'/'. $article['article']->imagename[0]['imagename'] }}" alt="Article Image" class="w-full h-auto rounded-lg">
                 </div>
-
-                <div>
-                    <label for="subtitle" class="block text-sm font-medium text-gray-700">Sub Title</label>
-                    <input id="subtitle" value="{{$article['article']->subtitle}}" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                </div>
-                <div>
-                    <label for="publication" class="block text-sm font-medium text-gray-700">Publication</label>
-                    <input id="publication" value="{{$article['article']->publication}}" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                </div>
-                <div>
-                    <label for="no" class="block text-sm font-medium text-gray-700">Number of</label>
-                    <input id="no" value="{{$article['article']->numberofpages}}" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                </div>
-                <div>
-                    <label for="place" class="block text-sm font-medium text-gray-700">Place of</label>
-                    <input id="place" value="{{$article['article']->city}}" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                </div>
-                <div>
-                    <label for="type" class="block text-sm font-medium text-gray-700">Type</label>
-                    <input id="type" value="{{$article['article']->type}}" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                </div>
-                <div>
-                    <label for="date" class="block text-sm font-medium text-gray-700">Date of</label>
-                    <input id="date" value="{{$article['article']->pubdate}}" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                </div>
-                <div>
-                    <label for="sector" class="block text-sm font-medium text-gray-700">Sector</label>
-                    <input id="sector" value="{{$article['article']->sector}}" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                </div>
-                {{-- <div>
-                    <label for="volume" class="block text-sm font-medium text-gray-700">Volume no</label>
-                    <input id="volume" value="{{$article['article']->Volume}}" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                
             </div>
-            <div>
-                <label for="Subsec" class="block text-sm font-medium text-gray-700">Sub Sector</label>
-                <input id="Subsec" value="{{$article['article']->subsector->Name}}" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            </div> --}}
-            <div>
-                <label for="totaltime" class="block text-sm font-medium text-gray-700">Total Time</label>
-                <input id="totaltime" value="" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            </div>
-            <div>
-                <label for="totalave" class="block text-sm font-medium text-gray-700">Total AVE</label>
-                <input id="totalave" value="{{$article['article']->ave}}" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            </div>
-        </div>
-        <div class="grid grid-cols-3 ">
-            <div>
-                <label for="preminum" class="block text-sm font-medium text-gray-700">Preminum</label>
-                <input id="preminum" value="" type="checkbox">
-            </div>
-            <div>
-                <label for="includes" class="block text-sm font-medium text-gray-700">Includes</label>
-                <input id="includes" value="" type="checkbox">
-            </div>
-            <div>
-                <label for="pot" class="block text-sm font-medium text-gray-700">Pot No</label>
-                <input id="pot" value="" type="checkbox">
-            </div>
-            <div>
-                <label for="epapar" class="block text-sm font-medium text-gray-700">E paper</label>
-                <input id="epapar" value="" type="checkbox">
-            </div>
-            <div>
-                <label for="color" class="block text-sm font-medium text-gray-700">Color</label>
-                <input id="color" value="{{$article['article']->ispremium}}" {{$article['article']->ispremium?'checked':''}} type="checkbox">
-            </div>
-            <div>
-                <label for="page" class="block text-sm font-medium text-gray-700">Pages</label>
-                <input id="page" value="" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            </div>
-        </div>
-        <div><button class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save Article</button>
-            <button class="px-3 py-2 text-xs font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">Delete</button>
-            <button class="px-3 py-2 text-xs font-medium text-center text-white bg-gray-700 rounded-lg hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800" data-modal-target="large-modal1" data-modal-toggle="large-modal1">Add to </button>
-            <button class="px-3 py-2 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Mail </button>
-            <button class="px-3 py-2 text-xs font-medium text-center text-white bg-purple-700 rounded-lg hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800">Qc </button>
         </div>
     </div>
+    
     <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
         <div class="grid grid-cols-2 gap-4">
             <div>
