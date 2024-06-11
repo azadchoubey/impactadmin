@@ -55,7 +55,7 @@ Route::post('/get-delivery-times', [ClientsProfile::class, 'getDeliveryTimes'])-
 //  publications routes
 Route::view('/publications','publications/index');
 Route::get('/createpublication',CreatePublication::class)->name('createpub');
-Route::get('/editpublication/{id}',EditPublications::class)->name('editpublication');
+Route::get('/editpublicaticon/{id}',EditPublications::class)->name('editpublication');
 
 // article routes 
 Route::get('/articles',Articles::class);

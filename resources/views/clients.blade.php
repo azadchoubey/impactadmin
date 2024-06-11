@@ -48,6 +48,9 @@
                 <li class="me-2" role="presentation">
                     <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="settings-tab" data-tabs-target="#settings" type="button" role="tab" aria-controls="settings" aria-selected="{{ request()->query('keywords') ? 'true' : 'false' }}">Client Keywords</button>
                 </li>
+                <li class="me-2" role="presentation">
+                    <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="media-universe" data-tabs-target="#mediauniverse" type="button" role="tab" aria-controls="mediauniverse" aria-selected="{{ request()->query('mediauniverse') ? 'true' : 'false' }}">Client Media Universe</button>
+                </li>
             </ul>
         </div>
 
@@ -505,6 +508,9 @@
                         </nav>
                     </div>
                 </div>
+            </div>
+            <div class="rounded-lg bg-gray-50 dark:bg-gray-800" id="mediauniverse" role="tabpanel" aria-labelledby="media-universe">
+            <x-client-media-universe :clientid="$data->ClientID" />
             </div>
         </div>
     </div>
@@ -1144,6 +1150,7 @@ function openmodal(id){
                 }, 1000)
 
             })
+            
         };
         function addcontact(){
         var formData1 =  $('#addcontact').serialize();
