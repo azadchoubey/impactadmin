@@ -1,6 +1,25 @@
 @extends('layouts.default')
 
 @section('content')
+@if(session()->has('success'))
+    <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
+        <span class="font-medium">{{ session()->get('success') }}</span>
+    </div>
+    @endif
+    @if($errors->has('error'))
+    <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+        <span class="font-medium">{{ session()->get('error') }}</span>
+    </div>
+    @endif
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 <div class="p-5">
     <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
         <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist">

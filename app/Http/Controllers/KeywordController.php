@@ -147,6 +147,16 @@ class KeywordController extends Controller
         })->select('ClientID', 'Name')->get();
         return response()->json($clients);
     }
+    public function companyString()  {
+        $search = request('query');
+        $result = Clientkeyword::where('CompanyS', 'LIKE', "%{$search}%")->groupBy('CompanyS')->get();
+        return response()->json($result);
+    }
+    public function brandString()  {
+        $search = request('query');
+        $result = Clientkeyword::where('BrandS', 'LIKE', "%{$search}%")->groupBy('BrandS')->get();
+        return response()->json($result);
+    }
     
 }
 

@@ -13,7 +13,7 @@
             <div class="grid grid-cols-2 gap-3">
                 <div class="mb-2" x-data="{isTyped: false}">
                     <label for="name" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Publication</label>
-                    <input wire:model="pubid" type="text" disabled class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <input wire:model="pubid" type="text" disabled class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>                
              {{--    <div class="mb-4">
                     <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Web Universe</span>
@@ -24,7 +24,7 @@
                     <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Primary</span>
                     <div class="mt-1 flex items-center">
                         <input  wire:model="togglePrimary" wire:click="togglePrimary" {{$primary != 0 ? "checked" : ''}} class="text" type="checkbox">
-                        <select wire:model="primary" {{ !$primaryname  ? 'disabled' : ''}} class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <select wire:model="primary" {{ !$primaryname  ? 'disabled' : ''}} class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         <option></option>
                         @foreach($data['pubmaster'] as $pubmaster)
                         <option value="{{$pubmaster->PubId}}">{{$pubmaster->Title}}</option>
@@ -39,7 +39,7 @@
             <div class="grid grid-cols-1">
                 <div class="mb-2">
                     <label for="name" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Name</label>
-                    <input wire:model="title" type="text" id="name" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <input wire:model="title" type="text" id="name" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     @error('title')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
                 </div>
             </div>
@@ -48,7 +48,7 @@
                 <div class="mb-4">
 
                     <label for="edition" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Edition</label>
-                    <select wire:model="edition" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <select wire:model="edition" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 
                         @foreach($picklist['city'] as $edtion)
                         <option {{$edtion->ID == $edition ?'selected':'' }} value="{{$edtion->ID}}">{{$edtion->Name}}</option>
@@ -58,7 +58,7 @@
                 </div>
                 <div class="mb-4">
                     <label for="category" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Category</label>
-                    <select wire:model="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <select wire:model="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         @foreach($picklist['Pub Category'] as $key=>$cat)
                         <option {{$cat->ID == $category?'seleted':''}} value="{{$cat->ID}}">{{$cat->Name}}</option>
                         @endforeach
@@ -69,7 +69,7 @@
                 <div class="mb-4">
 
                     <label for="type" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Type</label>
-                    <select wire:model="type" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <select wire:model="type" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         @foreach($picklist['Pubtype'] as $key => $pubtype)
                         <option {{ $pubtype->ID == $type ? 'selected' : '' }} value="{{ $pubtype->ID }}">{{ $pubtype->Name }}</option>
                         @endforeach
@@ -77,7 +77,7 @@
                 </div>
                 <div class="mb-4">
                     <label for="region" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Region</label>
-                    <select wire:model="region" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <select wire:model="region" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         @foreach($picklist['Region'] as $key=>$region)
                         <option {{$region->ID ==($region?0:'')? 'selected': ''}} value="{{$region->ID}}">{{$region->Name}}</option>
                         @endforeach
@@ -88,7 +88,7 @@
 
                 <div class="mb-4">
                     <label for="language" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Language</label>
-                    <select wire:model="language" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <select wire:model="language" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         @foreach($picklist['Language'] as $key=>$lang)
                         <option {{$lang->ID == $language ?  'selected': ''}} value="{{$lang->ID}}">{{$lang->Name}}</option>
                         @endforeach
@@ -99,7 +99,7 @@
                 <div class="mb-4">
                     <label for="pagename" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Page Name</label>
                     <div>
-                        <input wire:model="page" wire:keydown.enter.prevent="addCheckbox" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" id="pagename">
+                        <input wire:model="page" wire:keydown.enter.prevent="addCheckbox" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" id="pagename">
                     </div>
                     <div class="overflow-auto max-h-48 mt-3"> <!-- Set max height and enable overflow scrolling -->
                         @if(!empty($pagenames))
@@ -154,19 +154,19 @@
             <div class="grid grid-cols-2 gap-3">
                 <div class="mb-4">
                     <label for="circulation" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Circulation</label>
-                    <input wire:model="circulation" type="text" id="circulation" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <input wire:model="circulation" type="text" id="circulation" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     @error('circulation')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
 
                 </div>
                 <div class="mb-4">
                     <label for="issn" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">ISSN</label>
-                    <input wire:model="issn" type="text" id="issn" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <input wire:model="issn" type="text" id="issn" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     @error('issn')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
 
                 </div>
                 <div class="mb-4">
                     <label for="frequency" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Frequency</label>
-                    <select wire:model="frequency" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <select wire:model="frequency" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         @foreach($picklist['periodicity'] as $freq)
                         <option {{$freq->ID == $frequency ? 'seleted':''}}  value="{{$freq->ID}}">{{$freq->Name}}</option>
                         @endforeach
@@ -176,7 +176,7 @@
                 </div>
                 <div class="mb-4">
                     <label for="size" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Size</label>
-                    <input wire:model="size" type="text" id="size" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <input wire:model="size" type="text" id="size" class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     @error('size')  <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
 
                 </div>

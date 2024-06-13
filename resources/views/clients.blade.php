@@ -304,7 +304,7 @@
             <div class="rounded-lg bg-gray-50 dark:bg-gray-800" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <button id="editbutton" data-modal-target="large-modal" data-modal-toggle="large-modal" class="hidden px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Edit</button>
-                    <div id="createcontacts">
+                    <div id="createcontacts" class="mb-2">
                         <button data-modal-target="large-modal2" data-modal-toggle="large-modal2" class="right-0 px-3 py-2 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create Contact</button>
                     </div>
                     @php
@@ -319,34 +319,29 @@
                     @endphp
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                            <th scope="col" class="px-6 py-3">
+                            <!-- <th scope="col" class="px-6 py-3">
                                 <input type="checkbox" id="selectAll" onchange="toggleSelectAll(this)" class="form-checkbox">
-                            </th>
+                            </th> -->
                             <th scope="col" class="px-6">Contact Name</th>
                             <th scope="col" class="px-6">Print</th>
                             <th scope="col" class="px-6">Web</th>
-                            <th scope="col" class="px-6">Qlikview</th>
-                            <th scope="col" class="px-6">Qualify</th>
-                            <th scope="col" class="px-6">Alert</th>
-                            <th scope="col" class="px-6">Charts</th>
                             <th scope="col" class="px-6">Br</th>
-                            <th scope="col" class="px-6">BB</th>
-                            <th scope="col" class="px-6">Mobile</th>
+                            <th scope="col" class="px-6">Twitter</th>
+                            <th scope="col" class="px-6">Youtube</th>
+                            <th scope="col" class="px-6">Smartdas</th>
                             <th scope="col" class="px-6">Whatsapp</th>
                             <th scope="col" class="px-6">Mediatouch</th>
                             <th scope="col" class="px-6">Dyna</th>
                             <th scope="col" class="px-6">Custom Digest</th>
-                            <th scope="col" class="px-6">Regular Web</th>
-                            <th scope="col" class="px-6">Regular Print</th>
                             <th scope="col" class="px-6">Action</th>
                         </thead>
                         <tbody>
 
                             @foreach($currentPageItems as $contact)
                             <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                                <td class="px-6 py-4">
+                                <!-- <td class="px-6 py-4">
                                     <input type="checkbox" onchange="updateEditButtonVisibility()" value="{{$contact->contactid}}" class="form-checkbox checkboxes">
-                                </td>
+                                </td> -->
                                 <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $contact->ContactName}}</td>
                                 <td class="editSection{{$contact->contactid}} px-6 py-4 hidden">
                                     <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="wm_enableforprint" {{ $contact->wm_enableforprint ? 'checked' : '' }} />
@@ -354,26 +349,15 @@
                                 <td class="editSection{{$contact->contactid}} px-6 py-4 hidden">
                                     <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="wm_enableforweb" {{ $contact->wm_enableforweb ? 'checked' : '' }} />
                                 </td>
-                                <td class="editSection{{$contact->contactid}} px-6 py-4 hidden ">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforqlikview" {{ $contact->enableforqlikview ? 'checked' : '' }} />
+
+                                <td class="editSection{{$contact->contactid}} px-6 py-4 hidden">
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforbr" {{ $contact->enablefortwitter ? 'checked' : '' }} />
                                 </td>
                                 <td class="editSection{{$contact->contactid}} px-6 py-4 hidden">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enabletoqualify" {{ $contact->enabletoqualify ? 'checked' : '' }} />
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforbr" {{ $contact->enableforyoutube ? 'checked' : '' }} />
                                 </td>
                                 <td class="editSection{{$contact->contactid}} px-6 py-4 hidden">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="getcriticalalert" {{ $contact->getcriticalalert ? 'checked' : '' }} />
-                                </td>
-                                <td class="editSection{{$contact->contactid}} px-6 py-4 hidden ">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforcharts" {{ $contact->enableforcharts ? 'checked' : '' }} />
-                                </td>
-                                <td class="editSection{{$contact->contactid}} px-6 py-4 hidden">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforbr" {{ $contact->enableforbr ? 'checked' : '' }} />
-                                </td>
-                                <td class="editSection{{$contact->contactid}} px-6 py-4 hidden">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforbb" {{ $contact->enableforbb ? 'checked' : '' }} />
-                                </td>
-                                <td class="editSection{{$contact->contactid}} px-6 py-4 hidden">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableformobile" {{ $contact->enableformobile ? 'checked' : '' }} />
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforbr" {{ $contact->enableforyoutube ? 'checked' : '' }} />
                                 </td>
                                 <td class="editSection{{$contact->contactid}} px-6 py-4 hidden">
                                     <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforwhatsapp" {{ $contact->enableforwhatsapp ? 'checked' : '' }} />
@@ -387,29 +371,20 @@
                                 <td class="editSection{{$contact->contactid}} px-6 py-4 hidden">
                                     <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="delivery" {{ $contact->delivery->isNotEmpty() ? 'checked' : '' }} />
                                 </td>
-                                <td class="editSection{{$contact->contactid}} px-6 py-4 hidden">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="regularDigestWeb" {{ $contact->regularDigestWeb->isNotEmpty() ? 'checked' : '' }} />
-                                </td>
-                                <td class="editSection{{$contact->contactid}} px-6 py-4 hidden">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="regularDigestPrint" {{ $contact->regularDigestPrint->ID != 0 ? 'checked' : '' }} />
-                                </td>
+                               
                                 <td class="editSection{{$contact->contactid}} px-6 py-4 hidden"><a href="javascript:void(0);">Update</a></td>
 
                                 <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->wm_enableforprint?$check:$cross !!}</td>
                                 <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->wm_enableforweb?$check:$cross !!}</td>
-                                <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->enableforqlikview?$check:$cross !!}</td>
-                                <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->enabletoqualify?$check:$cross !!}</td>
-                                <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->getcriticalalert?$check:$cross !!}</td>
-                                <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->enableforcharts?$check:$cross !!}</td>
                                 <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->enableforbr?$check:$cross !!}</td>
-                                <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->enableforbb?$check:$cross !!}</td>
-                                <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->enableformobile?$check:$cross !!}</td>
+                                <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->enablefortwitter?$check:$cross !!}</td>
+                                <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->enableforyoutube?$check:$cross !!}</td>
+                                <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->enableforyoutube?$check:$cross !!}</td>
                                 <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->enableforwhatsapp?$check:$cross !!}</td>
                                 <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->enableformediatouch?$check:$cross !!}</td>
                                 <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->enablefordidyounotice?$check:$cross !!}</td>
                                 <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->delivery->isNotEmpty()?$check:$cross !!}</td>
-                                <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->regularDigestWeb->isNotEmpty() ?$check:$cross !!}</td>
-                                <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->regularDigestPrint->ID != 0 ?$check:$cross !!}</td>
+                              
                                 <td id="editButton" class="withoutEditSection{{$contact->contactid}} px-6 py-4"><a onclick="openmodal({{$contact->contactid}})"  data-modal-target="large-modal{{$contact->contactid}}" data-modal-toggle="large-modal{{$contact->contactid}}" href="javascript:void(0);">Edit</a></td>
                                 <x-edit-contact :contact="$contact" :picklist="$picklist" :deliverymaster="$deliverymaster" :webdeliverymaster="$webdeliverymaster" :client="$data" :formats="$formats" />
 
@@ -1443,6 +1418,54 @@ function openmodal(id){
                     dropdown.disabled = true;
                 }
             });
+            $("#companyString").autocomplete({
+        source: function(request, response) {
+            $.ajax({
+                url: "{{ route('companyString') }}",
+                data: {
+                    query: request.term
+                },
+                success: function(data) {
+                    response($.map(data, function(item) {
+                        return {
+                            label: item.CompanyS,
+                            value: item.CompanyS
+                        };
+                    }));
+                }
+            });
+        },
+        minLength: 2,
+        select: function(event, ui) {
+            // Optional: handle the selection
+            console.log("Selected: " + ui.item.value);
+        }
+        
+    });
+            $("#brandString").autocomplete({
+        source: function(request, response) {
+            $.ajax({
+                url: "{{ route('brandString') }}",
+                data: {
+                    query: request.term
+                },
+                success: function(data) {
+                    response($.map(data, function(item) {
+                        return {
+                            label: item.BrandS,
+                            value: item.BrandS
+                        };
+                    }));
+                }
+            });
+        },
+        minLength: 2,
+        select: function(event, ui) {
+            // Optional: handle the selection
+            console.log("Selected: " + ui.item.value);
+        }
+        
+    });
         });
 
     </script>

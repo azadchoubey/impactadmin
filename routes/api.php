@@ -24,5 +24,7 @@ Route::controller(KeywordController::class)->group(function () {
     Route::get('/keywordlist', 'keywordlist')->name('keywords.list');
     Route::get('/filter-strings', 'filterstrings')->name('keywords.filterstrings');
     Route::get('/keywordClients', 'keywordClients')->name('keywords.clients');
+    Route::get('/companystring','companyString')->name('companyString');
+    Route::get('/brandString','brandString')->name('brandString');
 });
 

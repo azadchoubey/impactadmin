@@ -94,6 +94,7 @@ class EditPublications extends Component
         $this->RatePC = $data->RatePC;
         $this->RateNC = $data->RateNC;
         $this->RatePB = $data->RatePB;
+        $this->mu = $data->IsMain;
         $this->masthead = $data->MastHead;
         $this->primary = $data->PrimaryPubID;
         $this->primaryname = $this->primary == 0 ? false:true;
@@ -177,9 +178,10 @@ class EditPublications extends Component
             ],$pagename);
            
         }
+        MediaUniverseMaster::where('pubid',$pubmaster->PubId)->delete();
+        RemoteMediaMaster::where('pubid',$pubmaster->PubId)->delete();
         if($this->mu){
-            MediaUniverseMaster::where('pubid',$pubmaster->PubId)->delete();
-            RemoteMediaMaster::where('pubid',$pubmaster->PubId)->delete();
+
             MediaUniverseMaster::insertFromQuery($pubmaster->PubId);
             RemoteMediaMaster::insertFromQuery($pubmaster->PubId);
            

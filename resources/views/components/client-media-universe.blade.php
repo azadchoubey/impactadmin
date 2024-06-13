@@ -1,16 +1,13 @@
 <div >
-<div class="flex flex-col items-left ">
+<div class="flex flex-col items-center ">
 <div class="flex space-x-4">
 <label class="mb-2">Client id {{ $clientid}}</label>
-</div>
-<div class="flex space-x-4">
 <label >Client Prioriy</label>
 <input type="checkbox" name="clientpriority" >
-</div>
-<div class="flex space-x-4">
 <label>Restricted MU	</label>
 <input type="checkbox" name="clientpriority" >
 </div>
+
 </div>  
 <div class="grid grid-cols-2 gap-8 place-items-center">
 
@@ -118,41 +115,48 @@
 <script>
     $(function() {
         $('.multiple').multiSelect({
-            dblClick: true,
-            selectableHeader: "<input type='text' class='search-input small' autocomplete='off' placeholder='Search...'>",
-            selectionHeader: "<input type='text' class='search-input small' autocomplete='off' placeholder='Search...'>",
-            afterInit: function(ms) {
-                var that = this,
-                    $selectableSearch = that.$selectableUl.prev(),
-                    $selectionSearch = that.$selectionUl.prev(),
-                    selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
-                    selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
+    dblClick: true,
+    selectableHeader: "<div class='header-wrapper'><input type='text' class='search-input small mb-2' autocomplete='off' placeholder='Search...'><button type='button' class='clear-btn'>&times;</button></div>",
+    selectionHeader: "<div class='header-wrapper'><input type='text' class='search-input small mb-2' autocomplete='off' placeholder='Search...'><button type='button' class='clear-btn'>&times;</button></div>",
+    afterInit: function(ms) {
+        var that = this,
+            $selectableSearch = that.$selectableUl.prev().find('.search-input'),
+            $selectionSearch = that.$selectionUl.prev().find('.search-input'),
+            selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
+            selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
 
-                that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
-                    .on('keydown', function(e) {
-                        if (e.which === 40) {
-                            that.$selectableUl.focus();
-                            return false;
-                        }
-                    });
+        that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+            .on('keydown', function(e) {
+                if (e.which === 40) {
+                    that.$selectableUl.focus();
+                    return false;
+                }
+            });
 
-                that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
-                    .on('keydown', function(e) {
-                        if (e.which == 40) {
-                            that.$selectionUl.focus();
-                            return false;
-                        }
-                    });
-            },
-            afterSelect: function() {
-                this.qs1.cache();
-                this.qs2.cache();
-            },
-            afterDeselect: function() {
-                this.qs1.cache();
-                this.qs2.cache();
-            }
+        that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+            .on('keydown', function(e) {
+                if (e.which == 40) {
+                    that.$selectionUl.focus();
+                    return false;
+                }
+            });
+
+        // Add event listener for clear button
+        $('.clear-btn').on('click', function(){
+            var $input = $(this).prev('.search-input');
+            $input.val('').trigger('keyup');
         });
+    },
+    afterSelect: function() {
+        this.qs1.cache();
+        this.qs2.cache();
+    },
+    afterDeselect: function() {
+        this.qs1.cache();
+        this.qs2.cache();
+    }
+});
+
      
         tinymce.init({
   selector: 'textarea#default',
@@ -162,10 +166,19 @@
 </script>
 @endsection
 @section('style')
-<style>
+<style scoped>
     .small {
-  width: 100px;
+  width: 90%;
   height: 30px;
-  font-size: 14px; }
+  font-size: 8pt;
+  
+   }
+   .ms-container {
+    font-family: verdana;
+    width: 530px;
+   }
+   .ms-container .ms-selectable li.ms-elem-selectable, .ms-container .ms-selection li.ms-elem-selection {
+    font-size: 8pt;
+   }
 </style>
 @endsection

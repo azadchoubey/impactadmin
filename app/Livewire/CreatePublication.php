@@ -37,7 +37,7 @@ class CreatePublication extends Component
     public $RateNB;
     public $masthead;
     public $checkboxes =[];
-    public $primaryDisabled = true; 
+    public $primaryDisabled = false; 
     protected $rules = [
         'title' => 'required',
         'type'=>'required',
