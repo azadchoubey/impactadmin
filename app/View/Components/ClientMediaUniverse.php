@@ -3,6 +3,7 @@
 namespace App\View\Components;
 
 use App\Models\MediaUniverse;
+use App\Models\MediaUniverseMaster;
 use App\Models\Picklist;
 use App\Models\Pubmaster;
 use Closure;
@@ -12,14 +13,14 @@ use Illuminate\View\Component;
 
 class ClientMediaUniverse extends Component
 {
-    public $comments,$clientid,$Language, $clientlang, $Edition, $clientedition, $clientnewspapercat, $Newspapercat, $Magazinecat, $clientmagazinecat;
+    public $newspapers, $Magazines,$clientmagazines, $clientnewspaper, $comments, $clientid, $Language, $clientlang, $Edition, $clientedition, $clientnewspapercat, $Newspapercat, $Magazinecat, $clientmagazinecat;
     /**
      * Create a new component instance.
      */
     public function __construct($clientid)
     {
         $this->clientid = $clientid;
-       
+
         $subquery = MediaUniverse::select('tagId')
             ->where('clientId', $clientid)
             ->where('type', 'Language');
@@ -30,7 +31,7 @@ class ClientMediaUniverse extends Component
             ->distinct()
             ->orderBy('picklist.name')
             ->get();
-            $this->clientlang = Picklist::select('picklist.name as Name', 'picklist.id as ID')
+        $this->clientlang = Picklist::select('picklist.name as Name', 'picklist.id as ID')
             ->join('media_universe as mucp', 'mucp.tagId', '=', 'picklist.id')
             ->where('mucp.type', 'Language')
             ->where('mucp.clientId', $clientid)
@@ -48,13 +49,13 @@ class ClientMediaUniverse extends Component
             ->orderBy('picklist.name')
             ->get();
 
-            $this->clientedition = Picklist::select(DB::raw('distinct picklist.name as Name'), 'picklist.id as ID')
+        $this->clientedition = Picklist::select(DB::raw('distinct picklist.name as Name'), 'picklist.id as ID')
             ->join('media_universe as mucp', 'mucp.tagId', '=', 'picklist.id')
             ->where('mucp.type', 'Edition')
             ->where('mucp.clientId', $clientid)
             ->orderBy('picklist.name')
             ->get();
-            $subquery = Mediauniverse::select('tagId')
+        $subquery = Mediauniverse::select('tagId')
             ->where('clientId', $clientid)
             ->where('type', 'Newspaper')
             ->where('tag', 'B');
@@ -68,7 +69,7 @@ class ClientMediaUniverse extends Component
             ->orderBy('picklist.Name')
             ->get();
 
-            $this->clientnewspapercat = Mediauniverse::select(DB::raw('distinct picklist.Name as Category'), 'picklist.ID as catid')
+        $this->clientnewspapercat = Mediauniverse::select(DB::raw('distinct picklist.Name as Category'), 'picklist.ID as catid')
             ->leftJoin('picklist', 'media_universe.tagId', '=', 'picklist.ID')
             ->leftJoin('pub_master', 'picklist.ID', '=', 'pub_master.Category')
             ->where('pub_master.primaryPubId', 0)
@@ -80,7 +81,7 @@ class ClientMediaUniverse extends Component
             ->orderBy('Category')
             ->get();
 
-            $subquery = Mediauniverse::select('tagId')
+        $subquery = Mediauniverse::select('tagId')
             ->where('clientId', $clientid)
             ->where('type', 'Magazine')
             ->where('tag', 'B')
@@ -94,7 +95,7 @@ class ClientMediaUniverse extends Component
             ->whereNotIn('pub_master.Category', $subquery)
             ->orderBy('picklist.Name')
             ->get();
-            $this->clientmagazinecat = MediaUniverse::selectRaw('DISTINCT picklist.Name as Category, picklist.ID as catid')
+        $this->clientmagazinecat = MediaUniverse::selectRaw('DISTINCT picklist.Name as Category, picklist.ID as catid')
             ->leftJoin('picklist', 'media_universe.tagid', '=', 'picklist.ID')
             ->leftJoin('pub_master', 'picklist.ID', '=', 'pub_master.Category')
             ->where('pub_master.primaryPubId', 0)
@@ -105,16 +106,65 @@ class ClientMediaUniverse extends Component
             ->whereNotNull('picklist.ID')
             ->orderBy('Category')
             ->get();
-            $this->comments =  DB::connection('mysql2')->table('wm_users')
+        $this->comments =  DB::connection('mysql2')->table('wm_users')
             ->join('MUComment', 'wm_users.login', '=', 'MUComment.user')
             ->where('MUComment.clientid', $clientid)
             ->where('MUComment.isdeleted', 'No')
             ->orderBy('MUComment.id', 'desc')
             ->select('wm_users.fullname', 'MUComment.comment', 'MUComment.createddatetime', 'MUComment.id')
             ->get();
+        $this->newspapers = Pubmaster::select('pub_master.Title as title', 'pub_master.PubId as pubid', 'picklist.Name as ediPlace')
+            ->join('picklist', 'pub_master.Place', '=', 'picklist.ID')
+            ->where('pub_master.Type', 230)
+            ->where('pub_master.PrimaryPubID', 0)
+            ->where('pub_master.deleted', 0)
+            ->whereNotIn('pub_master.pubid', function ($query) use ($clientid) {
+                $query->select('mum.pubid')
+                    ->from('media_universe_master as mum')
+                    ->join('pub_master as pm', 'mum.pubid', '=', 'pm.PubId')
+                    ->where('mum.clientid', $clientid)
+                    ->where('pm.Type', 230)
+                    ->where('pm.PrimaryPubID', 0)
+                    ->where('pm.deleted', 0);
+            })
+            ->where('pub_master.deleted', 0)
+            ->orderBy('pub_master.Title')
+            ->get();
+        $this->clientnewspaper = MediaUniverseMaster::select('media_universe_master.pubid as pubid', 'pm.Title as title', 'pl.Name as ediPlace')
+            ->join('pub_master as pm', 'media_universe_master.pubid', '=', 'pm.PubId')
+            ->join('picklist as pl', 'pm.Place', '=', 'pl.ID')
+            ->where('media_universe_master.clientid', $clientid)
+            ->where('pm.Type', 230)
+            ->where('pm.PrimaryPubID', 0)
+            ->where('pm.deleted', 0)
+            ->orderBy('pm.Title')
+            ->get();
+        $this->Magazines = PubMaster::select('pub_master.Title as title', 'pub_master.PubId as pubid', 'picklist.Name as ediPlace')
+            ->join('picklist', 'pub_master.Place', '=', 'picklist.ID')
+            ->where('pub_master.Type', 229)
+            ->where('pub_master.PrimaryPubID', 0)
+            ->where('pub_master.deleted', 0)
+            ->whereNotIn('pub_master.pubid', function ($query) use ($clientid) {
+                $query->select('pubid')
+                    ->from(DB::raw("(SELECT mum.pubid as pubid
+                              FROM media_universe_master as mum
+                              join pub_master as pm on mum.pubid = pm.PubId
+                              where clientid = '{$clientid}' AND pm.Type = 229 AND pm.PrimaryPubID = 0 AND pm.deleted = 0) as t"));
+            })
+            ->where('deleted', 0)
+            ->get();
+            $this->clientmagazines = MediaUniverseMaster::select('media_universe_master.pubid as pubid', 'pm.Title as title', 'pl.Name as ediPlace')
+            ->join('pub_master as pm', 'media_universe_master.pubid', '=', 'pm.PubId')
+            ->join('picklist as pl', 'pm.Place', '=', 'pl.ID')
+            ->where('media_universe_master.clientid', $clientid)
+            ->where('pm.Type', 229)
+            ->where('pm.PrimaryPubID', 0)
+            ->where('pm.deleted', 0)
+            ->orderBy('pm.Title')
+            ->get();
     }
 
-   
+
     public function render(): View|Closure|string
     {
         return view('components.client-media-universe');

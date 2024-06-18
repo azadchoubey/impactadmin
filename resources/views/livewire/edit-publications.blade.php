@@ -8,6 +8,7 @@
             Processing ...
         </button>
         </div>
+        <x-sticky-header title="" name="Edit Publication Name : {{$this->title}}" subtitle="PubId : {{$this->pubid}}" />
     <form wire:submit.prevent="submitForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 p-4">
         <div class="mr-3 bg-white-300 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 p-4 dark:bg-gray-800 dark:border-gray-700">
             <div class="grid grid-cols-2 gap-3">

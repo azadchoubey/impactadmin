@@ -1,7 +1,9 @@
 @extends('layouts.default')
 
 @section('content')
-<div class="container mx-auto p-6 bg-white rounded-md shadow-md">
+<x-sticky-header title="Client Profile" subtitle="Clientid : {{$data->ClientID}}" name="Client Name : {{ $data->Name }}" />
+
+<div class="container mx-auto px-3 bg-white rounded-md shadow-md">
 @if(session()->has('success'))
     <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
         <span class="font-medium">{{ session()->get('success') }}</span>
@@ -61,13 +63,13 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4 mb-6">
                         <div>
                             <label for="client_id" class="block text-sm font-medium text-gray-700">Client ID</label>
-                            <input value="{{$data->ClientID}}" id="client_id" name="client_id" type="text" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <input value="{{$data->ClientID}}" id="client_id" name="client_id" type="text" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         </div>
                         <div disabled>
                             <label for="broadcast" class="block text-sm font-medium text-gray-700">Broadcast</label>
                             <div class="flex items-center">
                                 <input type="checkbox" {{$data->broadcastcid?'checked':''}} id="broadcastCheckbox" class="mr-2" disabled>
-                                <input type="text" value="{{ $data->broadcastcid }}" id="broadcastText" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled>
+                                <input type="text" value="{{ $data->broadcastcid }}" id="broadcastText" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled>
                             </div>
                         </div>
 
@@ -75,7 +77,7 @@
                             <label for="primary" class="block text-sm font-medium text-gray-700">Primary Client</label>
                             <div class="flex items-center">
                                 <input type="checkbox" name="primary" {{$data->PriClientID ? 'checked' : ''}} id="primaryCheckbox" class="mr-2" disabled>
-                                <select name="primary_client_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled>
+                                <select name="primary_client_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled>
                                     @foreach($clients as $client)
                                     <option {{$data->PriClientID == $client->ClientID}} value="{{$client->ClientID}}">{{$client->Name}}</option>
                                     @endforeach
@@ -85,13 +87,13 @@
                                            
                         <div>
                             <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
-                            <input id="name" name="Name" value="{{$data->Name}}" type="text" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <input id="name" name="Name" value="{{$data->Name}}" type="text" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         </div>
 
                         
                         <div>
                             <label for="sector" class="block text-sm font-medium text-gray-700">Industory / Sector</label>
-                            <select name="SectorPid" id="SectorPid" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled>
+                            <select name="SectorPid" id="SectorPid" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled>
                                 <option value="">Select Option</option>
                                 @foreach($picklist['sector'] as $sector)
                                     <option {{$data->sector->ID == $sector->ID ? 'selected' : ''}} value="{{$sector->ID}}">{{$sector->Name}}</option>
@@ -102,13 +104,13 @@
                         
                         <div>
                             <label for="mobile" class="block text-sm font-medium text-gray-700">Mobile No</label>
-                            <input name="Mobile"  value="{{$data->Mobile}}"type="text" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <input name="Mobile"  value="{{$data->Mobile}}"type="text" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             @error('Mobile') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
 
                         </div>
                         <div>
                             <label for="reference" class="block text-sm font-medium text-gray-700">Reference</label>
-                            <select disabled name="Reference" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <select disabled name="Reference" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 
                             @foreach($picklist['client source'] as $source)
                             <option {{$data->Reference == $source->ID ?'selected':''}} value="{{$source->ID}}">{{$source->Name}}</option>
@@ -119,11 +121,11 @@
                      
                         <div>
                             <label for="contractstart" class="block text-sm font-medium text-gray-700">Contract Start</label>
-                            <input name="contractstart" id="contractstart" value="{{$data->StartDate}}" disabled type="date"class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <input name="contractstart" id="contractstart" value="{{$data->StartDate}}" disabled type="date"class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         </div>
                         <div>
                             <label for="type" class="block text-sm font-medium text-gray-700">Type</label>
-                            <select disabled name="Type" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <select disabled name="Type" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             <option value="">Select Option</option>
                             @foreach($picklist['client type'] as $type)
                             <option {{$type->ID ==$data->Type ? 'selected':''}} value="{{$type->ID}}">{{$type->Name}}</option>
@@ -133,13 +135,13 @@
                         </div>                    
                         <div>
                             <label for="currency" class="block text-sm font-medium text-gray-700">Currency</label>
-                            <input id="currency" name="Currency" value="{{$data->Currency}}" type="text" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <input id="currency" name="Currency" value="{{$data->Currency}}" type="text" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             @error('Currency') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
 
                         </div>
                         <div>
                             <label for="region" class="block text-sm font-medium text-gray-700">Region</label>
-                            <select disabled name="Region" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <select disabled name="Region" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             @foreach($picklist['region'] as $region)
                             <option value="{{$region->ID}}">{{$region->Name}}</option>
                             @endforeach
@@ -149,7 +151,7 @@
                        
                         <div>
                             <label for="client" class="block text-sm font-medium text-gray-700">Client Logo</label>
-                            <input id="client" type="file" name="Logo" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <input id="client" type="file" name="Logo" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         </div>                        
                         
                     </div>
@@ -172,7 +174,7 @@
                                 </div>
                                 <div>
                                     <label for="billingcycle" class="block text-sm font-medium text-gray-700">Billing Cycle</label>
-                                    <select name="BillCycleID" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled>
+                                    <select name="BillCycleID" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled>
                                         <option value=""></option>
                                         @foreach($picklist['bill cycle'] as $billingcycle)
                                         <option value="{{$billingcycle->ID}}" {{$billingcycle->ID == $data->BillCycleID ? 'selected' : ''}}>{{$billingcycle->Name}}</option>
@@ -183,15 +185,15 @@
                                 
                                 <div>
                                     <label for="billingdate" class="block text-sm font-medium text-gray-700">Billing Date</label>
-                                    <input name="BillDate" id="billingcycle" type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{ $data->BillDate ?? '' }}" disabled>
+                                    <input name="BillDate" id="billingcycle" type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{ $data->BillDate ?? '' }}" disabled>
                                 </div>
                                 <div>
                                     <label for="billingrate" class="block text-sm font-medium text-gray-700">Billing Rate</label>
-                                    <input id="billingrate" type="text" name="BillRate" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"value="{{ $data->BillRate ?? '' }}" disabled>
+                                    <input id="billingrate" type="text" name="BillRate" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"value="{{ $data->BillRate ?? '' }}" disabled>
                                 </div>
                                 <div>
                                     <label for="print" class="block text-sm font-medium text-gray-700">Print Status</label>
-                                    <select name="Status" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled>
+                                    <select name="Status" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled>
                                         @foreach($picklist['client status'] as $status)
                                         <option {{$data->Status == $status->ID ?'selected':''}} value="{{$status->ID}}">{{$status->Name}}</option>
                                         @endforeach
@@ -218,7 +220,7 @@
                     </div>
                     <div>
                         <label for="billingcycle" class="block text-sm font-medium text-gray-700">Billing Cycle</label>
-                        <select name="wm_billingcycle" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <select name="wm_billingcycle" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             @foreach($picklist['bill cycle'] as $billingcycle)
                             <option value="{{$billingcycle->ID}}" {{$billingcycle->ID == $data->wm_billingcycle ? 'selected' : ''}}>{{$billingcycle->Name}}</option>
                             @endforeach
@@ -226,15 +228,15 @@
                     </div>
                     <div>
                         <label for="billingdate" class="block text-sm font-medium text-gray-700">Billing Date</label>
-                        <input name="wm_billingdate" type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{$data->wm_billingdate ?? ''}}">
+                        <input name="wm_billingdate" type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{$data->wm_billingdate ?? ''}}">
                     </div>
                     <div>
                         <label for="billingrate" class="block text-sm font-medium text-gray-700">Billing Rate</label>
-                        <input id="" type="text" name="wm_billingrate" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{$data->wm_billingrate}}">
+                        <input id="" type="text" name="wm_billingrate" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{$data->wm_billingrate}}">
                     </div>
                     <div>
                         <label for="webstatus" class="block text-sm font-medium text-gray-700">Web Status</label>
-                        <select name="wm_status" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <select name="wm_status" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             @foreach($picklist['client status'] as $status)
                             <option value="{{$status->ID}}" {{$data->wm_status == $status->ID ? 'selected' : ''}}>{{$status->Name}}</option>
                             @endforeach
@@ -261,7 +263,7 @@
                     </div>
                     <div>
                         <label for="webstatus" class="block text-sm font-medium text-gray-700">Twitter Status</label>
-                        <select name="wm_twitter_status" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <select name="wm_twitter_status" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             <option></option>
                             @foreach($picklist['client status'] as $status)
                             <option {{$data->wm_twitter_status == $status->ID ? 'selected' : ''}} value="{{$status->ID}}">{{$status->Name}}</option>
@@ -272,23 +274,20 @@
             </fieldset>
             
             <fieldset class="border border-gray-300 p-6 rounded-lg" disabled>
-                <legend class="text-sm font-medium text-gray-900">Other Monitoring Parameters</legend>
-                <div>
-                    <label for="type" class="block text-sm font-medium text-gray-700">Enable for WhatsApp</label>
+                <legend class="text-sm font-medium text-gray-900 ">Other Monitoring Parameters Enable For</legend>
+                <div class="flex items-center gap-2">
+                    <label for="type" class="block text-sm font-medium text-gray-700">WhatsApp</label>
                     <input type="checkbox" name="enableforwhatsapp" value="1" {{$data->enableforwhatsapp == 1 ? 'checked' : ''}}>
-                </div>
-                <div>
-                    <label for="type" class="block text-sm font-medium text-gray-700">Enable for YouTube</label>
+                    <label for="type" class="block text-sm font-medium text-gray-700"> YouTube</label>
                     <input type="checkbox" name="enableforyoutube" value="1" {{$data->enableforyoutube == 1 ? 'checked' : ''}}>
-                </div>
-                <div>
-                    <label for="type" class="block text-sm font-medium text-gray-700">Enable for DYNA</label>
+                    <label for="type" class="block text-sm font-medium text-gray-700"> YouTube</label>
+                    <input type="checkbox" name="enableforyoutube" value="1" {{$data->enableforyoutube == 1 ? 'checked' : ''}}>
+                    <label for="type" class="block text-sm font-medium text-gray-700">DYNA</label>
                     <input type="checkbox" name="enablefordidyounotice" value="1" {{$data->enablefordidyounotice == 1 ? 'checked' : ''}}>
-                </div>
-                <div>
-                    <label for="type" class="block text-sm font-medium text-gray-700">Enable for Full-Text</label>
+                    <label for="type" class="block text-sm font-medium text-gray-700">Full-Text</label>
                     <input type="checkbox" name="enableforfulltext" value="1" {{$data->enableforfulltext == 1 ? 'checked' : ''}}>
                 </div>
+              
             </fieldset>
             
         </div>
@@ -297,6 +296,16 @@
                             Save
                         </button>
                         <button type="button" onclick="enableAllDisabledItems()" id="editbtn" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-blue-600">Edit</button>
+                        <button type="button"  class="px-3 py-2 text-xs font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
+                        <div class="flex items-center">
+                            <svg class="h-4 w-4 text-white-500" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" />
+                                <line x1="4" y1="7" x2="20" y2="7" />
+                                <line x1="10" y1="11" x2="10" y2="17" />
+                                <line x1="14" y1="11" x2="14" y2="17" />
+                                <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                                <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                            </svg> Delete</button>
                     </div>
                 </form>
 
@@ -328,7 +337,7 @@
                             <th scope="col" class="px-6">Br</th>
                             <th scope="col" class="px-6">Twitter</th>
                             <th scope="col" class="px-6">Youtube</th>
-                            <th scope="col" class="px-6">Smartdas</th>
+                            <th scope="col" class="px-6">Smartdash</th>
                             <th scope="col" class="px-6">Whatsapp</th>
                             <th scope="col" class="px-6">Mediatouch</th>
                             <th scope="col" class="px-6">Dyna</th>
@@ -343,43 +352,13 @@
                                     <input type="checkbox" onchange="updateEditButtonVisibility()" value="{{$contact->contactid}}" class="form-checkbox checkboxes">
                                 </td> -->
                                 <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $contact->ContactName}}</td>
-                                <td class="editSection{{$contact->contactid}} px-6 py-4 hidden">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="wm_enableforprint" {{ $contact->wm_enableforprint ? 'checked' : '' }} />
-                                </td>
-                                <td class="editSection{{$contact->contactid}} px-6 py-4 hidden">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="wm_enableforweb" {{ $contact->wm_enableforweb ? 'checked' : '' }} />
-                                </td>
-
-                                <td class="editSection{{$contact->contactid}} px-6 py-4 hidden">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforbr" {{ $contact->enablefortwitter ? 'checked' : '' }} />
-                                </td>
-                                <td class="editSection{{$contact->contactid}} px-6 py-4 hidden">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforbr" {{ $contact->enableforyoutube ? 'checked' : '' }} />
-                                </td>
-                                <td class="editSection{{$contact->contactid}} px-6 py-4 hidden">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforbr" {{ $contact->enableforyoutube ? 'checked' : '' }} />
-                                </td>
-                                <td class="editSection{{$contact->contactid}} px-6 py-4 hidden">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableforwhatsapp" {{ $contact->enableforwhatsapp ? 'checked' : '' }} />
-                                </td>
-                                <td class="editSection{{$contact->contactid}} px-6 py-4 hidden">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enableformediatouch" {{ $contact->enableformediatouch ? 'checked' : '' }} />
-                                </td>
-                                <td class="editSection{{$contact->contactid}} px-6 py-4 hidden">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="enablefordidyounotice" {{ $contact->enablefordidyounotice ? 'checked' : '' }} />
-                                </td>
-                                <td class="editSection{{$contact->contactid}} px-6 py-4 hidden">
-                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" name="delivery" {{ $contact->delivery->isNotEmpty() ? 'checked' : '' }} />
-                                </td>
-                               
-                                <td class="editSection{{$contact->contactid}} px-6 py-4 hidden"><a href="javascript:void(0);">Update</a></td>
-
+                                
                                 <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->wm_enableforprint?$check:$cross !!}</td>
                                 <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->wm_enableforweb?$check:$cross !!}</td>
                                 <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->enableforbr?$check:$cross !!}</td>
                                 <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->enablefortwitter?$check:$cross !!}</td>
                                 <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->enableforyoutube?$check:$cross !!}</td>
-                                <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->enableforyoutube?$check:$cross !!}</td>
+                                <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->dashboard?$check:$cross !!}</td>
                                 <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->enableforwhatsapp?$check:$cross !!}</td>
                                 <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->enableformediatouch?$check:$cross !!}</td>
                                 <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->enablefordidyounotice?$check:$cross !!}</td>
@@ -387,7 +366,6 @@
                               
                                 <td id="editButton" class="withoutEditSection{{$contact->contactid}} px-6 py-4"><a onclick="openmodal({{$contact->contactid}})"  data-modal-target="large-modal{{$contact->contactid}}" data-modal-toggle="large-modal{{$contact->contactid}}" href="javascript:void(0);">Edit</a></td>
                                 <x-edit-contact :contact="$contact" :picklist="$picklist" :deliverymaster="$deliverymaster" :webdeliverymaster="$webdeliverymaster" :client="$data" :formats="$formats" />
-
                             </tr>
                             @endforeach
                         </tbody>
@@ -607,24 +585,24 @@
                         <div class="grid grid-cols-3 gap-4 p-5">
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Contact Name</label>
-                                <input name="ContactName" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <input name="ContactName" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <div id="ContactName-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Mobile</label>
-                                <input name="Mobile" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <input name="Mobile" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <div id="Mobile-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
 
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">E-mail</label>
-                                <input name="Email" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <input name="Email" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <div id="Email-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
 
                             </div>
                             {{-- <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Contact Type</label>
-                                <select name="ContactType" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <select name="ContactType" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     <option value="">Select option</option>
                                     @if(isset($picklist['contacttype']))
                                     @foreach($picklist['contacttype'] as $contacttype)
@@ -635,42 +613,42 @@
                             </div> --}}
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Designation</label>
-                                <input name="Designation" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <input name="Designation" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <div id="Designation-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Phone</label>
-                                <input name="Phone" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <input name="Phone" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <div id="Phone-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Company</label>
-                                <input name="Company" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <input name="Company" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <div id="Company-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Fax</label>
-                                <input name="Fax" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <input name="Fax" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <div id="Fax-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Address 1</label>
-                                <input name="Address1" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <input name="Address1" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <div id="Address1-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Address 2</label>
-                                <input name="Address2" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <input name="Address2" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <div id="Address2-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Address 3</label>
-                                <input name="Address3" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <input name="Address3" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <div id="Address3-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Country</label>
-                                <select name="CountryID" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <select name="CountryID" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     <option value="">Select option</option>
                                     @foreach($picklist['country'] as $country)
                                     <option value="{{$country->ID}}">{{$country->Name}}</option>
@@ -680,7 +658,7 @@
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">City</label>
-                                <select name="CityID" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <select name="CityID" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     <option value="">Select option</option>
                                     @foreach($picklist['city'] as $City)
                                     <option value="{{$City->ID}}">{{$City->Name}}</option>
@@ -690,14 +668,44 @@
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Country Code</label>
-                                <input name="CountryCode" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <input name="CountryCode" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <div id="CountryCode-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Area Code</label>
-                                <input name="Pin" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <input name="Pin" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <div id="Pin-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
+                        </div>
+                    </fieldset>
+                    <fieldset class="border border-gray-300 p-6 rounded-lg">
+                        <legend class="text-sm font-medium text-gray-900">Enable Others Parameters</legend>
+                        <div class="grid grid-cols-3 gap-4 mt-3 p-5">
+                           
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Enable for BR</label>
+                                <input name="enableforbr" type="checkbox" value="1">
+                            </div>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Media Touch</label>
+                                <input name="enableformediatouch" value="1" type="checkbox">
+                            </div>
+                        
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Smartdash</label>
+                                <input name="dashboard" type="checkbox" value="1">
+                            </div> 
+                           
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">YouTube</label>
+                                <input name="enableforyoutube" type="checkbox" value="1">
+                            </div>
+                            <div>
+                                <label for="type" class="block text-sm font-medium text-gray-700">DYNA</label>
+                                <input name="enablefordidyounotice" type="checkbox" value="1">
+                            </div>
+
+                           
                         </div>
                     </fieldset>
                     <fieldset class="border border-gray-300 p-6 rounded-lg"{{$data->wm_enableforprint == 1 ? '' : 'disabled'}}>
@@ -710,7 +718,7 @@
                     
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Delivery Method Print</label>
-                                <select name="deliverymethod" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" {{$data->wm_enableforprint == 1 ? '' : 'disabled'}}>
+                                <select name="deliverymethod" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" {{$data->wm_enableforprint == 1 ? '' : 'disabled'}}>
                                     <option value="">Select option</option>
                                     @foreach($deliverymaster as $Delivery)
                                     <option value="{{$Delivery->id}}">{{$Delivery->deliverytime}}</option>
@@ -728,7 +736,7 @@
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Formats </label>
-                                <select name="format" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <select name="format" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     <option value="">Select option</option>
                                     @foreach($formats as $format)
                                     <option value="{{$format->id}}">{{$format->format_name}}</option>
@@ -738,7 +746,7 @@
                     
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Delivery Method</label>
-                                <select name="deliveryid[]" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" >
+                                <select name="deliveryid[]" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" >
                                     <option value="">Select option</option>
                                     @foreach($deliverymaster as $Delivery)
                                     <option value="{{$Delivery->id}}">{{$Delivery->deliverytime}}</option>
@@ -748,7 +756,7 @@
                             
                         </div>
                     </fieldset>
-                    
+             
                     <fieldset class="border border-gray-300 p-6 rounded-lg">
                         <legend class="text-sm font-medium text-gray-900">Web Monitoring Parameters</legend>
                         <div class="grid grid-cols-4 gap-4 mt-3 p-5">
@@ -762,7 +770,7 @@
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Delivery Method Web</label>
-                                <select name="wm_deliveryids[]" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <select name="wm_deliveryids[]" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     <option value="">Select option</option>
                                     @foreach($webdeliverymaster as $delivery)
                                     <option value="{{$delivery->id}}">{{$delivery->deliverytime}}</option>
@@ -785,7 +793,7 @@
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Phone No</label>
-                                <input name="whatsappnumber" type="text" placeholder="E.g. 919811223344" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg ps-10 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
+                                <input name="whatsappnumber" type="text" placeholder="E.g. 919811223344" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                             </div>
 
                         </div>
@@ -891,64 +899,7 @@
                         </fieldset>
                     </fieldset>
                 
-                    <fieldset class="border border-gray-300 p-6 rounded-lg">
-                        <legend class="text-sm font-medium text-gray-900">Enable Others Parameters</legend>
-                        <div class="grid grid-cols-3 gap-4 mt-3 p-5">
-                            <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700">Media Touch</label>
-                                <input name="enableformediatouch" value="1" type="checkbox">
-                            </div>
-                            <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700">DYNA</label>
-                                <input name="enablefordidyounotice" type="checkbox" value="1">
-                            </div>
-                            <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700">QLIKVIEW</label>
-                                <input name="enableforqlikview" type="checkbox" value="1">
-                            </div> 
-                            {{-- <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700">Enable for QUALIFY</label>
-                                <input name="enabletoqualify" type="checkbox" value="1">
-                            </div>  --}}
-                            <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700">YouTube</label>
-                                <input name="enableforyoutube" type="checkbox" value="1">
-                            </div>
-                           
-                            {{-- <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700">Enable for BR</label>
-                                <input name="enableforbr" type="checkbox" value="1">
-                            </div>
-                            <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700">Enable for BB</label>
-                                <input name="enableforbb" type="checkbox" value="1">
-                            </div> --}}
-                            {{-- <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700">Mobile</label>
-                                <input name="enableformobile" type="checkbox" value="1">
-                            </div> --}}
-                            {{-- <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700">Regular Print</label>
-                                <input name="regularDigestPrint" type="checkbox" value="1">
-                            </div>
-                            <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700">Regular Web</label>
-                                <input name="regularDigestWeb" type="checkbox" value="1">
-                            </div>
-                            <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700">Custom Digest</label>
-                                <input name="delivery" type="checkbox" value="1">
-                            </div> --}}
-                            <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700">Dashboard</label>
-                                <input name="dashboard" type="checkbox" value="1">
-                            </div>
-                            <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700">Broadcast</label>
-                                <input name="broadcast" type="checkbox" value="1">
-                            </div>
-                        </div>
-                    </fieldset>
+             
                 </div>
 
                 <div class="flex items-center p-4 md:p-5 space-x-3 rtl:space-x-reverse border-t border-gray-200 rounded-b dark:border-gray-600">
@@ -1442,7 +1393,7 @@ function openmodal(id){
         }
         
     });
-            $("#brandString").autocomplete({
+        $("#brandString").autocomplete({
         source: function(request, response) {
             $.ajax({
                 url: "{{ route('brandString') }}",
