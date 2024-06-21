@@ -10,11 +10,14 @@ use Illuminate\View\Component;
 class EditKeyword extends Component
 {
     public $keywordtypes ,$keywordcategories=[],$keyword;
-    public function __construct($keyword)
+    public function __construct($keyword, $keywordtypes ,$keywordcategories)
     {
-        $this->keywordtypes = Picklist::where('type','keyword Type')->orderBy('Name')->get();
-        $this->keywordcategories = Picklist::where('type','keyword category')->orderBy('Name')->get();
-        $this->keyword = $keyword;
+        if(!empty($keyword) && $keyword){
+            $this->keywordtypes = $keywordtypes;
+            $this->keywordcategories = $keywordcategories;
+            $this->keyword = $keyword;
+        }
+       
     }
 
     /**

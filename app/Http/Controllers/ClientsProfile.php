@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Livewire\ClientProfile;
 use App\Models\Bmdeliverymethod;
 use App\Models\ClinetContacts;
 use App\Models\Clinetprofile;
@@ -12,6 +13,7 @@ use App\Models\Deliverymethod;
 use App\Models\Deliverymethodmaster;
 use App\Models\Mongo\ClientContact;
 use App\Models\Picklist;
+use App\Models\Pubmaster;
 use App\Models\Wmwebdeliverymethod;
 use App\Models\Wmwebdeliverymethodmaster;
 use Illuminate\Http\Request;
@@ -19,6 +21,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Response;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Rels;
 
 class ClientsProfile extends Controller
@@ -421,7 +424,100 @@ class ClientsProfile extends Controller
         session()->flash('error', 'Operation Failed!');
         return response()->json(['error' => $e->getMessage()], 500);
     }
+    
 }
+public function downloadMediaUniverseReport(Request $request)
+    {
+        $clientId = $request->query('clid');
+        $newxls = md5(uniqid(rand(), true)) . ".csv";
+        $headers = [
+            "Content-Disposition" => "attachment; filename=" . $newxls,
+            'Content-Type' => 'application/ms-excel',
+        ];
 
+        $sql = "
+            SELECT pm.title as t, pm.type as ty, pl.Name as p, pll.name as lang, pm.Circulation as Circulation, pm.pubid as pid
+            FROM media_universe_master m
+            INNER JOIN pub_master pm ON m.pubid = pm.pubid
+            INNER JOIN picklist pl ON pm.Place = pl.ID
+            JOIN picklist pll ON pm.language = pll.id
+            WHERE m.clientId = ? AND pm.PrimaryPubID = 0 AND (pm.type = 230 OR pm.type = 229)
+            ORDER BY t, pm.type DESC, p ASC
+        ";
+
+        $results = DB::connection('mysql2')->select($sql, [$clientId]);
+        
+        $clientProfile = Clinetprofile::where('clientid', $clientId)->first();
+        $clientName = $clientProfile ? $clientProfile->Name : 'Unknown';
+
+        $contentsNews = "Media Universe For: " . $clientName . " (" . $clientId . ")\n";
+        $contentsNews .= "Publication,Edition,Language,Circulation,Pubid,Type\n";
+
+        foreach ($results as $row) {
+            $contentsNews .= strip_tags($row->t) . ",";
+            $contentsNews .= strip_tags($row->p) . ",";
+            $contentsNews .= strip_tags($row->lang) . ",";
+            $contentsNews .= strip_tags($row->Circulation) . ",";
+            $contentsNews .= strip_tags($row->pid) . ",";
+            $contentsNews .= ($row->ty == 230) ? "Newspaper\n" : "Magazine\n";
+        }
+
+        $contentsNews = strip_tags($contentsNews);
+
+        return Response::make($contentsNews, 200, $headers);
+    }
+    public function searchExceptional(Request $request)
+    {
+        $newsNMag = trim($request->input('newsNMag'));
+        $searchCriteria = $request->input('searchCriteria', 'name');
+        $selectedNewsIds = $request->input('newsPaper', []);
+        $selectedMagIds = $request->input('magzine', []);
+
+        $condition = ($searchCriteria == 'name') ? "pub_master.Title LIKE '{$newsNMag}%'" : "picklist.Name LIKE '{$newsNMag}%'";
+
+        // Fetch newspapers
+        $newsPublications = $this->fetchPublicationsByType(230, $condition, $selectedNewsIds);
+        // Fetch magazines
+        $magazinePublications = $this->fetchPublicationsByType(229, $condition, $selectedMagIds);
+
+        $arrResult = [
+            "news" => $newsPublications,
+            "magazine" => $magazinePublications,
+        ];
+
+        return response()->json($arrResult);
+    }
+
+    private function fetchPublicationsByType($type, $condition, $selectedIds)
+    {
+        $query = DB::table('pub_master')
+            ->select('pub_master.Title as Name', 'pub_master.PubId as ID', 'picklist.Name as ediPlace', 'pub_master.IsMain')
+            ->join('picklist', 'pub_master.Place', '=', 'picklist.ID')
+            ->where('pub_master.PrimaryPubId', 0)
+            ->where('pub_master.type', $type)
+            ->where('pub_master.deleted', 0)
+            ->whereRaw($condition);
+
+        if (!empty($selectedIds) && $selectedIds[0] != -420) {
+            $query->whereNotIn('pub_master.PubId', $selectedIds);
+        }
+
+        $publications = $query->orderBy('Name')
+                             ->get();
+
+        $result = '<select size="4" name="' . ($type == 230 ? 'newspaper' : 'magzine') . '" style="width:200px;" id="' . ($type == 230 ? 'newspaper' : 'magzine') . '" multiple="multiple">';
+        foreach ($publications as $publication) {
+            $style = ($publication->IsMain == 1) ? 'style="background-color:yellow;"' : '';
+            $result .= '<option value="' . $publication->ID . '" ' . $style . '>' . $publication->Name . ' (' . $publication->ediPlace . ')</option>';
+        }
+        $result .= '</select>';
+
+        if ($publications->isEmpty()) {
+            $result = '<select size="4" name="' . ($type == 230 ? 'newspaper' : 'magzine') . '" style="width:200px;" id="' . ($type == 230 ? 'newspaper' : 'magzine') . '" multiple="multiple"><option>No record found</option></select>';
+        }
+
+        return $result;
+    }
+    
     
 }

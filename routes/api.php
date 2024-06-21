@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\ClientsProfile;
+use App\Http\Controllers\FilterController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KeywordController;
@@ -27,4 +29,6 @@ Route::controller(KeywordController::class)->group(function () {
     Route::get('/companystring','companyString')->name('companyString');
     Route::get('/brandString','brandString')->name('brandString');
 });
-
+Route::post('/searchexceptional',[ClientsProfile::class,'searchExceptional'])->name('searchexceptional');
+Route::post('/filter',[FilterController::class,'filter'])->name('filter');
+Route::post('/saveselecteddata',[FilterController::class,'saveselecteddata'])->name('saveselecteddata');

@@ -1,6 +1,10 @@
 @extends('layouts.default')
 
 @section('content')
+@php
+    $keywordtypes = \App\Models\Picklist::where('type','keyword Type')->orderBy('Name')->get();
+    $keywordcategories = \App\Models\Picklist::where('type','keyword category')->orderBy('Name')->get();
+    @endphp
 <x-sticky-header title="Client Profile" subtitle="Clientid : {{$data->ClientID}}" name="Client Name : {{ $data->Name }}" />
 
 <div class="container mx-auto px-3 bg-white rounded-md shadow-md">
@@ -437,7 +441,7 @@
                                         <a href="javascript:void(0)" class="editkeyword" data-id="{{ $keyword->id }}" data-modal-target="large-modal{{$keyword->keyID}}" data-modal-toggle="large-modal{{$keyword->keyID}}" >Edit</a>
                                     </td>  
                                 </tr>
-                                <x-edit-keyword :keyword="$keyword" />
+                                <x-edit-keyword :keyword="$keyword"  :keywordtypes="$keywordtypes" :keywordcategories="$keywordcategories"/>
                                 @endforeach
                             </tbody>
                         </table>
@@ -559,7 +563,7 @@
             </div>
         </div>
     </div>
-    <x-createkeyword />                            
+    <x-createkeyword :keywordtypes="$keywordtypes" :keywordcategories="$keywordcategories"/>                            
     
     <div id="large-modal2" tabindex="-1" class="fixed top-0 left-60 right-0 z-50 w-full p-4 hidden overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative w-full max-w-4xl max-h-full">

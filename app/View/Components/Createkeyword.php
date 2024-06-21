@@ -11,10 +11,10 @@ class Createkeyword extends Component
 {
     public $keywordtypes ,$keywordcategories=[];
 
-    public function __construct()
+    public function __construct( $keywordtypes ,$keywordcategories)
     {
-        $this->keywordtypes = Picklist::where('type','keyword Type')->orderBy('Name')->get();
-        $this->keywordcategories = Picklist::where('type','keyword category')->orderBy('Name')->get();
+        $this->keywordtypes =  $keywordtypes;
+        $this->keywordcategories = $keywordcategories;
     }
 
     /**

@@ -13,7 +13,7 @@ use Illuminate\View\Component;
 
 class ClientMediaUniverse extends Component
 {
-    public $newspapers, $Magazines,$clientmagazines, $clientnewspaper, $comments, $clientid, $Language, $clientlang, $Edition, $clientedition, $clientnewspapercat, $Newspapercat, $Magazinecat, $clientmagazinecat;
+    public $newspapers, $selectpubnews, $Magazines, $clientmagazines, $clientnewspaper, $comments, $clientid, $Language, $clientlang, $Edition, $clientedition, $clientnewspapercat, $Newspapercat, $Magazinecat, $clientmagazinecat;
     /**
      * Create a new component instance.
      */
@@ -38,6 +38,7 @@ class ClientMediaUniverse extends Component
             ->distinct()
             ->orderBy('picklist.name')
             ->get();
+       
         $subquery = Mediauniverse::select('tagId')
             ->where('clientId', $clientid)
             ->where('type', 'Edition');
@@ -55,6 +56,7 @@ class ClientMediaUniverse extends Component
             ->where('mucp.clientId', $clientid)
             ->orderBy('picklist.name')
             ->get();
+
         $subquery = Mediauniverse::select('tagId')
             ->where('clientId', $clientid)
             ->where('type', 'Newspaper')
@@ -130,7 +132,7 @@ class ClientMediaUniverse extends Component
             ->where('pub_master.deleted', 0)
             ->orderBy('pub_master.Title')
             ->get();
-        $this->clientnewspaper = MediaUniverseMaster::select('media_universe_master.pubid as pubid', 'pm.Title as title', 'pl.Name as ediPlace')
+        $this->clientnewspaper = MediaUniverseMaster::on('mysql2')->select('media_universe_master.pubid as pubid', 'pm.Title as title', 'pl.Name as ediPlace')
             ->join('pub_master as pm', 'media_universe_master.pubid', '=', 'pm.PubId')
             ->join('picklist as pl', 'pm.Place', '=', 'pl.ID')
             ->where('media_universe_master.clientid', $clientid)
@@ -153,7 +155,7 @@ class ClientMediaUniverse extends Component
             })
             ->where('deleted', 0)
             ->get();
-            $this->clientmagazines = MediaUniverseMaster::select('media_universe_master.pubid as pubid', 'pm.Title as title', 'pl.Name as ediPlace')
+        $this->clientmagazines = MediaUniverseMaster::on('mysql2')->select('media_universe_master.pubid as pubid', 'pm.Title as title', 'pl.Name as ediPlace')
             ->join('pub_master as pm', 'media_universe_master.pubid', '=', 'pm.PubId')
             ->join('picklist as pl', 'pm.Place', '=', 'pl.ID')
             ->where('media_universe_master.clientid', $clientid)
@@ -162,6 +164,7 @@ class ClientMediaUniverse extends Component
             ->where('pm.deleted', 0)
             ->orderBy('pm.Title')
             ->get();
+        $this->selectpubnews = Pubmaster::where('IsMain', 1)->pluck('PubId')->toArray();
     }
 
 
