@@ -519,5 +519,31 @@ public function downloadMediaUniverseReport(Request $request)
         return $result;
     }
     
-    
+    public function addComment(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'addcomment' => 'required|string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => 'Validation failed', 'errors' => $validator->errors()], 400);
+        }
+
+        $clientId = $request->input('clientId');
+        $user = auth()->user()->UserID;
+        $addcomment = $request->input('addcomment');
+
+        DB::table('MUComment')->insert([
+            'clientid' => $clientId,
+            'comment' => $addcomment,
+            'user' => $user,
+            'createddatetime' => now()
+        ]);
+
+        // Load the comments
+        $comments = $this->loadComment($clientId);
+
+        return response()->json(['comments' => $comments]);
+    }
+
 }

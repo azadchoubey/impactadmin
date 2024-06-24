@@ -1,5 +1,5 @@
 <div id="large-modal{{$contact->contactid}}" tabindex="-1" class="fixed top-0 left-60 right-0 z-50 w-full hidden overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-    <div class="relative w-full max-w-4xl max-h-full">
+    <div class="relative w-lg max-w-4xl max-h-full">
         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
         <div class="sticky top-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-600 z-50">
     <div class="flex items-center justify-between py-2 md:p-3 rounded-t">
@@ -18,9 +18,9 @@
                 @csrf
                 <input type="hidden" name="clientid" value="{{$client->ClientID}}">
                 <div class="p-4 md:p-3">
-                    <fieldset class="border border-gray-300 p-6 rounded-lg">
+                    <fieldset class="border border-gray-300 p-3 rounded-lg">
                         <legend class="text-sm font-medium text-gray-900">Personal Details</legend>
-                        <div class="grid grid-cols-3 gap-4 p-5">
+                        <div class="grid grid-cols-3 gap-4">
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Contact Name</label>
                                 <input name="ContactName" type="text" value="{{ $contact->ContactName}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -115,9 +115,9 @@
                         </div>
                     </fieldset>
                     
-                    <fieldset class="border border-gray-300 p-6 rounded-lg">
+                    <fieldset class="border border-gray-300 p-3 rounded-lg">
                         <legend class="text-sm font-medium text-gray-900">Enable Others Parameters</legend>
-                        <div class="grid grid-cols-3 gap-4 mt-3 p-5">
+                        <div class="grid grid-cols-3 gap-4 mt-3">
                         <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for BR</label>
                                 <input name="enableforbr" {{ $contact->enableforbr ? 'checked' : '' }}  type="checkbox" value="1">
@@ -143,9 +143,9 @@
                         
                            
                     </fieldset>
-                    <fieldset class="border border-gray-300 p-6 rounded-lg" {{$client->wm_enableforprint == 1 ? '' : 'disabled'}}>
+                    <fieldset class="border border-gray-300 p-2 rounded-lg" {{$client->wm_enableforprint == 1 ? '' : 'disabled'}}>
                         <legend class="text-sm font-medium text-gray-900">Print Monitoring Parameters</legend>
-                        <div class="grid grid-cols-3 gap-4 mt-4 p-5">
+                        <div class="grid grid-cols-3 gap-4 mt-4">
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for Print</label>
                                 <input name="wm_enableforprint" value="1" type="checkbox" {{$client->wm_enableforprint == 1 ? 'checked' : ''}} {{$client->wm_enableforprint == 1 ? '' : 'disabled'}}>
@@ -162,9 +162,9 @@
                             </div>
                         </div>
                     </fieldset>
-                    <fieldset class="border border-gray-300 p-6 rounded-lg">
+                    <fieldset class="border border-gray-300 p-2 rounded-lg">
                         <legend class="text-sm font-medium text-gray-900">Custom Digest</legend>
-                        <div class="flex flex-wrap justify-between items-center mt-4 p-5">
+                        <div class="flex flex-wrap justify-between items-center">
                             <div class="w-full sm:w-auto mb-4 sm:mb-0">
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for custom digest</label>
                                 <input name="wm_enableforweb" value="1" type="checkbox" {{$contact->delivery->isNotEmpty() ? 'checked' : ''}}>
@@ -194,9 +194,9 @@
                             </div>
                         </div>
                     </fieldset>
-                    <fieldset class="border border-gray-300 p-6 rounded-lg">
+                    <fieldset class="border border-gray-300 p-2 rounded-lg">
                         <legend class="text-sm font-medium text-gray-900">Web Monitoring Parameters</legend>
-                        <div class="grid grid-cols-4 gap-4 mt-3 p-5">
+                        <div class="grid grid-cols-4 gap-4">
                             <div class="{{$client->wm_enableforweb == 1 ? '' : 'disabled'}}">
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for Web</label>
                                 <input name="wm_enableforweb" type="checkbox" value="1" {{$client->wm_enableforweb == 1 ? 'checked' : ''}} {{$client->wm_enableforweb == 1 ? '' : 'disabled'}}>
@@ -218,9 +218,9 @@
                         </div>
                     </fieldset>
 
-                    <fieldset class="border border-gray-300 p-6 rounded-lg" {{$client->enableforwhatsapp == 1 ? '' : 'disabled'}}>
+                    <fieldset class="border border-gray-300 p-2 rounded-lg" {{$client->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                         <legend class="text-sm font-medium text-gray-900">WhatsApp Monitoring Parameters</legend>
-                        <div class="grid grid-cols-3 gap-4 mt-3 p-5">
+                        <div class="grid grid-cols-3 gap-4">
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for Whatsapp</label>
                                 <input name="enableforwhatsapp" value="1" type="checkbox" value="1" {{$client->enableforwhatsapp == 1 ? 'checked' : ''}} {{$client->enableforwhatsapp == 1 ? '' : 'disabled'}}>
@@ -235,9 +235,9 @@
                             </div>
 
                         </div>
-                        <fieldset class="border border-gray-300 p-6 rounded-lg">
+                        <fieldset class="border border-gray-300 p-2 rounded-lg">
                             <legend class="text-sm font-medium text-gray-900">Print</legend>
-                            <div class="grid grid-cols-4 gap-4 mt-3 p-5">
+                            <div class="grid grid-cols-4 gap-4">
                                 <div>
                                     <label for="type" class="block text-sm font-medium text-gray-700">Company News</label>
                                 </div>
@@ -285,9 +285,9 @@
                                 </div>
                             </div>
                         </fieldset>
-                        <fieldset class="border border-gray-300 p-6 rounded-lg">
+                        <fieldset class="border border-gray-300 p-2 rounded-lg">
                             <legend class="text-sm font-medium text-gray-900">Web</legend>
-                            <div class="grid grid-cols-4 gap-4 mt-3 p-5">
+                            <div class="grid grid-cols-4 gap-4">
                                 <div>
                                     <label for="type" class="block text-sm font-medium text-gray-700">Company News</label>
                                 </div>

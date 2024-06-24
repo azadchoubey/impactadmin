@@ -307,7 +307,7 @@
     <div class="flex flex-col items-center mb-4">
         <h2 class="block text-lg font-medium">Comments</h2>
         <textarea id="default"></textarea>
-        <button id="addCommentBtn" class="mt-2 bg-blue-500 text-white p-2 rounded ml-2">Add Comment</button>
+        <button id="add_comment" class="mt-2 bg-blue-500 text-white p-2 rounded ml-2">Add Comment</button>
         <table class="w-4/5	 table-auto border-collapse mt-4">
             <thead>
                 <tr class="bg-blue-500 text-white">
@@ -672,6 +672,21 @@ $(document).ready(function () {
         sortOptions('editionSelect1');
         sortOptions('newspaperSelect1');
         sortOptions('magazineSelect1'); 
+        
+$('#add_comment').click(function (e) {
+    e.preventDefault();
+    var comment = $('#default').val();
+    jQuery.ajax({
+       type: "POST",
+       url: "ajaxComment.php",
+       async: false,
+       cache: false,
+       data: "addcomment="+comment + "&clientid={{$clientid}}",
+       success: function (response) {
+          window.location.reload();
+       }
+   });
+   });
 });
 </script>
 @endsection
