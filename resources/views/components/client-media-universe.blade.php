@@ -676,13 +676,18 @@ $(document).ready(function () {
 $('#add_comment').click(function (e) {
     e.preventDefault();
     var comment = $('#default').val();
+    var clientid = '{{ $clientid }}';
+    var csrfToken = '{{csrf_token()}}';
     jQuery.ajax({
        type: "POST",
-       url: "ajaxComment.php",
+       url: "{{route('addcomment')}}",  
        async: false,
        cache: false,
-       data: "addcomment="+comment + "&clientid={{$clientid}}",
-       success: function (response) {
+       data: {
+            addcomment: comment,
+            clientid: clientid,
+            _token: csrfToken
+        },  success: function (response) {
           window.location.reload();
        }
    });
