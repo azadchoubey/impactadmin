@@ -467,7 +467,7 @@
                 </div>
             </div>
             <div class="rounded-lg bg-gray-50 dark:bg-gray-800" id="mediauniverse" role="tabpanel" aria-labelledby="media-universe">
-            <x-client-media-universe :clientid="$data->ClientID" />
+            <x-client-media-universe :clientid="$data->ClientID" :priority="$data->priority" :restrictedmu="$data->restricted_mu" />
             </div>
         </div>
     </div>
