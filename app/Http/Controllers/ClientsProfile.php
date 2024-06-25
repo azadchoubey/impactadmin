@@ -23,13 +23,15 @@ use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Rels;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class ClientsProfile extends Controller
 {
     public function index($id)
     {
         $data = Clinetprofile::with('contacts', 'contacts.delivery', 'contacts.delivery.deliveryformats', 'contacts.regularDigestPrint', 'contacts.regularDigestWeb', 'Country', 'Region', 'sector', 'keywords', 'billingcycle')->find(base64_decode($id));
-
         $keywords = $data->keywords;
         $contacts = $data->contacts;
         $picklist = Picklist::whereIn('Type', ['City', 'Country', 'Delivery Method', 'Sector Summary Delivery', 'contacttype','client type','client source','Region','bill cycle','client status','sector'])->get()->groupBy(function ($query) {
@@ -544,6 +546,217 @@ public function downloadMediaUniverseReport(Request $request)
 
         return response()->json(['status' =>true]);
     }
-    
+    public function export()
+    {
+        $data = DB::table('clientcontacts')
+            ->select(
+                'clientcontacts.ContactName as contactname',
+                'clientcontacts.Email as email',
+                'clientprofile.Name as name',
+                DB::raw("(case when(clientcontacts.wm_enableforweb=1) then 'Yes' else ' ' end) as webenable"),
+                DB::raw("(case when(clientcontacts.wm_enableforprint=1) then 'Yes' else ' ' end) as printenable"),
+                DB::raw("(case when(clientcontacts.enableforbr=1) then 'Yes' else ' ' end) as brenable"),
+                DB::raw("(case when(clientcontacts.enableforqlikview=1) then 'Yes' else ' ' end) as smartmeasure"),
+                DB::raw("(case when(clientcontacts.dashboard=1) then 'Yes' else ' ' end) as smartdashboard"),
+                DB::raw("if(picklist.Name='Digest- Broadcast - Every 24 Hours','Digest- Broadcast - Every 24 Hours','') as broadcast"),
+                DB::raw("if(picklist.Name<>'Digest- Broadcast - Every 24 Hours',picklist.Name,'') as printdigest"),
+                DB::raw("group_concat(SUBSTRING(wm_webdeliverymethod_master.deliverytime,1,2) ORDER BY wm_webdeliverymethod_master.deliverytime ASC) as webtime")
+            )
+            ->leftJoin('wm_webdeliverymethod', 'wm_webdeliverymethod.contactid', '=', 'clientcontacts.contactid')
+            ->leftJoin('wm_webdeliverymethod_master', 'wm_webdeliverymethod_master.id', '=', 'wm_webdeliverymethod.deliveryid')
+            ->leftJoin('clientprofile', 'clientprofile.ClientID', '=', 'clientcontacts.ClientID')
+            ->leftJoin('picklist', 'picklist.id', '=', 'clientcontacts.DeliveryID')
+            ->where(function($query) {
+                $query->where('clientprofile.status', 366)
+                      ->orWhere('clientprofile.wm_status', 366);
+            })
+            ->where(function($query) {
+                $query->where('clientcontacts.wm_enableforweb', 1)
+                      ->orWhere('clientcontacts.wm_enableforprint', 1)
+                      ->orWhere('clientcontacts.enableforbr', 1);
+            })
+            ->where('clientprofile.deleted', '<>', 1)
+            ->groupBy(
+                'clientcontacts.ClientID',
+                'clientcontacts.ContactName',
+                'clientcontacts.Email',
+                'clientprofile.Name'
+            )
+            ->get();
 
+        $filename = "Clientlist.xls";
+        
+        return Excel::download(new ClientsExport($data), $filename);
+    }
+    public function exportDetails()
+    {
+        $data = DB::table('clientprofile')
+            ->select(
+                'c1.Name as primaryc',
+                'clientprofile.Name as name',
+                'clientprofile.AddressLine1 as address1',
+                'clientprofile.AddressLine2 as address2',
+                'clientprofile.AddressLine3 as address3',
+                'clientprofile.City as city',
+                'clientprofile.State as state',
+                'clientprofile.Pin as pin',
+                'clientprofile.Currency as currency',
+                'p1.Name as clientsource',
+                'p2.Name as print',
+                'p3.Name as web',
+                
+                'p4.Name as region',
+                'p5.Name as billcycle',
+                'clientprofile.BillDate as billdate',
+                'clientprofile.BillRate as billrate',
+                'p6.Name as Sector',
+                'clientprofile.StartDate as startdate',
+                'clientprofile.endDate as enddate',
+                'p7.Name as type',
+
+                'clientprofile.broadcastcid as broadcastcid',
+            )
+            ->leftJoin('picklist as p1', 'p1.id', '=', 'clientprofile.Source')
+            ->leftJoin('picklist as p2', 'p2.id', '=', 'clientprofile.status')
+            ->leftJoin('picklist as p3', 'p3.id', '=', 'clientprofile.wm_status')
+            ->leftJoin('picklist as p4', 'p4.id', '=', 'clientprofile.Region')
+            ->leftJoin('picklist as p5', 'p5.id', '=', 'clientprofile.BillCycleID')
+            ->leftJoin('picklist as p6', 'p6.id', '=', 'clientprofile.SectorPid')
+            ->leftJoin('picklist as p7', 'p7.id', '=', 'clientprofile.Type')
+            ->leftJoin('clientprofile as c1', 'clientprofile.PriClientID', '=', 'c1.ClientID')
+            ->where('clientprofile.deleted', '!=', 1)
+            ->get()
+            ->map(function($row) {
+                $row->broadcastcid = ($row->broadcastcid != 'NULL' && $row->broadcastcid != '') ? 'Enable' : 'Disable';
+                return $row;
+            });
+
+        $filename = "ClientDetails.xls";
+        
+        return Excel::download(new ClientDetailsExport($data), $filename);
+    }
+    public function exportBrandStrings(Request $request)
+    {
+        $clid = $request->query('clid');
+        $data = DB::table('clientkeyword')
+            ->join('keyword_master', 'keyword_master.keyId', '=', 'clientkeyword.KeywordId')
+            ->select(
+                // 'keyword_master.KeyId as KeyId',
+                'keyword_master.KeyWord as Keyword',
+                'clientkeyword.Filter as Filter',
+                'keyword_master.Filter_String as FilterString',
+                'clientkeyword.Category as Category',
+                'clientkeyword.Type as Type',
+                'clientkeyword.CompanyS as CompanyS',
+                'clientkeyword.BrandS as BrandS'
+            )
+            ->where('clientkeyword.clientid', $clid)
+            ->orderBy('clientkeyword.Type', 'asc')
+            ->get();
+
+        $filename = "brandstrings.xls";
+
+        return Excel::download(new BrandStringsExport($data), $filename);
+    }
+}
+class ClientDetailsExport implements FromCollection, WithHeadings
+{
+    protected $data;
+
+    public function __construct($data)
+    {
+        $this->data = $data;
+    }
+
+    public function collection()
+    {
+        return $this->data;
+    }
+
+    public function headings(): array
+    {
+        return [
+            'Primary Client',
+            'Name',
+            'Address1',
+            'Address2',
+            'Address3',
+            'City',
+            'State',
+            'Pin',
+            'Currency',
+            'Client Source',
+            'Print',
+            'Web',
+            'Region',
+            'Billing Cycle',
+            'Billing Date',
+            'Billing Rate',
+            'Sector',
+            'Start Date',
+            'End Date',
+            'Type',
+            'Broadcast',
+
+        ];
+    }
+}
+
+class ClientsExport implements FromCollection, WithHeadings
+{
+    protected $data;
+
+    public function __construct($data)
+    {
+        $this->data = $data;
+    }
+
+    public function collection()
+    {
+        return $this->data;
+    }
+
+    public function headings(): array
+    {
+        return [
+            'Name',
+            'Contactname',
+            'Email',
+            'Print digest Frequency',
+            'Web digest Frequency',
+            'Broadcast digest Frequency',
+            'Print Access',
+            'Web Access',
+            'Broadcast Access',
+            'Smartmeasure Access',
+            'Smartdashboard Access'
+        ];
+    }    
+}
+class BrandStringsExport implements FromCollection, WithHeadings
+{
+    protected $data;
+
+    public function __construct($data)
+    {
+        $this->data = $data;
+    }
+
+    public function collection()
+    {
+        return $this->data;
+    }
+
+    public function headings(): array
+    {
+        return [
+            'Keyword',
+            'Filter',
+            'FilterString',
+            'Category',
+            'Type',
+            'Company_String',
+            'Brand_String'
+        ];
+    }
 }

@@ -13,13 +13,15 @@ use Illuminate\View\Component;
 
 class ClientMediaUniverse extends Component
 {
-    public $newspapers, $selectpubnews, $Magazines, $clientmagazines, $clientnewspaper, $comments, $clientid, $Language, $clientlang, $Edition, $clientedition, $clientnewspapercat, $Newspapercat, $Magazinecat, $clientmagazinecat;
+    public $priority ,$restrictedmu,$newspapers, $selectpubnews, $Magazines, $clientmagazines, $clientnewspaper, $comments, $clientid, $Language, $clientlang, $Edition, $clientedition, $clientnewspapercat, $Newspapercat, $Magazinecat, $clientmagazinecat;
     /**
      * Create a new component instance.
      */
-    public function __construct($clientid)
+    public function __construct($clientid,$priority,$restrictedmu)
     {
         $this->clientid = $clientid;
+        $this->restrictedmu = $restrictedmu;
+        $this->priority = $priority;
 
         $subquery = MediaUniverse::on('mysql2')->select('tagId')
             ->where('clientId', $clientid)
