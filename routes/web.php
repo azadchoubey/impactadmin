@@ -70,7 +70,7 @@ Route::get('/keywordsearch',KeywordSearch::class);
 Route::post('/saveArticle', [ArticleController::class, 'saveArticle'])->name('keywords.saveArticle');
 Route::post('/save-keyword', [KeywordController::class, 'saveKeyword'])->name('save.keyword');
 Route::post('/edit-keyword', [KeywordController::class, 'editKeyword'])->name('edit.keyword');
-
+Route::post('/addcomment', [ClientsProfile::class, 'addComment'])->name('addcomment');
 
 //report download 
 Route::get('/downloadmediauniverse',[ClientsProfile::class,'downloadMediaUniverseReport'])->name('downloadmediauniverse');

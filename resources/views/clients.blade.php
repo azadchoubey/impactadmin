@@ -288,7 +288,7 @@
                     <input type="checkbox" name="enableforyoutube" value="1" {{$data->enableforyoutube == 1 ? 'checked' : ''}}>
                     <label for="type" class="block text-sm font-medium text-gray-700">DYNA</label>
                     <input type="checkbox" name="enablefordidyounotice" value="1" {{$data->enablefordidyounotice == 1 ? 'checked' : ''}}>
-                    <label for="type" class="block text-sm font-medium text-gray-700">Full-Text</label>
+                    <label for="type" class="block text-sm font-medium text-gray-700">Fulltext</label>
                     <input type="checkbox" name="enableforfulltext" value="1" {{$data->enableforfulltext == 1 ? 'checked' : ''}}>
                 </div>
               

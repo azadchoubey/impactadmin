@@ -530,8 +530,7 @@ public function downloadMediaUniverseReport(Request $request)
         if ($validator->fails()) {
             return response()->json(['message' => 'Validation failed', 'errors' => $validator->errors()], 400);
         }
-
-        $clientId = $request->input('clientId');
+        $clientId = $request->input('clientid');
         $user = auth()->user()->UserID;
         $addcomment = $request->input('addcomment');
 
@@ -542,10 +541,10 @@ public function downloadMediaUniverseReport(Request $request)
             'createddatetime' => now()
         ]);
 
-        // Load the comments
-        $comments = $this->loadComment($clientId);
+        session()->flash('success', 'Comment Added Successfully!');
 
-        return response()->json(['comments' => $comments]);
+
+        return response()->json(['status' =>true]);
     }
     public function export()
     {
