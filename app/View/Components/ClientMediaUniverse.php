@@ -30,6 +30,7 @@ class ClientMediaUniverse extends Component
         $this->Language = Picklist::on('mysql2')->select('picklist.name as Name', 'picklist.id as ID')
             ->join('pub_master', 'pub_master.language', '=', 'picklist.id')
             ->whereNotIn('picklist.id', $subquery)
+            ->whereNotIn('picklist.id',[0])
             ->distinct()
             ->orderBy('picklist.name')
             ->get();
@@ -45,9 +46,7 @@ class ClientMediaUniverse extends Component
             ->where('type', 'Edition')
             ->pluck('tagId')
             ->first();
-    
         $additionalIds = [
-            -1 => 'All',
             -6 => '6 Cities',
             -8 => '6+2 Cities'
         ];
@@ -68,6 +67,7 @@ class ClientMediaUniverse extends Component
             $editionResults = Picklist::on('mysql2')->select('picklist.name as Name', 'picklist.id as ID')
             ->join('pub_master', 'pub_master.place', '=', 'picklist.id')
             ->whereNotIn('pub_master.place', $subquery)
+            ->whereNotIn('picklist.id',[0])
             ->distinct()
             ->orderBy('picklist.name')
             ->get();
