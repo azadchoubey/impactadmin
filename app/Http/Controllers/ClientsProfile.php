@@ -547,19 +547,19 @@ public function downloadMediaUniverseReport(Request $request)
     }
     public function export()
     {
-        $data = DB::table('clientcontacts')
+        $data = DB::connection('mysql2')->table('clientcontacts')
             ->select(
+                'clientprofile.Name as name',
                 'clientcontacts.ContactName as contactname',
                 'clientcontacts.Email as email',
-                'clientprofile.Name as name',
-                DB::raw("(case when(clientcontacts.wm_enableforweb=1) then 'Yes' else ' ' end) as webenable"),
+                DB::raw("if(picklist.Name<>'Digest- Broadcast - Every 24 Hours',picklist.Name,'') as printdigest"),
+                DB::raw("group_concat(SUBSTRING(wm_webdeliverymethod_master.deliverytime,1,2) ORDER BY wm_webdeliverymethod_master.deliverytime ASC) as webtime"),
+                DB::raw("if(picklist.Name='Digest- Broadcast - Every 24 Hours','Digest- Broadcast - Every 24 Hours','') as broadcast"),
                 DB::raw("(case when(clientcontacts.wm_enableforprint=1) then 'Yes' else ' ' end) as printenable"),
+                DB::raw("(case when(clientcontacts.wm_enableforweb=1) then 'Yes' else ' ' end) as webenable"),
                 DB::raw("(case when(clientcontacts.enableforbr=1) then 'Yes' else ' ' end) as brenable"),
                 DB::raw("(case when(clientcontacts.enableforqlikview=1) then 'Yes' else ' ' end) as smartmeasure"),
                 DB::raw("(case when(clientcontacts.dashboard=1) then 'Yes' else ' ' end) as smartdashboard"),
-                DB::raw("if(picklist.Name='Digest- Broadcast - Every 24 Hours','Digest- Broadcast - Every 24 Hours','') as broadcast"),
-                DB::raw("if(picklist.Name<>'Digest- Broadcast - Every 24 Hours',picklist.Name,'') as printdigest"),
-                DB::raw("group_concat(SUBSTRING(wm_webdeliverymethod_master.deliverytime,1,2) ORDER BY wm_webdeliverymethod_master.deliverytime ASC) as webtime")
             )
             ->leftJoin('wm_webdeliverymethod', 'wm_webdeliverymethod.contactid', '=', 'clientcontacts.contactid')
             ->leftJoin('wm_webdeliverymethod_master', 'wm_webdeliverymethod_master.id', '=', 'wm_webdeliverymethod.deliveryid')
@@ -589,7 +589,7 @@ public function downloadMediaUniverseReport(Request $request)
     }
     public function exportDetails()
     {
-        $data = DB::table('clientprofile')
+        $data = DB::connection('mysql2')->table('clientprofile')
             ->select(
                 'c1.Name as primaryc',
                 'clientprofile.Name as name',
@@ -637,7 +637,7 @@ public function downloadMediaUniverseReport(Request $request)
     public function exportBrandStrings(Request $request)
     {
         $clid = $request->query('clid');
-        $data = DB::table('clientkeyword')
+        $data = DB::connection('mysql2')->table('clientkeyword')
             ->join('keyword_master', 'keyword_master.keyId', '=', 'clientkeyword.KeywordId')
             ->select(
                 // 'keyword_master.KeyId as KeyId',
