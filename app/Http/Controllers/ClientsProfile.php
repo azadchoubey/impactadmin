@@ -657,6 +657,23 @@ public function downloadMediaUniverseReport(Request $request)
 
         return Excel::download(new BrandStringsExport($data), $filename);
     }
+    public function updateCheckbox(Request $request)
+    {
+        $clientId = $request->input('client_id');
+        $field = $request->input('field');
+        $value = $request->input('value');
+
+        // Update the client profile for the specified client ID
+        
+        if(Clinetprofile::where('ClientID', $clientId)->update([$field=>$value])){
+            return response()->json(['success' => true]);
+
+        }else{
+            return response()->json(['success' => false], 404);
+        }
+    
+    }
+
 }
 
 

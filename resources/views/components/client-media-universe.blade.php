@@ -1,8 +1,8 @@
 <div style="background-color:white;">
-    <div class="flex flex-col items-center ">
+    <div class="flex flex-col items-center">
         <div class="flex space-x-4">
             <label class="block text-sm font-medium">Client Priority</label>
-            <input type="checkbox" name="clientpriority" {{ $priority == 1 ? 'checked' : '' }}>
+            <input type="checkbox" name="clientpriority" id="clientpriority" {{ $priority == 1 ? 'checked' : '' }}>
             <label class="block text-sm font-medium">Restricted MU</label>
             <input type="checkbox" name="restrictedmu" id="restrictedmu" {{ $restrictedmu == 1 ? 'checked' : '' }}>
         </div>
@@ -333,6 +333,36 @@
 
 @section('scripts')
 <script>
+    $(document).ready(function() {
+        $('#clientpriority').change(function() {
+            var isChecked = $(this).is(':checked') ? 1 : 0;
+            updateDatabase('priority', isChecked);
+        });
+
+        $('#restrictedmu').change(function() {
+            var isChecked = $(this).is(':checked') ? 1 : 0;
+            updateDatabase('restricted_mu', isChecked);
+        });
+
+        function updateDatabase(field, value) {
+            $.ajax({
+                url: '{{ route("update.checkbox") }}', 
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    field: field,
+                    value: value,
+                    client_id:'{{$clientid}}'
+                },
+                success: function(response) {
+                    console.log('Database updated successfully');
+                },
+                error: function(xhr) {
+                    console.log('Error updating database');
+                }
+            });
+        }
+    });
     document.addEventListener('DOMContentLoaded', function () {
         const restrictedMUCheckbox = document.getElementById('restrictedmu');
 
