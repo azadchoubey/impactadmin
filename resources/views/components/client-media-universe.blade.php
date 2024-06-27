@@ -1,12 +1,11 @@
 <div style="background-color:white;">
-    <div class="flex flex-col items-center ">
+    <div class="flex flex-col items-center">
         <div class="flex space-x-4">
             <label class="block text-sm font-medium">Client Priority</label>
-            <input type="checkbox" name="clientpriority" {{ $priority == 1 ? 'checked' : '' }}>
+            <input type="checkbox" name="clientpriority" id="clientpriority" {{ $priority == 1 ? 'checked' : '' }}>
             <label class="block text-sm font-medium">Restricted MU</label>
-            <input type="checkbox" name="restrictedmu" {{ $restrictedmu == 1 ? 'checked' : '' }}>
+            <input type="checkbox" name="restrictedmu" id="restrictedmu" {{ $restrictedmu == 1 ? 'checked' : '' }}>
         </div>
-
     </div>
     <div class="grid grid-cols-2 gap-8 place-items-center">
         <div>
@@ -14,43 +13,43 @@
                 <label class="mb-4 block text-sm font-medium">Language</label>
             </div>
             <div class="flex justify-between w-full">
-                <div class="relative multiple mb-2">
-                    <input type="text" id="LanguageSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search..">
-                    <button id="clearLanguageSearch" class="absolute end-2.5 bottom-2.5 ">
-                        x
-                    </button>
-                </div>
-                <div class="relative multiple mb-2 items-right">
-                    <input type="text" id="LanguageSelectionSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search..">
-                    <button id="clearLanguageSelectionSearch" class="absolute end-2.5 bottom-2.5 ">
-                        x
-                    </button>
-                </div>
+            <div class="relative multiple mb-2">
+                <input type="text" id="LanguageSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search..">
+                <button id="clearLanguageSearch" class="absolute end-2.5 bottom-2.5 ">
+                    x
+                </button>
+            </div>
+            <div class="relative multiple mb-2 items-right">
+                <input type="text" id="LanguageSelectionSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search..">
+                <button id="clearLanguageSelectionSearch" class="absolute end-2.5 bottom-2.5 ">
+                    x
+                </button>
+            </div>
             </div>
             <div class="flex space-x-4">
                 <select id="languageSelect1" multiple class="multiple w-48 h-48 p-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    @if (count($clientlang)>0)
-                    <option value="-1">All</option>
+                     @if (count($clientlang)>0)
+                    <option  value="-1">All</option>   
                     @endif
                     @foreach ($Language as $lang)
-                    <option value="{{ $lang->ID }}">{{ $lang->Name }}</option>
+                        <option value="{{ $lang->ID }}">{{ $lang->Name }}</option>
                     @endforeach
-
+                   
                 </select>
                 <div class="flex flex-col justify-center items-center gap-2">
                     <button id="moveRightLang" class="bg-blue-500 text-white p-1 rounded">&gt;</button>
                     <button id="moveLeftLang" class="bg-blue-500 text-white p-1 rounded">&lt;</button>
                 </div>
-
+                
                 <select id="languageselection" class="multiple border p-2 rounded" multiple>
                     @forelse ($clientlang as $lang)
-                    <option selected value="{{ $lang->ID }}">{{ $lang->Name }}</option>
+                        <option selected value="{{ $lang->ID }}">{{ $lang->Name }}</option>
                     @empty
-                    <option selected value="-1">All</option>
+                        <option selected value="-1">All</option>
                     @endforelse
                 </select>
             </div>
-
+        
         </div>
 
         <div>
@@ -58,28 +57,28 @@
                 <label class="mb-4 block text-sm font-medium">Edition</label>
             </div>
             <div class="flex justify-between w-full">
-                <div class="relative multiple mb-2">
-                    <input type="text" id="EditionSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search..">
-                    <button id="clearEditionSearch" class="absolute end-2.5 bottom-2.5 ">
-                        x
-                    </button>
-                </div>
-                <div class="relative multiple mb-2">
-                    <input type="text" id="EditionSelectionSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search..">
-                    <button id="clearEditionSelectionSearch" class="absolute end-2.5 bottom-2.5 ">
-                        x
-                    </button>
-                </div>
+            <div class="relative multiple mb-2">
+                <input type="text" id="EditionSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search..">
+                <button id="clearEditionSearch" class="absolute end-2.5 bottom-2.5 ">
+                    x
+                </button>
+            </div>
+            <div class="relative multiple mb-2">
+                <input type="text" id="EditionSelectionSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search..">
+                <button id="clearEditionSelectionSearch" class="absolute end-2.5 bottom-2.5 ">
+                    x
+                </button>
+            </div>
             </div>
             <div class="flex space-x-4">
                 <select id="editionSelect1" multiple class="multiple w-48 h-48 p-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    @if (count($clientedition)>0)
-                    <option value="-1">All</option>
+                @if (count($clientedition)>0)
+                    <option  value="-1">All</option>   
                     @endif
                     @foreach ($Edition as $lang)
-                    <option value="{{ $lang->ID }}">{{ $lang->Name }}</option>
+                        <option value="{{ $lang->ID }}">{{ $lang->Name }}</option>
                     @endforeach
-
+                   
                 </select>
                 <div class="flex flex-col justify-center items-center gap-2">
                     <button id="moveRightEdition" class="bg-blue-500 text-white p-1 rounded">&gt;</button>
@@ -87,13 +86,12 @@
                 </div>
                 <select id="editionselection" class="multiple border p-2 rounded" multiple>
                     @forelse ($clientedition as $lang)
-                    <option selected value="{{ $lang->ID }}">{{ $lang->Name }}</option>
+                        <option selected value="{{ $lang->ID }}">{{ $lang->Name }}</option>
                     @empty
-                    <option selected value="-1">All</option>
+                        <option selected value="-1">All</option>
                     @endforelse
                 </select>
             </div>
-
         </div>
         <div>
             <div class="flex flex-col items-center">
@@ -347,16 +345,24 @@
 
 @section('scripts')
 <script>
-    function sortOptions(selectElement) {
-        var options = $(selectElement).find('option');
-        options = options.sort(function(a, b) {
-            if (a.text.toLowerCase() > b.text.toLowerCase()) return 1;
-            if (a.text.toLowerCase() < b.text.toLowerCase()) return -1;
-            return 0;
-        });
-
-     $(selectElement).empty().append(options);
-    }
+     function sortOptions(selectElement) {
+           
+           var options = $(selectElement).find('option');
+           console.log(options);
+           var emptyOption = options.filter(function() {        
+            return this.value === "";
+    });
+    
+    options = options.filter(function() {
+        return this.value !== "";
+    }).sort(function(a, b) {
+        if (a.text.toLowerCase() > b.text.toLowerCase()) return 1;
+        if (a.text.toLowerCase() < b.text.toLowerCase()) return -1;
+        return 0;
+    });
+    
+   // $(selectElement).empty().append(emptyOption).append(options);
+       }
     $(function() {
 
 

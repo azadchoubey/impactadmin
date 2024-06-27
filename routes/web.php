@@ -53,6 +53,7 @@ Route::post('/get-delivery-times', [ClientsProfile::class, 'getDeliveryTimes'])-
 Route::get('/export-clients', [ClientsProfile::class, 'export'])->name('clients.export');
 Route::get('/export-client-details', [ClientsProfile::class, 'exportDetails'])->name('clients.exportDetails');
 Route::get('/export-brand-strings', [ClientsProfile::class, 'exportBrandStrings'])->name('clients.exportBrandStrings');
+Route::post('/update-checkbox', [ClientsProfile::class, 'updateCheckbox'])->name('update.checkbox');
 
 
 
