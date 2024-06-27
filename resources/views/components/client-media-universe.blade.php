@@ -364,8 +364,6 @@
    // $(selectElement).empty().append(emptyOption).append(options);
        }
     $(function() {
-
-
         $('#magazineSearchInput').on('input', function() {
             filterOptions(this, document.getElementById('magazineSelect1'));
         });
