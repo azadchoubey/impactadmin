@@ -13,34 +13,28 @@
                 <label class="mb-4 block text-sm font-medium">Language</label>
             </div>
             <div class="flex justify-between w-full">
-            <div class="relative multiple mb-2">
-                <input type="text" id="LanguageSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search..">
-                <button id="clearLanguageSearch" class="absolute end-2.5 bottom-2.5 ">
-                    x
-                </button>
-            </div>
-            <div class="relative multiple mb-2 items-right">
-                <input type="text" id="LanguageSelectionSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search..">
-                <button id="clearLanguageSelectionSearch" class="absolute end-2.5 bottom-2.5 ">
-                    x
-                </button>
-            </div>
+                <div class="relative multiple mb-2">
+                    <input type="text" id="LanguageSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search..">
+                    <button id="clearLanguageSearch" class="absolute end-2.5 bottom-2.5 ">x</button>
+                </div>
+                <div class="relative multiple mb-2 items-right">
+                    <input type="text" id="LanguageSelectionSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search..">
+                    <button id="clearLanguageSelectionSearch" class="absolute end-2.5 bottom-2.5 ">x</button>
+                </div>
             </div>
             <div class="flex space-x-4">
                 <select id="languageSelect1" multiple class="multiple w-48 h-48 p-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                     @if (count($clientlang)>0)
-                    <option  value="-1">All</option>   
+                    @if (count($clientlang) > 0)
+                        <option value="-1">All</option>
                     @endif
                     @foreach ($Language as $lang)
                         <option value="{{ $lang->ID }}">{{ $lang->Name }}</option>
                     @endforeach
-                   
                 </select>
                 <div class="flex flex-col justify-center items-center gap-2">
                     <button id="moveRightLang" class="bg-blue-500 text-white p-1 rounded">&gt;</button>
                     <button id="moveLeftLang" class="bg-blue-500 text-white p-1 rounded">&lt;</button>
                 </div>
-                
                 <select id="languageselection" class="multiple border p-2 rounded" multiple>
                     @forelse ($clientlang as $lang)
                         <option selected value="{{ $lang->ID }}">{{ $lang->Name }}</option>
@@ -49,36 +43,30 @@
                     @endforelse
                 </select>
             </div>
-        
         </div>
-
+       
         <div>
             <div class="flex flex-col items-center">
                 <label class="mb-4 block text-sm font-medium">Edition</label>
             </div>
             <div class="flex justify-between w-full">
-            <div class="relative multiple mb-2">
-                <input type="text" id="EditionSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search..">
-                <button id="clearEditionSearch" class="absolute end-2.5 bottom-2.5 ">
-                    x
-                </button>
-            </div>
-            <div class="relative multiple mb-2">
-                <input type="text" id="EditionSelectionSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search..">
-                <button id="clearEditionSelectionSearch" class="absolute end-2.5 bottom-2.5 ">
-                    x
-                </button>
-            </div>
+                <div class="relative multiple mb-2">
+                    <input type="text" id="EditionSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search..">
+                    <button id="clearEditionSearch" class="absolute end-2.5 bottom-2.5 ">x</button>
+                </div>
+                <div class="relative multiple mb-2">
+                    <input type="text" id="EditionSelectionSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search..">
+                    <button id="clearEditionSelectionSearch" class="absolute end-2.5 bottom-2.5 ">x</button>
+                </div>
             </div>
             <div class="flex space-x-4">
                 <select id="editionSelect1" multiple class="multiple w-48 h-48 p-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                @if (count($clientedition)>0)
-                    <option  value="-1">All</option>   
+                    @if (count($clientedition) > 0)
+                        <option value="-1">All</option>
                     @endif
                     @foreach ($Edition as $lang)
                         <option value="{{ $lang->ID }}">{{ $lang->Name }}</option>
                     @endforeach
-                   
                 </select>
                 <div class="flex flex-col justify-center items-center gap-2">
                     <button id="moveRightEdition" class="bg-blue-500 text-white p-1 rounded">&gt;</button>
@@ -98,24 +86,24 @@
                 <label class="mb-4 block text-sm font-medium">Newspaper Categories</label>
             </div>
             <div class="flex justify-between w-full">
-                <div class="relative multiple mb-2">
-                    <input type="text" id="NewspaperSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search..">
-                    <button id="clearNewspaperSearch" class="absolute end-2.5 bottom-2.5 ">
-                        x
-                    </button>
-                </div>
-                <div class="relative multiple mb-2">
-                    <input type="text" id="NewspaperSelectionSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search..">
-                    <button id="clearNewspaperSelectionSearch" class="absolute end-2.5 bottom-2.5 ">
-                        x
-                    </button>
-                </div>
+            <div class="relative multiple mb-2">
+                <input type="text" id="NewspaperSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search..">
+                <button id="clearNewspaperSearch" class="absolute end-2.5 bottom-2.5 ">
+                    x
+                </button>
+            </div>
+            <div class="relative multiple mb-2">
+                <input type="text" id="NewspaperSelectionSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search..">
+                <button id="clearNewspaperSelectionSearch" class="absolute end-2.5 bottom-2.5 ">
+                    x
+                </button>
+            </div>
             </div>
 
             <div class="flex space-x-4">
                 <select id="newspaperSelect1" multiple class="multiple w-48 h-48 p-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    @if (count($clientnewspapercat)>0)
-                    <option value="-1">All</option>
+                @if (count($clientnewspapercat)>0)
+                    <option  value="-1">All</option>   
                     @endif
                     @foreach ($Newspapercat as $lang)
                     <option value="{{ $lang->catid }}">{{ $lang->Category }}</option>
@@ -141,23 +129,23 @@
 
             </div>
             <div class="flex justify-between w-full">
-                <div class="relative multiple mb-2">
-                    <input type="text" id="magazineSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search.. ">
-                    <button id="clearMagazineSearch" class="absolute end-2.5 bottom-2.5 ">
-                        x
-                    </button>
-                </div>
-                <div class="relative multiple mb-2">
-                    <input type="text" id="magazineSelectionSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search..">
-                    <button id="clearMagazineSelectionSearch" class="absolute end-2.5 bottom-2.5 ">
-                        x
-                    </button>
-                </div>
+            <div class="relative multiple mb-2">
+                <input type="text" id="magazineSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search.. ">
+                <button id="clearMagazineSearch" class="absolute end-2.5 bottom-2.5 ">
+                    x
+                </button>
+            </div>
+            <div class="relative multiple mb-2">
+                <input type="text" id="magazineSelectionSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search..">
+                <button id="clearMagazineSelectionSearch" class="absolute end-2.5 bottom-2.5 ">
+                    x
+                </button>
+            </div>
             </div>
             <div class="flex space-x-4">
                 <select id="magazineSelect1" multiple class="multiple w-48 h-48 p-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    @if (count($clientmagazinecat)>0)
-                    <option value="-1">All</option>
+                      @if (count($clientmagazinecat)>0)
+                    <option  value="-1">All</option>   
                     @endif
                     @foreach ($Magazinecat as $lang)
                     <option value="{{ $lang->catid }}">{{ $lang->Category }}</option>
@@ -193,27 +181,27 @@
     </div>
     <div class="grid grid-cols-2 gap-8 place-items-center">
         <div>
-            <div class="flex flex-col items-center mb-4">
-                <label class="mb-4 block text-sm font-medium">Newspaper</label>
+        <div class="flex flex-col items-center mb-4">
+            <label class="mb-4 block text-sm font-medium">Newspaper</label>
             </div>
             <div class="flex justify-between w-full">
-                <div class="relative multiple mb-2">
-                    <input type="text" id="newspaperssSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search.. ">
-                    <button id="clearNewspapersSearch" class="absolute end-2.5 bottom-2.5 ">
-                        x
-                    </button>
-                </div>
-                <div class="relative multiple mb-2">
-                    <input type="text" id="newspaperssSelectionSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search..">
-                    <button id="clearNewspapersSelectionSearch" class="absolute end-2.5 bottom-2.5 ">
-                        x
-                    </button>
-                </div>
+            <div class="relative multiple mb-2">
+                <input type="text" id="newspaperssSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search.. ">
+                <button id="clearNewspapersSearch" class="absolute end-2.5 bottom-2.5 ">
+                    x
+                </button>
+            </div>
+            <div class="relative multiple mb-2">
+                <input type="text" id="newspaperssSelectionSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search..">
+                <button id="clearNewspapersSelectionSearch" class="absolute end-2.5 bottom-2.5 ">
+                    x
+                </button>
+            </div>  
             </div>
             <div class="flex space-x-4">
 
                 <select id="newspapersSelect1" multiple class="multiple w-48 h-48 p-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-
+              
                     @foreach ($newspapers as $newspaper)
                     <option value="{{ $newspaper->PubId }}">{{ $newspaper->title }} ({{ $newspaper->ediPlace }})</option>
                     @endforeach
@@ -230,29 +218,29 @@
                     @endforelse
                 </select>
             </div>
-
+        
         </div>
         <div>
-            <div class="flex flex-col items-center mb-4">
-                <label class="mb-4 block text-sm font-medium">Magazines</label>
+        <div class="flex flex-col items-center mb-4">
+            <label class="mb-4 block text-sm font-medium">Magazines</label>
             </div>
             <div class="flex justify-between w-full">
-                <div class="relative multiple mb-2">
-                    <input type="text" id="magazinesSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search.. ">
-                    <button id="clearMagazinesSearch" class="absolute end-2.5 bottom-2.5 ">
-                        x
-                    </button>
-                </div>
-                <div class="relative multiple mb-2">
-                    <input type="text" id="magazinesSelectionSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search..">
-                    <button id="clearMagazinesSelectionSearch" class="absolute end-2.5 bottom-2.5 ">
-                        x
-                    </button>
-                </div>
+            <div class="relative multiple mb-2">
+                <input type="text" id="magazinesSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search.. ">
+                <button id="clearMagazinesSearch" class="absolute end-2.5 bottom-2.5 ">
+                    x
+                </button>
+            </div>
+            <div class="relative multiple mb-2">
+                <input type="text" id="magazinesSelectionSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search..">
+                <button id="clearMagazinesSelectionSearch" class="absolute end-2.5 bottom-2.5 ">
+                    x
+                </button>
+            </div>  
             </div>
             <div class="flex space-x-4">
                 <select id="magazinesSelect1" multiple class="multiple w-48 h-48 p-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-
+               
                     @foreach ($Magazines as $Magazine)
                     <option value="{{ $Magazine->pubid }}">{{ $Magazine->title }} ({{ $Magazine->ediPlace }})</option>
                     @endforeach
@@ -269,7 +257,7 @@
                     @endforelse
                 </select>
             </div>
-
+        
         </div>
         <div class="flex flex-col items-center mb-4 mt-3">
             <button type="button" onclick="apply_filters('save')" id="SaveBtn" class="bg-blue-500 text-white p-2 rounded ml-2">Save</button>
@@ -281,34 +269,34 @@
                     <path fill="#2E7D32" d="M27 42L6 38 6 10 27 6z"></path>
                     <path fill="#FFF" d="M19.129,31l-2.411-4.561c-0.092-0.171-0.186-0.483-0.284-0.938h-0.037c-0.046,0.215-0.154,0.541-0.324,0.979L13.652,31H9.895l4.462-7.001L10.274,17h3.837l2.001,4.196c0.156,0.331,0.296,0.725,0.42,1.179h0.04c0.078-0.271,0.224-0.68,0.439-1.22L19.237,17h3.515l-4.199,6.939l4.316,7.059h-3.74V31z"></path>
                 </svg>Export</a>
-            <a class="flex" href="{{ route('clients.export') }}">
-                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0 0 48 48">
-                    <path fill="#4CAF50" d="M41,10H25v28h16c0.553,0,1-0.447,1-1V11C42,10.447,41.553,10,41,10z"></path>
-                    <path fill="#FFF" d="M32 15H39V18H32zM32 25H39V28H32zM32 30H39V33H32zM32 20H39V23H32zM25 15H30V18H25zM25 25H30V28H25zM25 30H30V33H25zM25 20H30V23H25z"></path>
-                    <path fill="#2E7D32" d="M27 42L6 38 6 10 27 6z"></path>
-                    <path fill="#FFF" d="M19.129,31l-2.411-4.561c-0.092-0.171-0.186-0.483-0.284-0.938h-0.037c-0.046,0.215-0.154,0.541-0.324,0.979L13.652,31H9.895l4.462-7.001L10.274,17h3.837l2.001,4.196c0.156,0.331,0.296,0.725,0.42,1.179h0.04c0.078-0.271,0.224-0.68,0.439-1.22L19.237,17h3.515l-4.199,6.939l4.316,7.059h-3.74V31z"></path>
-                </svg>
-                Export Client Email
-            </a>
-
-            <a class="flex" href="{{ route('clients.exportDetails') }}">
-                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0 0 48 48">
-                    <path fill="#4CAF50" d="M41,10H25v28h16c0.553,0,1-0.447,1-1V11C42,10.447,41.553,10,41,10z"></path>
-                    <path fill="#FFF" d="M32 15H39V18H32zM32 25H39V28H32zM32 30H39V33H32zM32 20H39V23H32zM25 15H30V18H25zM25 25H30V28H25zM25 30H30V33H25zM25 20H30V23H25z"></path>
-                    <path fill="#2E7D32" d="M27 42L6 38 6 10 27 6z"></path>
-                    <path fill="#FFF" d="M19.129,31l-2.411-4.561c-0.092-0.171-0.186-0.483-0.284-0.938h-0.037c-0.046,0.215-0.154,0.541-0.324,0.979L13.652,31H9.895l4.462-7.001L10.274,17h3.837l2.001,4.196c0.156,0.331,0.296,0.725,0.42,1.179h0.04c0.078-0.271,0.224-0.68,0.439-1.22L19.237,17h3.515l-4.199,6.939l4.316,7.059h-3.74V31z"></path>
-                </svg>
-                Client Master
-            </a>
-            <a class="flex" href="{{ route('clients.exportBrandStrings', ['clid' => $clientid]) }}">
-                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0 0 48 48">
-                    <path fill="#4CAF50" d="M41,10H25v28h16c0.553,0,1-0.447,1-1V11C42,10.447,41.553,10,41,10z"></path>
-                    <path fill="#FFF" d="M32 15H39V18H32zM32 25H39V28H32zM32 30H39V33H32zM32 20H39V23H32zM25 15H30V18H25zM25 25H30V28H25zM25 30H30V33H25zM25 20H30V23H25z"></path>
-                    <path fill="#2E7D32" d="M27 42L6 38 6 10 27 6z"></path>
-                    <path fill="#FFF" d="M19.129,31l-2.411-4.561c-0.092-0.171-0.186-0.483-0.284-0.938h-0.037c-0.046,0.215-0.154,0.541-0.324,0.979L13.652,31H9.895l4.462-7.001L10.274,17h3.837l2.001,4.196c0.156,0.331,0.296,0.725,0.42,1.179h0.04c0.078-0.271,0.224-0.68,0.439-1.22L19.237,17h3.515l-4.199,6.939l4.316,7.059h-3.74V31z"></path>
-                </svg>
-                BrandString
-            </a>
+                <a class="flex" href="{{ route('clients.export') }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0 0 48 48">
+                        <path fill="#4CAF50" d="M41,10H25v28h16c0.553,0,1-0.447,1-1V11C42,10.447,41.553,10,41,10z"></path>
+                        <path fill="#FFF" d="M32 15H39V18H32zM32 25H39V28H32zM32 30H39V33H32zM32 20H39V23H32zM25 15H30V18H25zM25 25H30V28H25zM25 30H30V33H25zM25 20H30V23H25z"></path>
+                        <path fill="#2E7D32" d="M27 42L6 38 6 10 27 6z"></path>
+                        <path fill="#FFF" d="M19.129,31l-2.411-4.561c-0.092-0.171-0.186-0.483-0.284-0.938h-0.037c-0.046,0.215-0.154,0.541-0.324,0.979L13.652,31H9.895l4.462-7.001L10.274,17h3.837l2.001,4.196c0.156,0.331,0.296,0.725,0.42,1.179h0.04c0.078-0.271,0.224-0.68,0.439-1.22L19.237,17h3.515l-4.199,6.939l4.316,7.059h-3.74V31z"></path>
+                    </svg>
+                    Export Client Email
+                </a>
+                
+                <a class="flex" href="{{ route('clients.exportDetails') }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0 0 48 48">
+                        <path fill="#4CAF50" d="M41,10H25v28h16c0.553,0,1-0.447,1-1V11C42,10.447,41.553,10,41,10z"></path>
+                        <path fill="#FFF" d="M32 15H39V18H32zM32 25H39V28H32zM32 30H39V33H32zM32 20H39V23H32zM25 15H30V18H25zM25 25H30V28H25zM25 30H30V33H25zM25 20H30V23H25z"></path>
+                        <path fill="#2E7D32" d="M27 42L6 38 6 10 27 6z"></path>
+                        <path fill="#FFF" d="M19.129,31l-2.411-4.561c-0.092-0.171-0.186-0.483-0.284-0.938h-0.037c-0.046,0.215-0.154,0.541-0.324,0.979L13.652,31H9.895l4.462-7.001L10.274,17h3.837l2.001,4.196c0.156,0.331,0.296,0.725,0.42,1.179h0.04c0.078-0.271,0.224-0.68,0.439-1.22L19.237,17h3.515l-4.199,6.939l4.316,7.059h-3.74V31z"></path>
+                    </svg>
+                    Client Master
+                </a>                
+                <a class="flex" href="{{ route('clients.exportBrandStrings', ['clid' => $clientid]) }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0 0 48 48">
+                        <path fill="#4CAF50" d="M41,10H25v28h16c0.553,0,1-0.447,1-1V11C42,10.447,41.553,10,41,10z"></path>
+                        <path fill="#FFF" d="M32 15H39V18H32zM32 25H39V28H32zM32 30H39V33H32zM32 20H39V23H32zM25 15H30V18H25zM25 25H30V28H25zM25 30H30V33H25zM25 20H30V23H25z"></path>
+                        <path fill="#2E7D32" d="M27 42L6 38 6 10 27 6z"></path>
+                        <path fill="#FFF" d="M19.129,31l-2.411-4.561c-0.092-0.171-0.186-0.483-0.284-0.938h-0.037c-0.046,0.215-0.154,0.541-0.324,0.979L13.652,31H9.895l4.462-7.001L10.274,17h3.837l2.001,4.196c0.156,0.331,0.296,0.725,0.42,1.179h0.04c0.078-0.271,0.224-0.68,0.439-1.22L19.237,17h3.515l-4.199,6.939l4.316,7.059h-3.74V31z"></path>
+                    </svg>
+                    BrandString
+                </a>                
         </div>
     </div>
     <hr>
@@ -345,6 +333,126 @@
 
 @section('scripts')
 <script>
+    $(document).ready(function() {
+        $('#clientpriority').change(function() {
+            var isChecked = $(this).is(':checked') ? 1 : 0;
+            updateDatabase('priority', isChecked);
+        });
+
+        $('#restrictedmu').change(function() {
+            var isChecked = $(this).is(':checked') ? 1 : 0;
+            updateDatabase('restricted_mu', isChecked);
+        });
+
+        function updateDatabase(field, value) {
+            $.ajax({
+                url: '{{ route("update.checkbox") }}', 
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    field: field,
+                    value: value,
+                    client_id:'{{$clientid}}'
+                },
+                success: function(response) {
+                    console.log('Database updated successfully');
+                },
+                error: function(xhr) {
+                    console.log('Error updating database');
+                }
+            });
+        }
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+        const restrictedMUCheckbox = document.getElementById('restrictedmu');
+
+        const languageInputs = [
+            document.getElementById('LanguageSearchInput'),
+            document.getElementById('clearLanguageSearch'),
+            document.getElementById('LanguageSelectionSearchInput'),
+            document.getElementById('clearLanguageSelectionSearch'),
+            document.getElementById('languageSelect1'),
+            document.getElementById('moveRightLang'),
+            document.getElementById('moveLeftLang'),
+            document.getElementById('languageselection')
+        ];
+
+        const editionInputs = [
+            document.getElementById('EditionSearchInput'),
+            document.getElementById('clearEditionSearch'),
+            document.getElementById('EditionSelectionSearchInput'),
+            document.getElementById('clearEditionSelectionSearch'),
+            document.getElementById('editionSelect1'),
+            document.getElementById('moveRightEdition'),
+            document.getElementById('moveLeftEdition'),
+            document.getElementById('editionselection')
+        ];
+
+        const newspaperInputs = [
+            document.getElementById('NewspaperSearchInput'),
+            document.getElementById('clearNewspaperSearch'),
+            document.getElementById('NewspaperSelectionSearchInput'),
+            document.getElementById('clearNewspaperSelectionSearch'),
+            document.getElementById('newspaperSelect1'),
+            document.getElementById('moveRightNewspaper'),
+            document.getElementById('moveLeftNewspaper'),
+            document.getElementById('newspaperselection')
+        ];
+
+        const magazineInputs = [
+            document.getElementById('magazineSearchInput'),
+            document.getElementById('clearMagazineSearch'),
+            document.getElementById('magazineSelectionSearchInput'),
+            document.getElementById('clearMagazineSelectionSearch'),
+            document.getElementById('magazineSelect1'),
+            document.getElementById('moveRightMagazine'),
+            document.getElementById('moveLeftMagazine'),
+            document.getElementById('magazineselection')
+        ];
+
+        const newspapersInputs = [
+            document.getElementById('newspaperssSearchInput'),
+            document.getElementById('clearNewspapersSearch'),
+            document.getElementById('newspaperssSelectionSearchInput'),
+            document.getElementById('clearNewspapersSelectionSearch'),
+            document.getElementById('newspapersSelect1'),
+            document.getElementById('moveRightnewspapers'),
+            document.getElementById('moveLeftnewspapers'),
+            document.getElementById('newspapersselection')
+        ];
+
+        const magazinesInputs = [
+            document.getElementById('magazinesSearchInput'),
+            document.getElementById('clearMagazinesSearch'),
+            document.getElementById('magazinesSelectionSearchInput'),
+            document.getElementById('clearMagazinesSelectionSearch'),
+            document.getElementById('magazinesSelect1'),
+            document.getElementById('moveRightmagazines'),
+            document.getElementById('moveLeftmagazines'),
+            document.getElementById('magazinesselection')
+        ];
+
+        function toggleInputs(inputs, disable) {
+            inputs.forEach(input => {
+                input.disabled = disable;
+            });
+        }
+
+        function toggleLanguageAndEditionInputs() {
+            const disable = restrictedMUCheckbox.checked;
+            toggleInputs(languageInputs, disable);
+            toggleInputs(editionInputs, disable);
+            toggleInputs(newspaperInputs, disable);
+            toggleInputs(magazineInputs, disable);
+            toggleInputs(newspapersInputs, disable);
+            toggleInputs(magazinesInputs, disable);
+        }
+
+        restrictedMUCheckbox.addEventListener('change', toggleLanguageAndEditionInputs);
+
+        // Initial state based on checkbox
+        toggleLanguageAndEditionInputs();
+    });
      function sortOptions(selectElement) {
            
            var options = $(selectElement).find('option');
@@ -364,7 +472,7 @@
    // $(selectElement).empty().append(emptyOption).append(options);
        }
     $(function() {
-
+       
 
         $('#magazineSearchInput').on('input', function() {
             filterOptions(this, document.getElementById('magazineSelect1'));
@@ -405,9 +513,7 @@
 
         function moveItems(origin, destination) {
             var hasAllOption = $(destination).find('option[value="-1"]').length > 0;
-
             $(origin).find('option:selected').each(function() {
-                var thiss = $(this);
                 let mainSelect = $(destination).attr('id').includes('Select1');
                 if (mainSelect && hasAllOption) {
                     if ($(this).val() != "-1") {
@@ -421,21 +527,8 @@
                         return false;
                     }
                     if (!hasAllOption && !mainSelect) {
-                        if ($(this).val() == "-8") {
-                            var valuesToCheck = ["1", "232", "233", "156", "157", "450", "206", "531", "-6"];
-                            var foundValues = $(destination).find('option').filter(function() {
-                                return valuesToCheck.includes($(this).val());
-                            }).remove();
-                        }
-                        if($(this).val() == "-6"){
-                            var valuesToCheck = ["1", "232", "233", "156", "157", "450"];
-                            var foundValues = $(destination).find('option').filter(function() {
-                                return valuesToCheck.includes($(this).val());
-                            }).remove();
-                        }
+
                         $(this).remove().appendTo(destination);
-                        
-                       
 
                     }
                     if (!hasAllOption && mainSelect) {
@@ -496,7 +589,7 @@
             filterOptions(document.getElementById('magazinesSelectionSearchInput'), document.getElementById('magazinesselection'));
         });
 
-
+       
         // Language Select
         $('#moveRightLang').click(function() {
             moveItems('#languageSelect1', '#languageselection');
@@ -605,123 +698,131 @@
 
         });
     }
-
     function apply_filters(condition) {
 
-        var mainPaper = false;
-        var languageSelectedOpts = $('#languageselection option');
-        var newspapercatSelectedOpts = $('#newspaperselection option');
-        var magazinecatSelectedOpts = $('#magazineselection option');
-        var editionSelectedOpts = $('#editionselection option');
-        var newsPaperSelectedOpts = $('#newspapersselection option');
-        var magzineSelectedOpts = $('#magazinesselection option');
-        var lang = $.map($(languageSelectedOpts), function(e) {
-            return e.value;
-        });
-        var editions = $.map($(editionSelectedOpts), function(e) {
-            return e.value;
-        });
-        var newscat = $.map($(newspapercatSelectedOpts), function(e) {
-            return e.value;
-        });
-        var magcat = $.map($(magazinecatSelectedOpts), function(e) {
-            return e.value;
-        });
-        var newsPaper = $.map($(newsPaperSelectedOpts), function(e) {
-            return e.value;
-        });
-        var magzine = $.map($(magzineSelectedOpts), function(e) {
-            return e.value;
-        });
-        //for save record
-        if (condition == 'save') {
-            document.getElementById('processModal').classList.remove('hidden');
+    var mainPaper = false;
+    var languageSelectedOpts = $('#languageselection option');
+    var newspapercatSelectedOpts = $('#newspaperselection option');
+    var magazinecatSelectedOpts = $('#magazineselection option');
+    var editionSelectedOpts = $('#editionselection option');
+    var newsPaperSelectedOpts = $('#newspapersselection option');
+    var magzineSelectedOpts = $('#magazinesselection option');
+    var lang = $.map($(languageSelectedOpts), function (e) {
+        return e.value;
+    });
+    var editions = $.map($(editionSelectedOpts), function (e) {
+        return e.value;
+    });
+    var newscat = $.map($(newspapercatSelectedOpts), function (e) {
+        return e.value;
+    });
+    var magcat = $.map($(magazinecatSelectedOpts), function (e) {
+        return e.value;
+    });
+    var newsPaper = $.map($(newsPaperSelectedOpts), function (e) {
+        return e.value;
+    });
+    var magzine = $.map($(magzineSelectedOpts), function (e) {
+        return e.value;
+    });
+    //for save record
+    if (condition == 'save') {
+        document.getElementById('processModal').classList.remove('hidden');
 
-            setTimeout(function() {
-                jQuery.ajax({
-                    type: "POST",
-                    url: "{{route('saveselecteddata')}}",
-                    data: "language=" + lang + "&edition=" + editions + "&newspapercat=" + newscat + "&magzinecat=" + magcat + "&newsPaper=" + newsPaper + "&magzine=" + magzine + "&clientid=" + "{{$clientid}}" + "&user={{auth()->user()->UserID}}",
-                    success: function(response) {
-                        alert("saved successfully");
-                        setTimeout(function() {
-                            document.getElementById('processModal').classList.add('hidden');
-                        }, 1000);
-                        // for loader end
-                        if (response.status == 'success') {
-                            window.location.reload();
-                        }
-                    },
-                    error: function(error) {
-                        alert("Error" + eval(error));
-                    }
-                });
-            }, 100);
-        } else {
-            if (lang == '') {
-                alert("Languege Box are empty!");
-                return false;
-            }
-            if (editions == '') {
-                alert("Edition Box are empty!");
-                return false;
-            }
-            if (newscat == '' && magcat == '') {
-                alert("Newspaper or Magazine Categories Box are empty!");
-                return false;
-            }
-            document.getElementById('processModal').classList.remove('hidden');
+        setTimeout(function () {
             jQuery.ajax({
                 type: "POST",
-                url: "{{route('filter')}}",
-                data: "language=" + lang + "&edition=" + editions + "&newspapercat=" + newscat + "&magzinecat=" + magcat + "&mainPaper=" + mainPaper + "&clientid=" + "{{$clientid}}",
-
-                success: function(response) {
-                    setTimeout(function() {
+                url: "{{route('saveselecteddata')}}",
+                data: "language=" + lang + "&edition=" + editions + "&newspapercat=" + newscat + "&magzinecat=" + magcat + "&newsPaper=" + newsPaper + "&magzine=" + magzine+ "&clientid=" +"{{$clientid}}"+"&user={{auth()->user()->UserID}}",
+                async: false,
+                cache: false,
+                success: function (response) {
+                    alert("saved successfully");
+                    setTimeout(function () {
                         document.getElementById('processModal').classList.add('hidden');
                     }, 1000);
-                    var AjaxresultArr = response;
-                    var newsPaperdata = AjaxresultArr.news;
-                    var magazinedata = AjaxresultArr.magazine;
-                    var newsPaperdataAll = AjaxresultArr.newsAll;
-                    var magazinedataAll = AjaxresultArr.magazineAll;
-                    document.getElementById('newspapersSelect1').innerHTML = newsPaperdataAll;
-                    document.getElementById('magazinesSelect1').innerHTML = magazinedataAll;
-                    document.getElementById('newspapersselection').innerHTML = newsPaperdata;
-                    document.getElementById('magazinesselection').innerHTML = magazinedata;
+                    // for loader end
+                    if (response.status == 'success') {
+                        window.location.reload();
+                    }
+                },
+                error: function (error) {
+                    alert("Error" + eval(error));
                 }
             });
+        }, 100);
+    } else {
+        if (lang == '') {
+            alert("Languege Box are empty!");
+            return false;
         }
+        if (editions == '') {
+            alert("Edition Box are empty!");
+            return false;
+        }
+        if (newscat == '' && magcat == '') {
+            alert("Newspaper or Magazine Categories Box are empty!");
+            return false;
+        }
+        jQuery.ajax({
+            type: "POST",
+            url: "{{route('filter')}}",
+            data: "language=" + lang + "&edition=" + editions + "&newspapercat=" + newscat + "&magzinecat=" + magcat + "&mainPaper=" + mainPaper+ "&clientid=" +"{{$clientid}}",
+            async: false,
+            cache: false,
+            beforeSend: function() {
 
-        return false;
+        document.getElementById('processModal').classList.remove('hidden');
+
+    },
+    complete: function() {
+        setTimeout(function () {
+                    document.getElementById('processModal').classList.add('hidden');
+                }, 1000);
+    },
+            success: function (response) {
+          
+                var AjaxresultArr = response;
+                var newsPaperdata = AjaxresultArr.news;
+                var magazinedata = AjaxresultArr.magazine;
+                var newsPaperdataAll = AjaxresultArr.newsAll;
+                var magazinedataAll = AjaxresultArr.magazineAll;
+                document.getElementById('newspapersSelect1').innerHTML = newsPaperdataAll;
+                document.getElementById('magazinesSelect1').innerHTML = magazinedataAll;
+                document.getElementById('newspapersselection').innerHTML = newsPaperdata;
+                document.getElementById('magazinesselection').innerHTML = magazinedata;
+            }
+        });
     }
-    $(document).ready(function() {
+
+    return false;
+}
+$(document).ready(function () {
         sortOptions('languageSelect1');
         sortOptions('editionSelect1');
         sortOptions('newspaperSelect1');
-        sortOptions('magazineSelect1');
-
-        $('#add_comment').click(function(e) {
-            e.preventDefault();
-            var comment = $('#default').val();
-            var clientid = '{{ $clientid }}';
-            var csrfToken = '{{csrf_token()}}';
-            jQuery.ajax({
-                type: "POST",
-                url: "{{route('addcomment')}}",
-                async: false,
-                cache: false,
-                data: {
-                    addcomment: comment,
-                    clientid: clientid,
-                    _token: csrfToken
-                },
-                success: function(response) {
-                    window.location.reload();
-                }
-            });
-        });
-    });
+        sortOptions('magazineSelect1'); 
+        
+$('#add_comment').click(function (e) {
+    e.preventDefault();
+    var comment = $('#default').val();
+    var clientid = '{{ $clientid }}';
+    var csrfToken = '{{csrf_token()}}';
+    jQuery.ajax({
+       type: "POST",
+       url: "{{route('addcomment')}}",  
+       async: false,
+       cache: false,
+       data: {
+            addcomment: comment,
+            clientid: clientid,
+            _token: csrfToken
+        },  success: function (response) {
+          window.location.reload();
+       }
+   });
+   });
+});
 </script>
 @endsection
 @section('style')
