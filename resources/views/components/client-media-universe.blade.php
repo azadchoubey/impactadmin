@@ -188,7 +188,7 @@
         <label for="search" class="block text-sm font-medium">Search Exceptional Case </label>
         <input type="text" id="excpNewsMag" class="text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" />
         <label for="edition" class="block text-sm font-medium">Edition</label>
-        <input type="radio" name="search" id="serach" value="edition">
+        <input type="radio" checked name="search" id="serach" value="edition">
         <label for="edition" class="block text-sm font-medium">Name</label>
         <input type="radio" name="search" id="serach" value="name">
         <button class="bg-blue-500 text-white p-2 rounded" onclick="searchExceptional()">Search</button>
@@ -351,12 +351,19 @@
            
            var options = $(selectElement).find('option');
            console.log(options);
-           options.sort(function(a, b) {
-               if (a.text.toLowerCase() > b.text.toLowerCase()) return 1;
-               if (a.text.toLowerCase() < b.text.toLowerCase()) return -1;
-               return 0;
-           });
-           $(selectElement).empty().append(options);
+           var emptyOption = options.filter(function() {        
+            return this.value === "";
+    });
+    
+    options = options.filter(function() {
+        return this.value !== "";
+    }).sort(function(a, b) {
+        if (a.text.toLowerCase() > b.text.toLowerCase()) return 1;
+        if (a.text.toLowerCase() < b.text.toLowerCase()) return -1;
+        return 0;
+    });
+    
+   // $(selectElement).empty().append(emptyOption).append(options);
        }
     $(function() {
        
@@ -519,7 +526,7 @@
         $('#moveRightnewspapers').click(function() {
             moveItems('#newspapersSelect1', '#newspapersselection');
         });
-        $('#moveLeftNewspaper').click(function() {
+        $('#moveLeftNewspapers').click(function() {
             moveItems('#newspapersselection', '#newspapersSelect1');
         });
 
@@ -544,8 +551,8 @@
     function filterOptions(input, select) {
         var filter = input.value.toLowerCase();
         var options = select.options;
-
         for (var i = 0; i < options.length; i++) {
+            if (options[i].value === "") continue;
             var text = options[i].text.toLowerCase();
             var isVisible = text.includes(filter);
             options[i].style.display = isVisible ? '' : 'none';
@@ -651,17 +658,24 @@
             alert("Newspaper or Magazine Categories Box are empty!");
             return false;
         }
-        document.getElementById('processModal').classList.remove('hidden');
         jQuery.ajax({
             type: "POST",
             url: "{{route('filter')}}",
             data: "language=" + lang + "&edition=" + editions + "&newspapercat=" + newscat + "&magzinecat=" + magcat + "&mainPaper=" + mainPaper+ "&clientid=" +"{{$clientid}}",
             async: false,
             cache: false,
-            success: function (response) {
-                setTimeout(function () {
+            beforeSend: function() {
+
+        document.getElementById('processModal').classList.remove('hidden');
+
+    },
+    complete: function() {
+        setTimeout(function () {
                     document.getElementById('processModal').classList.add('hidden');
                 }, 1000);
+    },
+            success: function (response) {
+          
                 var AjaxresultArr = response;
                 var newsPaperdata = AjaxresultArr.news;
                 var magazinedata = AjaxresultArr.magazine;

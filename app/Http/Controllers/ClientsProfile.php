@@ -22,11 +22,10 @@ use Illuminate\Support\Facades\Validator;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Rels;
 use Maatwebsite\Excel\Facades\Excel;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-
+use App\Exports\ClientDetailsExport;
+use App\Exports\BrandStringsExport;
+use App\Exports\ClientsExport;
 class ClientsProfile extends Controller
 {
     public function index($id)
@@ -584,7 +583,7 @@ public function downloadMediaUniverseReport(Request $request)
             )
             ->get();
 
-        $filename = "Clientlist.xls";
+        $filename = "Clientlist.xlsx";
         
         return Excel::download(new ClientsExport($data), $filename);
     }
@@ -631,7 +630,7 @@ public function downloadMediaUniverseReport(Request $request)
                 return $row;
             });
 
-        $filename = "ClientDetails.xls";
+        $filename = "ClientDetails.xlsx";
         
         return Excel::download(new ClientDetailsExport($data), $filename);
     }
@@ -654,109 +653,12 @@ public function downloadMediaUniverseReport(Request $request)
             ->orderBy('clientkeyword.Type', 'asc')
             ->get();
 
-        $filename = "brandstrings.xls";
+        $filename = "brandstrings.xlsx";
 
         return Excel::download(new BrandStringsExport($data), $filename);
     }
 }
-class ClientDetailsExport implements FromCollection, WithHeadings
-{
-    protected $data;
 
-    public function __construct($data)
-    {
-        $this->data = $data;
-    }
 
-    public function collection()
-    {
-        return $this->data;
-    }
 
-    public function headings(): array
-    {
-        return [
-            'Primary Client',
-            'Name',
-            'Address1',
-            'Address2',
-            'Address3',
-            'City',
-            'State',
-            'Pin',
-            'Currency',
-            'Client Source',
-            'Print',
-            'Web',
-            'Region',
-            'Billing Cycle',
-            'Billing Date',
-            'Billing Rate',
-            'Sector',
-            'Start Date',
-            'End Date',
-            'Type',
-            'Broadcast',
 
-        ];
-    }
-}
-
-class ClientsExport implements FromCollection, WithHeadings
-{
-    protected $data;
-
-    public function __construct($data)
-    {
-        $this->data = $data;
-    }
-
-    public function collection()
-    {
-        return $this->data;
-    }
-
-    public function headings(): array
-    {
-        return [
-            'Name',
-            'Contactname',
-            'Email',
-            'Print digest Frequency',
-            'Web digest Frequency',
-            'Broadcast digest Frequency',
-            'Print Access',
-            'Web Access',
-            'Broadcast Access',
-            'Smartmeasure Access',
-            'Smartdashboard Access'
-        ];
-    }    
-}
-class BrandStringsExport implements FromCollection, WithHeadings
-{
-    protected $data;
-
-    public function __construct($data)
-    {
-        $this->data = $data;
-    }
-
-    public function collection()
-    {
-        return $this->data;
-    }
-
-    public function headings(): array
-    {
-        return [
-            'Keyword',
-            'Filter',
-            'FilterString',
-            'Category',
-            'Type',
-            'Company_String',
-            'Brand_String'
-        ];
-    }
-}

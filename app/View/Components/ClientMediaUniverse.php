@@ -40,18 +40,51 @@ class ClientMediaUniverse extends Component
             ->distinct()
             ->orderBy('picklist.name')
             ->get();
-       
-        $subquery = Mediauniverse::on('mysql2')->select('tagId')
+        $tagId = Mediauniverse::on('mysql2')->where('clientId', $clientid)
+            ->where('tagId', -1)
+            ->where('type', 'Edition')
+            ->pluck('tagId')
+            ->first();
+    
+        $additionalIds = [
+            -1 => 'All',
+            -6 => '6 Cities',
+            -8 => '6+2 Cities'
+        ];
+    
+        if ($tagId !== null) {
+            $selectedVal = $additionalIds[$tagId];
+            unset($additionalIds[$tagId]);
+        }
+    
+        $this->Edition = collect();
+        foreach ($additionalIds as $key => $val) {
+            $this->Edition->push((object) ['Name' => $val, 'ID' => $key]);
+        }
+            $subquery = Mediauniverse::on('mysql2')->select('tagId')
             ->where('clientId', $clientid)
             ->where('type', 'Edition');
 
-        $this->Edition = Picklist::on('mysql2')->select('picklist.name as Name', 'picklist.id as ID')
+            $editionResults = Picklist::on('mysql2')->select('picklist.name as Name', 'picklist.id as ID')
             ->join('pub_master', 'pub_master.place', '=', 'picklist.id')
             ->whereNotIn('pub_master.place', $subquery)
             ->distinct()
             ->orderBy('picklist.name')
             ->get();
-
+            $this->Edition = $this->Edition
+            ->merge($editionResults->map(function($result) {
+                return (object) ['Name' => $result->Name, 'ID' => $result->ID];
+            }))
+            ->sort(function($a, $b) {
+                if ($a->Name === '') {
+                    return -1;
+                }
+                if ($b->Name === '') {
+                    return 1;
+                }
+                return strcasecmp($a->Name, $b->Name);
+            });
+       
         $this->clientedition = Picklist::on('mysql2')->select(DB::raw('distinct picklist.name as Name'), 'picklist.id as ID')
             ->join('media_universe as mucp', 'mucp.tagId', '=', 'picklist.id')
             ->where('mucp.type', 'Edition')

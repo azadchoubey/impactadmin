@@ -15,7 +15,7 @@ class FilterController extends Controller
     public function filter(Request $request)
     {
         if ($request->ajax()) {
-            $clientId = session('clientid');
+            $clientId = $request->input('clientid');
             $mainPaper = $request->input('mainPaper') === 'true';
 
             // Main Paper Condition
@@ -26,7 +26,7 @@ class FilterController extends Controller
 
             // Handle Newspaper Categories
             $categoryConditions = $this->handleCategoryCondition($request->input('newspapercat'));
-
+          
             // Handle Magazine Categories
             $magCategoryConditions = $this->handleCategoryCondition($request->input('magzinecat'));
 
@@ -34,21 +34,36 @@ class FilterController extends Controller
             $languageConditions = $this->handleLanguages($request->input('language'));
 
             // Filtering Newspaper
-            $news = PubMaster::where('PrimaryPubId', 0)
+            $news = PubMaster::on('mysql2')->where('PrimaryPubId', 0)
                 ->where('type', 230)
                 ->where($mainPaperCondition)
                 ->where($placeConditions)
-                ->where($categoryConditions)
-                ->where($languageConditions)
+                ->where(function ($query) use ($categoryConditions) {
+                    if ($categoryConditions) {
+                        if ($categoryConditions[1] === 'IN') {
+                            $query->whereIn($categoryConditions[0], $categoryConditions[2]);
+                        } else {
+                            $query->where($categoryConditions[0], $categoryConditions[1], $categoryConditions[2]);
+                        }
+                    }
+                })
+                ->where(function ($query) use ($languageConditions) {
+                    if ($languageConditions) {
+                        if ($languageConditions[1] === 'IN') {
+                            $query->whereIn($languageConditions[0], $languageConditions[2]);
+                        } else {
+                            $query->where($languageConditions[0], $languageConditions[1], $languageConditions[2]);
+                        }
+                    }
+                })
                 ->where('deleted', 0)
                 ->with('edition')
                 ->orderBy('Title')
                 ->get();
-
             $newsOptions = $this->generateSelectOptions($news);
-
+                    
             // Rest of the Newspapers
-            $newsAll = PubMaster::where('PrimaryPubId', 0)
+            $newsAll = PubMaster::on('mysql2')->where('PrimaryPubId', 0)
                 ->where('type', 230)
                 ->whereNotIn('PubId', $news->pluck('PubId'))
                 ->where('deleted', 0)
@@ -57,23 +72,37 @@ class FilterController extends Controller
                 ->get();
 
             $newsAllOptions = $this->generateSelectOptions($newsAll);
-
             // Filtering Magazines
-            $magazines = PubMaster::where('PrimaryPubId', 0)
+
+            $magazines = PubMaster::on('mysql2')->where('PrimaryPubId', 0)
                 ->where('type', 229)
                 ->where($mainPaperCondition)
                 ->where($placeConditions)
-                ->where($magCategoryConditions)
-                ->where($languageConditions)
+                ->where(function ($query) use ($magCategoryConditions) {
+                    if ($magCategoryConditions) {
+                        if ($magCategoryConditions[1] === 'IN') {
+                            $query->whereIn($magCategoryConditions[0], $magCategoryConditions[2]);
+                        } else {
+                            $query->where($magCategoryConditions[0], $magCategoryConditions[1], $magCategoryConditions[2]);
+                        }
+                    }
+                })
+                ->where(function ($query) use ($languageConditions) {
+                    if ($languageConditions) {
+                        if ($languageConditions[1] === 'IN') {
+                            $query->whereIn($languageConditions[0], $languageConditions[2]);
+                        } else {
+                            $query->where($languageConditions[0], $languageConditions[1], $languageConditions[2]);
+                        }
+                    }
+                })
                 ->where('deleted', 0)
                 ->with('edition')
                 ->orderBy('Title')
                 ->get();
-
             $magazineOptions = $this->generateSelectOptions($magazines);
-
-            // Rest of the Magazines
-            $magazinesAll = PubMaster::where('PrimaryPubId', 0)
+            
+            $magazinesAll = PubMaster::on('mysql2')->where('PrimaryPubId', 0)
                 ->where('type', 229)
                 ->whereNotIn('PubId', $magazines->pluck('PubId'))
                 ->where('deleted', 0)
