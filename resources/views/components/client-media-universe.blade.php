@@ -361,7 +361,7 @@
         return 0;
     });
     
-   // $(selectElement).empty().append(emptyOption).append(options);
+   $(selectElement).empty().append(options);
        }
     $(function() {
         $('#magazineSearchInput').on('input', function() {
