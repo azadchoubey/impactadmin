@@ -4,53 +4,45 @@
             <label class="block text-sm font-medium">Client Priority</label>
             <input type="checkbox" name="clientpriority" {{ $priority == 1 ? 'checked' : '' }}>
             <label class="block text-sm font-medium">Restricted MU</label>
-            <input type="checkbox" name="restrictedmu" {{ $restrictedmu == 1 ? 'checked' : '' }}>
+            <input type="checkbox" name="restrictedmu" id="restrictedmu" {{ $restrictedmu == 1 ? 'checked' : '' }}>
         </div>
-
     </div>
     <div class="grid grid-cols-2 gap-8 place-items-center">
         <div>
-        <div class="flex flex-col items-center">
-            <label class="mb-4 block text-sm font-medium">Language</label>
+            <div class="flex flex-col items-center">
+                <label class="mb-4 block text-sm font-medium">Language</label>
             </div>
             <div class="flex justify-between w-full">
-            <div class="relative multiple mb-2">
-                <input type="text" id="LanguageSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search..">
-                <button id="clearLanguageSearch" class="absolute end-2.5 bottom-2.5 ">
-                    x
-                </button>
-            </div>
-            <div class="relative multiple mb-2 items-right">
-                <input type="text" id="LanguageSelectionSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search..">
-                <button id="clearLanguageSelectionSearch" class="absolute end-2.5 bottom-2.5 ">
-                    x
-                </button>
-            </div>
+                <div class="relative multiple mb-2">
+                    <input type="text" id="LanguageSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search..">
+                    <button id="clearLanguageSearch" class="absolute end-2.5 bottom-2.5 ">x</button>
+                </div>
+                <div class="relative multiple mb-2 items-right">
+                    <input type="text" id="LanguageSelectionSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search..">
+                    <button id="clearLanguageSelectionSearch" class="absolute end-2.5 bottom-2.5 ">x</button>
+                </div>
             </div>
             <div class="flex space-x-4">
                 <select id="languageSelect1" multiple class="multiple w-48 h-48 p-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                     @if (count($clientlang)>0)
-                    <option  value="-1">All</option>   
+                    @if (count($clientlang) > 0)
+                        <option value="-1">All</option>
                     @endif
                     @foreach ($Language as $lang)
-                    <option value="{{ $lang->ID }}">{{ $lang->Name }}</option>
+                        <option value="{{ $lang->ID }}">{{ $lang->Name }}</option>
                     @endforeach
-                   
                 </select>
                 <div class="flex flex-col justify-center items-center gap-2">
                     <button id="moveRightLang" class="bg-blue-500 text-white p-1 rounded">&gt;</button>
                     <button id="moveLeftLang" class="bg-blue-500 text-white p-1 rounded">&lt;</button>
                 </div>
-                
                 <select id="languageselection" class="multiple border p-2 rounded" multiple>
                     @forelse ($clientlang as $lang)
-                    <option selected value="{{ $lang->ID }}">{{ $lang->Name }}</option>
+                        <option selected value="{{ $lang->ID }}">{{ $lang->Name }}</option>
                     @empty
-                    <option selected value="-1">All</option>
+                        <option selected value="-1">All</option>
                     @endforelse
                 </select>
             </div>
-        
         </div>
        
         <div>
@@ -58,28 +50,23 @@
                 <label class="mb-4 block text-sm font-medium">Edition</label>
             </div>
             <div class="flex justify-between w-full">
-            <div class="relative multiple mb-2">
-                <input type="text" id="EditionSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search..">
-                <button id="clearEditionSearch" class="absolute end-2.5 bottom-2.5 ">
-                    x
-                </button>
-            </div>
-            <div class="relative multiple mb-2">
-                <input type="text" id="EditionSelectionSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search..">
-                <button id="clearEditionSelectionSearch" class="absolute end-2.5 bottom-2.5 ">
-                    x
-                </button>
-            </div>
+                <div class="relative multiple mb-2">
+                    <input type="text" id="EditionSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search..">
+                    <button id="clearEditionSearch" class="absolute end-2.5 bottom-2.5 ">x</button>
+                </div>
+                <div class="relative multiple mb-2">
+                    <input type="text" id="EditionSelectionSearchInput" class="multiple text-xs rounded-sm focus:ring-blue-500 focus:border-blue-500 pl-2 pr-10" placeholder="Search..">
+                    <button id="clearEditionSelectionSearch" class="absolute end-2.5 bottom-2.5 ">x</button>
+                </div>
             </div>
             <div class="flex space-x-4">
                 <select id="editionSelect1" multiple class="multiple w-48 h-48 p-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                @if (count($clientedition)>0)
-                    <option  value="-1">All</option>   
+                    @if (count($clientedition) > 0)
+                        <option value="-1">All</option>
                     @endif
                     @foreach ($Edition as $lang)
-                    <option value="{{ $lang->ID }}">{{ $lang->Name }}</option>
+                        <option value="{{ $lang->ID }}">{{ $lang->Name }}</option>
                     @endforeach
-                   
                 </select>
                 <div class="flex flex-col justify-center items-center gap-2">
                     <button id="moveRightEdition" class="bg-blue-500 text-white p-1 rounded">&gt;</button>
@@ -87,13 +74,12 @@
                 </div>
                 <select id="editionselection" class="multiple border p-2 rounded" multiple>
                     @forelse ($clientedition as $lang)
-                    <option selected value="{{ $lang->ID }}">{{ $lang->Name }}</option>
+                        <option selected value="{{ $lang->ID }}">{{ $lang->Name }}</option>
                     @empty
-                    <option selected value="-1">All</option>
+                        <option selected value="-1">All</option>
                     @endforelse
                 </select>
             </div>
-
         </div>
         <div>
             <div class="flex flex-col items-center">
@@ -347,6 +333,96 @@
 
 @section('scripts')
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const restrictedMUCheckbox = document.getElementById('restrictedmu');
+
+        const languageInputs = [
+            document.getElementById('LanguageSearchInput'),
+            document.getElementById('clearLanguageSearch'),
+            document.getElementById('LanguageSelectionSearchInput'),
+            document.getElementById('clearLanguageSelectionSearch'),
+            document.getElementById('languageSelect1'),
+            document.getElementById('moveRightLang'),
+            document.getElementById('moveLeftLang'),
+            document.getElementById('languageselection')
+        ];
+
+        const editionInputs = [
+            document.getElementById('EditionSearchInput'),
+            document.getElementById('clearEditionSearch'),
+            document.getElementById('EditionSelectionSearchInput'),
+            document.getElementById('clearEditionSelectionSearch'),
+            document.getElementById('editionSelect1'),
+            document.getElementById('moveRightEdition'),
+            document.getElementById('moveLeftEdition'),
+            document.getElementById('editionselection')
+        ];
+
+        const newspaperInputs = [
+            document.getElementById('NewspaperSearchInput'),
+            document.getElementById('clearNewspaperSearch'),
+            document.getElementById('NewspaperSelectionSearchInput'),
+            document.getElementById('clearNewspaperSelectionSearch'),
+            document.getElementById('newspaperSelect1'),
+            document.getElementById('moveRightNewspaper'),
+            document.getElementById('moveLeftNewspaper'),
+            document.getElementById('newspaperselection')
+        ];
+
+        const magazineInputs = [
+            document.getElementById('magazineSearchInput'),
+            document.getElementById('clearMagazineSearch'),
+            document.getElementById('magazineSelectionSearchInput'),
+            document.getElementById('clearMagazineSelectionSearch'),
+            document.getElementById('magazineSelect1'),
+            document.getElementById('moveRightMagazine'),
+            document.getElementById('moveLeftMagazine'),
+            document.getElementById('magazineselection')
+        ];
+
+        const newspapersInputs = [
+            document.getElementById('newspaperssSearchInput'),
+            document.getElementById('clearNewspapersSearch'),
+            document.getElementById('newspaperssSelectionSearchInput'),
+            document.getElementById('clearNewspapersSelectionSearch'),
+            document.getElementById('newspapersSelect1'),
+            document.getElementById('moveRightnewspapers'),
+            document.getElementById('moveLeftnewspapers'),
+            document.getElementById('newspapersselection')
+        ];
+
+        const magazinesInputs = [
+            document.getElementById('magazinesSearchInput'),
+            document.getElementById('clearMagazinesSearch'),
+            document.getElementById('magazinesSelectionSearchInput'),
+            document.getElementById('clearMagazinesSelectionSearch'),
+            document.getElementById('magazinesSelect1'),
+            document.getElementById('moveRightmagazines'),
+            document.getElementById('moveLeftmagazines'),
+            document.getElementById('magazinesselection')
+        ];
+
+        function toggleInputs(inputs, disable) {
+            inputs.forEach(input => {
+                input.disabled = disable;
+            });
+        }
+
+        function toggleLanguageAndEditionInputs() {
+            const disable = restrictedMUCheckbox.checked;
+            toggleInputs(languageInputs, disable);
+            toggleInputs(editionInputs, disable);
+            toggleInputs(newspaperInputs, disable);
+            toggleInputs(magazineInputs, disable);
+            toggleInputs(newspapersInputs, disable);
+            toggleInputs(magazinesInputs, disable);
+        }
+
+        restrictedMUCheckbox.addEventListener('change', toggleLanguageAndEditionInputs);
+
+        // Initial state based on checkbox
+        toggleLanguageAndEditionInputs();
+    });
      function sortOptions(selectElement) {
            
            var options = $(selectElement).find('option');
