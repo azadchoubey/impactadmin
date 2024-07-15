@@ -32,3 +32,4 @@ Route::controller(KeywordController::class)->group(function () {
 Route::post('/searchexceptional',[ClientsProfile::class,'searchExceptional'])->name('searchexceptional');
 Route::post('/filter',[FilterController::class,'filter'])->name('filter');
 Route::post('/saveselecteddata',[FilterController::class,'saveselecteddata'])->name('saveselecteddata');
+Route::delete('deleteClient', [ClientsProfile::class, 'deleteClient'])->name('delete.client');

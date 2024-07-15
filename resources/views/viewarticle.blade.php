@@ -124,7 +124,7 @@
                 </div>
                 <!-- Image Box -->
                 <div class="border p-4 rounded-lg bg-white dark:bg-gray-700">
-                    <img src="{{ 'https://myimpact.in/backup/'.$article['article']->imagedirectory.'/'. $article['article']->imagename[0]['imagename'] }}" alt="Article Image" class="w-full h-auto rounded-lg">
+                <img src="{{ 'https://myimpact.in/backup/'.$article['article']->imagedirectory.'/'.$article['article']->imagename[0]['imagename'] }}" alt="Article Image" class="w-1/2 h-auto rounded-lg">
                 </div>
                 
             </div>
@@ -167,7 +167,7 @@
             </div>
             <div>
                 <label for="fulltext" class="block text-sm font-medium text-gray-700">OCRed Text</label>
-                <textarea class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
+                <textarea class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">{{$article['full_text']}}</textarea>
 
             </div>
         </div>
@@ -182,8 +182,8 @@
         @foreach(array_chunk($article['keywords'], 10) as $chunk)
         <ul class="list-disc list-inside">
             @foreach($chunk as $keyword=>$key)
-
-            <li>{{ $key }}</li>
+             
+            <li>{{ $key['keyword'] }}</li>
             @endforeach
         </ul>
 
@@ -215,44 +215,52 @@
 
 @section('scripts')
 <script>
-    $('#keyword').on('input', fetchResults);
-
-    function fetchResults() {
-        const keyword = $('#keyword').val().trim();
-        const autocompleteList = $('#autocomplete-list');
-        const resultsList = $('#results-list');
-        if (keyword.length > 2) {
-            $.ajax({
-                url: '/api/keywordlist',
-                method: 'GET',
-                data: {
-                    keyword: keyword
-                },
-                success: function(response) {
-                    resultsList.empty(); // Clear previous results
-                    if (response.length > 0) {
-                        $.each(response, function(index, result) {
-                            const li = $('<li>').text(result.KeyWord);
-
-                            li.css('padding', '8px')
-                            li.on('click', function() {
-                                selectResult(result.KeyWord, result.keyID);
-                            });
-                            resultsList.append(li);
-                        });
-                        autocompleteList.show(); // Show autocomplete list
-                    } else {
-                        autocompleteList.hide(); // Hide autocomplete list if no results
+    $(document).ready(function() {
+        $('#keyword').autocomplete({
+        source: function(request, response) {
+            const keyword = request.term.trim();
+            if (keyword.length >= 2) {
+                $.ajax({
+                    url: '/api/keywordlist',
+                    method: 'GET',
+                    data: {
+                        keyword: keyword
+                    },
+                    success: function(data) {
+                        const autocompleteData = data.map(item => ({
+                            label: item.KeyWord,
+                            value: item.KeyWord,
+                            keyID: item.keyID
+                        }));
+                        response(autocompleteData);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching results:', error);
+                        response([]); 
                     }
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error fetching results:', error);
-                }
+                });
+            } else {
+                response([]);
+            }
+        },
+        minLength: 2, 
+        select: function(event, ui) {
+            selectResult(ui.item.value, ui.item.keyID);
+        },
+        open: function(event, ui) {
+            var $input = $(this);
+            var $results = $input.autocomplete("widget");
+            var maxHeight = 300; // Adjust max height as needed
+
+            // Limit the height of the autocomplete list
+            $results.css({
+                'max-height': maxHeight + 'px',
+                'overflow-y': 'auto',
+                'overflow-x': 'hidden'
             });
-        } else {
-            autocompleteList.hide(); // Hide autocomplete list if keyword length is less than 3
         }
-    }
+    });
+     });
 
     function selectResult(keyword, keyID) {
         $('#keyword').val(keyword);

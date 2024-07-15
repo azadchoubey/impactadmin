@@ -8,6 +8,7 @@ use App\Models\Mongo\Article;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class ArticleController extends Controller
@@ -23,10 +24,10 @@ class ArticleController extends Controller
 
                 $keywords = $group->flatMap(function ($item) {
                     return collect($item['keyword'])->mapWithKeys(function ($keyword) {
-                        return [
+                        return [[
                             'keyid' => $keyword['keyid'],
                             'keyword' => $keyword['keyword'],
-                        ];
+                        ]];
                     });
                 })->unique()->all();
 
@@ -45,7 +46,8 @@ class ArticleController extends Controller
             });
          
         $groupedResults = $groupedResults->values()->first();
-       
+        $data = Http::withoutVerifying()->post('https://jcsja7gip7.execute-api.ap-south-1.amazonaws.com/dev/articles/getsummary', ['articleid' =>  $id])->json();
+        $groupedResults['full_text'] = $data[0]['full_text'];
         return view('viewarticle', ['article' => $groupedResults]);
     }
     public function saveArticle(Request $request)
@@ -67,7 +69,7 @@ class ArticleController extends Controller
         $placeholders = implode(',', array_fill(0, count($clientids), '?'));
         try {
             DB::beginTransaction();
-            $clientkeywords = Clientkeyword::where('KeywordID', $keyid)
+            $clientkeywords = Clientkeyword::on('mysql')->where('KeywordID', $keyid)
                 ->whereIn('ClientID', $clientids)
                 ->get();
 

@@ -41,7 +41,7 @@ Route::get('/enabledisable/{id}',[ManageUsers::class,'enabledisable'])->name('en
 
 
 // client profile routes
-Route::get('/clients',ShowClientProfile::class);
+Route::get('/clients',ShowClientProfile::class)->name('client');
 Route::get('/clients/{id}',[ClientsProfile::class,'index'])->name('clients');
 Route::post('/editclient/{id}', [ClientsProfile::class,'edit'])->name('editclient');
 Route::get('/addclient',[ClientsProfile::class,'addclient'])->name('addclient');
@@ -54,6 +54,7 @@ Route::get('/export-clients', [ClientsProfile::class, 'export'])->name('clients.
 Route::get('/export-client-details', [ClientsProfile::class, 'exportDetails'])->name('clients.exportDetails');
 Route::get('/export-brand-strings', [ClientsProfile::class, 'exportBrandStrings'])->name('clients.exportBrandStrings');
 Route::post('/update-checkbox', [ClientsProfile::class, 'updateCheckbox'])->name('update.checkbox');
+Route::get('/media/universe/content', [ClientsProfile::class, 'loadMediaUniverseContent'])->name('loadMediaUniverseContent');
 
 
 

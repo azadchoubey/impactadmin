@@ -5,8 +5,16 @@
     $keywordtypes = \App\Models\Picklist::where('type','keyword Type')->orderBy('Name')->get();
     $keywordcategories = \App\Models\Picklist::where('type','keyword category')->orderBy('Name')->get();
     @endphp
-<x-sticky-header title="Client Profile" subtitle="Clientid : {{$data->ClientID}}" name="Client Name : {{ $data->Name }}" />
-
+<x-sticky-header title="Client Profile" subtitle="" name="Client Name : {{ $data->Name }} - {{$data->ClientID}}" />
+<div id="deleteConfirmModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-10">
+    <div class="bg-white p-4 rounded-lg">
+        <p>Are you sure you want to delete this account?</p>
+        <div class="flex justify-end mt-4">
+            <button id="confirmDelete" class="bg-red-500 text-white px-4 py-2 rounded mr-2">Yes</button>
+            <button id="cancelDelete" class="bg-gray-300 text-black px-4 py-2 rounded">No</button>
+        </div>
+    </div>
+</div>
 <div class="container mx-auto px-3 bg-white rounded-md shadow-md">
 @if(session()->has('success'))
     <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
@@ -300,7 +308,7 @@
                             Save
                         </button>
                         <button type="button" onclick="enableAllDisabledItems()" id="editbtn" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-blue-600">Edit</button>
-                        <button type="button"  class="px-3 py-2 text-xs font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
+                        <button type="button" id="deleteButton"  class="px-3 py-2 text-xs font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
                         <div class="flex items-center">
                             <svg class="h-4 w-4 text-white-500" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" />
@@ -317,20 +325,9 @@
             <div class="rounded-lg bg-gray-50 dark:bg-gray-800" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <button id="editbutton" data-modal-target="large-modal" data-modal-toggle="large-modal" class="hidden px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Edit</button>
-                    <div id="createcontacts" class="mb-2">
-                        <button data-modal-target="large-modal2" data-modal-toggle="large-modal2" class="right-0 px-3 py-2 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create Contact</button>
-                    </div>
-                    @php
-                    $currentPage = request()->input('contacts', 1);
-                    $perPage = 10;
-                    $totalItems = $contacts->count();
-                    $totalPages = ceil($totalItems / $perPage);
-                    $startIndex = ($currentPage - 1) * $perPage;
-                    $endIndex = min($startIndex + $perPage - 1, $totalItems);
-
-                    $currentPageItems = $contacts->slice($startIndex, $endIndex - $startIndex + 1);
-                    @endphp
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                   
+                  
+                    <table id="contacts" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <!-- <th scope="col" class="px-6 py-3">
                                 <input type="checkbox" id="selectAll" onchange="toggleSelectAll(this)" class="form-checkbox">
@@ -350,7 +347,7 @@
                         </thead>
                         <tbody>
 
-                            @foreach($currentPageItems as $contact)
+                            @foreach($contacts as $contact)
                             <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
                                 <!-- <td class="px-6 py-4">
                                     <input type="checkbox" onchange="updateEditButtonVisibility()" value="{{$contact->contactid}}" class="form-checkbox checkboxes">
@@ -368,30 +365,14 @@
                                 <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->enablefordidyounotice?$check:$cross !!}</td>
                                 <td class="withoutEditSection{{$contact->contactid}} px-6 py-4">{!! $contact->delivery->isNotEmpty()?$check:$cross !!}</td>
                               
-                                <td id="editButton" class="withoutEditSection{{$contact->contactid}} px-6 py-4"><a onclick="openmodal({{$contact->contactid}})"  data-modal-target="large-modal{{$contact->contactid}}" data-modal-toggle="large-modal{{$contact->contactid}}" href="javascript:void(0);">Edit</a></td>
+                                <td id="editButton" class="withoutEditSection{{$contact->contactid}} px-6 py-4"><a onclick="openmodal('{{$contact->contactid}}')"  data-modal-target="large-modal{{$contact->contactid}}" data-modal-toggle="large-modal{{$contact->contactid}}" href="javascript:void(0);">Edit</a></td>
                                 <x-edit-contact :contact="$contact" :picklist="$picklist" :deliverymaster="$deliverymaster" :webdeliverymaster="$webdeliverymaster" :client="$data" :formats="$formats" />
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
 
-                    <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4" aria-label="Table navigation">
-                        <span class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">
-                            Showing <span class="font-semibold text-gray-900 dark:text-white">{{ $startIndex + 1 }}-{{ $endIndex + 1 }}</span> of <span class="font-semibold text-gray-900 dark:text-white">{{ $totalItems }}</span>
-                        </span>
-                        <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
-                            <li>
-                                <a href="{{ url()->current() }}?contacts={{ max($currentPage - 1, 1) }}" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white {{ $currentPage == 1 ? 'pointer-events-none' : '' }}">Previous</a>
-                            </li>
-                            @for ($page = 1; $page <= $totalPages; $page++) <li>
-                                <a href="{{ url()->current() }}?contacts={{ $page }}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white {{ $page == $currentPage ? 'text-blue-600 border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white' : '' }}">{{ $page }}</a>
-                                </li>
-                                @endfor
-                                <li>
-                                    <a href="{{ url()->current() }}?contacts={{ min($currentPage + 1, $totalPages) }}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white {{ $currentPage == $totalPages ? 'pointer-events-none' : '' }}">Next</a>
-                                </li>
-                        </ul>
-                    </nav>
+                  
                 </div>
 
             </div>
@@ -399,22 +380,11 @@
             <div class="rounded-lg bg-gray-50 dark:bg-gray-800" id="settings" role="tabpanel" aria-labelledby="settings-tab">
                 <div class="mt-5 relative overflow-x-auto shadow-md sm:rounded-lg">
                     <button id="editbutton1" data-modal-target="large-modal1" data-modal-toggle="large-modal1" class="hidden px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Edit</button>
-                    <div dir="rtl" id="createkeywords">
-                        <button id="createkeyword" data-modal-target="large-modal1" data-modal-toggle="large-modal1" class="right-0 px-3 py-2 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create Keyword</button>
-                    </div>
+                  
                     <div>
-                        @php
-                        $currentPage = request()->input('keywords', 1);
-                        $perPage = 10;
-                        $totalItems = $keywords->count();
-                        $totalPages = ceil($totalItems / $perPage);
-
-                        $startIndex = ($currentPage - 1) * $perPage;
-                        $endIndex = min($startIndex + $perPage - 1, $totalItems);
-
-                        $currentPageItems = $keywords->slice($startIndex, $endIndex - $startIndex + 1);
-                        @endphp
-                        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                        
+                  
+                        <table id="keywords" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         
                                 <th scope="col" class="px-6 py-3">Keyword</th>
@@ -427,7 +397,7 @@
                                 <th scope="col" class="px-6 py-3">Action</th>
                             </thead>
                             <tbody>
-                                @foreach($currentPageItems as $keyword)
+                                @foreach($keywords as $keyword)
                                 <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
                              
                                     <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $keyword->KeyWord}}</td>
@@ -446,28 +416,11 @@
                             </tbody>
                         </table>
 
-                        <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4" aria-label="Table navigation">
-                            <span class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">
-                                Showing <span class="font-semibold text-gray-900 dark:text-white">{{ $startIndex + 1 }}-{{ $endIndex + 1 }}</span> of <span class="font-semibold text-gray-900 dark:text-white">{{ $totalItems }}</span>
-                            </span>
-                            <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
-                                <li>
-                                    <a href="{{ url()->current() }}?keywords={{ max($currentPage - 1, 1) }}" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white {{ $currentPage == 1 ? 'pointer-events-none' : '' }}">Previous</a>
-                                </li>
-                                @for ($page = 1; $page <= $totalPages; $page++) <li>
-                                    <a href="{{ url()->current() }}?keywords={{ $page }}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white {{ $page == $currentPage ? 'text-blue-600 border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white' : '' }}">{{ $page }}</a>
-                                    </li>
-                                    @endfor
-                                    <li>
-                                        <a href="{{ url()->current() }}?keywords={{ min($currentPage + 1, $totalPages) }}" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white {{ $currentPage == $totalPages ? 'pointer-events-none' : '' }}">Next</a>
-                                    </li>
-                            </ul>
-                        </nav>
+                
                     </div>
                 </div>
             </div>
             <div class="rounded-lg bg-gray-50 dark:bg-gray-800" id="mediauniverse" role="tabpanel" aria-labelledby="media-universe">
-            <x-client-media-universe :clientid="$data->ClientID" :priority="$data->priority" :restrictedmu="$data->restricted_mu" />
             </div>
         </div>
     </div>
@@ -687,7 +640,7 @@
                         <div class="grid grid-cols-3 gap-2 mt-3">
                            
                             <div>
-                                <label for="type" class="block text-sm font-medium text-gray-700">Enable for BR</label>
+                                <label for="type" class="block text-sm font-medium text-gray-700">Broadcast</label>
                                 <input name="enableforbr" type="checkbox" value="1">
                             </div>
                             <div>
@@ -708,7 +661,10 @@
                                 <label for="type" class="block text-sm font-medium text-gray-700">DYNA</label>
                                 <input name="enablefordidyounotice" type="checkbox" value="1">
                             </div>
-
+                            <div class="{{$data->enablefortwitter == 1 ? '' : 'disabled'}}">
+                                <label for="type" class="block text-sm font-medium text-gray-700">Enable for Twitter</label>
+                                <input name="enablefortwitter" type="checkbox" value="1" {{$data->enablefortwitter == 1 ? 'checked' : ''}} {{$data->enablefortwitter == 1 ? '' : 'disabled'}}>
+                            </div>
                            
                         </div>
                     </fieldset>
@@ -724,8 +680,8 @@
                                 <label for="type" class="block text-sm font-medium text-gray-700">Delivery Method Print</label>
                                 <select name="deliverymethod" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" {{$data->wm_enableforprint == 1 ? '' : 'disabled'}}>
                                     <option value="">Select option</option>
-                                    @foreach($deliverymaster as $Delivery)
-                                    <option value="{{$Delivery->id}}">{{$Delivery->deliverytime}}</option>
+                                    @foreach($picklist['delivery method'] as $Delivery)
+                                    <option value="{{$Delivery->ID}}">{{$Delivery->Name}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -768,10 +724,7 @@
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for Web</label>
                                 <input name="wm_enableforweb" type="checkbox" value="1" {{$data->wm_enableforweb == 1 ? 'checked' : ''}} {{$data->wm_enableforweb == 1 ? '' : 'disabled'}}>
                             </div>
-                            <div class="{{$data->enablefortwitter == 1 ? '' : 'disabled'}}">
-                                <label for="type" class="block text-sm font-medium text-gray-700">Enable for Twitter</label>
-                                <input name="enablefortwitter" type="checkbox" value="1" {{$data->enablefortwitter == 1 ? 'checked' : ''}} {{$data->enablefortwitter == 1 ? '' : 'disabled'}}>
-                            </div>
+                           
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Delivery Method Web</label>
                                 <select name="wm_deliveryids[]" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -808,46 +761,49 @@
                                     <label for="type" class="block text-sm font-medium text-gray-700">Company News</label>
                                 </div>
                                 <div>
-                                    <label for="type" class="block text-sm font-small text-gray-700">None</label>
-                                    <input name="whatsapp_print_company" value="0" type="radio"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
+                                    <label for="type" class="block text-sm font-small text-gray-700">Prominent News</label>
+                                    <input name="whatsapp_print_company" value="2" type="radio"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                                 </div>
+                              
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">All News</label>
                                     <input name="whatsapp_print_company" value="1"  type="radio"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                                 </div>
                                 <div>
-                                    <label for="type" class="block text-sm font-small text-gray-700">Prominent News</label>
-                                    <input name="whatsapp_print_company" value="2" type="radio"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
+                                    <label for="type" class="block text-sm font-small text-gray-700">None</label>
+                                    <input name="whatsapp_print_company" value="0" type="radio"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-medium text-gray-700">Competitor News</label>
-                                </div>
-                                <div>
-                                    <label for="type" class="block text-sm font-small text-gray-700">None</label>
-                                    <input name="whatsapp_print_competitor" value="0" type="radio"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
-                                </div>
-                                <div>
-                                    <label for="type" class="block text-sm font-small text-gray-700">All News</label>
-                                    <input name="whatsapp_print_competitor" value="1" type="radio"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">Prominent News</label>
                                     <input name="whatsapp_print_competitor" value="2" type="radio"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                                 </div>
                                 <div>
+                                    <label for="type" class="block text-sm font-small text-gray-700">All News</label>
+                                    <input name="whatsapp_print_competitor" value="1" type="radio"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
+                                </div>
+                                
+                                <div>
+                                    <label for="type" class="block text-sm font-small text-gray-700">None</label>
+                                    <input name="whatsapp_print_competitor" value="0" type="radio"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
+                                </div>
+                                <div>
                                     <label for="type" class="block text-sm font-medium text-gray-700">Industry News </label>
                                 </div>
                                 <div>
-                                    <label for="type" class="block text-sm font-small text-gray-700">None</label>
-                                    <input name="whatsapp_print_industry" value="0" type="radio"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
+                                    <label for="type" class="block text-sm font-small text-gray-700">Prominent News</label>
+                                    <input name="whatsapp_print_industry" value="2" type="radio"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">All News</label>
                                     <input name="whatsapp_print_industry" value="1" type="radio"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                                 </div>
+                         
                                 <div>
-                                    <label for="type" class="block text-sm font-small text-gray-700">Prominent News</label>
-                                    <input name="whatsapp_print_industry" value="2" type="radio"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
+                                    <label for="type" class="block text-sm font-small text-gray-700">None</label>
+                                    <input name="whatsapp_print_industry" value="0" type="radio"{{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                                 </div>
                             </div>
                         </fieldset>
@@ -1358,6 +1314,87 @@ function openmodal(id){
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            $('#deleteButton').on('click', function() {
+        $('#deleteConfirmModal').removeClass('hidden');
+    });
+    $('#keywords').DataTable({
+        pagingType: 'first_last_numbers',
+        layout: {
+                topStart: {
+                    buttons: [{
+                        text: '<div class="flex items-center" id="createkeyword" data-modal-target="large-modal1" data-modal-toggle="large-modal1"  >Create Keyword</div>',
+                        className: 'px-3 py-2 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800',
+                        
+                    }]
+                }
+            }
+    });
+    $('#contacts').DataTable({
+        pagingType: 'first_last_numbers',
+        layout: {
+                topStart: {
+                    buttons: [{
+                        text: '<div class="flex items-center" data-modal-target="large-modal2" data-modal-toggle="large-modal2"  >Create Contact</div>',
+                        className: 'px-3 py-2 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800',
+                        
+                    }]
+                }
+            }
+    });
+    $('#cancelDelete').on('click', function() {
+        $('#deleteConfirmModal').addClass('hidden');
+    });
+
+    $('#confirmDelete').on('click', function() {
+        var clientid = '{{ $data->ClientID }}';      
+        $.ajax({
+            url: `{{route('delete.client')}}`, 
+            type: 'DELETE',
+         
+            data: {
+                clientid: clientid,
+                userid: '{{ auth()->user()->UserID }}'
+            },
+            success: function(result) {
+                if(result.status) {
+                    alert(result.message);
+                    window.location.href = "{{ route('client') }}";
+                }else{
+                    alert(result.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error deleting item:', error);
+                $('#deleteConfirmModal').addClass('hidden');
+            }
+        });
+       
+    });
+        $('#media-universe').on('click', function() {
+        document.getElementById('processModal').classList.remove('hidden');
+
+        $.ajax({
+            url: `{{route('loadMediaUniverseContent')}}`,
+            method: 'GET',
+            data: {
+                clientid: "{{ $data->ClientID }}",
+                priority: "{{ $data->priority }}",
+                restrictedmu: "{{ $data->restricted_mu }}"
+            },
+            success: function(data) {
+                // Update the DOM with the fetched contenta
+                $('#mediauniverse').html(data);
+
+                document.getElementById('processModal').classList.add('hidden');
+            },
+            error: function(xhr, status, error) {
+                console.error('Error loading content:', error);
+
+                // Hide the loading spinner in case of error
+                document.getElementById('processModal').classList.add('hidden');
+            }
+        });
+    });
             const checkbox = document.getElementById('primaryCheckbox');
             const dropdown = document.querySelector('select[name="primary_client_id"]');
     

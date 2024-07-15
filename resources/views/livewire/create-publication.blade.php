@@ -1,5 +1,5 @@
 <div class="w-10/12 mx-auto">
-    <h5 class="text-center text-xl font-bold dark:text-white">Create Publication</h5>
+    <x-sticky-header name="Create Publication" subtitle=""  title=""/>
     @if (session()->has('error'))
         <div>{{ session('error') }}</div>
     @endif
@@ -35,7 +35,7 @@
                     <div class="flex items-center">
                         <input wire:model="togglePrimary" wire:click="togglePrimary" class="text" type="checkbox">
                         <select wire:model="primary" {{ !$primaryDisabled ? 'disabled' : ''}} class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ms-3 p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option></option>
+                        <option value="">Select option</option>
                             @foreach($data['pubmaster'] as $pubmaster)
                             <option value="{{$pubmaster->PubId}}">{{$pubmaster->Title}}</option>
                             @endforeach
@@ -75,7 +75,9 @@
              <div class="mb-4">
                     <label for="type" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Type</label>
                     <select wire:model="type" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        @forelse($data['Pubtype'] as $key=>$pubtype)
+                    <option value="">Select option</option>
+
+                    @forelse($data['Pubtype'] as $key=>$pubtype)
                         <option value="{{$pubtype->ID}}">{{$pubtype->Name}}</option>
                         @empty
                         <option value="">Select option</option>
@@ -99,7 +101,9 @@
                 <div class="mb-4">
                     <label for="language" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Language</label>
                     <select wire:model="language" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        @forelse($data['Language'] as $key=>$language)
+                    <option value="">Select option</option>
+    
+                    @forelse($data['Language'] as $key=>$language)
                         <option value="{{$language->ID}}">{{$language->Name}}</option>
                         @empty
                         <option value="">Select option</option>
@@ -122,7 +126,7 @@
                             <input wire:model="checkboxes.{{$index}}.IsPre" type="checkbox" id="checkbox-{{ $index }}">
                             <label for="checkbox-{{ $index }}">{{ $label['Name'] }}</label>
                         </div>
-                        <button wire:click="removeCheckbox({{$index}})" class="text-red-500 dark:text-red-400">❌</button>
+                        <button type="button" wire:click="removeCheckbox({{$index}})" class="text-red-500 dark:text-red-400">❌</button>
                     </div>
                     @empty
                     @endforelse
