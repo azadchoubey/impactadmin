@@ -20,7 +20,7 @@ class KeywordController extends Controller
 
         $results = Keywordmaster::where('keyword', 'like', '%' . $keyword . '%')
         ->whereRaw("IFNULL(filter_string, '') = ''")
-        ->limit(10)->get();
+        ->get();
 
         return response()->json($results);
     }
@@ -142,7 +142,7 @@ class KeywordController extends Controller
     }
     public function keywordClients()  {
         $keyid = request('keyid');
-        $clients = Clinetprofile::whereHas('clientkeywords', function($query) use ($keyid) {
+        $clients = Clinetprofile::on('mysql2')->whereHas('clientkeywords', function($query) use ($keyid) {
             $query->where('KeywordID', $keyid);
         })->select('ClientID', 'Name')->get();
         return response()->json($clients);

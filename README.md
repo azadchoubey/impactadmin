@@ -64,3 +64,33 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+### Step-by-Step Deployment
+
+## Step 1: Install PHP and Required Extensions
+
+1. Install EPEL release.
+2. Install Remi repository.
+3. Install yum-utils.
+4. Enable Remi repository for PHP 8.1.
+5. Install PHP and necessary extensions.
+6. Verify the PHP installation.
+
+## Step 2: Install Composer
+
+1. Download and install Composer.
+2. Verify the Composer installation.
+
+
+## Step 3: Configure Laravel Environment
+
+1. Copy the example environment file.
+2. Generate a new application key.
+3. Update the `.env` file with your database and other configurations.
+
+## Step 4: Install Node.js and Frontend Dependencies
+
+1. Install Node 20.3 and npm 9.6.7..
+2. Install frontend dependencies. npm i
+3. Build frontend assets. npm run build
+

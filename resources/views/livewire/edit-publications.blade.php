@@ -1,4 +1,4 @@
-<div class="w-10/12 mx-auto">
+<div class="w-11/12 mx-auto">
 <div class='mt-3 flex flex-col items-center'>
         <button wire:loading disabled type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 inline-flex items-center">
             <svg aria-hidden="true" role="status" class="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -11,16 +11,12 @@
         <x-sticky-header title="" name="Edit Publication Name : {{$this->title}}" subtitle="PubId : {{$this->pubid}}" />
     <form wire:submit.prevent="submitForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 p-4">
         <div class="mr-3 bg-white-300 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 p-4 dark:bg-gray-800 dark:border-gray-700">
-            <div class="grid grid-cols-2 gap-3">
+            <div class="grid grid-cols-2 gap-2">
                 <div class="mb-2" x-data="{isTyped: false}">
                     <label for="name" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Publication</label>
                     <input wire:model="pubid" type="text" disabled class="text bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>                
-             {{--    <div class="mb-4">
-                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Web Universe</span>
-                    <br>
-                    <input disabled wire:model="webuniverse" {{$webuniverse == 1 ? "checked" : ''}} class="text" type="checkbox">
-                </div> --}}
+     
                 <div class="mb-4">
                     <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Primary</span>
                     <div class="mt-1 flex items-center">
@@ -107,7 +103,7 @@
                         @foreach($pagenames as $key => $pagename)   
                         <div class="flex items-center justify-between space-x-2 mb-2">
                             <div class="flex items-center space-x-2">
-                                <input wire:model="pagenames.{{$key}}.IsPre" {{$pagename['IsPre'] == "1" ? "checked":""}} type="checkbox" class="text gap-4"> 
+                                <input wire:model="pagenames.{{$key}}.IsPre" {{$pagename['IsPre'] == "1" ? "checked":""}} type="checkbox" class="text gap-1"> 
                                 @if(isset($pagename['editing']) && $pagename['editing'])
                                     <input wire:model="pagenames.{{$key}}.Name" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 @else
@@ -117,10 +113,10 @@
                             <div>
                                 @if(isset($pagename['editing']) && $pagename['editing'])
                                 <button wire:click="savePageName({{$key}})" type="button" class="px-2 py-1 text-sm font-semibold text-white bg-blue-500 rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Save</button>
-                            @else
+                                @else
                                 <button wire:click="toggleEditPageName({{$key}})" type="button" class="px-2 py-1 text-sm font-semibold text-white bg-blue-500 rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Edit</button>
-                            @endif
                                 <button wire:click="removePage({{$key}})" type="button" class="text-red-600 dark:text-red-500">❌</button>
+                                @endif
                             </div>
                         </div>
                         @endforeach                    
@@ -132,7 +128,6 @@
                 
 
                 <div class="mb-4">
-                    {{-- <input wire:model="restrictedmu" {{$restrictedmu == 1 ?"checked":''}} class="text" value="{{$restrictedmu}}" type="checkbox">
                     <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Restricted MU</span> --}}
                     <input wire:model="mu" {{$mu == 1 ?"checked":''}} class="text" value="{{$mu}}" type="checkbox" style="margin-left: 20px;">
                     <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Media Universe</span>

@@ -13,8 +13,8 @@ class ShowClientProfile extends Component
     public function render()
     {
         return view('livewire.show-client-profile',[
-            'Results' => Clinetprofile::orWhere('Name','LIKE','%'.$this->name.'%')
-            ->paginate($this->page)
+            'Results' => Clinetprofile::orWhere('Name','LIKE','%'.$this->name.'%')->
+            where('deleted','!=',1)->paginate($this->page)
         ]);
     }
 }

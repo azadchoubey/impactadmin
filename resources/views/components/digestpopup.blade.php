@@ -25,24 +25,22 @@
             </div>
             @php
             if($digest->delivery->isNotEmpty()){
-                $formats  = $digest->delivery->groupby('format');
+                $formats  = $digest->delivery->pluck('format')->implode(', ');
             }else{
                 $formats = $digest->delivery;
             }
+           
             @endphp
            
-            @forelse($formats as $key=>$item)
             @php
-                $deliveryTimes = $item->pluck('deliveryformats.deliverytime')->implode(', ');
+                $deliveryTimes =$digest->delivery->pluck('deliveryformats.deliverytime')->implode(', ');
             @endphp
                 <div class="flex">
-                <div class="w-1/2 px-4 py-2 border border-gray-400">P{{$key}}</div>
+                <div class="w-1/2 px-4 py-2 border border-gray-400">P{{$formats}}</div>
                 <div class="w-1/2 px-4 py-2 border border-gray-400">{{$deliveryTimes}}</div>
             </div>
         
-                @empty
-                <p>No Format Found</p>
-               @endforelse
+             
            
            
         </div>

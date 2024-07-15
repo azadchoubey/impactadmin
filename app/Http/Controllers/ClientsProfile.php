@@ -26,12 +26,17 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ClientDetailsExport;
 use App\Exports\BrandStringsExport;
 use App\Exports\ClientsExport;
+use App\Models\MediaUniverse;
+use App\Models\MediaUniverseMaster;
+use App\View\Components\ClientMediaUniverse;
+
 class ClientsProfile extends Controller
 {
     public function index($id)
     {
         $data = Clinetprofile::with('contacts', 'contacts.delivery', 'contacts.delivery.deliveryformats', 'contacts.regularDigestPrint', 'contacts.regularDigestWeb', 'Country', 'Region', 'sector', 'keywords', 'billingcycle')->find(base64_decode($id));
         $keywords = $data->keywords;
+      
         $contacts = $data->contacts;
         $picklist = Picklist::whereIn('Type', ['City', 'Country', 'Delivery Method', 'Sector Summary Delivery', 'contacttype','client type','client source','Region','bill cycle','client status','sector'])->get()->groupBy(function ($query) {
             return strtolower($query->Type);
@@ -232,6 +237,7 @@ class ClientsProfile extends Controller
             $input = $request->except(['_token', 'deliveryid', 'SectorID', 'format', 'wm_deliveryids', 'deliverymethod']);
             $input['ContactType'] = 0; 
             $input['wm_deliverymethod'] = $request->wm_enableforweb ? 1 : 0;
+            $input['DeliveryID']= $deliverymethod ?? 0;
             $contactid = ClinetContacts::insertGetId($input);
     
             $password = str_pad(rand(0, 9999999), 6, '0', STR_PAD_LEFT);
@@ -266,14 +272,7 @@ class ClientsProfile extends Controller
                         ]);
                     }
                 }                
-                if (isset($input['wm_enableforprint']) && $input['wm_enableforprint'] == 1) {
-                    foreach ($deliverymethod['deliverymethod'] as $deliveryid) {
-                        Deliverymethod::insert([
-                            'contactid' => $contactid,
-                            'deliveryid' => $deliverymethod['deliverymethod'],
-                        ]);
-                    }
-                }
+              
     
                 DB::commit();
                 $client = Clinetprofile::find($input['clientid']);
@@ -350,13 +349,17 @@ class ClientsProfile extends Controller
         $deliveryMethod = $request->only('deliverymethod');
         $input = $request->except(['_token', 'contactid', 'deliveryid', 'SectorID', 'format', 'wm_deliveryids', 'deliverymethod']);
         $input['ContactType'] = 0;
+        $input['DeliveryID']= $input['wm_deliverymethod'] ?? 0;
         $input['wm_deliverymethod'] = $request->wm_enableforweb ? 1 : 0;
         $input['enableformediatouch'] = $request->enableformediatouch ? 1 : 0;
         $input['enablefortwitter'] = $request->enablefortwitter ? 1 : 0;
         $input['enableformobile'] = $request->enableformobile ? 1 : 0;
         $input['enableforqlikview'] = $request->enableforqlikview ? 1 : 0;
-
-        ClinetContacts::where('ContactID', $contactId)->update($input);
+       if($input['password']){
+        $input['passwd'] = $input['password'];
+        ClinetContacts::where('Email', $input['Email'])->update(['passwd' => $input['password']]); 
+       }
+        ClinetContacts::where(['ContactID'=> $contactId , 'ClientID'=>$input['clientid']])->update($input);
 
         if ($wmDeliveryMethod) {
             Wmwebdeliverymethod::where('contactid', $contactId)->delete();
@@ -400,15 +403,7 @@ class ClientsProfile extends Controller
         }
         
 
-        if (isset($input['wm_enableforprint']) && $input['wm_enableforprint'] == 1 && $deliveryMethod) {
-            Deliverymethod::where('contactid', $contactId)->delete();
-            foreach ($deliveryMethod['deliverymethod'] as $deliveryId) {
-                Deliverymethod::insert([
-                    'contactid' => $contactId,
-                    'deliveryid' => $deliveryId,
-                ]);
-            }
-        }
+      
 
         DB::commit();
 
@@ -673,6 +668,232 @@ public function downloadMediaUniverseReport(Request $request)
         }
     
     }
+    public function loadMediaUniverseContent(Request $request)
+{
+    $clientid = $request->query('clientid');
+    $priority = $request->query('priority');
+    $restrictedmu = $request->query('restrictedmu');
+    $component = new ClientMediaUniverse($clientid, $priority, $restrictedmu); $subquery = MediaUniverse::on('mysql2')->select('tagId')
+    ->where('clientId', $clientid)
+    ->where('type', 'Language');
+
+$Language = Picklist::on('mysql2')->select('picklist.name as Name', 'picklist.id as ID')
+    ->join('pub_master', 'pub_master.language', '=', 'picklist.id')
+    ->whereNotIn('picklist.id', $subquery)
+    ->whereNotIn('picklist.id',[0])
+    ->distinct()
+    ->orderBy('picklist.name')
+    ->get();
+$clientlang = Picklist::on('mysql2')->select('picklist.name as Name', 'picklist.id as ID')
+    ->join('media_universe as mucp', 'mucp.tagId', '=', 'picklist.id')
+    ->where('mucp.type', 'Language')
+    ->where('mucp.clientId', $clientid)
+    ->distinct()
+    ->orderBy('picklist.name')
+    ->get();
+$tagId = Mediauniverse::on('mysql2')->where('clientId', $clientid)
+    ->where('tagId', -1)
+    ->where('type', 'Edition')
+    ->pluck('tagId')
+    ->first();
+$additionalIds = [
+    -6 => '6 Cities',
+    -8 => '6+2 Cities'
+];
+
+if ($tagId !== null && array_key_exists($tagId, $additionalIds)) {
+    $selectedVal = $additionalIds[$tagId];
+    unset($additionalIds[$tagId]);
+}
+
+$Edition = collect();
+foreach ($additionalIds as $key => $val) {
+    $Edition->push((object) ['Name' => $val, 'ID' => $key]);
+}
+    $subquery = Mediauniverse::on('mysql2')->select('tagId')
+    ->where('clientId', $clientid)
+    ->where('type', 'Edition');
+
+    $editionResults = Picklist::on('mysql2')->select('picklist.name as Name', 'picklist.id as ID')
+    ->join('pub_master', 'pub_master.place', '=', 'picklist.id')
+    ->whereNotIn('pub_master.place', $subquery)
+    ->whereNotIn('picklist.id',[0])
+    ->distinct()
+    ->orderBy('picklist.name')
+    ->get();
+    $Edition = $Edition
+    ->merge($editionResults->map(function($result) {
+        return (object) ['Name' => $result->Name, 'ID' => $result->ID];
+    }))
+    ->sort(function($a, $b) {
+        if ($a->Name === '') {
+            return -1;
+        }
+        if ($b->Name === '') {
+            return 1;
+        }
+        return strcasecmp($a->Name, $b->Name);
+    });
+
+$clientedition = Picklist::on('mysql2')->select(DB::raw('distinct picklist.name as Name'), 'picklist.id as ID')
+    ->join('media_universe as mucp', 'mucp.tagId', '=', 'picklist.id')
+    ->where('mucp.type', 'Edition')
+    ->where('mucp.clientId', $clientid)
+    ->orderBy('picklist.name')
+    ->get();
+
+$subquery = Mediauniverse::on('mysql2')->select('tagId')
+    ->where('clientId', $clientid)
+    ->where('type', 'Newspaper')
+    ->where('tag', 'B');
+
+$Newspapercat = Pubmaster::on('mysql2')->select(DB::raw('distinct picklist.Name as Category'), 'picklist.ID as catid')
+    ->leftJoin('picklist', 'pub_master.Category', '=', 'picklist.ID')
+    ->where('pub_master.primaryPubId', 0)
+    ->where('pub_master.Type', 230)
+    ->where('picklist.Name', '!=', '')
+    ->whereNotIn('pub_master.Category', $subquery)
+    ->orderBy('picklist.Name')
+    ->get();
+
+$clientnewspapercat = Mediauniverse::on('mysql2')->select(DB::raw('distinct picklist.Name as Category'), 'picklist.ID as catid')
+    ->leftJoin('picklist', 'media_universe.tagId', '=', 'picklist.ID')
+    ->leftJoin('pub_master', 'picklist.ID', '=', 'pub_master.Category')
+    ->where('pub_master.primaryPubId', 0)
+    ->where('pub_master.Type', 230)
+    ->where('media_universe.type', 'Newspaper')
+    ->where('media_universe.tag', 'B')
+    ->where('media_universe.clientId', $clientid)
+    ->whereNotNull('picklist.ID')
+    ->orderBy('Category')
+    ->get();
+
+$subquery = Mediauniverse::on('mysql2')->select('tagId')
+    ->where('clientId', $clientid)
+    ->where('type', 'Magazine')
+    ->where('tag', 'B')
+    ->getQuery();
+
+$Magazinecat = Pubmaster::on('mysql2')->select(DB::raw('distinct picklist.Name as Category'), 'picklist.ID as catid')
+    ->leftJoin('picklist', 'pub_master.Category', '=', 'picklist.ID')
+    ->where('pub_master.primaryPubId', 0)
+    ->where('pub_master.Type', 229)
+    ->where('picklist.Name', '!=', '')
+    ->whereNotIn('pub_master.Category', $subquery)
+    ->orderBy('picklist.Name')
+    ->get();
+$clientmagazinecat = MediaUniverse::on('mysql2')->selectRaw('DISTINCT picklist.Name as Category, picklist.ID as catid')
+    ->leftJoin('picklist', 'media_universe.tagid', '=', 'picklist.ID')
+    ->leftJoin('pub_master', 'picklist.ID', '=', 'pub_master.Category')
+    ->where('pub_master.primaryPubId', 0)
+    ->where('pub_master.Type', 229)
+    ->where('media_universe.type', 'Magazine')
+    ->where('media_universe.tag', 'B')
+    ->where('media_universe.clientId', $clientid)
+    ->whereNotNull('picklist.ID')
+    ->orderBy('Category')
+    ->get();
+$comments =  DB::connection('mysql2')->table('wm_users')
+    ->join('MUComment', 'wm_users.login', '=', 'MUComment.user')
+    ->where('MUComment.clientid', $clientid)
+    ->where('MUComment.isdeleted', 'No')
+    ->orderBy('MUComment.id', 'desc')
+    ->select('wm_users.fullname', 'MUComment.comment', 'MUComment.createddatetime', 'MUComment.id')
+    ->get();
+    
+$newspapers = Pubmaster::on('mysql2')->select('pub_master.Title as title', 'pub_master.PubId as pubid', 'picklist.Name as ediPlace')
+    ->join('picklist', 'pub_master.Place', '=', 'picklist.ID')
+    ->where('pub_master.Type', 230)
+    ->where('pub_master.PrimaryPubID', 0)
+    ->where('pub_master.deleted', 0)
+    ->whereNotIn('pub_master.pubid', function ($query) use ($clientid) {
+        $query->select('mum.pubid')
+            ->from('media_universe_master as mum')
+            ->join('pub_master as pm', 'mum.pubid', '=', 'pm.PubId')
+            ->where('mum.clientid', $clientid)
+            ->where('pm.Type', 230)
+            ->where('pm.PrimaryPubID', 0)
+            ->where('pm.deleted', 0);
+    })
+    ->where('pub_master.deleted', 0)
+    ->orderBy('pub_master.Title')
+    ->get();
+$clientnewspaper = MediaUniverseMaster::on('mysql2')->select('media_universe_master.pubid as pubid', 'pm.Title as title', 'pl.Name as ediPlace')
+    ->join('pub_master as pm', 'media_universe_master.pubid', '=', 'pm.PubId')
+    ->join('picklist as pl', 'pm.Place', '=', 'pl.ID')
+    ->where('media_universe_master.clientid', $clientid)
+    ->where('pm.Type', 230)
+    ->where('pm.PrimaryPubID', 0)
+    ->where('pm.deleted', 0)
+    ->orderBy('pm.Title')
+    ->get();
+$Magazines = PubMaster::on('mysql2')->select('pub_master.Title as title', 'pub_master.PubId as pubid', 'picklist.Name as ediPlace')
+    ->join('picklist', 'pub_master.Place', '=', 'picklist.ID')
+    ->where('pub_master.Type', 229)
+    ->where('pub_master.PrimaryPubID', 0)
+    ->where('pub_master.deleted', 0)
+    ->whereNotIn('pub_master.pubid', function ($query) use ($clientid) {
+        $query->select('pubid')
+            ->from(DB::raw("(SELECT mum.pubid as pubid
+                      FROM media_universe_master as mum
+                      join pub_master as pm on mum.pubid = pm.PubId
+                      where clientid = '{$clientid}' AND pm.Type = 229 AND pm.PrimaryPubID = 0 AND pm.deleted = 0) as t"));
+    })
+    ->where('deleted', 0)
+    ->get();
+$clientmagazines = MediaUniverseMaster::on('mysql2')->select('media_universe_master.pubid as pubid', 'pm.Title as title', 'pl.Name as ediPlace')
+    ->join('pub_master as pm', 'media_universe_master.pubid', '=', 'pm.PubId')
+    ->join('picklist as pl', 'pm.Place', '=', 'pl.ID')
+    ->where('media_universe_master.clientid', $clientid)
+    ->where('pm.Type', 229)
+    ->where('pm.PrimaryPubID', 0)
+    ->where('pm.deleted', 0)
+    ->orderBy('pm.Title')
+    ->get();
+  
+$selectpubnews = Pubmaster::on('mysql2')->where('IsMain', 1)->pluck('PubId')->toArray();
+    return  view('components.client-media-universe')
+            ->with([
+                'clientid' => $clientid,
+                'priority' => $priority,
+                'restrictedmu' => $restrictedmu,
+                'Language' => $Language,
+                'clientlang' => $clientlang,
+                'Edition' => $Edition,
+                'clientedition' => $clientedition,
+                'Newspapercat' => $Newspapercat,
+                'clientnewspapercat' => $clientnewspapercat,
+                'Magazinecat' => $Magazinecat,
+                'clientmagazinecat' => $clientmagazinecat,
+                'comments' => $comments,
+                'newspapers' => $newspapers,
+                'clientnewspaper' => $clientnewspaper,
+                'Magazines' => $Magazines,
+                'clientmagazines' => $clientmagazines,
+                'selectpubnews' => $selectpubnews,
+            ])->render();
+}
+public function  deleteClient(Request $request)  {
+    $clientid = $request->input('clientid');
+    $userid = $request->input('userid');
+
+    if (!$clientid || !$userid) {
+        Log::warning("Delete client request with invalid data. Client ID: $clientid, User ID: $userid");
+        return response()->json(['message' => 'Invalid request'], 400);
+    }
+    $client = Clinetprofile::where('ClientID', $clientid)->first();
+    if ($client) {
+        $client->deleted = 1;
+        $client->Edit_By = $userid;
+        $client->EditDateTime = now();
+        $client->update();
+        Log::info("Client deleted successfully. Client ID: $clientid, User ID: $userid");
+        return response()->json(['status' => true,'message' => 'Client deleted successfully'], 200);
+    } else {
+        Log::warning("Client not found. Client ID: $clientid, User ID: $userid");
+        return response()->json(['status' => false,'message' => 'Client not found'], 404);
+    }
+}
 
 }
 

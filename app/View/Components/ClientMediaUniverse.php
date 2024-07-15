@@ -22,7 +22,7 @@ class ClientMediaUniverse extends Component
         $this->clientid = $clientid;
         $this->restrictedmu = $restrictedmu;
         $this->priority = $priority;
-
+        
         $subquery = MediaUniverse::on('mysql2')->select('tagId')
             ->where('clientId', $clientid)
             ->where('type', 'Language');
@@ -50,8 +50,8 @@ class ClientMediaUniverse extends Component
             -6 => '6 Cities',
             -8 => '6+2 Cities'
         ];
-    
-        if ($tagId !== null) {
+        
+        if ($tagId !== null && array_key_exists($tagId, $additionalIds)) {
             $selectedVal = $additionalIds[$tagId];
             unset($additionalIds[$tagId]);
         }
