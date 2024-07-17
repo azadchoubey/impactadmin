@@ -179,65 +179,65 @@
                 <fieldset class="border border-gray-300 p-2 rounded-lg">
                     <legend class="text-sm font-medium text-gray-900">Custom Digest</legend>
                     <div class="flex flex-wrap justify-between items-center">
-                        {{-- <div class="w-full sm:w-auto mb-4 sm:mb-0">
+                        <div id="editSection{{$contact->contactid}}" class="hidden w-full flex flex-wrap justify-between">
+                            <div class="w-full sm:w-1/4 mb-4 sm:mb-0">
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for custom digest</label>
                                 <input name="wm_enableforweb" value="1" type="checkbox" {{$contact->delivery->isNotEmpty() ? 'checked' : ''}}>
-                    </div>
-                    <div class="w-full sm:w-auto mb-4 sm:mb-0">
-                        <label for="format" class="block text-sm font-medium text-gray-700">Format</label>
-                        <select name="format" onchange="selectFormat(this.value,'{{$contact->contactid}}')" id="format" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option value="">Select format</option>
-                            @foreach($formats as $format)
-                            <option value="{{$format->id}}" data-delivery="{{$format->deliverymethod}}">{{$format->format_name}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="w-full sm:w-auto mb-4 sm:mb-0">
-                        <label for="delivery_method" class="block text-sm font-medium text-gray-700">Delivery Method</label>
-                        <select name="deliveryid[]" id="delivery_method" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option value="">Select delivery method(s)</option>
-                            @foreach($deliverymaster as $delivery)
-                            <option value="{{ $delivery->id }}">{{ $delivery->deliverytime }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="w-full sm:w-auto">
-                        <button data-modal-target="static-modal{{$contact->contactid}}" data-modal-toggle="static-modal{{$contact->contactid}}" onclick="closeModal({{$contact->contactid}})" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-                            View Formats
-                        </button>
-                    </div> --}}
-                    <div class="w-full  text-sm font-medium">
-                        <div class="border border-gray-400">
-                            <div class=" flex">
-                                <div class="w-1/2 px-2 py-2 border border-gray-400">Formats</div>
-                                <div class="w-1/2 px-2 py-2 border border-gray-400">Timings</div>
-                                <div class="w-1/2 px-2 py-2 border border-gray-400">Action</div>
                             </div>
-                            @php
-                            if($contact->delivery->isNotEmpty()){
-                            $formats = $contact->delivery->pluck('format')->implode(', ');
-                            }else{
-                            $formats = $contact->delivery;
-                            }
-
-                            @endphp
-
-                            @php
-                            $deliveryTimes =$contact->delivery->pluck('deliveryformats.deliverytime')->implode(', ');
-                            @endphp
-                            <div class="flex">
-                                <div class="w-1/2 px-2 py-2 border border-gray-400">P{{$formats}}</div>
-                                <div class="w-1/2 px-2 py-2 border border-gray-400">{{$deliveryTimes}}</div>
-                                <div class="w-1/2 px-2 py-2 border border-gray-400">Edit</div>
+                            <div class="w-full sm:w-1/4 mb-4 sm:mb-0">
+                                <label for="format" class="block text-sm font-medium text-gray-700">Format</label>
+                                <select name="format" onchange="selectFormat(this.value,'{{$contact->contactid}}')" id="format" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <option value="">Select format</option>
+                                    @foreach($formats as $format)
+                                    <option value="{{$format->format}}" data-delivery="{{$format->deliverymethod}}">{{$format->format_name}}</option>
+                                    @endforeach
+                                </select>
                             </div>
-
-
-
-
+                            <div class="w-full sm:w-1/4 mb-4 sm:mb-0">
+                                <label for="delivery_method" class="block text-sm font-medium text-gray-700">Delivery Method</label>
+                                <select name="deliveryid[]" id="delivery_method" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <option value="">Select delivery method(s)</option>
+                                    @foreach($deliverymaster as $delivery)
+                                    <option value="{{ $delivery->id }}">{{ $delivery->deliverytime }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="w-full sm:w-auto">
+                                <button onclick="event.preventDefault(); saveChanges({{$contact->contactid}})" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                                    Back
+                                </button>
+                            </div>
+                        </div>
+                        <div id="displaySection{{$contact->contactid}}" class="w-full text-sm font-medium">
+                            <div class="border border-gray-400">
+                                <div class="flex">
+                                    <div class="w-1/3 px-2 py-2 border border-gray-400">Formats</div>
+                                    <div class="w-1/3 px-2 py-2 border border-gray-400">Timings</div>
+                                    <div class="w-1/3 px-2 py-2 border border-gray-400">Action</div>
+                                </div>
+                                @php
+                                if($contact->delivery->isNotEmpty()){
+                                $formats = $contact->delivery->pluck('format')->implode(', ');
+                                }else{
+                                $formats = $contact->delivery;
+                                }
+                
+                                @endphp
+                
+                                @php
+                                $deliveryTimes =$contact->delivery->pluck('deliveryformats.deliverytime')->implode(', ');
+                                @endphp
+                                <div class="flex">
+                                    <div class="w-1/3 px-2 py-2 border border-gray-400">P{{$formats}}</div>
+                                    <div class="w-1/3 px-2 py-2 border border-gray-400">{{$deliveryTimes}}</div>
+                                    <div class="w-1/3 px-2 py-2 border border-gray-400">
+                                        <button onclick="event.preventDefault(); toggleEditSection({{$contact->contactid}})" class="text-blue-600 hover:text-blue-800">Edit</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-        </div>
-        </fieldset>
+                </fieldset>
         <fieldset class="border border-gray-300 p-2 rounded-lg">
             <legend class="text-sm font-medium text-gray-900">Web Monitoring Parameters</legend>
             <div class="grid grid-cols-4 gap-4">
@@ -443,4 +443,33 @@
             });
         }
     }
+    function toggleEditSection(contactId, close = false) {
+        const editSection = document.getElementById('editSection' + contactId);
+        const displaySection = document.getElementById('displaySection' + contactId);
+        if (close) {
+            editSection.classList.add('hidden');
+            displaySection.classList.remove('hidden');
+        } else {
+            if (editSection.classList.contains('hidden')) {
+                editSection.classList.remove('hidden');
+                displaySection.classList.add('hidden');
+            } else {
+                editSection.classList.add('hidden');
+                displaySection.classList.remove('hidden');
+            }
+        }
+    }
+
+    function saveChanges(contactId) {
+        // Your save logic here
+        // After saving, update the display section with new values and close the edit section
+        toggleEditSection(contactId, true);
+    }
+
+    function closeModal(contactId) {
+        // Your close modal logic here
+        toggleEditSection(contactId, true);
+    }
+
+
 </script>

@@ -1325,22 +1325,113 @@ function openmodal(id){
                         text: '<div class="flex items-center" id="createkeyword" data-modal-target="large-modal1" data-modal-toggle="large-modal1"  >Create Keyword</div>',
                         className: 'px-3 py-2 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800',
                         
-                    }]
+                    },
+                    {
+            text: '<div class="flex items-center"  >Export </div>',
+            action: function (e, dt, button, config) {
+                exportDataToCSV('keywords.csv', dt);
+            },
+            className: 'px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800',
+        }]
                 }
             }
     });
-    $('#contacts').DataTable({
-        pagingType: 'first_last_numbers',
-        layout: {
-                topStart: {
-                    buttons: [{
-                        text: '<div class="flex items-center" data-modal-target="large-modal2" data-modal-toggle="large-modal2"  >Create Contact</div>',
-                        className: 'px-3 py-2 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800',
-                        
-                    }]
-                }
+// Function to export data to CSV with handling for special characters
+function exportDataToCSV(filename, datatable) {
+    var csv = [];
+    var headers = datatable.columns().header().toArray().map(header => $(header).text());
+    headers.pop(); // Remove the last header column
+    csv.push(headers.map(header => `"${header}"`).join(','));
+
+    // Fetch all data
+    datatable.rows().every(function () {
+        var data = this.data();
+        data.pop(); // Remove the last data column
+
+        // Process each data item to handle special characters
+        var processedData = data.map(item => {
+            // Encapsulate in quotes and escape existing quotes if necessary
+            if (typeof item === 'string') {
+                return `"${item.replace(/"/g, '""')}"`;
             }
+            return item;
+        });
+
+        csv.push(processedData.join(','));
     });
+
+    var csvString = csv.join('\n');
+    var blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+    var link = document.createElement("a");
+
+    if (link.download !== undefined) { // feature detection
+        var url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", filename);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+}
+$('#contacts').DataTable({
+    pagingType: 'first_last_numbers',
+    layout: {
+        topStart: {
+            buttons: [{
+                    text: '<div class="flex items-center" data-modal-target="large-modal2" data-modal-toggle="large-modal2">Create Contact</div>',
+                    className: 'px-3 py-2 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800',
+                },
+                {
+                    text: '<div class="flex items-center">Export</div>',
+                    action: function (e, dt, button, config) {
+                        exportDataToCSV('contacts.csv', dt);
+                    },
+                    className: 'px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800',
+                }
+            ]
+        }
+    }
+});
+
+function exportDataToCSV(filename, datatable) {
+    var csv = [];
+    var headers = datatable.columns().header().toArray().map(header => $(header).text());
+    headers.pop(); // Remove the last header column
+    csv.push(headers.map(header => `"${header}"`).join(','));
+
+    // Fetch all data
+    datatable.rows().every(function () {
+        var data = this.data();
+        data.pop(); // Remove the last data column
+
+        // Process each data item to handle special characters
+        var processedData = data.map(item => {
+            // Encapsulate in quotes and escape existing quotes if necessary
+            if (typeof item === 'string') {
+                return `"${item.replace(/"/g, '""')}"`;
+            }
+            return item;
+        });
+
+        csv.push(processedData.join(','));
+    });
+
+    var csvString = csv.join('\n');
+    var blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+    var link = document.createElement("a");
+
+    if (link.download !== undefined) { // feature detection
+        var url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", filename);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+}
+
     $('#cancelDelete').on('click', function() {
         $('#deleteConfirmModal').addClass('hidden');
     });

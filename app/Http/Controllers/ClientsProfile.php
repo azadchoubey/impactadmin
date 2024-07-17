@@ -44,7 +44,7 @@ class ClientsProfile extends Controller
         $webdeliverymaster = Wmwebdeliverymethodmaster::all();
         $deliverymaster = Deliverymethodmaster::all();
         $clients = Clinetprofile::where('deleted','!=',1)->get();
-        $formats = CustomDigestFormat::select('id','format_name')->get();
+        $formats = CustomDigestFormat::select('id','format','format_name')->get();
         $customdelivery = Deliverymethod1::select('id','contactid','deliveryid','format')->get();
         return view('clients', compact('data', 'contacts', 'keywords', 'picklist', 'webdeliverymaster', 'deliverymaster','clients','formats','customdelivery'));
     }
@@ -224,7 +224,6 @@ class ClientsProfile extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()]);
         }
-    
         try {
             DB::beginTransaction();
     
@@ -238,6 +237,7 @@ class ClientsProfile extends Controller
             $input['ContactType'] = 0; 
             $input['wm_deliverymethod'] = $request->wm_enableforweb ? 1 : 0;
             $input['DeliveryID']= $deliverymethod ?? 0;
+            return  $input;
             $contactid = ClinetContacts::insertGetId($input);
     
             $password = str_pad(rand(0, 9999999), 6, '0', STR_PAD_LEFT);
