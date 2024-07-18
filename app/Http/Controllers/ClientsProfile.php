@@ -236,8 +236,7 @@ class ClientsProfile extends Controller
             $input = $request->except(['_token', 'deliveryid', 'SectorID', 'format', 'wm_deliveryids', 'deliverymethod']);
             $input['ContactType'] = 0; 
             $input['wm_deliverymethod'] = $request->wm_enableforweb ? 1 : 0;
-            $input['DeliveryID']= $deliverymethod ?? 0;
-            return  $input;
+            $input['DeliveryID']= $deliverymethod['deliverymethod'] ?? 0;
             $contactid = ClinetContacts::insertGetId($input);
     
             $password = str_pad(rand(0, 9999999), 6, '0', STR_PAD_LEFT);
