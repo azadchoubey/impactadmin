@@ -128,9 +128,9 @@
                 
 
                 <div class="mb-4">
-                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Restricted MU</span> --}}
-                    <input wire:model="mu" {{$mu == 1 ?"checked":''}} class="text" value="{{$mu}}" type="checkbox" style="margin-left: 20px;">
-                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Media Universe</span>
+                  {{-- <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Restricted MU</span> --}}
+                    <input wire:model="mu" {{$mu == 1 ?"checked":''}} class="text" value="{{$mu}}" type="checkbox" style="margin-left: 20px;"> 
+                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Media Universe</span> 
                 </div>
 
                 <div class="mb-4">

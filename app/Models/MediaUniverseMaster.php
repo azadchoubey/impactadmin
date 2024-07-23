@@ -22,8 +22,8 @@ class MediaUniverseMaster extends Model
     public static function insertFromQuery($pubId)
     {
         $rawSql = "INSERT INTO media_universe_master (clientid, pubid)
-select m1.clientid, pub_master.pubid from pub_master  join clientprofile m1  
-join   media_universe m2  on m1.clientid=m2.clientid and m2.type='Language' 
+select m1.clientid, pub_master.pubid from pub_master  join clientprofile m1 
+join   media_universe m2  on m1.clientid=m2.clientid and m2.type='Language' and m1.restricted_mu = 0
 and (m2.tagid=-1 or m2.tagid=pub_master.language )  
 join   media_universe m3  on m1.clientid=m3.clientid 
 and m3.type='Edition' and (m3.tagid=-1 or m3.tagid=pub_master.place )   

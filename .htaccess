@@ -1,0 +1,16 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Redirect all requests to the public directory's index.php
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/index.php [L,QSA]
+
+    # Prevent directory listings
+    Options -Indexes
+
+    # Restrict access to sensitive files
+    <FilesMatch "\.(env|git|htaccess|htpasswd|ini|log|sh|yml|bak|backup|sql)$">
+        Order allow,deny
+        Deny from all
+    </FilesMatch>
+</IfModule>

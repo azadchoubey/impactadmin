@@ -220,13 +220,14 @@
                                 $formats = $contact->delivery->pluck('format')->implode(', ');
                                 }else{
                                 $formats = $contact->delivery;
+                                
                                 }
-                
                                 @endphp
                 
                                 @php
                                 $deliveryTimes =$contact->delivery->pluck('deliveryformats.deliverytime')->implode(', ');
                                 @endphp
+                                @if(count($contact->delivery)>0 )
                                 <div class="flex">
                                     <div class="w-1/3 px-2 py-2 border border-gray-400">P{{$formats}}</div>
                                     <div class="w-1/3 px-2 py-2 border border-gray-400">{{$deliveryTimes}}</div>
@@ -234,6 +235,16 @@
                                         <button onclick="event.preventDefault(); toggleEditSection({{$contact->contactid}})" class="text-blue-600 hover:text-blue-800">Edit</button>
                                     </div>
                                 </div>
+                                @else
+                                <div class="flex">
+                                <div class="w-1/3 px-2 py-2 border border-gray-400"> No Digest Found</div>
+                                <div class="w-1/3 px-2 py-2 border border-gray-400"></div>
+
+                                <div class="w-1/3 px-2 py-2 border border-gray-400">
+                                        <button onclick="event.preventDefault(); toggleEditSection({{$contact->contactid}})" class="text-blue-600 hover:text-blue-800">Edit</button>
+                                    </div>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>
