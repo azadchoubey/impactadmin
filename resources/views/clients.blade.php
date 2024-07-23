@@ -691,13 +691,13 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                     <fieldset class="border border-gray-300 p-3 rounded-lg">
                         <legend class="text-sm font-medium text-gray-900">Custom Digest</legend>
                         <div class="grid grid-cols-3 gap-2 mt-4">
-                            <div>
+                            <div class="{{$data->wm_enableforweb == 1 ? '' : 'disabled'}}">
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for custom digest</label>
-                                <input name="wm_enableforweb" value="1" type="checkbox" {{$data->wm_enableforweb == 1 ? '' : 'disabled'}}>
+                                <input name="wm_enableforweb" value="1" type="checkbox" {{$data->wm_enableforweb == 1 ? 'checked' : ''}} {{$data->wm_enableforweb == 1 ? '' : 'disabled'}}>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Formats </label>
-                                <select name="format" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <select name="format" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" {{$data->wm_enableforweb == 1 ? '' : 'disabled'}}>
                                     <option value="">Select option</option>
                                     @foreach($formats as $format)
                                     <option value="{{$format->id}}">{{$format->format_name}}</option>
@@ -707,7 +707,7 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
 
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Delivery Method</label>
-                                <select name="deliveryid[]" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <select name="deliveryid[]" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"{{$data->wm_enableforweb == 1 ? '' : 'disabled'}}>
                                     <option value="">Select option</option>
                                     @foreach($deliverymaster as $Delivery)
                                     <option value="{{$Delivery->id}}">{{$Delivery->deliverytime}}</option>
@@ -728,7 +728,7 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
 
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Delivery Method Web</label>
-                                <select name="wm_deliveryids[]" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <select name="wm_deliveryids[]" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"{{$data->wm_enableforweb == 1 ? '' : 'disabled'}}>
                                     <option value="">Select option</option>
                                     @foreach($webdeliverymaster as $delivery)
                                     <option value="{{$delivery->id}}">{{$delivery->deliverytime}}</option>
@@ -864,8 +864,8 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
             </div>
 
             <div class="flex items-center p-4 md:p-5 space-x-3 rtl:space-x-reverse border-t border-gray-200 rounded-b dark:border-gray-600">
-                <button type="button" onclick="addcontact()" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save</button>
-            </div>
+                <button id="saveButton" type="button" onclick="addcontact()" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save</button>
+            </div>            
             </form>
         </div>
     </div>
@@ -1041,28 +1041,35 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
     };
 
     function addcontact() {
-        var formData1 = $('#addcontact').serialize();
-        console.log(formData1);
-        $.ajax({
-            url: '{{ route("addcontact") }}',
-            method: 'POST',
-            data: formData1,
-            success: function(response) {
-                if (response.success) {
-                    window.location.reload();
-                } else {
-                    if (response.errors) {
-                        $.each(response.errors, function(key, value) {
-                            $('#' + key + '-error1').text(value);
-                        });
-                    }
+    var saveButton = document.getElementById('saveButton');
+    saveButton.disabled = true;
+
+    var formData1 = $('#addcontact').serialize();
+    console.log(formData1);
+
+    $.ajax({
+        url: '{{ route("addcontact") }}',
+        method: 'POST',
+        data: formData1,
+        success: function(response) {
+            if (response.success) {
+                window.location.reload();
+            } else {
+                if (response.errors) {
+                    $.each(response.errors, function(key, value) {
+                        $('#' + key + '-error1').text(value);
+                    });
                 }
-            },
-            error: function(xhr, status, error) {
-                console.error(xhr.responseText);
             }
-        });
-    }
+            saveButton.disabled = false;
+        },
+        error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+            saveButton.disabled = false;
+        }
+    });
+}
+
 
     function editcontact(id) {
         var formData2 = $(`#editcontact${id}`).serialize();
