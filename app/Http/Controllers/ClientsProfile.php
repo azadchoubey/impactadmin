@@ -92,8 +92,12 @@ class ClientsProfile extends Controller
             $clientProfile->EditDateTime=now();
             $clientProfile->Edit_By=auth()->user()->UserID;
             if ($request->hasFile('Logo')) {
-              
-                $filename = $request->file('Logo')->getClientOriginalName();
+                // Generate filename using ClientID
+                $clientID = $request->ClientID ?? $id; 
+                $extension = $request->file('Logo')->getClientOriginalExtension();
+                $filename = $clientID . '.' . $extension;
+    
+                // Store the file with the generated filename
                 $request->file('Logo')->storeAs('client', $filename);
                 $clientProfile->Logo = $filename;
             }
