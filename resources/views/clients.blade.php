@@ -569,7 +569,7 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                                 @endif
                                 </select>
                             </div> --}}
-                            <div>
+                            {{-- <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Designation</label>
                                 <input name="Designation" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <div id="Designation-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
@@ -633,7 +633,7 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                                 <label for="type" class="block text-sm font-medium text-gray-700">Area Code</label>
                                 <input name="Pin" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <div id="Pin-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
-                            </div>
+                            </div> --}}
                     </div>
                     </fieldset>
                     <fieldset class="border border-gray-300 p-6 rounded-lg">
@@ -752,6 +752,8 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Phone No</label>
                                 <input name="whatsappnumber" type="text" placeholder="E.g. 919811223344" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" {{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
+                                <div id="whatsappnumber-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+
                             </div>
 
                         </div>

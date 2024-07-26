@@ -49,7 +49,7 @@
                             @endif
                             </select>
                         </div> --}}
-                        <div>
+                        {{-- <div>
                             <label for="type" class="block text-sm font-medium text-gray-700">Designation</label>
                             <input name="Designation" type="text" value="{{ $contact->Designation}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             <div id="Designation-error{{$contact->contactid}}" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
@@ -111,7 +111,7 @@
                             <label for="type" class="block text-sm font-medium text-gray-700">Area Code</label>
                             <input name="Pin" type="text" value="{{ $contact->Pin}}" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             <div id="Pin-error{{$contact->contactid}}" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
-                        </div>
+                        </div> --}}
                 </div>
                 </fieldset>
                 <fieldset class="border border-gray-300 p-3 rounded-lg">

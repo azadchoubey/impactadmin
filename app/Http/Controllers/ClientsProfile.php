@@ -207,40 +207,64 @@ class ClientsProfile extends Controller
             'ContactName' => 'required|string',
             'Mobile' => 'required|digits:10',
             'Email' => 'required|email',
-            'Address1' => 'required',
-            'Address2' => 'required',
-            'Address3' => 'required',
-            'CountryID' => 'required',
-            'CityID' => 'required',
-            'Designation' => 'required',
-            'CountryCode' => 'required',
-            'Pin' => 'required',
-            'Fax' => 'required',
-            'Company' => 'required',
-            'Phone' => 'required',
+            // 'Address1' => 'required',
+            // 'Address2' => 'required',
+            // 'Address3' => 'required',
+            // 'CountryID' => 'required',
+            // 'CityID' => 'required',
+            // 'Designation' => 'required',
+            // 'CountryCode' => 'required',
+            // 'Pin' => 'required',
+            // 'Fax' => 'required',
+            // 'Company' => 'required',
+            // 'Phone' => 'required',
+            'whatsappnumber' => 'required_if:enableforwhatsapp,1',
         ], [
             'CountryID.required' => 'Country field is required',
             'CityID.required' => 'City field is required',
             'Mobile.required' => 'Mobile must be 10 digits.',
             'Email.required' => 'Please enter a valid email address.',
+            'whatsappnumber.required_if' => 'Please enter the number'
         ]);
     
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()]);
         }
+    
         try {
             DB::beginTransaction();
     
             $deliveryids = $request->only('deliveryid');
             $sectorids = $request->only('SectorID');
             $format = $request->only('format');
-            $wm_deliverymethod =  $request->only('wm_deliveryids');
+            $wm_deliverymethod = $request->only('wm_deliveryids');
             $broadcast = $request->broadcast;
-            $deliverymethod = $request->only('deliverymethod'); 
+            $deliverymethod = $request->only('deliverymethod');
+    
             $input = $request->except(['_token', 'deliveryid', 'SectorID', 'format', 'wm_deliveryids', 'deliverymethod']);
-            $input['ContactType'] = 0; 
+    
+            // Set default values
+            $defaultValues = [
+                'Address1' => 'Default Address1',
+                'Address2' => 'Default Address2',
+                'Address3' => 'Default Address3',
+                'CountryID' => 1,
+                'CityID' => 1,
+                'Designation' => 'Default Designation',
+                'CountryCode' => 'Default CountryCode',
+                'Pin' => 000000,
+                'Fax' => 0000000000,
+                'Company' => 'Default Company',
+                'Phone' => 0000000000
+            ];
+    
+            // Merge default values with input
+            $input = array_merge($defaultValues, $input);
+    
+            $input['ContactType'] = 0;
             $input['wm_deliverymethod'] = $request->wm_enableforweb ? 1 : 0;
-            $input['DeliveryID']= $deliverymethod['deliverymethod'] ?? 0;
+            $input['DeliveryID'] = $deliverymethod['deliverymethod'] ?? 0;
+    
             $contactid = ClinetContacts::insertGetId($input);
     
             $password = str_pad(rand(0, 9999999), 6, '0', STR_PAD_LEFT);
@@ -266,7 +290,7 @@ class ClientsProfile extends Controller
                     ContactSector::insert($contact_sector);
                 }
     
-                if (isset($input['wm_deliverymethod'])&& $input['wm_deliverymethod'] == 1) {
+                if (isset($input['wm_deliverymethod']) && $input['wm_deliverymethod'] == 1) {
                     foreach ($deliveryids['deliveryid'] as $deliveryid) {
                         Deliverymethod1::insert([
                             'contactid' => $contactid,
@@ -274,9 +298,7 @@ class ClientsProfile extends Controller
                             'format' => $format['format'],
                         ]);
                     }
-                }                
-              
-    
+                }
                 DB::commit();
                 $client = Clinetprofile::find($input['clientid']);
                 ClientContact::insert([
@@ -315,23 +337,24 @@ class ClientsProfile extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+    
     public function editContact(Request $request)
 {
     $validator = Validator::make($request->all(), [
         'ContactName' => 'required|string',
         'Mobile' => 'required|digits:10',
         'Email' => 'required|email',
-        'Address1' => 'required',
-        'Address2' => 'required',
-        'Address3' => 'required',
-        'CountryID' => 'required',
-        'CityID' => 'required',
-        'Designation' => 'required',
-        'CountryCode' => 'required',
-        'Pin' => 'required',
-        'Fax' => 'required',
-        'Company' => 'required',
-        'Phone' => 'required',
+        // 'Address1' => 'required',
+        // 'Address2' => 'required',
+        // 'Address3' => 'required',
+        // 'CountryID' => 'required',
+        // 'CityID' => 'required',
+        // 'Designation' => 'required',
+        // 'CountryCode' => 'required',
+        // 'Pin' => 'required',
+        // 'Fax' => 'required',
+        // 'Company' => 'required',
+        // 'Phone' => 'required',
     ],[
         'CountryID.required'=>'Country field is required',
         'CityID.required'=>'City field is required',
