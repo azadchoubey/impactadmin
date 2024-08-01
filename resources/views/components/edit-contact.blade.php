@@ -457,16 +457,19 @@
     function toggleEditSection(contactId, close = false) {
         const editSection = document.getElementById('editSection' + contactId);
         const displaySection = document.getElementById('displaySection' + contactId);
-        if (close) {
+        if (editSection.classList && close) {
             editSection.classList.add('hidden');
             displaySection.classList.remove('hidden');
         } else {
-            if (editSection.classList.contains('hidden')) {
+            if (editSection.classList && editSection.classList.contains('hidden')) {
                 editSection.classList.remove('hidden');
                 displaySection.classList.add('hidden');
             } else {
-                editSection.classList.add('hidden');
-                displaySection.classList.remove('hidden');
+                if(editSection.classList){
+                    editSection.classList.add('hidden');
+                    displaySection.classList.remove('hidden');
+                }
+               
             }
         }
     }

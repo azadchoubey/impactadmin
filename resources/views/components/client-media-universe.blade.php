@@ -531,12 +531,14 @@
                        
                         $(this).remove().appendTo(destination);
                     }
+                  
                     return;
                 } else {
                     if (!mainSelect && $(this).val() == "-1") {
                         $(destination).children().appendTo(origin);
                         $(destination).empty();
                         $(this).remove().appendTo(destination);
+                       
                         return false;
                     }
                     if (!hasAllOption && !mainSelect) {
@@ -545,6 +547,7 @@
                             var foundValues = $(destination).find('option').filter(function() {
                                 return valuesToCheck.includes($(this).val());
                             }).remove();
+                            
                         }
                         if($(this).val() == "-6"){
                             var valuesToCheck = ["1", "232", "233", "156", "157", "450"];
@@ -558,6 +561,7 @@
 
                     }
                     if (!hasAllOption && mainSelect) {
+                       
                         $(this).remove().appendTo(destination);
 
                     }
@@ -659,7 +663,7 @@
         $('#moveRightnewspapers').click(function() {
             moveItems('#newspapersSelect1', '#newspapersselection');
         });
-        $('#moveLeftNewspapers').click(function() {
+        $('#moveLeftnewspapers').click(function() {
             moveItems('#newspapersselection', '#newspapersSelect1');
         });
 
@@ -676,21 +680,6 @@
                 code: false,
                 videoEmbed: false,
         });
-        // $('#default').summernote({
-        //     tabsize: 2,
-        //     height: 120,
-        //     toolbar: [
-        //         ['style', ['style']],
-        //         ['font', ['bold', 'underline', 'clear']],
-        //         ['color', ['color']],
-        //         ['para', ['ul', 'ol', 'paragraph']],
-        //         ['table', ['table']],
-        //         ['view', ['fullscreen', 'codeview', 'help']]
-        //     ]
-        // });
-
-
-
     function filterOptions(input, select) {
         var filter = input.value.toLowerCase();
         var options = select.options;

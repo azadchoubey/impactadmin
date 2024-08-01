@@ -34,6 +34,7 @@ class ClientsProfile extends Controller
 {
     public function index($id)
     {
+        $concepts = 
         $data = Clinetprofile::with('contacts', 'contacts.delivery', 'contacts.delivery.deliveryformats', 'contacts.regularDigestPrint', 'contacts.regularDigestWeb', 'Country', 'Region', 'sector', 'keywords', 'billingcycle')->find(base64_decode($id));
         $keywords = $data->keywords;
       
@@ -96,8 +97,6 @@ class ClientsProfile extends Controller
                 $clientID = $request->ClientID ?? $id; 
                 $extension = $request->file('Logo')->getClientOriginalExtension();
                 $filename = $clientID . '.' . $extension;
-    
-                // Store the file with the generated filename
                 $request->file('Logo')->storeAs('client', $filename);
                 $clientProfile->Logo = $filename;
             }
@@ -160,11 +159,7 @@ class ClientsProfile extends Controller
         DB::beginTransaction();
         $input = $request->except(['_token']);
        
-        if ($request->hasFile('Logo')) {
-            $filename = $request->file('Logo')->getClientOriginalName();
-            $request->file('Logo')->storeAs('client', $filename);
-            $input['Logo'] = $filename;
-        }
+     
         $s2 = strtoupper(substr($request->Name, 0, 1));
         $clientid = '';
 
@@ -176,7 +171,11 @@ class ClientsProfile extends Controller
             $a = $maxNumber + 1;
             $clientid = $s2 . str_pad($a, 4, '0', STR_PAD_LEFT);
         }
-        
+        if ($request->hasFile('Logo')) {
+            $filename = $clientid . '.' . $request->file('Logo')->getClientOriginalExtension();
+            $request->file('Logo')->storeAs('client', $filename);
+            $input['Logo'] = $filename;
+        }
         $input['ClientID']= $clientid;
         $input['Edit_By']= auth()->user()->UserID;
         if ( !$input['StartDate']) {

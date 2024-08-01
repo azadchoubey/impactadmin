@@ -65,6 +65,17 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                 <li class="me-2" role="presentation">
                     <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="media-universe" data-tabs-target="#mediauniverse" type="button" role="tab" aria-controls="mediauniverse" aria-selected="{{ request()->query('mediauniverse') ? 'true' : 'false' }}">Client Media Universe</button>
                 </li>
+                @if($data->wm_enableforweb == 1)
+                <li class="me-2" role="presentation">
+                    <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="issue-conceptkeywords-tab" data-tabs-target="#issueconceptkeywords" type="button" role="tab" aria-controls="issueconceptkeywords" aria-selected="false">Issues/Concepts/Keywords</button>
+                </li>
+                <li class="me-2" role="presentation">
+                    <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="print-issue-conceptkeywords-tab" data-tabs-target="#printissueconceptkeywords" type="button" role="tab" aria-controls="printissueconceptkeywords" aria-selected="false">Print Issues/Concepts/Keywords</button>
+                </li>
+                <li class="me-2" role="presentation">
+                    <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="web-universe-tab" data-tabs-target="#webuniverse" type="button" role="tab" aria-controls="webuniverse" aria-selected="false">Web Universe</button>
+                </li>
+                    @endif
             </ul>
         </div>
 
@@ -161,9 +172,18 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                             @error('Region') <p class="mt-2 text-sm text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span> </p> @enderror
                         </div>
 
-                        <div>
+                        <div class="relative">
                             <label for="client" class="block text-sm font-medium text-gray-700">Client Logo</label>
                             <input id="client" type="file" name="Logo" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            @if($data->Logo)
+                            <button type="button" id="showLogoBtn" class="absolute top-0 right-0 mt-7 mr-2 text-gray-500 hover:text-gray-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                </svg>
+
+                            </button>
+                            @endif
                         </div>
 
                     </div>
@@ -423,153 +443,216 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
             </div>
             <div class="rounded-lg bg-gray-50 dark:bg-gray-800" id="mediauniverse" role="tabpanel" aria-labelledby="media-universe">
             </div>
-        </div>
-    </div>
-    <div id="large-modal" wire:ignore tabindex="-1" class="fixed top-0 left-60 right-0 z-50 w-full p-4 hidden overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-        <div class="relative w-full max-w-4xl max-h-full">
-            <!-- Modal content -->
-
-            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                <!-- Modal header -->
-                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                    <h3 class="text-xl font-medium text-gray-900 dark:text-white">
-                        Client Contacts Edit
-                    </h3>
-                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="large-modal">
-                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                        </svg>
-                        <span class="sr-only">Close modal</span>
-                    </button>
+            @if($data->wm_enableforweb == 1)
+            <div id="issueconceptkeywords" role="tabpanel" aria-labelledby="issue-conceptkeywords-tab">
+                <!-- Web Universe content with submenu -->
+                <div id="issue-conceptkeywords-tabs" class="mb-4 border-b border-gray-200 dark:border-gray-700 mx-auto">
+                    <ul class="flex justify-center flex-wrap -mb-px text-sm font-medium text-center" id="web-universe-submenu" data-tabs-toggle="#web-universe-submenu-content" role="tablist">
+                        <li class="me-2" role="presentation">
+                            <button class="inline-block p-4 border-b-2 rounded-t-lg" id="sub-tab-1" data-tabs-target="#subtab1" type="button" role="tab" aria-controls="subtab1" aria-selected="true">Concepts</button>
+                        </li>
+                        <li class="me-2" role="presentation">
+                            <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="sub-tab-2" data-tabs-target="#subtab2" type="button" role="tab" aria-controls="subtab2" aria-selected="false">Complex Concepts</button>
+                        </li>
+                        <li class="me-2" role="presentation">
+                            <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="sub-tab-3" data-tabs-target="#subtab3" type="button" role="tab" aria-controls="subtab3" aria-selected="false">Issues</button>
+                        </li>
+                        <li class="me-2" role="presentation">
+                            <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="sub-tab-3" data-tabs-target="#subtab4" type="button" role="tab" aria-controls="subtab4" aria-selected="false">Company Color</button>
+                        </li>
+                    </ul>
                 </div>
-
-                <div class="p-4 md:p-5 space-y-4">
-                    <!-- Headers -->
-                    <div class="flex flex-wrap text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                        <label class="flex justify-between items-center w-full px-6 py-3">
-                            Print
-                            <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
-                        </label>
-                        <label class="flex justify-between items-center w-full px-6 py-3">
-                            Web
-                            <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
-                        </label>
-                        <label class="flex justify-between items-center w-full px-6 py-3">
-                            Qlikview
-                            <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
-                        </label>
-                        <label class="flex justify-between items-center w-full px-6 py-3">
-                            Qualify
-                            <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
-                        </label>
-                        <label class="flex justify-between items-center w-full px-6 py-3">
-                            Alert
-                            <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
-                        </label>
-                        <label class="flex justify-between items-center w-full px-6 py-3">
-                            Charts
-                            <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
-                        </label>
-                        <label class="flex justify-between items-center w-full px-6 py-3">
-                            Br
-                            <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
-                        </label>
-                        <label class="flex justify-between items-center w-full px-6 py-3">
-                            BB
-                            <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
-                        </label>
-                        <label class="flex justify-between items-center w-full px-6 py-3">
-                            Mobile
-                            <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
-                        </label>
-                        <label class="flex justify-between items-center w-full px-6 py-3">
-                            Whatsapp
-                            <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
-                        </label>
-                        <label class="flex justify-between items-center w-full px-6 py-3">
-                            Mediatouch
-                            <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
-                        </label>
-                        <label class="flex justify-between items-center w-full px-6 py-3">
-                            Dyna
-                            <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
-                        </label>
-                        <label class="flex justify-between items-center w-full px-6 py-3">
-                            Custom Digest
-                            <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
-                        </label>
-                        <label class="flex justify-between items-center w-full px-6 py-3">
-                            Regular Web
-                            <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
-                        </label>
-                        <label class="flex justify-between items-center w-full px-6 py-3">
-                            Regular Print
-                            <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
-                        </label>
+                <div id="web-universe-submenu-content">
+                    <div id="subtab1" role="tabpanel" aria-labelledby="sub-tab-1">
+                       <x-concept-keyword-setup/>
                     </div>
-
-
-                </div>
-
-                <div class="flex items-center p-4 md:p-5 space-x-3 rtl:space-x-reverse border-t border-gray-200 rounded-b dark:border-gray-600">
-                    <button data-modal-hide="large-modal" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save</button>
+                    <div id="subtab2" role="tabpanel" aria-labelledby="sub-tab-2">
+                        <!-- Sub Tab 2 content -->
+                    </div>
+                    <div id="subtab3" role="tabpanel" aria-labelledby="sub-tab-3">
+                        <!-- Sub Tab 3 content -->
+                    </div>
+                    <div id="subtab4" role="tabpanel" aria-labelledby="sub-tab-3">
+                        <!-- Sub Tab 3 content -->
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <x-createkeyword :keywordtypes="$keywordtypes" :keywordcategories="$keywordcategories" />
-
-    <div id="large-modal2" tabindex="-1" class="fixed top-0 left-60 right-0 z-50 w-full p-4 hidden overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-        <div class="relative w-lg max-w-4xl max-h-full">
-
-            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                    <h3 class="text-xl font-medium text-gray-900 dark:text-white">
-                        Add Client Contact
-                    </h3>
-                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="large-modal2">
-                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                        </svg>
-                        <span class="sr-only">Close modal</span>
-                    </button>
+            <div id="webuniverse" role="tabpanel" aria-labelledby="web-universe-tab">
+                <!-- Web Universe content -->
+            </div>
+            <div id="printissueconceptkeywords" role="tabpanel" aria-labelledby="print-issue-conceptkeywords-tab">
+                <!-- Print Issues/Concepts/Keywords content with submenu -->
+                <div id="print-issue-conceptkeywords-tabs" class="mb-4 border-b border-gray-200 dark:border-gray-700">
+                    <ul class="flex justify-center flex-wrap -mb-px text-sm font-medium text-center" id="print-issue-conceptkeywords-submenu" data-tabs-toggle="#print-issue-conceptkeywords-submenu-content" role="tablist">
+                        <li class="me-2" role="presentation">
+                            <button class="inline-block p-4 border-b-2 rounded-t-lg" id="print-concepts-tab" data-tabs-target="#print-concepts" type="button" role="tab" aria-controls="print-concepts" aria-selected="true">Concepts</button>
+                        </li>
+                        <li class="me-2" role="presentation">
+                            <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="print-complex-concept-tab" data-tabs-target="#print-complex-concept" type="button" role="tab" aria-controls="print-complex-concept" aria-selected="false">Complex Concept</button>
+                        </li>
+                        <li class="me-2" role="presentation">
+                            <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="print-issues-tab" data-tabs-target="#print-issues" type="button" role="tab" aria-controls="print-issues" aria-selected="false">Issues</button>
+                        </li>
+                    </ul>
                 </div>
-                <form id="addcontact">
-                    @csrf
-                    <input type="hidden" name="clientid" value="{{$data->ClientID}}">
-                    <div class="p-4 md:p-3">
-                        <fieldset class="border border-gray-300 p-6 rounded-lg">
-                            <legend class="text-sm font-medium text-gray-900">Personal Details</legend>
-                            <div class="grid grid-cols-3 gap-4">
-                                <div>
-                                    <label for="type" class="block text-sm font-medium text-gray-700">Contact Name</label>
-                                    <input name="ContactName" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                    <div id="ContactName-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
-                                </div>
-                                <div>
-                                    <label for="type" class="block text-sm font-medium text-gray-700">Mobile</label>
-                                    <input name="Mobile" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                    <div id="Mobile-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+                <div id="print-issue-conceptkeywords-submenu-content">
+                    <div id="print-concepts" role="tabpanel" aria-labelledby="print-concepts-tab">
+                        Print content for Concepts
+                    </div>
+                    <div id="print-complex-concept" role="tabpanel" aria-labelledby="print-complex-concept-tab">
+                        Print content for Complex Concept
+                    </div>
+                    <div id="print-issues" role="tabpanel" aria-labelledby="print-issues-tab">
+                        Print content for Issues
+                    </div>
+                </div>
+            </div>
+            @endif
+            <div id="large-modal" wire:ignore tabindex="-1" class="fixed top-0 left-60 right-0 z-50 w-full p-4 hidden overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                <div class="relative w-full max-w-4xl max-h-full">
+                    <!-- Modal content -->
 
-                                </div>
-                                <div>
-                                    <label for="type" class="block text-sm font-medium text-gray-700">E-mail</label>
-                                    <input name="Email" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                    <div id="Email-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+                    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                        <!-- Modal header -->
+                        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                            <h3 class="text-xl font-medium text-gray-900 dark:text-white">
+                                Client Contacts Edit
+                            </h3>
+                            <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="large-modal">
+                                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                </svg>
+                                <span class="sr-only">Close modal</span>
+                            </button>
+                        </div>
 
-                                </div>
-                                {{-- <div>
+                        <div class="p-4 md:p-5 space-y-4">
+                            <!-- Headers -->
+                            <div class="flex flex-wrap text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                <label class="flex justify-between items-center w-full px-6 py-3">
+                                    Print
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
+                                </label>
+                                <label class="flex justify-between items-center w-full px-6 py-3">
+                                    Web
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
+                                </label>
+                                <label class="flex justify-between items-center w-full px-6 py-3">
+                                    Qlikview
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
+                                </label>
+                                <label class="flex justify-between items-center w-full px-6 py-3">
+                                    Qualify
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
+                                </label>
+                                <label class="flex justify-between items-center w-full px-6 py-3">
+                                    Alert
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
+                                </label>
+                                <label class="flex justify-between items-center w-full px-6 py-3">
+                                    Charts
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
+                                </label>
+                                <label class="flex justify-between items-center w-full px-6 py-3">
+                                    Br
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
+                                </label>
+                                <label class="flex justify-between items-center w-full px-6 py-3">
+                                    BB
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
+                                </label>
+                                <label class="flex justify-between items-center w-full px-6 py-3">
+                                    Mobile
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
+                                </label>
+                                <label class="flex justify-between items-center w-full px-6 py-3">
+                                    Whatsapp
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
+                                </label>
+                                <label class="flex justify-between items-center w-full px-6 py-3">
+                                    Mediatouch
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
+                                </label>
+                                <label class="flex justify-between items-center w-full px-6 py-3">
+                                    Dyna
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
+                                </label>
+                                <label class="flex justify-between items-center w-full px-6 py-3">
+                                    Custom Digest
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
+                                </label>
+                                <label class="flex justify-between items-center w-full px-6 py-3">
+                                    Regular Web
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
+                                </label>
+                                <label class="flex justify-between items-center w-full px-6 py-3">
+                                    Regular Print
+                                    <input type="checkbox" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
+                                </label>
+                            </div>
+
+
+                        </div>
+
+                        <div class="flex items-center p-4 md:p-5 space-x-3 rtl:space-x-reverse border-t border-gray-200 rounded-b dark:border-gray-600">
+                            <button data-modal-hide="large-modal" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <x-createkeyword :keywordtypes="$keywordtypes" :keywordcategories="$keywordcategories" />
+
+            <div id="large-modal2" tabindex="-1" class="fixed top-0 left-60 right-0 z-50 w-full p-4 hidden overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                <div class="relative w-lg max-w-4xl max-h-full">
+
+                    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                            <h3 class="text-xl font-medium text-gray-900 dark:text-white">
+                                Add Client Contact
+                            </h3>
+                            <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="large-modal2">
+                                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                </svg>
+                                <span class="sr-only">Close modal</span>
+                            </button>
+                        </div>
+                        <form id="addcontact">
+                            @csrf
+                            <input type="hidden" name="clientid" value="{{$data->ClientID}}">
+                            <div class="p-4 md:p-3">
+                                <fieldset class="border border-gray-300 p-6 rounded-lg">
+                                    <legend class="text-sm font-medium text-gray-900">Personal Details</legend>
+                                    <div class="grid grid-cols-3 gap-4">
+                                        <div>
+                                            <label for="type" class="block text-sm font-medium text-gray-700">Contact Name</label>
+                                            <input name="ContactName" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                            <div id="ContactName-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+                                        </div>
+                                        <div>
+                                            <label for="type" class="block text-sm font-medium text-gray-700">Mobile</label>
+                                            <input name="Mobile" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                            <div id="Mobile-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+
+                                        </div>
+                                        <div>
+                                            <label for="type" class="block text-sm font-medium text-gray-700">E-mail</label>
+                                            <input name="Email" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                            <div id="Email-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+
+                                        </div>
+                                        {{-- <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Contact Type</label>
                                 <select name="ContactType" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     <option value="">Select option</option>
                                     @if(isset($picklist['contacttype']))
                                     @foreach($picklist['contacttype'] as $contacttype)
                                     <option value="{{$contacttype->ID}}">{{$contacttype->Name}}</option>
-                                @endforeach
-                                @endif
-                                </select>
-                            </div> --}}
-                            {{-- <div>
+                                        @endforeach
+                                        @endif
+                                        </select>
+                                    </div> --}}
+                                    {{-- <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Designation</label>
                                 <input name="Designation" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <div id="Designation-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
@@ -611,8 +694,8 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                                     @foreach($picklist['country'] as $country)
                                     <option value="{{$country->ID}}">{{$country->Name}}</option>
                                     @endforeach
-                                </select>
-                                <div id="CountryID-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
+                                    </select>
+                                    <div id="CountryID-error1" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                             </div>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">City</label>
@@ -707,7 +790,7 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
 
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Delivery Method</label>
-                                <select name="deliveryid[]" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"{{$data->wm_enableforweb == 1 ? '' : 'disabled'}}>
+                                <select name="deliveryid[]" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" {{$data->wm_enableforweb == 1 ? '' : 'disabled'}}>
                                     <option value="">Select option</option>
                                     @foreach($deliverymaster as $Delivery)
                                     <option value="{{$Delivery->id}}">{{$Delivery->deliverytime}}</option>
@@ -728,7 +811,7 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
 
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Delivery Method Web</label>
-                                <select name="wm_deliveryids[]" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"{{$data->wm_enableforweb == 1 ? '' : 'disabled'}}>
+                                <select name="wm_deliveryids[]" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" {{$data->wm_enableforweb == 1 ? '' : 'disabled'}}>
                                     <option value="">Select option</option>
                                     @foreach($webdeliverymaster as $delivery)
                                     <option value="{{$delivery->id}}">{{$delivery->deliverytime}}</option>
@@ -817,473 +900,326 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                                     <label for="type" class="block text-sm font-medium text-gray-700">Company News</label>
                                 </div>
                                 <div>
-                                    <label for="type" class="block text-sm font-small text-gray-700">None</label>
-                                    <input name="whatsapp_web_company" value="0" type="radio" {{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
+                                    <label for="type" class="block text-sm font-small text-gray-700">Prominent News</label>
+                                    <input name="whatsapp_web_company" value="2" type="radio" {{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">All News</label>
                                     <input name="whatsapp_web_company" value="1" type="radio" {{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                                 </div>
+
                                 <div>
-                                    <label for="type" class="block text-sm font-small text-gray-700">Prominent News</label>
-                                    <input name="whatsapp_web_company" value="2" type="radio" {{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
+                                    <label for="type" class="block text-sm font-small text-gray-700">None</label>
+                                    <input name="whatsapp_web_company" value="0" type="radio" {{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-medium text-gray-700">Competitor News</label>
-                                </div>
-                                <div>
-                                    <label for="type" class="block text-sm font-small text-gray-700">None</label>
-                                    <input name="whatsapp_web_competitor" value="0" type="radio" {{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
-                                </div>
-                                <div>
-                                    <label for="type" class="block text-sm font-small text-gray-700">All News</label>
-                                    <input name="whatsapp_web_competitor" value="1" type="radio" {{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">Prominent News</label>
                                     <input name="whatsapp_web_competitor" value="2" type="radio" {{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                                 </div>
                                 <div>
+                                    <label for="type" class="block text-sm font-small text-gray-700">All News</label>
+                                    <input name="whatsapp_web_competitor" value="1" type="radio" {{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
+                                </div>
+
+                                <div>
+                                    <label for="type" class="block text-sm font-small text-gray-700">None</label>
+                                    <input name="whatsapp_web_competitor" value="0" type="radio" {{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
+                                </div>
+                                <div>
                                     <label for="type" class="block text-sm font-medium text-gray-700">Industry News </label>
                                 </div>
                                 <div>
-                                    <label for="type" class="block text-sm font-small text-gray-700">None</label>
-                                    <input name="whatsapp_web_industry" value="0" type="radio" {{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
+                                    <label for="type" class="block text-sm font-small text-gray-700">Prominent News</label>
+                                    <input name="whatsapp_web_industry" value="2" type="radio" {{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                                 </div>
                                 <div>
                                     <label for="type" class="block text-sm font-small text-gray-700">All News</label>
                                     <input name="whatsapp_web_industry" value="1" type="radio" {{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                                 </div>
+
                                 <div>
-                                    <label for="type" class="block text-sm font-small text-gray-700">Prominent News</label>
-                                    <input name="whatsapp_web_industry" value="2" type="radio" {{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
+                                    <label for="type" class="block text-sm font-small text-gray-700">None</label>
+                                    <input name="whatsapp_web_industry" value="0" type="radio" {{$data->enableforwhatsapp == 1 ? '' : 'disabled'}}>
                                 </div>
                             </div>
                         </fieldset>
                     </fieldset>
 
 
+                </div>
+                <div class="flex items-center p-4 md:p-5 space-x-3 rtl:space-x-reverse border-t border-gray-200 rounded-b dark:border-gray-600">
+                    <button id="saveButton" type="button" onclick="addcontact()" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save</button>
+                </div>
+                </form>
             </div>
 
-            <div class="flex items-center p-4 md:p-5 space-x-3 rtl:space-x-reverse border-t border-gray-200 rounded-b dark:border-gray-600">
-                <button id="saveButton" type="button" onclick="addcontact()" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save</button>
-            </div>            
-            </form>
         </div>
     </div>
-</div>
-<script>
-    function toggleSelectAll(checked) {
-        let checkboxes = document.getElementsByClassName('checkboxes');
-        var editButton = document.getElementById('editbutton');
-        for (let i = 0; i < checkboxes.length; i++) {
-            checkboxes[i].checked = checked.checked;
-        }
-        if (checked.checked) {
-            editButton.classList.remove('hidden');
-        } else {
-            editButton.classList.add('hidden');
-        }
-    }
+    <div id="logoModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center">
+        <div class="bg-white p-4 rounded-lg shadow-lg max-w-sm mx-auto relative">
+            <button type="button" id="closeModalBtn" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <img id="currentLogo" src="http://myimpact.in/logos/client_logos/{{$data->Logo}}" alt="Current Logo" class="mx-auto">
+        </div>
+    </div>
 
-    function toggleSelectAll1(checked) {
-        let checkboxes = document.getElementsByClassName('checkboxes1');
-        var editButton = document.getElementById('editbutton1');
-        for (let i = 0; i < checkboxes.length; i++) {
-            checkboxes[i].checked = checked.checked;
-        }
-        if (checked.checked) {
-            editButton.classList.remove('hidden');
-        } else {
-            editButton.classList.add('hidden');
-        }
-    }
-
-    function updateEditButtonVisibility() {
-
-        var checkboxes = document.querySelectorAll('.checkboxes');
-        var checkedCount = 0;
-        checkboxes.forEach(function(checkbox) {
-            if (checkbox.checked) {
-                checkedCount++;
+    <script>
+        function toggleSelectAll(checked) {
+            let checkboxes = document.getElementsByClassName('checkboxes');
+            var editButton = document.getElementById('editbutton');
+            for (let i = 0; i < checkboxes.length; i++) {
+                checkboxes[i].checked = checked.checked;
             }
-        });
-        var editButton = document.getElementById('editbutton');
-        if (checkedCount >= 2) {
-            editButton.classList.remove('hidden');
-        } else {
-            editButton.classList.add('hidden');
-        }
-    }
-
-
-    function updateEditButtonVisibility1() {
-        var checkboxes = document.querySelectorAll('.checkboxes1');
-        var checkedCount = 0;
-        checkboxes.forEach(function(checkbox) {
-            if (checkbox.checked) {
-                checkedCount++;
-            }
-        })
-    }
-
-    function toggleSelectAll1(checked) {
-        let checkboxes = document.getElementsByClassName('checkboxes1');
-        var editButton = document.getElementById('editbutton1');
-        for (let i = 0; i < checkboxes.length; i++) {
-            checkboxes[i].checked = checked.checked;
-        }
-        if (checked.checked) {
-            editButton.classList.remove('hidden');
-        } else {
-            editButton.classList.add('hidden');
-        }
-    }
-
-    function updateEditButtonVisibility() {
-        var checkboxes = document.querySelectorAll('.checkboxes');
-        var checkedCount = 0;
-        checkboxes.forEach(function(checkbox) {
-            if (checkbox.checked) {
-                checkedCount++;
-            }
-        });
-        var editButton = document.getElementById('editbutton');
-        if (checkedCount >= 2) {
-            editButton.classList.remove('hidden');
-        } else {
-            editButton.classList.add('hidden');
-        }
-    }
-
-    function updateEditButtonVisibility1() {
-        var checkboxes = document.querySelectorAll('.checkboxes1');
-        var checkedCount = 0;
-        checkboxes.forEach(function(checkbox) {
-            if (checkbox.checked) {
-                checkedCount++;
-            }
-        });
-        var editButton = document.getElementById('editbutton1');
-        if (checkedCount >= 2) {
-            editButton.classList.remove('hidden');
-        } else {
-            editButton.classList.add('hidden');
-        }
-    }
-
-    function showtab() {
-        var tabs = document.getElementById('tabs');
-        setTimeout(() => {
-            tabs.classList.remove('hidden');
-        }, 1000)
-
-    }
-
-    function enableAllDisabledItems() {
-        const checkbox = document.getElementById('primaryCheckbox');
-        const select = document.querySelector('select[name="primary_client_id"]');
-
-        if (checkbox.checked) {
-            select.removeAttribute('disabled');
-        } else {
-            select.setAttribute('disabled', '');
-        }
-
-        const disabledElements = document.querySelectorAll('[disabled]');
-        disabledElements.forEach(element => {
-            // Check if the element is not the primary client dropdown
-            if (element !== select) {
-                element.removeAttribute('disabled');
-            }
-        });
-
-        document.getElementById('editbtn').style.display = "none";
-        document.getElementById('save').classList.remove('hidden');
-        document.getElementById('client_id').setAttribute('disabled', '');
-    }
-
-    function openmodal(id) {
-        const $targetEl = document.getElementById(`large-modal${id}`);
-        const modal = new Modal($targetEl);
-        modal.show();
-    }
-
-    function toggleEditMode(contactId) {
-        var editSections = document.getElementsByClassName('editSection' + contactId);
-        var withoutEditSections = document.getElementsByClassName('withoutEditSection' + contactId);
-
-        for (var i = 0; i < editSections.length; i++) {
-            var editSection = editSections[i];
-            var withoutEditSection = withoutEditSections[i];
-
-            if (!editSection.classList.contains('hidden')) {
-                editSection.classList.add('hidden');
-                withoutEditSection.classList.remove('hidden');
+            if (checked.checked) {
+                editButton.classList.remove('hidden');
             } else {
-                editSection.classList.remove('hidden');
-                withoutEditSection.classList.add('hidden');
+                editButton.classList.add('hidden');
             }
         }
-    }
-    window.onload = (event) => {
-        document.getElementById('settings-tab').addEventListener('click', function() {
+
+        function toggleSelectAll1(checked) {
+            let checkboxes = document.getElementsByClassName('checkboxes1');
+            var editButton = document.getElementById('editbutton1');
+            for (let i = 0; i < checkboxes.length; i++) {
+                checkboxes[i].checked = checked.checked;
+            }
+            if (checked.checked) {
+                editButton.classList.remove('hidden');
+            } else {
+                editButton.classList.add('hidden');
+            }
+        }
+
+        function updateEditButtonVisibility() {
+
+            var checkboxes = document.querySelectorAll('.checkboxes');
+            var checkedCount = 0;
+            checkboxes.forEach(function(checkbox) {
+                if (checkbox.checked) {
+                    checkedCount++;
+                }
+            });
+            var editButton = document.getElementById('editbutton');
+            if (checkedCount >= 2) {
+                editButton.classList.remove('hidden');
+            } else {
+                editButton.classList.add('hidden');
+            }
+        }
+
+
+        function updateEditButtonVisibility1() {
+            var checkboxes = document.querySelectorAll('.checkboxes1');
+            var checkedCount = 0;
+            checkboxes.forEach(function(checkbox) {
+                if (checkbox.checked) {
+                    checkedCount++;
+                }
+            })
+        }
+
+        function toggleSelectAll1(checked) {
+            let checkboxes = document.getElementsByClassName('checkboxes1');
+            var editButton = document.getElementById('editbutton1');
+            for (let i = 0; i < checkboxes.length; i++) {
+                checkboxes[i].checked = checked.checked;
+            }
+            if (checked.checked) {
+                editButton.classList.remove('hidden');
+            } else {
+                editButton.classList.add('hidden');
+            }
+        }
+
+        function updateEditButtonVisibility() {
+            var checkboxes = document.querySelectorAll('.checkboxes');
+            var checkedCount = 0;
+            checkboxes.forEach(function(checkbox) {
+                if (checkbox.checked) {
+                    checkedCount++;
+                }
+            });
+            var editButton = document.getElementById('editbutton');
+            if (checkedCount >= 2) {
+                editButton.classList.remove('hidden');
+            } else {
+                editButton.classList.add('hidden');
+            }
+        }
+
+        function updateEditButtonVisibility1() {
+            var checkboxes = document.querySelectorAll('.checkboxes1');
+            var checkedCount = 0;
+            checkboxes.forEach(function(checkbox) {
+                if (checkbox.checked) {
+                    checkedCount++;
+                }
+            });
+            var editButton = document.getElementById('editbutton1');
+            if (checkedCount >= 2) {
+                editButton.classList.remove('hidden');
+            } else {
+                editButton.classList.add('hidden');
+            }
+        }
+
+        function showtab() {
+            var tabs = document.getElementById('tabs');
             setTimeout(() => {
-                document.getElementById('createkeywords').style.display = "block";
+                tabs.classList.remove('hidden');
             }, 1000)
 
-        })
-        document.getElementById('dashboard-tab').addEventListener('click', function() {
-            setTimeout(() => {
-                document.getElementById('createcontacts').style.display = "block";
-            }, 1000)
-
-        })
-
-    };
-
-    function addcontact() {
-    var saveButton = document.getElementById('saveButton');
-    saveButton.disabled = true;
-
-    var formData1 = $('#addcontact').serialize();
-    console.log(formData1);
-
-    $.ajax({
-        url: '{{ route("addcontact") }}',
-        method: 'POST',
-        data: formData1,
-        success: function(response) {
-            if (response.success) {
-                window.location.reload();
-            } else {
-                if (response.errors) {
-                    $.each(response.errors, function(key, value) {
-                        $('#' + key + '-error1').text(value);
-                    });
-                }
-            }
-            saveButton.disabled = false;
-        },
-        error: function(xhr, status, error) {
-            console.error(xhr.responseText);
-            saveButton.disabled = false;
         }
-    });
-}
 
+        function enableAllDisabledItems() {
+            const checkbox = document.getElementById('primaryCheckbox');
+            const select = document.querySelector('select[name="primary_client_id"]');
 
-    function editcontact(id) {
-        var formData2 = $(`#editcontact${id}`).serialize();
-        formData2 += '&contactid=' + id;
-        $.ajax({
-            url: '{{ route("editcontact") }}',
-            method: 'POST',
-            data: formData2,
-            success: function(response) {
-                if (response.success) {
-                    window.location.reload();
-                } else {
-                    if (response.errors) {
-                        $.each(response.errors, function(key, value) {
-                            console.log($('#' + key + '-error'));
-
-                            $(`#${key}-error${id}`).text(value);
-                        });
-                    }
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error(xhr.responseText);
+            if (checkbox.checked) {
+                select.removeAttribute('disabled');
+            } else {
+                select.setAttribute('disabled', '');
             }
-        });
-    }
 
-    function saveKeywordBtn(id) {
-        // Gather form data
-        const keyword = $(`#keyword${id}`).val();
-        const filter = $(`#filterinput${id}`).val();
-        const filterString = $(`#filterStringinput${id}`).val();
-        const type = $(`#type${id}`).val();
-        const category = $(`#category${id}`).val();
-        const companyString = $(`#companyString${id}`).val();
-        const brandString = $(`#brandString${id}`).val();
-
-        // Send AJAX request to save the keyword
-        $.ajax({
-            url: `{{route('edit.keyword')}}`,
-            method: 'POST',
-            data: {
-                keyid: id,
-                keyword: keyword,
-                filter: filter,
-                filterString: filterString,
-                type: type,
-                category: category,
-                companyString: companyString,
-                brandString: brandString,
-                _token: '{{ csrf_token() }}',
-                clientid: `{{request()->route()->parameter('id')}}`
-            },
-            success: function(response) {
-                if (response.success) {
-                    window.location.reload();
-                } else {
-
-                    if (response.errors) {
-                        $.each(response.errors, function(key, value) {
-
-                            $('#' + key + '-error').text(value);
-                        });
-                    }
+            const disabledElements = document.querySelectorAll('[disabled]');
+            disabledElements.forEach(element => {
+                // Check if the element is not the primary client dropdown
+                if (element !== select) {
+                    element.removeAttribute('disabled');
                 }
-            },
-            error: function(xhr, status, error) {
-                $.each(xhr.responseJSON.errors, function(key, value) {
+            });
 
-                    $('#' + key + '-error').text(value);
-                });
-                console.log(xhr.responseJSON);
+            document.getElementById('editbtn').style.display = "none";
+            document.getElementById('save').classList.remove('hidden');
+            document.getElementById('client_id').setAttribute('disabled', '');
+        }
 
+        function openmodal(id) {
+            const $targetEl = document.getElementById(`large-modal${id}`);
+            const modal = new Modal($targetEl);
+            modal.show();
+        }
 
-                console.error('Error saving keyword:', error);
+        function toggleEditMode(contactId) {
+            var editSections = document.getElementsByClassName('editSection' + contactId);
+            var withoutEditSections = document.getElementsByClassName('withoutEditSection' + contactId);
+
+            for (var i = 0; i < editSections.length; i++) {
+                var editSection = editSections[i];
+                var withoutEditSection = withoutEditSections[i];
+
+                if (!editSection.classList.contains('hidden')) {
+                    editSection.classList.add('hidden');
+                    withoutEditSection.classList.remove('hidden');
+                } else {
+                    editSection.classList.remove('hidden');
+                    withoutEditSection.classList.add('hidden');
+                }
             }
-        });
-    }
+        }
+        window.onload = (event) => {
+            document.getElementById('settings-tab').addEventListener('click', function() {
+                setTimeout(() => {
+                    document.getElementById('createkeywords').style.display = "block";
+                }, 1000)
 
-    function fetchResults() {
-        const keyword = $('#keyword').val().trim();
-        const autocompleteList = $('#autocomplete-list');
-        const resultsList = $('#results-list');
-        console.log(resultsList)
-        if (keyword.length > 2) {
-            // Make an AJAX request to fetch autocomplete results
+            })
+            document.getElementById('dashboard-tab').addEventListener('click', function() {
+                setTimeout(() => {
+                    document.getElementById('createcontacts').style.display = "block";
+                }, 1000)
+
+            })
+
+        };
+
+        function addcontact() {
+            var modalContent = document.querySelector('#large-modal2');
+            var saveButton = document.getElementById('saveButton');
+            saveButton.disabled = true;
+            document.getElementById('processModal').classList.remove('hidden');
+            var formData1 = $('#addcontact').serialize();
             $.ajax({
-                url: '/api/keywordlist',
-                method: 'GET',
-                data: {
-                    keyword: keyword
-                },
+                url: '{{ route("addcontact") }}',
+                method: 'POST',
+                data: formData1,
                 success: function(response) {
-                    resultsList.empty(); // Clear previous results
-                    if (response.length > 0) {
-                        $.each(response, function(index, result) {
-                            const li = $('<li>').text(result.KeyWord);
-
-                            li.css('padding', '8px')
-                            li.on('click', function() {
-                                selectResult(result.KeyWord);
-                            });
-                            resultsList.append(li);
-                        });
-                        autocompleteList.show(); // Show autocomplete list
+                    document.getElementById('processModal').classList.add('hidden');
+                    if (response.success) {
+                        window.location.reload();
                     } else {
-                        autocompleteList.hide(); // Hide autocomplete list if no results
+                        if (response.errors) {
+                            if (modalContent) {
+                                modalContent.scrollTop = 0;   
+                                }
+                            $.each(response.errors, function(key, value) {
+                                $('#' + key + '-error1').text(value);                             
+                               
+                            });
+                        }
+                    }
+                    saveButton.disabled = false;
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                    saveButton.disabled = false;
+                }
+            });
+        }
+
+
+        function editcontact(id) {
+            var formData2 = $(`#editcontact${id}`).serialize();
+            var modalContent = document.querySelector(`#large-modal${id}`);
+            formData2 += '&contactid=' + id;
+            $.ajax({
+                url: '{{ route("editcontact") }}',
+                method: 'POST',
+                data: formData2,
+                success: function(response) {
+                    if (response.success) {
+                        window.location.reload();
+                    } else {
+                        if (response.errors) {
+                            if (modalContent) {
+                                modalContent.scrollTop = 0;   
+                                }
+                            $.each(response.errors, function(key, value) {
+                                console.log($('#' + key + '-error'));
+
+                                $(`#${key}-error${id}`).text(value);
+                            });
+                        }
                     }
                 },
                 error: function(xhr, status, error) {
-                    console.error('Error fetching results:', error);
+                    console.error(xhr.responseText);
                 }
             });
-        } else {
-            autocompleteList.hide(); // Hide autocomplete list if keyword length is less than 3
         }
-    }
 
-    // Define the selectResult function
-    function selectResult(keyword) {
-        $('#keyword').val(keyword);
-        $('#autocomplete-list').hide();
-        $.ajax({
-            url: '/api/filter-strings',
-            method: 'GET',
-            data: {
-                keyword: keyword
-            },
-            success: function(response) {
-                // Populate the filter string dropdown
-                const filterStringDropdown = $('#filterString');
-                const filter = $('#filter');
-                filterStringDropdown.empty();
-                if (response.length > 0) {
-                    $.each(response, function(index, filterString) {
-                        const option = $('<option>').val(filterString.Filter_String).text(filterString.Filter_String);
-                        const option1 = $('<option>').val(filterString.filter).text(filterString.filter);
-                        filterStringDropdown.append(option);
-                        filter.append(option1);
-                    });
-                } else {
-                    // If no filter strings found, disable the dropdown
-                    filterStringDropdown.prop('disabled', true);
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('Error fetching filter strings:', error);
-            }
-        });
-    }
-</script>
-<script>
-    // Function to enable/disable broadcast fields
-    function enableBroadcastFields() {
-        var checkbox = document.getElementById("broadcastCheckbox");
-        var textBox = document.getElementById("broadcastText");
-
-        // Enable/disable text box based on checkbox state
-        textBox.disabled = !checkbox.checked;
-    }
-
-    // Function to handle edit button click
-    function handleEditButtonClick() {
-        enableBroadcastFields(); // Enable broadcast fields
-    }
-
-    // Function to handle checkbox change event
-    function handleCheckboxChange() {
-        enableBroadcastFields(); // Enable/disable text box
-    }
-
-    // Function to handle primary checkbox change event
-    function handlePrimaryCheckboxChange() {
-        var checkbox = document.getElementById('primaryCheckbox');
-        var dropdown = document.querySelector('select[name="primary_client_id"]');
-
-        dropdown.disabled = !checkbox.checked; // Enable/disable dropdown
-    }
-
-    window.onload = function() {
-        // Add event listener to the "Edit" button
-        document.getElementById("editbtn").addEventListener("click", function() {
-            handleEditButtonClick();
-        });
-
-        // Add event listener to the broadcast checkbox
-        document.getElementById("broadcastCheckbox").addEventListener("change", function() {
-            handleCheckboxChange();
-        });
-
-        // Add event listener to the primary checkbox
-        document.getElementById('primaryCheckbox').addEventListener('change', function() {
-            handlePrimaryCheckboxChange();
-        });
-        $('#keyword').on('input', fetchResults);
-
-        // Handle "Save" button click
-        $('#saveKeywordBtn').click(function() {
+        function saveKeywordBtn(id) {
             // Gather form data
-            const keyword = $('#keyword').val();
-            const filter = $('#filterinput').val();
-            const filterString = $('#filterStringinput').val();
-            const type = $('#type').val();
-            const category = $('#category').val();
-            const companyString = $('#companyString').val();
-            const brandString = $('#brandString').val();
+            const keyword = $(`#keyword${id}`).val();
+            const filter = $(`#filterinput${id}`).val();
+            const filterString = $(`#filterStringinput${id}`).val();
+            const type = $(`#type${id}`).val();
+            const category = $(`#category${id}`).val();
+            const companyString = $(`#companyString${id}`).val();
+            const brandString = $(`#brandString${id}`).val();
 
             // Send AJAX request to save the keyword
             $.ajax({
-                url: '/save-keyword',
+                url: `{{route('edit.keyword')}}`,
                 method: 'POST',
                 data: {
+                    keyid: id,
                     keyword: keyword,
                     filter: filter,
                     filterString: filterString,
@@ -1315,243 +1251,437 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                     console.log(xhr.responseJSON);
 
 
-                    // Handle error response
                     console.error('Error saving keyword:', error);
-                    // Optionally, you can show an error message to the user
                 }
             });
-        });
-    };
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        $('#deleteButton').on('click', function() {
-            $('#deleteConfirmModal').removeClass('hidden');
-        });
-        $('#keywords').DataTable({
-            pagingType: 'first_last_numbers',
-            layout: {
-                topStart: {
-                    buttons: [{
-                            text: '<div class="flex items-center" id="createkeyword" data-modal-target="large-modal1" data-modal-toggle="large-modal1"  >Create Keyword</div>',
-                            className: 'px-3 py-2 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800',
+        }
 
-                        },
-                        {
-                            text: '<div class="flex items-center"  >Export </div>',
-                            action: function(e, dt, button, config) {
-                                exportDataToCSV('keywords.csv', dt);
-                            },
-                            className: 'px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800',
-                        }
-                    ]
-                }
-            }
-        });
-        function exportDataToCSV(filename, datatable) {
-            var csv = [];
-            var headers = datatable.columns().header().toArray().map(header => $(header).text());
-            headers.pop(); 
-            csv.push(headers.map(header => `"${header}"`).join(','));
+        function fetchResults() {
+            const keyword = $('#keyword').val().trim();
+            const autocompleteList = $('#autocomplete-list');
+            const resultsList = $('#results-list');
+            console.log(resultsList)
+            if (keyword.length > 2) {
+                // Make an AJAX request to fetch autocomplete results
+                $.ajax({
+                    url: '/api/keywordlist',
+                    method: 'GET',
+                    data: {
+                        keyword: keyword
+                    },
+                    success: function(response) {
+                        resultsList.empty(); // Clear previous results
+                        if (response.length > 0) {
+                            $.each(response, function(index, result) {
+                                const li = $('<li>').text(result.KeyWord);
 
-            datatable.rows().every(function() {
-                var data = this.data();
-                data.pop();
-
-                var processedData = data.map(item => {
-                    if (typeof item === 'string') {
-                        const parser = new DOMParser();
-                        const doc = parser.parseFromString(item, 'text/html');
-
-                        const greenSvg = doc.querySelector('svg.w-3.h-3.text-green-500[aria-hidden="true"]');
-                        const redSvg = doc.querySelector('svg.w-3.h-3.text-red-500[aria-hidden="true"]');
-
-                        if (greenSvg) {
-                            return "Yes";
-                        } else if (redSvg) {
-                            return "No";
+                                li.css('padding', '8px')
+                                li.on('click', function() {
+                                    selectResult(result.KeyWord);
+                                });
+                                resultsList.append(li);
+                            });
+                            autocompleteList.show(); // Show autocomplete list
                         } else {
-                            return `"${item.replace(/"/g, '""')}"`;
+                            autocompleteList.hide(); // Hide autocomplete list if no results
                         }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching results:', error);
                     }
-                    return item;
                 });
-
-                csv.push(processedData.join(','));
-            });
-
-            var csvString = csv.join('\n');
-            var blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
-            var link = document.createElement("a");
-
-            if (link.download !== undefined) { 
-                var url = URL.createObjectURL(blob);
-                link.setAttribute("href", url);
-                link.setAttribute("download", filename);
-                link.style.visibility = 'hidden';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
+            } else {
+                autocompleteList.hide(); // Hide autocomplete list if keyword length is less than 3
             }
         }
-        $('#contacts').DataTable({
-            pagingType: 'first_last_numbers',
-            layout: {
-                topStart: {
-                    buttons: [{
-                            text: '<div class="flex items-center" data-modal-target="large-modal2" data-modal-toggle="large-modal2">Create Contact</div>',
-                            className: 'px-3 py-2 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800',
-                        },
-                        {
-                            text: '<div class="flex items-center">Export</div>',
-                            action: function(e, dt, button, config) {
-                                exportDataToCSV('contacts.csv', dt);
-                            },
-                            className: 'px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800',
-                        }
-                    ]
-                }
-            }
-        });
 
-
-
-        $('#cancelDelete').on('click', function() {
-            $('#deleteConfirmModal').addClass('hidden');
-        });
-
-        $('#confirmDelete').on('click', function() {
-            var clientid = '{{ $data->ClientID }}';
+        // Define the selectResult function
+        function selectResult(keyword) {
+            $('#keyword').val(keyword);
+            $('#autocomplete-list').hide();
             $.ajax({
-                url: `{{route('delete.client')}}`,
-                type: 'DELETE',
-
-                data: {
-                    clientid: clientid,
-                    userid: '{{ auth()->user()->UserID }}'
-                },
-                success: function(result) {
-                    if (result.status) {
-                        alert(result.message);
-                        window.location.href = "{{ route('client') }}";
-                    } else {
-                        alert(result.message);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error deleting item:', error);
-                    $('#deleteConfirmModal').addClass('hidden');
-                }
-            });
-
-        });
-        $('#media-universe').on('click', function() {
-            document.getElementById('processModal').classList.remove('hidden');
-
-            $.ajax({
-                url: `{{route('loadMediaUniverseContent')}}`,
+                url: '/api/filter-strings',
                 method: 'GET',
                 data: {
-                    clientid: "{{ $data->ClientID }}",
-                    priority: "{{ $data->priority }}",
-                    restrictedmu: "{{ $data->restricted_mu }}"
+                    keyword: keyword
                 },
-                success: function(data) {
-                    // Update the DOM with the fetched contenta
-                    $('#mediauniverse').html(data);
-
-                    document.getElementById('processModal').classList.add('hidden');
+                success: function(response) {
+                    // Populate the filter string dropdown
+                    const filterStringDropdown = $('#filterString');
+                    const filter = $('#filter');
+                    filterStringDropdown.empty();
+                    if (response.length > 0) {
+                        $.each(response, function(index, filterString) {
+                            const option = $('<option>').val(filterString.Filter_String).text(filterString.Filter_String);
+                            const option1 = $('<option>').val(filterString.filter).text(filterString.filter);
+                            filterStringDropdown.append(option);
+                            filter.append(option1);
+                        });
+                    } else {
+                        // If no filter strings found, disable the dropdown
+                        filterStringDropdown.prop('disabled', true);
+                    }
                 },
                 error: function(xhr, status, error) {
-                    console.error('Error loading content:', error);
-
-                    // Hide the loading spinner in case of error
-                    document.getElementById('processModal').classList.add('hidden');
+                    console.error('Error fetching filter strings:', error);
                 }
             });
-        });
-        const checkbox = document.getElementById('primaryCheckbox');
-        const dropdown = document.querySelector('select[name="primary_client_id"]');
+        }
+    </script>
+    <script>
+        // Function to enable/disable broadcast fields
+        function enableBroadcastFields() {
+            var checkbox = document.getElementById("broadcastCheckbox");
+            var textBox = document.getElementById("broadcastText");
 
-        // Initial state
-        if (!checkbox.checked) {
-            dropdown.disabled = true;
+            // Enable/disable text box based on checkbox state
+            textBox.disabled = !checkbox.checked;
         }
 
-        checkbox.addEventListener('change', function() {
-            if (checkbox.checked) {
-                dropdown.disabled = false;
-            } else {
+        // Function to handle edit button click
+        function handleEditButtonClick() {
+            enableBroadcastFields(); // Enable broadcast fields
+        }
+
+        // Function to handle checkbox change event
+        function handleCheckboxChange() {
+            enableBroadcastFields(); // Enable/disable text box
+        }
+
+        // Function to handle primary checkbox change event
+        function handlePrimaryCheckboxChange() {
+            var checkbox = document.getElementById('primaryCheckbox');
+            var dropdown = document.querySelector('select[name="primary_client_id"]');
+
+            dropdown.disabled = !checkbox.checked; // Enable/disable dropdown
+        }
+
+        window.onload = function() {
+            // Add event listener to the "Edit" button
+            document.getElementById("editbtn").addEventListener("click", function() {
+                handleEditButtonClick();
+            });
+
+            // Add event listener to the broadcast checkbox
+            document.getElementById("broadcastCheckbox").addEventListener("change", function() {
+                handleCheckboxChange();
+            });
+
+            // Add event listener to the primary checkbox
+            document.getElementById('primaryCheckbox').addEventListener('change', function() {
+                handlePrimaryCheckboxChange();
+            });
+            const showLogoBtn = document.getElementById('showLogoBtn');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const logoModal = document.getElementById('logoModal');
+
+            if (showLogoBtn) {
+                showLogoBtn.addEventListener('click', function() {
+                    console.log('clicked');
+                    if (logoModal) {
+                        logoModal.classList.remove('hidden');
+                        logoModal.classList.add('flex');
+                    }
+                });
+            }
+
+            if (closeModalBtn) {
+                closeModalBtn.addEventListener('click', function() {
+                    if (logoModal) {
+                        logoModal.classList.remove('flex');
+                        logoModal.classList.add('hidden');
+                    }
+                });
+            }
+            $('#keyword').on('input', fetchResults);
+
+            // Handle "Save" button click
+            $('#saveKeywordBtn').click(function() {
+                // Gather form data
+                const keyword = $('#keyword').val();
+                const filter = $('#filterinput').val();
+                const filterString = $('#filterStringinput').val();
+                const type = $('#type').val();
+                const category = $('#category').val();
+                const companyString = $('#companyString').val();
+                const brandString = $('#brandString').val();
+
+                // Send AJAX request to save the keyword
+                $.ajax({
+                    url: '/save-keyword',
+                    method: 'POST',
+                    data: {
+                        keyword: keyword,
+                        filter: filter,
+                        filterString: filterString,
+                        type: type,
+                        category: category,
+                        companyString: companyString,
+                        brandString: brandString,
+                        _token: '{{ csrf_token() }}',
+                        clientid: `{{request()->route()->parameter('id')}}`
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            window.location.reload();
+                        } else {
+
+                            if (response.errors) {
+                                $.each(response.errors, function(key, value) {
+
+                                    $('#' + key + '-error').text(value);
+                                });
+                            }
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        $.each(xhr.responseJSON.errors, function(key, value) {
+
+                            $('#' + key + '-error').text(value);
+                        });
+                        console.log(xhr.responseJSON);
+
+
+                        // Handle error response
+                        console.error('Error saving keyword:', error);
+                        // Optionally, you can show an error message to the user
+                    }
+                });
+            });
+        };
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            $('#deleteButton').on('click', function() {
+                $('#deleteConfirmModal').removeClass('hidden');
+            });
+            $('#keywords').DataTable({
+                pagingType: 'first_last_numbers',
+                layout: {
+                    topStart: {
+                        buttons: [{
+                                text: '<div class="flex items-center" id="createkeyword" data-modal-target="large-modal1" data-modal-toggle="large-modal1"  >Create Keyword</div>',
+                                className: 'px-3 py-2 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800',
+
+                            },
+                            {
+                                text: '<div class="flex items-center"  >Export </div>',
+                                action: function(e, dt, button, config) {
+                                    exportDataToCSV('keywords.csv', dt);
+                                },
+                                className: 'px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800',
+                            }
+                        ]
+                    }
+                }
+            });
+
+            function exportDataToCSV(filename, datatable) {
+                var csv = [];
+                var headers = datatable.columns().header().toArray().map(header => $(header).text());
+                headers.pop();
+                csv.push(headers.map(header => `"${header}"`).join(','));
+
+                datatable.rows().every(function() {
+                    var data = this.data();
+                    data.pop();
+
+                    var processedData = data.map(item => {
+                        if (typeof item === 'string') {
+                            const parser = new DOMParser();
+                            const doc = parser.parseFromString(item, 'text/html');
+
+                            const greenSvg = doc.querySelector('svg.w-3.h-3.text-green-500[aria-hidden="true"]');
+                            const redSvg = doc.querySelector('svg.w-3.h-3.text-red-500[aria-hidden="true"]');
+
+                            if (greenSvg) {
+                                return "Yes";
+                            } else if (redSvg) {
+                                return "No";
+                            } else {
+                                return `"${item.replace(/"/g, '""')}"`;
+                            }
+                        }
+                        return item;
+                    });
+
+                    csv.push(processedData.join(','));
+                });
+
+                var csvString = csv.join('\n');
+                var blob = new Blob([csvString], {
+                    type: 'text/csv;charset=utf-8;'
+                });
+                var link = document.createElement("a");
+
+                if (link.download !== undefined) {
+                    var url = URL.createObjectURL(blob);
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", filename);
+                    link.style.visibility = 'hidden';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+            }
+            $('#contacts').DataTable({
+                pagingType: 'first_last_numbers',
+                layout: {
+                    topStart: {
+                        buttons: [{
+                                text: '<div class="flex items-center" data-modal-target="large-modal2" data-modal-toggle="large-modal2">Create Contact</div>',
+                                className: 'px-3 py-2 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800',
+                            },
+                            {
+                                text: '<div class="flex items-center">Export</div>',
+                                action: function(e, dt, button, config) {
+                                    exportDataToCSV('contacts.csv', dt);
+                                },
+                                className: 'px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800',
+                            }
+                        ]
+                    }
+                }
+            });
+
+
+
+            $('#cancelDelete').on('click', function() {
+                $('#deleteConfirmModal').addClass('hidden');
+            });
+
+            $('#confirmDelete').on('click', function() {
+                var clientid = '{{ $data->ClientID }}';
+                $.ajax({
+                    url: `{{route('delete.client')}}`,
+                    type: 'DELETE',
+
+                    data: {
+                        clientid: clientid,
+                        userid: '{{ auth()->user()->UserID }}'
+                    },
+                    success: function(result) {
+                        if (result.status) {
+                            alert(result.message);
+                            window.location.href = "{{ route('client') }}";
+                        } else {
+                            alert(result.message);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error deleting item:', error);
+                        $('#deleteConfirmModal').addClass('hidden');
+                    }
+                });
+
+            });
+            $('#media-universe').on('click', function() {
+                document.getElementById('processModal').classList.remove('hidden');
+
+                $.ajax({
+                    url: `{{route('loadMediaUniverseContent')}}`,
+                    method: 'GET',
+                    data: {
+                        clientid: "{{ $data->ClientID }}",
+                        priority: "{{ $data->priority }}",
+                        restrictedmu: "{{ $data->restricted_mu }}"
+                    },
+                    success: function(data) {
+                        // Update the DOM with the fetched contenta
+                        $('#mediauniverse').html(data);
+
+                        document.getElementById('processModal').classList.add('hidden');
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error loading content:', error);
+
+                        // Hide the loading spinner in case of error
+                        document.getElementById('processModal').classList.add('hidden');
+                    }
+                });
+            });
+            const checkbox = document.getElementById('primaryCheckbox');
+            const dropdown = document.querySelector('select[name="primary_client_id"]');
+
+            // Initial state
+            if (!checkbox.checked) {
                 dropdown.disabled = true;
             }
+
+            checkbox.addEventListener('change', function() {
+                if (checkbox.checked) {
+                    dropdown.disabled = false;
+                } else {
+                    dropdown.disabled = true;
+                }
+            });
+            $("#companyString").autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        url: "{{ route('companyString') }}",
+                        data: {
+                            query: request.term
+                        },
+                        success: function(data) {
+                            response($.map(data, function(item) {
+                                return {
+                                    label: item.CompanyS,
+                                    value: item.CompanyS
+                                };
+                            }));
+                        }
+                    });
+                },
+                minLength: 2,
+                select: function(event, ui) {
+                    // Optional: handle the selection
+                    console.log("Selected: " + ui.item.value);
+                }
+
+            });
+            $("#brandString").autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        url: "{{ route('brandString') }}",
+                        data: {
+                            query: request.term
+                        },
+                        success: function(data) {
+                            response($.map(data, function(item) {
+                                return {
+                                    label: item.BrandS,
+                                    value: item.BrandS
+                                };
+                            }));
+                        }
+                    });
+                },
+                minLength: 2,
+                select: function(event, ui) {
+                    // Optional: handle the selection
+                    console.log("Selected: " + ui.item.value);
+                }
+
+            });
         });
-        $("#companyString").autocomplete({
-            source: function(request, response) {
-                $.ajax({
-                    url: "{{ route('companyString') }}",
-                    data: {
-                        query: request.term
-                    },
-                    success: function(data) {
-                        response($.map(data, function(item) {
-                            return {
-                                label: item.CompanyS,
-                                value: item.CompanyS
-                            };
-                        }));
-                    }
-                });
-            },
-            minLength: 2,
-            select: function(event, ui) {
-                // Optional: handle the selection
-                console.log("Selected: " + ui.item.value);
-            }
+    </script>
 
-        });
-        $("#brandString").autocomplete({
-            source: function(request, response) {
-                $.ajax({
-                    url: "{{ route('brandString') }}",
-                    data: {
-                        query: request.term
-                    },
-                    success: function(data) {
-                        response($.map(data, function(item) {
-                            return {
-                                label: item.BrandS,
-                                value: item.BrandS
-                            };
-                        }));
-                    }
-                });
-            },
-            minLength: 2,
-            select: function(event, ui) {
-                // Optional: handle the selection
-                console.log("Selected: " + ui.item.value);
-            }
+    @endsection
+    @section('style')
+    <style>
+        fieldset[disabled] {
+            opacity: 0.5;
+            pointer-events: none;
+        }
 
-        });
-    });
-</script>
+        .disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
 
-@endsection
-@section('style')
-<style>
-    fieldset[disabled] {
-        opacity: 0.5;
-        pointer-events: none;
-    }
-
-    .disabled {
-        opacity: 0.5;
-        pointer-events: none;
-    }
-
-    fieldset[disabled] input,
-    fieldset[disabled] label {
-        cursor: not-allowed;
-    }
-</style>
-@endsection
+        fieldset[disabled] input,
+        fieldset[disabled] label {
+            cursor: not-allowed;
+        }
+    </style>
+    @endsection
