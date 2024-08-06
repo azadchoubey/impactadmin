@@ -452,7 +452,7 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                             <button class="inline-block p-4 border-b-2 rounded-t-lg" id="sub-tab-1" data-tabs-target="#subtab1" type="button" role="tab" aria-controls="subtab1" aria-selected="true">Concepts</button>
                         </li>
                         <li class="me-2" role="presentation">
-                            <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="sub-tab-2" data-tabs-target="#subtab2" type="button" role="tab" aria-controls="subtab2" aria-selected="false">Complex Concepts</button>
+                            <button id="button2" class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="sub-tab-2" data-tabs-target="#subtab2" type="button" role="tab" aria-controls="subtab2" aria-selected="false">Complex Concepts</button>
                         </li>
                         <li class="me-2" role="presentation">
                             <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="sub-tab-3" data-tabs-target="#subtab3" type="button" role="tab" aria-controls="subtab3" aria-selected="false">Issues</button>
@@ -464,7 +464,7 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                 </div>
                 <div id="web-universe-submenu-content">
                     <div id="subtab1" role="tabpanel" aria-labelledby="sub-tab-1">
-                       <x-concept-keyword-setup/>
+                       <x-concept-keyword-setup :concepts="$concepts" :clientid="$data->ClientID" />
                     </div>
                     <div id="subtab2" role="tabpanel" aria-labelledby="sub-tab-2">
                         <!-- Sub Tab 2 content -->

@@ -34,10 +34,12 @@ class ClientsProfile extends Controller
 {
     public function index($id)
     {
-        $concepts = 
-        $data = Clinetprofile::with('contacts', 'contacts.delivery', 'contacts.delivery.deliveryformats', 'contacts.regularDigestPrint', 'contacts.regularDigestWeb', 'Country', 'Region', 'sector', 'keywords', 'billingcycle')->find(base64_decode($id));
-        $keywords = $data->keywords;
+        $query = 'CALL sp_getconceptsforclient(\'' . base64_decode($id) . '\', 0)';
+        $concepts = DB::connection('mysql3')->select($query);
       
+        $data = Clinetprofile::on('mysql2')->with('contacts', 'contacts.delivery', 'contacts.delivery.deliveryformats', 'contacts.regularDigestPrint', 'contacts.regularDigestWeb', 'Country', 'Region', 'sector', 'keywords', 'billingcycle')->find(base64_decode($id));
+        $keywords = $data->keywords;
+        
         $contacts = $data->contacts;
         $picklist = Picklist::whereIn('Type', ['City', 'Country', 'Delivery Method', 'Sector Summary Delivery', 'contacttype','client type','client source','Region','bill cycle','client status','sector'])->get()->groupBy(function ($query) {
             return strtolower($query->Type);
@@ -47,7 +49,7 @@ class ClientsProfile extends Controller
         $clients = Clinetprofile::where('deleted','!=',1)->get();
         $formats = CustomDigestFormat::select('id','format','format_name')->get();
         $customdelivery = Deliverymethod1::select('id','contactid','deliveryid','format')->get();
-        return view('clients', compact('data', 'contacts', 'keywords', 'picklist', 'webdeliverymaster', 'deliverymaster','clients','formats','customdelivery'));
+        return view('clients', compact('data', 'concepts','contacts', 'keywords', 'picklist', 'webdeliverymaster', 'deliverymaster','clients','formats','customdelivery'));
     }
 
     public function edit(Request $request, $id)
@@ -918,6 +920,114 @@ public function  deleteClient(Request $request)  {
         Log::warning("Client not found. Client ID: $clientid, User ID: $userid");
         return response()->json(['status' => false,'message' => 'Client not found'], 404);
     }
+}
+public function displayKeywords(Request $request)
+{
+    $conceptId = $request->input('selectedOptions');
+    
+    if (empty($conceptId) || $conceptId == -1) {
+        return response()->json([
+            'keywords' => [
+                ['id' => -1, 'name' => ' --No Keywords Defined-- ']
+            ]
+        ]);
+    }
+    
+      $query = 'CALL sp_getkeywordsforconcept(\'' . $conceptId . '\')';
+      $keywords= DB::connection('mysql3')->select($query);
+    
+    if (empty($keywords)) {
+        $keywords = [
+            ['id' => -1, 'name' => ' --No Keywords Defined-- ']
+        ];
+    }
+    
+    return response()->json($keywords);
+}
+public function saveOption(Request $request){
+   
+    $validator = Validator::make($request->all(), [
+        'option' => 'required|string|max:255',
+        'clientid'=> 'required'
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 422);
+    }
+    $clientid = $request->input('clientid');
+    if($request->datatype == 'concept'){
+        $concept = trim($request->input('concept'));
+        $result = DB::connection('mysql3')->select('CALL pm_conceptoperations(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [
+            0, 
+            $concept, 
+            $clientid, 
+            'add', 
+            0, 
+            0, 
+            0, 
+            0, 
+            0, 
+            0
+        ]);
+        if ($result[0]->success == 0) {
+            return response()->json(['message' => 'Error: Concept already exists'], 400);
+        } else {
+            $concepts = $this->getConcepts($clientid);
+
+            return response()->json([
+                'message' => 'Concept Added',
+                'concepts' => $concepts
+            ], 200);
+        }
+    }else if($request->datatype == 'keyword'){
+      
+        $this->addKeyword($request);
+    }
+}
+public function addKeyword(Request $request)
+    {
+        $request->validate([
+            'concept_id' => 'required|integer',
+        ]);
+
+        $conceptId = $request->input('concept_id');
+        $keyword = trim($request->input('keyword'));
+        $keyword2 = ''; 
+        $atleast = 0;
+        $within = 0;
+        $withinwords = 0;
+
+        $result = DB::connection('mysql3')->select('CALL pm_keywordoperations(?, ?, ?, ?, ?, ?, ?, ?, ?)', [
+            $conceptId, 
+            0, 
+            $keyword, 
+            $atleast, 
+            $keyword2, 
+            $within, 
+            $withinwords, 
+            'add',
+            0
+        ]);
+
+        if ($result[0]->success == 0) {
+            return response()->json([
+                'message' => 'Error: Keyword already exists for this Concept'
+            ], 422); 
+        } else {
+           
+            $keywords = DB::connection('mysql3')->select('CALL pm_getkeywordsforconcept(?)', [$conceptId]);
+
+            return response()->json([
+                'message' => 'Keyword Added',
+                'keywords' => $keywords
+            ]);
+        }
+    }
+private function getConcepts($clientid)
+{
+    $concepts = DB::connection('mysql3')->select('CALL sp_getconceptsforclient(?, ?)', [$clientid, 0]);
+
+    return $concepts;
 }
 
 }
