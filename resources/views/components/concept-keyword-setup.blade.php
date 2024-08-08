@@ -136,6 +136,16 @@ function iso88591ToUtf8(iso88591String) {
                 // Encode UTF-8 string to UTF-8 bytes
                 return new TextEncoder().encode(utf8String);
             }
+            function toggleModal(modalId, visible) {
+            const modal = $(modalId);
+            if (visible) {
+                modal.removeClass('hidden');
+                modal.attr('data-visible', 'true');
+            } else {
+                modal.addClass('hidden');
+                modal.attr('data-visible', 'false');
+            }
+        }
         // Open Add Modal
         $('#addOption1Btn').on('click', function() {
             $('#header').html('Add Concept');
@@ -159,6 +169,7 @@ function iso88591ToUtf8(iso88591String) {
         $('.addCancelBtn').on('click', function() {
             toggleModal('#addOptionModal', false);
         });
+
 
         // Close Edit Modal
         $('.editCancelBtn').on('click', function() {

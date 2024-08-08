@@ -29,10 +29,14 @@ Route::controller(KeywordController::class)->group(function () {
     Route::get('/companystring','companyString')->name('companyString');
     Route::get('/brandString','brandString')->name('brandString');
 });
-Route::post('/saveOption',[ClientsProfile::class,'saveOption'])->name('saveOption');
-Route::post('/searchexceptional',[ClientsProfile::class,'searchExceptional'])->name('searchexceptional');
-Route::post('/displayKeywords',[ClientsProfile::class,'displayKeywords'])->name('displayKeywords');
+
+Route::controller(ClientsProfile::class)->group(function () {
+    Route::post('/saveOption','saveOption')->name('saveOption');
+    Route::post('/searchexceptional','searchExceptional')->name('searchexceptional');
+    Route::post('/displayKeywords','displayKeywords')->name('displayKeywords');
+    Route::delete('deleteClient','deleteClient')->name('delete.client');
+    Route::get('/getclientconcepts',  'getClientConcepts')->name('getclientconcepts');
+});
+
 Route::post('/filter',[FilterController::class,'filter'])->name('filter');
 Route::post('/saveselecteddata',[FilterController::class,'saveselecteddata'])->name('saveselecteddata');
-Route::delete('deleteClient', [ClientsProfile::class, 'deleteClient'])->name('delete.client');
-Route::get('/getclientconcepts', [ClientsProfile::class, 'getClientConcepts'])->name('getclientconcepts');
