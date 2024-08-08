@@ -470,7 +470,7 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                         <x-complex-concepts :complexconcepts="$complexconcepts" :clientid="$data->ClientID" />
                     </div>
                     <div id="subtab3" role="tabpanel" aria-labelledby="sub-tab-3">
-                        <!-- Sub Tab 3 content -->
+                        <x-issue-defination/>
                     </div>
                     <div id="subtab4" role="tabpanel" aria-labelledby="sub-tab-3">
                         <!-- Sub Tab 3 content -->
