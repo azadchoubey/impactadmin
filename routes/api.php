@@ -35,3 +35,4 @@ Route::post('/displayKeywords',[ClientsProfile::class,'displayKeywords'])->name(
 Route::post('/filter',[FilterController::class,'filter'])->name('filter');
 Route::post('/saveselecteddata',[FilterController::class,'saveselecteddata'])->name('saveselecteddata');
 Route::delete('deleteClient', [ClientsProfile::class, 'deleteClient'])->name('delete.client');
+Route::get('/getclientconcepts', [ClientsProfile::class, 'getClientConcepts'])->name('getclientconcepts');

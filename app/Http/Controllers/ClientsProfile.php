@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Livewire\ClientProfile;
-use App\Models\Bmdeliverymethod;
 use App\Models\ClinetContacts;
 use App\Models\Clinetprofile;
 use App\Models\ContactSector;
 use App\Models\CustomDigestFormat;
 use App\Models\Deliverymethod1;
-use App\Models\Deliverymethod;
 use App\Models\Deliverymethodmaster;
 use App\Models\Mongo\ClientContact;
 use App\Models\Picklist;
@@ -36,7 +33,8 @@ class ClientsProfile extends Controller
     {
         $query = 'CALL sp_getconceptsforclient(\'' . base64_decode($id) . '\', 0)';
         $concepts = DB::connection('mysql3')->select($query);
-      
+        $query = 'call sp_getconceptsforclient(\'' . base64_decode($id) . '\',1)';
+        $complexconcepts = DB::connection('mysql3')->select($query);
         $data = Clinetprofile::on('mysql2')->with('contacts', 'contacts.delivery', 'contacts.delivery.deliveryformats', 'contacts.regularDigestPrint', 'contacts.regularDigestWeb', 'Country', 'Region', 'sector', 'keywords', 'billingcycle')->find(base64_decode($id));
         $keywords = $data->keywords;
         
@@ -49,7 +47,7 @@ class ClientsProfile extends Controller
         $clients = Clinetprofile::where('deleted','!=',1)->get();
         $formats = CustomDigestFormat::select('id','format','format_name')->get();
         $customdelivery = Deliverymethod1::select('id','contactid','deliveryid','format')->get();
-        return view('clients', compact('data', 'concepts','contacts', 'keywords', 'picklist', 'webdeliverymaster', 'deliverymaster','clients','formats','customdelivery'));
+        return view('clients', compact('data', 'complexconcepts','concepts','contacts', 'keywords', 'picklist', 'webdeliverymaster', 'deliverymaster','clients','formats','customdelivery'));
     }
 
     public function edit(Request $request, $id)
@@ -932,17 +930,24 @@ public function displayKeywords(Request $request)
             ]
         ]);
     }
-    
+
       $query = 'CALL sp_getkeywordsforconcept(\'' . $conceptId . '\')';
       $keywords= DB::connection('mysql3')->select($query);
-    
-    if (empty($keywords)) {
+      
+      if (empty($keywords)) {
         $keywords = [
-            ['id' => -1, 'name' => ' --No Keywords Defined-- ']
+            (object) ['id' => -1, 'name' => ' --No Keywords Defined-- ']
         ];
     }
+
+    $optionsHtml = '';
+    foreach ($keywords as $item) {
+        $name = mb_convert_encoding($item->name, 'Windows-1252', 'utf-8');
+        $optionsHtml .= "<option value=\"{$item->id}\">{$name}</option>";
+    }
+
+    return response($optionsHtml, 200)->header('Content-Type', 'text/html');
     
-    return response()->json($keywords);
 }
 public function saveOption(Request $request){
    
@@ -1029,9 +1034,13 @@ private function getConcepts($clientid)
 
     return $concepts;
 }
-
+public function getClientConcepts(Request $request)
+{
+    $clientid = $request->input('clientid');
+    $concepts = $this->getConcepts($clientid);
+    return response()->json($concepts);
 }
 
-
+}
 
 

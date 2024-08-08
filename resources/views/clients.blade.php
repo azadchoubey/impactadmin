@@ -75,7 +75,7 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                 <li class="me-2" role="presentation">
                     <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="web-universe-tab" data-tabs-target="#webuniverse" type="button" role="tab" aria-controls="webuniverse" aria-selected="false">Web Universe</button>
                 </li>
-                    @endif
+                @endif
             </ul>
         </div>
 
@@ -464,10 +464,10 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                 </div>
                 <div id="web-universe-submenu-content">
                     <div id="subtab1" role="tabpanel" aria-labelledby="sub-tab-1">
-                       <x-concept-keyword-setup :concepts="$concepts" :clientid="$data->ClientID" />
+                        <x-concept-keyword-setup :concepts="$concepts" :clientid="$data->ClientID" />
                     </div>
                     <div id="subtab2" role="tabpanel" aria-labelledby="sub-tab-2">
-                        <x-complex-concepts/>
+                        <x-complex-concepts :complexconcepts="$complexconcepts" :clientid="$data->ClientID" />
                     </div>
                     <div id="subtab3" role="tabpanel" aria-labelledby="sub-tab-3">
                         <!-- Sub Tab 3 content -->
@@ -1156,11 +1156,11 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                     } else {
                         if (response.errors) {
                             if (modalContent) {
-                                modalContent.scrollTop = 0;   
-                                }
+                                modalContent.scrollTop = 0;
+                            }
                             $.each(response.errors, function(key, value) {
-                                $('#' + key + '-error1').text(value);                             
-                               
+                                $('#' + key + '-error1').text(value);
+
                             });
                         }
                     }
@@ -1188,8 +1188,8 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                     } else {
                         if (response.errors) {
                             if (modalContent) {
-                                modalContent.scrollTop = 0;   
-                                }
+                                modalContent.scrollTop = 0;
+                            }
                             $.each(response.errors, function(key, value) {
                                 console.log($('#' + key + '-error'));
 
@@ -1574,6 +1574,35 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                     }
                 });
 
+            });
+            $('#button2').on('click', function() {
+                document.getElementById('processModal').classList.remove('hidden');
+                $.ajax({
+                    url: `{{route('getclientconcepts')}}`,
+                    method: 'GET',
+                    data: {
+                        clientid: "{{ $data->ClientID }}",
+                    },
+                    success: function(data) {
+                        document.getElementById('processModal').classList.add('hidden');
+                        data.forEach(option => {
+                            const option1 = new Option(option.name, option.id, false, false);
+                            const option2 = new Option(option.name, option.id, false, false);
+                            const option3 = new Option(option.name, option.id, false, false);
+                            const option4 = new Option(option.name, option.id, false, false);
+                            $('#concept1').append(option1);
+                            $('#concept2').append(option2);
+                            $('#concept3').append(option3);
+                            $('#concept4').append(option4);
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error loading content:', error);
+
+                        // Hide the loading spinner in case of error
+                        document.getElementById('processModal').classList.add('hidden');
+                    }
+                });
             });
             $('#media-universe').on('click', function() {
                 document.getElementById('processModal').classList.remove('hidden');

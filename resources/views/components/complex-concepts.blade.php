@@ -1,179 +1,81 @@
-<div class="complex-concepts-container">
+<div class="complex-concepts-container container mx-auto p-2 rounded-lg space-y-8 mb-4">
     <!-- Section to display saved complex concepts -->
-    <div class="box saved-complex-concepts">
-        <h3>Saved Complex Concepts</h3>
-        <ul>
+    <div class="box saved-complex-concepts bg-white border border-gray-300 rounded-lg p-2 shadow max-h-60 overflow-auto">
+        <h3 class="text-sm font-semibold mb-4">Saved Complex Concepts</h3>
+        <ul class="list-none p-0">
             <!-- Example of saved complex concepts -->
-            <li>
-                At least 3 occurrences of the concept "Concept 1"
-                <button type="button" class="delete-concept" onclick="deleteConcept(this)">Delete</button>
+             @foreach ($complexconcepts as $complexconcept)
+                 
+           
+            <li class="text-sm flex justify-between items-center bg-gray-100 mb-2 p-2 border border-gray-200 rounded-md">
+               {{$complexconcept}}
+                <button type="button" class="delete-concept bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600" onclick="deleteConcept(this)">Delete</button>
             </li>
-            <li>
-                Concept 1 within 5 words of Concept 2
-                <button type="button" class="delete-concept" onclick="deleteConcept(this)">Delete</button>
-            </li>
-            <li>
-                Concept 3 within first 10 words of the article
-                <button type="button" class="delete-concept" onclick="deleteConcept(this)">Delete</button>
-            </li>
+            @endforeach
         </ul>
     </div>
 
     <!-- Form to define complex concepts -->
-    <div class="box define-complex-concepts">
-        <h3>Define Complex Concepts</h3>
-        <form id="complex-concepts-form" onsubmit="handleSubmit(event)">
+    <div class="box define-complex-concepts bg-white border border-gray-300 rounded-lg p-2 shadow mb-4">
+        <h3 class="text-sm font-semibold mb-4 ">Define Complex Concepts</h3>
+        <form id="complex-concepts-form" onsubmit="handleSubmit(event)" class="space-y-6">
             <!-- First Option: At least N occurrences of the concept -->
-            <div class="complex-concept-row" data-form-type="occurrences">
-                <label for="occurrences1">At least</label>
-                <input type="number" id="occurrences1" name="occurrences1" min="1" required>
+            <div class="complex-concept-row flex flex-wrap items-center mb-4" data-form-type="occurrences">
+                <label for="occurrences1" class="mr-2 text-sm">At least</label>
+                <input type="number" id="occurrences1" name="occurrences1" min="1" required class="flex-1 text-xs min-w-40 border border-gray-300 rounded">
                 
-                <label for="concept1">occurrences of the concept</label>
-                <select id="concept1" name="concept1" required>
+                <label for="concept1" class="ml-2 mr-2 text-sm">occurrences of the concept</label>
+                <select id="concept1" name="concept1" required class="flex-1 text-xs min-w-40 p-2 border border-gray-300 rounded">
                     <option value="" disabled selected>--concepts--</option>
-                    <option value="concept1">Concept 1</option>
-                    <option value="concept2">Concept 2</option>
-                    <option value="concept3">Concept 3</option>
+                  
                 </select>
                 
-                <button type="submit">OK</button>
-                <button type="reset">Clear</button>
+                <button type="submit" class="text-sm ml-4 py-1 px-4 bg-blue-500 text-white rounded hover:bg-blue-600">OK</button>
+                <button type="reset" class="text-sm  ml-2 py-1  px-4 bg-gray-500 text-white rounded hover:bg-gray-600">Clear</button>
             </div>
 
             <!-- Second Option: Concept 1 within N words of Concept 2 -->
-            <div class="complex-concept-row" data-form-type="within-words">
-                <label for="concept2">Concept 1</label>
-                <select id="concept2" name="concept2" required>
+            <div class="complex-concept-row flex flex-wrap items-center mb-4" data-form-type="within-words">
+                <label for="concept2" class="mr-2 text-sm">Concept 1</label>
+                <select id="concept2" name="concept2" required class="flex-1 text-xs min-w-40 p-2 border border-gray-300 rounded">
                     <option value="" disabled selected>--concepts--</option>
-                    <option value="concept1">Concept 1</option>
-                    <option value="concept2">Concept 2</option>
-                    <option value="concept3">Concept 3</option>
+                   
                 </select>
                 
-                <label for="words1">within</label>
-                <input type="number" id="words1" name="words1" min="1" required>
+                <label for="words1" class="ml-2 mr-2 text-sm">within</label>
+                <input type="number" id="words1" name="words1" min="1" required class="flex-1 text-xs min-w-40 p-2 border border-gray-300 rounded">
                 
-                <label for="concept3">words of Concept 2</label>
-                <select id="concept3" name="concept3" required>
+                <label for="concept3" class="ml-2 mr-2 text-sm">words of Concept 2</label>
+                <select id="concept3" name="concept3" required class="flex-1 text-xs min-w-40 p-2 border border-gray-300 rounded">
                     <option value="" disabled selected>--concepts--</option>
-                    <option value="concept1">Concept 1</option>
-                    <option value="concept2">Concept 2</option>
-                    <option value="concept3">Concept 3</option>
+                   
                 </select>
                 
-                <button type="submit">OK</button>
-                <button type="reset">Clear</button>
+                <button type="submit" class="text-sm  ml-4 py-1 px-4 bg-blue-500 text-white rounded hover:bg-blue-600">OK</button>
+                <button type="reset" class="text-sm  ml-2 py-1 px-4 bg-gray-500 text-white rounded hover:bg-gray-600">Clear</button>
             </div>
 
             <!-- Third Option: Concept within first N words of the article -->
-            <div class="complex-concept-row" data-form-type="first-words">
-                <label for="concept4">Concept</label>
-                <select id="concept4" name="concept4" required>
+            <div class="complex-concept-row flex flex-wrap items-center mb-4" data-form-type="first-words">
+                <label for="concept4" class="mr-2 text-sm">Concept</label>
+                <select id="concept4" name="concept4" required class="flex-1 text-xs min-w-40 p-2 border border-gray-300 rounded">
                     <option value="" disabled selected>--concepts--</option>
-                    <option value="concept1">Concept 1</option>
-                    <option value="concept2">Concept 2</option>
-                    <option value="concept3">Concept 3</option>
+                   
                 </select>
                 
-                <label for="words2">within first</label>
-                <input type="number" id="words2" name="words2" min="1" required>
+                <label for="words2" class="ml-2 mr-2 text-sm">within first</label>
+                <input type="number" id="words2" name="words2" min="1" required class="flex-1 text-xs min-w-40 p-2 border border-gray-300 rounded">
                 
-                <label for="words2">words of the article</label>
+                <label for="words2" class="ml-2 text-sm ">words of the article</label>
                 
-                <button type="submit">OK</button>
-                <button type="reset">Clear</button>
+                <button type="submit" class="text-sm  ml-4 py-1 px-4 bg-blue-500 text-white rounded hover:bg-blue-600">OK</button>
+                <button type="reset" class="text-sm ml-2 py-1 px-4 bg-gray-500 text-white rounded hover:bg-gray-600">Clear</button>
             </div>
         </form>
     </div>
 </div>
 
-<!-- Optionally, add some styling -->
-<style>
-    .complex-concepts-container {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: #f9f9f9;
-        border-radius: 10px;
-    }
-    .box {
-        background: #fff;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        padding: 20px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    .saved-complex-concepts h3, 
-    .define-complex-concepts h3 {
-        margin-top: 0;
-    }
-    .saved-complex-concepts ul {
-        list-style-type: none;
-        padding: 0;
-    }
-    .saved-complex-concepts li {
-        background: #f4f4f4;
-        margin-bottom: 10px;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .delete-concept {
-        background: #e74c3c;
-        color: #fff;
-        border: none;
-        padding: 5px 10px;
-        cursor: pointer;
-        border-radius: 3px;
-        transition: background 0.3s;
-    }
-    .delete-concept:hover {
-        background: #c0392b;
-    }
-    .complex-concept-row {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        margin-bottom: 10px;
-    }
-    .complex-concept-row label, 
-    .complex-concept-row input, 
-    .complex-concept-row select, 
-    .complex-concept-row button {
-        margin: 5px 10px;
-    }
-    .complex-concept-row input, 
-    .complex-concept-row select {
-        flex: 1;
-        min-width: 150px;
-        padding: 5px;
-        border: 1px solid #ccc;
-        border-radius: 3px;
-    }
-    .complex-concept-row button {
-        flex: 0 0 auto;
-        padding: 5px 10px;
-        border: none;
-        background: #3498db;
-        color: #fff;
-        border-radius: 3px;
-        cursor: pointer;
-        transition: background 0.3s;
-    }
-    .complex-concept-row button:hover {
-        background: #2980b9;
-    }
-    .complex-concept-row label {
-        flex: 0 0 auto;
-        white-space: nowrap;
-    }
-</style>
+
 
 <!-- JavaScript to handle form submission and delete functionality -->
 <script>

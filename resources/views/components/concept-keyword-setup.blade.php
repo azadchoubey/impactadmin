@@ -120,30 +120,22 @@
         }
 
         function updateSelect2(keywords) {
-            $('#select2').empty();
+    $('#select2').empty(); // Clear the select element
 
-            if (keywords.length > 0) {
-                keywords.forEach(keyword => {
-                    if (keyword.id == -1) {
-                        $('#editOption2Btn').prop('disabled', true);
-                    }
-                    const newOption = new Option(keyword.name, keyword.id, false, false);
-                    $('#select2').append(newOption).trigger('change');
-                });
+    $('#select2').append(keywords).trigger('change');
+}
+function iso88591ToUtf8(iso88591String) {
+                // Create a buffer from ISO-8859-1 string
+                var isoBytes = new Uint8Array(iso88591String.split('').map(function(c) {
+                    return c.charCodeAt(0);
+                }));
+
+                // Decode ISO-8859-1 bytes to UTF-8 string
+                var utf8String = new TextDecoder('iso-8859-1').decode(isoBytes);
+
+                // Encode UTF-8 string to UTF-8 bytes
+                return new TextEncoder().encode(utf8String);
             }
-        }
-
-        function toggleModal(modalId, visible) {
-            const modal = $(modalId);
-            if (visible) {
-                modal.removeClass('hidden');
-                modal.attr('data-visible', 'true');
-            } else {
-                modal.addClass('hidden');
-                modal.attr('data-visible', 'false');
-            }
-        }
-
         // Open Add Modal
         $('#addOption1Btn').on('click', function() {
             $('#header').html('Add Concept');
