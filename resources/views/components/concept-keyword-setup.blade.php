@@ -2,7 +2,7 @@
     <div class="grid grid-cols-2 gap-4 w-full">
         <div class="relative">
             <label for="select1" class="block text-sm font-medium text-gray-700">Concepts</label>
-            <select multiple id="select1" class="mt-4 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm select2"></select>
+            <select multiple id="select1" class="h-48 mt-4 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm select2"></select>
             <button id="addOption1Btn" style="right: 4.25rem;" class="absolute top-1 px-2 py-1 bg-blue-500 text-white text-xs rounded-md flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -18,7 +18,7 @@
         </div>
         <div class="relative">
             <label for="select2" class="block text-sm font-medium text-gray-700">Keywords</label>
-            <select multiple id="select2" class="mt-4 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm select2"></select>
+            <select multiple id="select2" class="h-48 mt-4 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm select2"></select>
             <button id="addOption2Btn" style="right: 4.25rem;" class="absolute top-1 px-2 py-1 bg-blue-500 text-white text-xs rounded-md flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
