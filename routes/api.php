@@ -29,7 +29,9 @@ Route::controller(KeywordController::class)->group(function () {
     Route::get('/companystring','companyString')->name('companyString');
     Route::get('/brandString','brandString')->name('brandString');
 });
+Route::post('/saveOption',[ClientsProfile::class,'saveOption'])->name('saveOption');
 Route::post('/searchexceptional',[ClientsProfile::class,'searchExceptional'])->name('searchexceptional');
+Route::post('/displayKeywords',[ClientsProfile::class,'displayKeywords'])->name('displayKeywords');
 Route::post('/filter',[FilterController::class,'filter'])->name('filter');
 Route::post('/saveselecteddata',[FilterController::class,'saveselecteddata'])->name('saveselecteddata');
 Route::delete('deleteClient', [ClientsProfile::class, 'deleteClient'])->name('delete.client');
