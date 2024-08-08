@@ -1586,10 +1586,10 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                     success: function(data) {
                         document.getElementById('processModal').classList.add('hidden');
                         data.forEach(option => {
-                            const option1 = new Option(option.name, option.id, false, false);
-                            const option2 = new Option(option.name, option.id, false, false);
-                            const option3 = new Option(option.name, option.id, false, false);
-                            const option4 = new Option(option.name, option.id, false, false);
+                            const option1 = new Option(option.name, option.name, false, false);
+                            const option2 = new Option(option.name, option.name, false, false);
+                            const option3 = new Option(option.name, option.name, false, false);
+                            const option4 = new Option(option.name, option.name, false, false);
                             $('#concept1').append(option1);
                             $('#concept2').append(option2);
                             $('#concept3').append(option3);
