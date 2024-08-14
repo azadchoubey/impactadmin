@@ -1154,25 +1154,27 @@ public function deleteConcept(Request $request)
 }
 public function saveIssue(Request $request)
 {
-    $openBracketsCount = 0;
-    $closeBracketsCount = 0;
-
     $validated = $request->validate([
-        'concept_conditions' => 'required|array|min:1',
         'issue' => 'required|string',
         'type' => 'required|string',
         'issue_color' => 'required|string',
         'company_issue' => 'nullable|integer',
         'tracking_type' => 'required|string',
     ]);
-
-    $conceptConditions = $validated['concept_conditions'];
+   
+    $conceptConditionsString = $request->concept_conditions ?trim($request->concept_conditions):'';
+    $postfix_expression = $request->input('postfix_expression')?trim($request->input('postfix_expression')):'';
+    $pattern = '/(\(|\)|and|or|not)/';
+    $conceptConditions = preg_split($pattern, $postfix_expression, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
     $issue = trim($validated['issue']);
     $type = trim($validated['type']);
     $issueColor = trim($validated['issue_color']);
     $companyIssue = $validated['company_issue'] ?? null;
     $trackingType = trim($validated['tracking_type']);
-
+    
+    $openBracketsCount = 0;
+    $closeBracketsCount = 0;
+    
     foreach ($conceptConditions as $condition) {
         if ($condition == '(') {
             $openBracketsCount++;
@@ -1180,24 +1182,25 @@ public function saveIssue(Request $request)
             $closeBracketsCount++;
         }
     }
-
+    
     if ($openBracketsCount !== $closeBracketsCount) {
-        return response()->json(['error' => 'Cannot save the Issue. The opening and closing braces in the concept condition are not balanced.'], 400);
+        return back()->withErrors(['concept_conditions' => 'Unbalanced parentheses in the concept conditions.']);
     }
 
-    $postfixExpression = $this->convertToPostfix($conceptConditions);
-
-    $clientId = session('clientid');
-    $issueId = $request->get('issue_id', 0);
+    $postfixExpression = convertToPostfix($conceptConditions);
+ 
+   
+    $clientId = $request->input('clientid');
+    $issueId = $request->input('issue_id', 0);
 
     $result = DB::connection('mysql3')->select(
-        'CALL sp_issueoperations_test(?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        'CALL sp_issueoperations_test(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
         [
             $issueId,
             $issue,
             $type,
             $clientId,
-            implode(' ', $conceptConditions),
+            $conceptConditionsString,
             $postfixExpression,
             $issueId == 0 ? 'add' : 'modify',
             $issueColor,
@@ -1212,10 +1215,24 @@ public function saveIssue(Request $request)
 
     return response()->json(['message' => $issueId == 0 ? 'Issue Added' : 'Issue Modified']);
 }
-
-private function convertToPostfix(array $conditions)
+public function editIssue($id)
 {
-    return implode(' ', $conditions);
+$issue = DB::connection('mysql3')->table('wm_issue')->find($id);
+
+    if ($issue) {
+        return response()->json([
+            'name' => $issue->name,
+            'color' => $issue->color,
+            'type' => $issue->type,
+            'tracking' => $issue->tracking,
+            'companyissue' => $issue->companyissue,
+            'id' => $issue->id,
+            'conceptcondition' => $issue->conceptcondition,
+            'postfixexpression' => $issue->postfixexpression
+        ]);
+    } else {
+        return response()->json(['error' => 'Issue not found'], 404);
+    }
 }
 
 }

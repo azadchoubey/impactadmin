@@ -39,6 +39,8 @@ Route::controller(ClientsProfile::class)->group(function () {
     Route::post('/add-complex-concepts',  'addComplexConcepts')->name('add-complex-concepts');
     Route::post('/update-complex-concepts',  'updateComplexConcepts')->name('updateComplexConcepts');
     Route::delete('/deleteConcept',  'deleteConcept')->name('deleteConcept');
+    Route::post('/saveissue',  'saveIssue')->name('save.issue');
+    Route::get('/issues/{issueId}/edit',  'editIssue')->name('editIssue');
 });
 
 Route::post('/filter',[FilterController::class,'filter'])->name('filter');

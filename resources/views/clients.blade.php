@@ -1036,7 +1036,31 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                 editButton.classList.add('hidden');
             }
         }
-
+        function editIssue(issueId) {
+    $.ajax({
+        url: `/api/issues/${issueId}/edit`, 
+        type: 'GET',
+        success: function(data) {
+            if(!data.error) {data
+            $('#issue').val(data.name);
+            $('#concept-color').val(data.color);
+            $('input[name="type"][value="' + data.type + '"]').prop('checked', true);
+            $('input[name="tracking_type"][value="' + data.tracking + '"]').prop('checked', true);
+            $('select[name="company_issue"]').val(data.companyissue).trigger('change');
+            
+            $('#saveissue').text('Edit and Save');
+            $('#concept-input').val(data.conceptcondition);
+             $('#postfix-expression').val(data.postfixexpression);
+            $('#issue-id').val(data.id);  
+            }
+            
+        },
+        error: function(xhr, status, error) {
+            console.error('Error fetching issue data:', error);
+            alert('An error occurred while fetching the issue data.');
+        }
+    });
+}
         function updateEditButtonVisibility() {
             var checkboxes = document.querySelectorAll('.checkboxes');
             var checkedCount = 0;
