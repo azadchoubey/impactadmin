@@ -1,5 +1,5 @@
 <div class="flex items-center justify-center">
-    <div class="grid grid-cols-2 gap-4 w-full">
+    <div class="grid grid-cols-2 gap-4 max-w-6xl">
         <div class="relative">
             <label for="select1" class="block text-sm font-medium text-gray-700">Concepts</label>
             <select multiple id="select1" class="h-48 mt-4 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm select2"></select>
@@ -124,18 +124,7 @@
 
     $('#select2').append(keywords).trigger('change');
 }
-function iso88591ToUtf8(iso88591String) {
-                // Create a buffer from ISO-8859-1 string
-                var isoBytes = new Uint8Array(iso88591String.split('').map(function(c) {
-                    return c.charCodeAt(0);
-                }));
 
-                // Decode ISO-8859-1 bytes to UTF-8 string
-                var utf8String = new TextDecoder('iso-8859-1').decode(isoBytes);
-
-                // Encode UTF-8 string to UTF-8 bytes
-                return new TextEncoder().encode(utf8String);
-            }
             function toggleModal(modalId, visible) {
             const modal = $(modalId);
             if (visible) {
@@ -179,7 +168,7 @@ function iso88591ToUtf8(iso88591String) {
             const form = $('#addOptionForm');
             const selectedValue = $('#select1').val(); 
             let formData = form.serialize();
-            formData += '&concept_id=' + encodeURIComponent(selectedValue); 
+            formData += '&username='+encodeURIComponent('{{ Auth::user()->UserID }}') +'&concept_id=' + encodeURIComponent(selectedValue); 
             $.ajax({
             url: `{{route('saveOption')}}`,  
             type: 'POST',

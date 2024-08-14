@@ -31,13 +31,18 @@ class ClientsProfile extends Controller
 {
     public function index($id)
     {
-        $query = 'CALL sp_getconceptsforclient(\'' . base64_decode($id) . '\', 0)';
+        $decodedId = base64_decode($id);
+        $query = 'CALL sp_getconceptsforclient(\'' . $decodedId . '\', 0)';
         $concepts = DB::connection('mysql3')->select($query);
-        $query = 'call sp_getconceptsforclient(\'' . base64_decode($id) . '\',1)';
+        $query = 'call sp_getconceptsforclient(\'' . $decodedId . '\',1)';
         $complexconcepts = DB::connection('mysql3')->select($query);
-        $data = Clinetprofile::on('mysql2')->with('contacts', 'contacts.delivery', 'contacts.delivery.deliveryformats', 'contacts.regularDigestPrint', 'contacts.regularDigestWeb', 'Country', 'Region', 'sector', 'keywords', 'billingcycle')->find(base64_decode($id));
+        $query = 'call sp_getcompanyissues()';
+        $issues = DB::connection('mysql3')->select($query);
+        $query = 'CALL sp_getissuesforclient(?, ?)';
+        $getissueforclients = DB::connection('mysql3')->select($query, [$decodedId, '']);
+        $data = Clinetprofile::on('mysql2')->with('contacts', 'contacts.delivery', 'contacts.delivery.deliveryformats', 'contacts.regularDigestPrint', 'contacts.regularDigestWeb', 'Country', 'Region', 'sector', 'keywords', 'billingcycle')->find($decodedId);
         $keywords = $data->keywords;
-        
+       
         $contacts = $data->contacts;
         $picklist = Picklist::whereIn('Type', ['City', 'Country', 'Delivery Method', 'Sector Summary Delivery', 'contacttype','client type','client source','Region','bill cycle','client status','sector'])->get()->groupBy(function ($query) {
             return strtolower($query->Type);
@@ -47,7 +52,7 @@ class ClientsProfile extends Controller
         $clients = Clinetprofile::where('deleted','!=',1)->get();
         $formats = CustomDigestFormat::select('id','format','format_name')->get();
         $customdelivery = Deliverymethod1::select('id','contactid','deliveryid','format')->get();
-        return view('clients', compact('data', 'complexconcepts','concepts','contacts', 'keywords', 'picklist', 'webdeliverymaster', 'deliverymaster','clients','formats','customdelivery'));
+        return view('clients', compact('data', 'getissueforclients','issues','complexconcepts','concepts','contacts', 'keywords', 'picklist', 'webdeliverymaster', 'deliverymaster','clients','formats','customdelivery'));
     }
 
     public function edit(Request $request, $id)
@@ -975,10 +980,11 @@ public function saveOption(Request $request){
             0
         ]);
         if ($result[0]->success == 0) {
+            Log::warning("Concept already exists. Client ID: $clientid, Concept: $concept, User ID: $request->username");
             return response()->json(['message' => 'Error: Concept already exists'], 400);
         } else {
             $concepts = $this->getConcepts($clientid);
-
+            Log::info("Concept added successfully. Client ID: $clientid, Concept: $concept, User ID: $request->username");
             return response()->json([
                 'message' => 'Concept Added',
                 'concepts' => $concepts
@@ -1004,24 +1010,25 @@ public function addKeyword(Request $request)
 
         $result = DB::connection('mysql3')->select('CALL pm_keywordoperations(?, ?, ?, ?, ?, ?, ?, ?, ?)', [
             $conceptId, 
-            0, 
+            '0', 
             $keyword, 
             $atleast, 
             $keyword2, 
             $within, 
             $withinwords, 
             'add',
-            0
+            '0'
         ]);
 
         if ($result[0]->success == 0) {
+            Log::warning("Keyword already exists. Client ID: $conceptId, Keyword: $keyword, User ID: $request->username");
             return response()->json([
                 'message' => 'Error: Keyword already exists for this Concept'
             ], 422); 
         } else {
            
             $keywords = DB::connection('mysql3')->select('CALL pm_getkeywordsforconcept(?)', [$conceptId]);
-
+            Log::info("Keyword added successfully. Client ID: $conceptId, Keyword: $keyword, User ID: $request->username");
             return response()->json([
                 'message' => 'Keyword Added',
                 'keywords' => $keywords
@@ -1040,7 +1047,175 @@ public function getClientConcepts(Request $request)
     $concepts = $this->getConcepts($clientid);
     return response()->json($concepts);
 }
+public function addComplexConcepts(Request $request){
+    $formData = $request->all();
+   
+    $concept = isset($formData['concept1'] )? $formData['concept1']['text']: $formData['concept2']['text'] ?? $formData['concept4']['text'] ?? 0;
+    $conceptvalue = isset($formData['concept1'] )? $formData['concept1']['value']: $formData['concept2']['value'] ?? $formData['concept4']['value'] ?? 0;
+    $atleast = $formData['occurrences1'] ?? 0;
+    $concept2 = isset($formData['concept3'] )? $formData['concept3']['text']: 0;
+    $concept2value = isset($formData['concept3'] )? $formData['concept3']['value']: 0;
+    $within = $formData['words1'] ?? 0;
+    $withinwords = $formData['words2'] ?? 0;
 
+    if (isset($formData['occurrences1'])) {
+        $complexConceptName = "At least $atleast occurrences of concept '$concept'";
+    } elseif (isset($formData['words1'])) {
+        $complexConceptName = "Concept '$concept' within $within words of concept '$concept2'";
+    } elseif (isset($formData['words2'])) {
+        $complexConceptName = "Concept '$concept' within first $withinwords words of the article";
+    } else {
+        return response()->json(['error' => 'Invalid form type'], 400);
+    }
+    $complexConcept = $this->addConcept($complexConceptName, $atleast, $conceptvalue, $concept2value, $withinwords, $within,$request->clientid);
+    if ($complexConcept == 0) {
+        return response()->json(['status' => 'error', 'message' => 'Failed to add concept']);
+    }
+   
+    elseif ($complexConcept == 2) {
+        response()->json(['error' => 'Error: Concept already exists'], 400);
+    }
+ 
+    $query = DB::connection('mysql3')->statement('CALL sp_setupkeywordsforcomplexconcept(?, ?, ?, ?, ?, ?)',[
+        $complexConcept,
+        intval($conceptvalue),
+        $atleast,
+        intval($concept2value),
+        intval($within),
+        intval($withinwords),
+    ]);
+
+    return response()->json(['success' => 'Concept added successfully']);
+}
+function addConcept($concept, $atleast, $concept1, $concept2, $withinwords, $within,$clientId)
+{
+    if (trim($concept) == "") {
+        return 0; 
+    }
+    $query = "CALL sp_conceptoperations(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+ 
+    $result = DB::connection('mysql3')->select($query, [
+        0,
+        $concept,  
+        $clientId,
+        'add',
+        1,
+        $atleast,
+        intval($concept1),
+        intval($concept2),
+        intval($within),
+        intval($withinwords),
+    ]);
+    if (!empty($result) && $result[0]->success == 0) {
+        return  2; 
+    } else {
+        return  $result[0]->success;
+    }
+}
+public function updateComplexConcepts(Request $request){
+     $conceptId = $request->input('id');
+     $concept = trim($request->input('name'));
+     $clientId = $request->input('clientid');
+     
+     $query = "CALL sp_conceptoperations(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+     
+     $result = DB::connection('mysql3')->select($query, [
+         $conceptId,
+         $concept,
+         $clientId,
+         'edit',
+         1,   
+         0,   
+         0,   
+         0,    
+         0,   
+         0     
+     ]);
+ 
+     if ($result && isset($result[0]->success) && $result[0]->success == 0) {
+         return response()->json(['error' => 'New Concept name already exists'], 400);
+     } else {
+         return response()->json(['success' => 'Concept Renamed']);
+     }
+}
+public function deleteConcept(Request $request)
+{
+    $conceptId = $request->input('concept_id');
+    $clientId = $request->input('clientid');
+
+    $query = "CALL sp_conceptoperations(?, '', ?, 'delete', 1, 0, 0, 0, 0, 0)";
+
+    DB::connection('mysql3')->select($query, [
+        $conceptId,
+        $clientId
+    ]);
+
+    return response()->json(['success' => 'Concept Deleted']);
+}
+public function saveIssue(Request $request)
+{
+    $openBracketsCount = 0;
+    $closeBracketsCount = 0;
+
+    $validated = $request->validate([
+        'concept_conditions' => 'required|array|min:1',
+        'issue' => 'required|string',
+        'type' => 'required|string',
+        'issue_color' => 'required|string',
+        'company_issue' => 'nullable|integer',
+        'tracking_type' => 'required|string',
+    ]);
+
+    $conceptConditions = $validated['concept_conditions'];
+    $issue = trim($validated['issue']);
+    $type = trim($validated['type']);
+    $issueColor = trim($validated['issue_color']);
+    $companyIssue = $validated['company_issue'] ?? null;
+    $trackingType = trim($validated['tracking_type']);
+
+    foreach ($conceptConditions as $condition) {
+        if ($condition == '(') {
+            $openBracketsCount++;
+        } elseif ($condition == ')') {
+            $closeBracketsCount++;
+        }
+    }
+
+    if ($openBracketsCount !== $closeBracketsCount) {
+        return response()->json(['error' => 'Cannot save the Issue. The opening and closing braces in the concept condition are not balanced.'], 400);
+    }
+
+    $postfixExpression = $this->convertToPostfix($conceptConditions);
+
+    $clientId = session('clientid');
+    $issueId = $request->get('issue_id', 0);
+
+    $result = DB::connection('mysql3')->select(
+        'CALL sp_issueoperations_test(?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        [
+            $issueId,
+            $issue,
+            $type,
+            $clientId,
+            implode(' ', $conceptConditions),
+            $postfixExpression,
+            $issueId == 0 ? 'add' : 'modify',
+            $issueColor,
+            $companyIssue,
+            $trackingType
+        ]
+    );
+
+    if ($result[0]->success == 0) {
+        return response()->json(['error' => 'Issue already exists'], 400);
+    }
+
+    return response()->json(['message' => $issueId == 0 ? 'Issue Added' : 'Issue Modified']);
 }
 
+private function convertToPostfix(array $conditions)
+{
+    return implode(' ', $conditions);
+}
 
+}

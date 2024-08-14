@@ -470,7 +470,7 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                         <x-complex-concepts :complexconcepts="$complexconcepts" :clientid="$data->ClientID" />
                     </div>
                     <div id="subtab3" role="tabpanel" aria-labelledby="sub-tab-3">
-                        <x-issue-defination/>
+                        <x-issue-defination :getissueforclients="$getissueforclients"  :issues="$issues"  :concepts="$concepts" :complexconcepts="$complexconcepts" :clientid="$data->ClientID" />
                     </div>
                     <div id="subtab4" role="tabpanel" aria-labelledby="sub-tab-3">
                         <!-- Sub Tab 3 content -->
@@ -1586,10 +1586,10 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                     success: function(data) {
                         document.getElementById('processModal').classList.add('hidden');
                         data.forEach(option => {
-                            const option1 = new Option(option.name, option.name, false, false);
-                            const option2 = new Option(option.name, option.name, false, false);
-                            const option3 = new Option(option.name, option.name, false, false);
-                            const option4 = new Option(option.name, option.name, false, false);
+                            const option1 = new Option(option.name, option.id, false, false);
+                            const option2 = new Option(option.name, option.id, false, false);
+                            const option3 = new Option(option.name, option.id, false, false);
+                            const option4 = new Option(option.name, option.id, false, false);
                             $('#concept1').append(option1);
                             $('#concept2').append(option2);
                             $('#concept3').append(option3);
@@ -1604,6 +1604,18 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                     }
                 });
             });
+            $('#concept3').change(function () {
+                $('#submit-button').prop('disabled', false);
+        let concept2Value = $('#concept2').val();
+        let concept3Value = $(this).val();
+
+        if (concept2Value === concept3Value) {
+            $('#submit-button').prop('disabled', true);
+            $('#error-message').text('Concept 2 and Concept 3 cannot be the same!').show();
+        } else {
+            $('#error-message').hide();
+        }
+    });
             $('#media-universe').on('click', function() {
                 document.getElementById('processModal').classList.remove('hidden');
 
@@ -1693,6 +1705,7 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
 
             });
         });
+  
     </script>
 
     @endsection
