@@ -97,6 +97,7 @@
                     <div class="w-1/6 p-1 flex justify-center gap-2">
                         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded" onclick="editIssue({{$getissueforclient->id}})">Edit</button>
                         <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">Delete</button>
+                        <button class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-1 px-2 rounded">Disable</button>
                     </div>
 
                 </div>
