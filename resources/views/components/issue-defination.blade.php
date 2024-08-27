@@ -188,6 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
         lastLogicalOp = null;
     }
 
+    $inputBox.val(currentValue.trim());
     $postfixInput.val(postfixParts.join(' '));
 }
 
