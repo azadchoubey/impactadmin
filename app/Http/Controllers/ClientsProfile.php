@@ -1234,5 +1234,51 @@ $issue = DB::connection('mysql3')->table('wm_issue')->find($id);
         return response()->json(['error' => 'Issue not found'], 404);
     }
 }
+public function deleteIssue($id,Request $request){
+
+    $clientid = $request->clientid;
+    $userid = $request->user_id;
+    try {
+    DB::connection('mysql3')->statement('CALL sp_issueoperations(?, ?, ?, ?, ?, ?, ?, ?, ?)', [
+        $id,
+        '',
+        '',
+        $clientid,
+        '',
+        '',
+        'delete',
+        '',
+        0
+    ]);
+    Log::info("Issue deleted. Client ID: $clientid, User ID: $userid");
+    return response()->json(['success' => 'Issue Deleted']);
+} catch (\Exception $e) {
+    Log::error($e->getMessage());
+    return response()->json(['error' => 'Failed to delete issue', 'message' => $e->getMessage()]);
+}
+}
+public function enableDisableIssue($id,Request $request){
+
+    $clientid = $request->clientid;
+    $userid = $request->user_id;
+    try {
+    DB::connection('mysql3')->statement('CALL sp_issueoperations(?, ?, ?, ?, ?, ?, ?, ?, ?)', [
+        $id,
+        '',
+        '',
+        $clientid,
+        '',
+        '',
+        'enabled',
+        '',
+        0
+    ]);
+    Log::info("Issue Enabled or Disabled successfully. Client ID: $clientid, User ID: $userid");
+    return response()->json(['success' => 'Issue Deleted']);
+} catch (\Exception $e) {
+    Log::error($e->getMessage());
+    return response()->json(['error' => 'Failed to enable/disable issue', 'message' => $e->getMessage()]);
+}
+}
 
 }

@@ -41,6 +41,8 @@ Route::controller(ClientsProfile::class)->group(function () {
     Route::delete('/deleteConcept',  'deleteConcept')->name('deleteConcept');
     Route::post('/saveissue',  'saveIssue')->name('save.issue');
     Route::get('/issues/{issueId}/edit',  'editIssue')->name('editIssue');
+    Route::delete('/delete-issue/{id}',  'deleteIssue')->name('deleteIssue');
+    Route::post('/enableDisableIssue/{id}',  'enableDisableIssue')->name('enableDisableIssue');
 });
 
 Route::post('/filter',[FilterController::class,'filter'])->name('filter');

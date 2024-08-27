@@ -470,7 +470,7 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                         <x-complex-concepts :complexconcepts="$complexconcepts" :clientid="$data->ClientID" />
                     </div>
                     <div id="subtab3" role="tabpanel" aria-labelledby="sub-tab-3">
-                        <x-issue-defination :getissueforclients="$getissueforclients"  :issues="$issues"  :concepts="$concepts" :complexconcepts="$complexconcepts" :clientid="$data->ClientID" />
+                        <x-issue-defination :getissueforclients="$getissueforclients" :issues="$issues" :concepts="$concepts" :complexconcepts="$complexconcepts" :clientid="$data->ClientID" />
                     </div>
                     <div id="subtab4" role="tabpanel" aria-labelledby="sub-tab-3">
                         <!-- Sub Tab 3 content -->
@@ -1036,31 +1036,34 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                 editButton.classList.add('hidden');
             }
         }
+
         function editIssue(issueId) {
-    $.ajax({
-        url: `/api/issues/${issueId}/edit`, 
-        type: 'GET',
-        success: function(data) {
-            if(!data.error) {data
-            $('#issue').val(data.name);
-            $('#concept-color').val(data.color);
-            $('input[name="type"][value="' + data.type + '"]').prop('checked', true);
-            $('input[name="tracking_type"][value="' + data.tracking + '"]').prop('checked', true);
-            $('select[name="company_issue"]').val(data.companyissue).trigger('change');
-            
-            $('#saveissue').text('Edit and Save');
-            $('#concept-input').val(data.conceptcondition);
-             $('#postfix-expression').val(data.postfixexpression);
-            $('#issue-id').val(data.id);  
-            }
-            
-        },
-        error: function(xhr, status, error) {
-            console.error('Error fetching issue data:', error);
-            alert('An error occurred while fetching the issue data.');
+            $.ajax({
+                url: `/api/issues/${issueId}/edit`,
+                type: 'GET',
+                success: function(data) {
+                    if (!data.error) {
+                        data
+                        $('#issue').val(data.name);
+                        $('#concept-color').val(data.color);
+                        $('input[name="type"][value="' + data.type + '"]').prop('checked', true);
+                        $('input[name="tracking_type"][value="' + data.tracking + '"]').prop('checked', true);
+                        $('select[name="company_issue"]').val(data.companyissue).trigger('change');
+
+                        $('#saveissue').text('Edit and Save');
+                        $('#concept-input').val(data.conceptcondition);
+                        $('#postfix-expression').val(data.postfixexpression);
+                        $('#issue-id').val(data.id);
+                    }
+
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching issue data:', error);
+                    alert('An error occurred while fetching the issue data.');
+                }
+            });
         }
-    });
-}
+
         function updateEditButtonVisibility() {
             var checkboxes = document.querySelectorAll('.checkboxes');
             var checkedCount = 0;
@@ -1353,6 +1356,62 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
         }
     </script>
     <script>
+        
+        function deleteIssue(id) {
+                if (confirm('Are you sure you want to delete this issue?')) {
+                    $.ajax({
+                        url: '{{ route("deleteIssue", ":id") }}'.replace(':id', id),
+                        type: 'DELETE',
+                        data: {
+                            user_id: '{{ auth()->user()->UserID }}',
+                            clientid: '{{ $data->ClientID }}'
+                        },
+                        success: function(response) {
+                            if(response.success){
+                                alert('Issue deleted successfully.');
+                                location.reload();
+                            }else{
+                                alert('Failed to delete the issue. Please try again.');
+                            }
+                          
+                        },
+                        error: function(xhr) {
+                            alert('Failed to delete the issue. Please try again.');
+                        }
+                    });
+                }
+
+
+            }
+            
+        function enableDisableIssue(id ,action) {
+                if (confirm('Are you sure you want to ${action} this issue?')) {
+                    $.ajax({
+                        url: '{{ route("enableDisableIssue", ":id") }}'.replace(':id', id),
+                        type: 'POST',
+                        data: {
+                            user_id: '{{ auth()->user()->UserID }}',
+                            clientid: '{{ $data->ClientID }}'
+                        },
+                        success: function(response) {
+                            if(response.success){
+                                alert('Issue ${action} successfully.');
+                                location.reload();
+                            }else{
+                                alert('Failed to ${action} the issue. Please try again.');
+                            }
+                          
+                        },
+                        error: function(xhr) {
+                            alert('Failed to ${action} the issue. Please try again.');
+                        }
+                    });
+                }
+
+
+            }
+
+
         // Function to enable/disable broadcast fields
         function enableBroadcastFields() {
             var checkbox = document.getElementById("broadcastCheckbox");
@@ -1628,18 +1687,18 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                     }
                 });
             });
-            $('#concept3').change(function () {
+            $('#concept3').change(function() {
                 $('#submit-button').prop('disabled', false);
-        let concept2Value = $('#concept2').val();
-        let concept3Value = $(this).val();
+                let concept2Value = $('#concept2').val();
+                let concept3Value = $(this).val();
 
-        if (concept2Value === concept3Value) {
-            $('#submit-button').prop('disabled', true);
-            $('#error-message').text('Concept 2 and Concept 3 cannot be the same!').show();
-        } else {
-            $('#error-message').hide();
-        }
-    });
+                if (concept2Value === concept3Value) {
+                    $('#submit-button').prop('disabled', true);
+                    $('#error-message').text('Concept 2 and Concept 3 cannot be the same!').show();
+                } else {
+                    $('#error-message').hide();
+                }
+            });
             $('#media-universe').on('click', function() {
                 document.getElementById('processModal').classList.remove('hidden');
 
@@ -1729,7 +1788,6 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
 
             });
         });
-  
     </script>
 
     @endsection
