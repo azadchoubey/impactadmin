@@ -267,26 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-    $('.delete-button').on('click', function () {
-    const issueId = $(this).data('id');
-
-    if (confirm('Are you sure you want to delete this issue?')) {
-        $.ajax({
-            url: `/api/issues/${issueId}`, 
-            type: 'DELETE',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')  
-            },
-            success: function (result) {
-                alert(result.message);
-                window.location.reload();
-            },
-            error: function (xhr, status, error) {
-                alert('Error deleting issue: ' + xhr.responseJSON.error);
-            }
-        });
-    }
-});
+   
 });
 
 
