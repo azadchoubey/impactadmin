@@ -114,6 +114,7 @@
         <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
             <h2 class="text-lg font-semibold mb-4">Company String:</h2>
             <form id="addCompanyForm">
+                @csrf <!-- CSRF token for Laravel -->
                 <div class="mb-4">
                     <label for="companyName" class="block text-sm font-medium text-gray-700">Name</label>
                     <input type="text" id="companyName" name="companyName" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" required>
@@ -137,56 +138,62 @@ document.addEventListener('DOMContentLoaded', () => {
     let postfixParts = []; 
   
     function updateInput(value, id, isConcept) {
-        let currentValue = $inputBox.val().trim();
-        postfixParts.push($postfixInput.val().trim())
-        if (value === "C") {
-            // Clear input and reset state
-            $inputBox.val('');
-            postfixParts = [];
-            $postfixInput.val('');
-            lastConcept = null;
-            lastComplexConcept = null;
-            lastLogicalOp = null;
-            return;
-        }
+    let currentValue = $inputBox.val().trim();
+    
+    // Initialize postfixParts with the current postfix expression
+    postfixParts.push($postfixInput.val().trim());
 
-        if (["(", ")"].includes(value)) {
-            // Handle parentheses
-            if (lastConcept || lastComplexConcept) {
-                currentValue += ` ${value} `;
-                if (value === ")" || value === "(") {
-                    postfixParts.push(value);
-                }
-                lastLogicalOp = null;
-            }
-        } else if (["and", "or", "not"].includes(value)) {
-            // Handle logical operators
-            if (lastLogicalOp || (!lastConcept && !lastComplexConcept)) {
-                return;
-            }
-            lastLogicalOp = value;
+    if (value === "C") {
+        // Clear input and reset state
+        $inputBox.val('');
+        postfixParts = [];
+        $postfixInput.val('');
+        lastConcept = null;
+        lastComplexConcept = null;
+        lastLogicalOp = null;
+        return;
+    }
+
+    if (["(", ")"].includes(value)) {
+        // Handle parentheses
+        if (value === "(" && !currentValue) {
+            // Allow open bracket at the start
+            currentValue = ` ${value} `;
+            postfixParts.push(value);
+        } else if (value === ")" && (lastConcept || lastComplexConcept)) {
+            // Handle closing bracket
             currentValue += ` ${value} `;
             postfixParts.push(value);
-        } else {
-            // Handle concepts
-            if ((lastConcept == value) || (lastComplexConcept == value)) {
-                return;
-            }
-            if (isConcept) {
-                postfixParts.push(id);
-                currentValue += ` ${value} `;
-            } else {
-                postfixParts.push(id);
-                currentValue += ` ${value} `;
-            }
-            lastConcept = isConcept ? value : null;
-            lastComplexConcept = isConcept ? null : value;
             lastLogicalOp = null;
         }
-
-        $inputBox.val(currentValue.trim());
-        $postfixInput.val(postfixParts.join(' '));
+    } else if (["and", "or", "not"].includes(value)) {
+        // Handle logical operators
+        if (lastLogicalOp || (!lastConcept && !lastComplexConcept)) {
+            return;
+        }
+        lastLogicalOp = value;
+        currentValue += ` ${value} `;
+        postfixParts.push(value);
+    } else {
+        // Handle concepts
+        if ((lastConcept == value) || (lastComplexConcept == value)) {
+            return;
+        }
+        if (isConcept) {
+            postfixParts.push(id);
+            currentValue += ` ${value} `;
+        } else {
+            postfixParts.push(id);
+            currentValue += ` ${value} `;
+        }
+        lastConcept = isConcept ? value : null;
+        lastComplexConcept = isConcept ? null : value;
+        lastLogicalOp = null;
     }
+
+    $inputBox.val(currentValue.trim());
+    $postfixInput.val(postfixParts.join(' '));
+}
 
     $('.concept-option').on('click', function () {
         const value = $(this).data('value');
@@ -247,6 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     window.location.href = "{{ route('client') }}";
                 } else {
                     alert(result.message);
+                    window.location.reload();
                 }
             },
             error: function (xhr, status, error) {
@@ -259,6 +267,26 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+    $('.delete-button').on('click', function () {
+    const issueId = $(this).data('id');
+
+    if (confirm('Are you sure you want to delete this issue?')) {
+        $.ajax({
+            url: `/api/issues/${issueId}`, 
+            type: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')  
+            },
+            success: function (result) {
+                alert(result.message);
+                window.location.reload();
+            },
+            error: function (xhr, status, error) {
+                alert('Error deleting issue: ' + xhr.responseJSON.error);
+            }
+        });
+    }
+});
 });
 
 

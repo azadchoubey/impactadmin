@@ -457,9 +457,9 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                         <li class="me-2" role="presentation">
                             <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="sub-tab-3" data-tabs-target="#subtab3" type="button" role="tab" aria-controls="subtab3" aria-selected="false">Issues</button>
                         </li>
-                        <li class="me-2" role="presentation">
+                        {{-- <li class="me-2" role="presentation">
                             <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="sub-tab-3" data-tabs-target="#subtab4" type="button" role="tab" aria-controls="subtab4" aria-selected="false">Company Color</button>
-                        </li>
+                        </li> --}}
                     </ul>
                 </div>
                 <div id="web-universe-submenu-content">
@@ -497,7 +497,7 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                 </div>
                 <div id="print-issue-conceptkeywords-submenu-content">
                     <div id="print-concepts" role="tabpanel" aria-labelledby="print-concepts-tab">
-                        Print content for Concepts
+                        <x-print-concept :concepts="$concepts" :clientid="$data->ClientID"/>
                     </div>
                     <div id="print-complex-concept" role="tabpanel" aria-labelledby="print-complex-concept-tab">
                         Print content for Complex Concept
