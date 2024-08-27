@@ -1234,5 +1234,37 @@ $issue = DB::connection('mysql3')->table('wm_issue')->find($id);
         return response()->json(['error' => 'Issue not found'], 404);
     }
 }
+public function deleteIssue(Request $request, $id)
+{
+    // Retrieve the issue using the ID
+    $issue = DB::connection('mysql3')->table('wm_issue')->find($id);
+
+    if ($issue) {
+        // Call stored procedure to delete the issue
+        $result = DB::connection('mysql3')->select(
+            'CALL sp_issueoperations_test(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [
+                $id, // issue ID
+                null, // issue name (null for deletion)
+                null, // issue type (null for deletion)
+                null, // client ID (null for deletion)
+                null, // concept conditions (null for deletion)
+                null, // postfix expression (null for deletion)
+                'delete', // action
+                null, // issue color (null for deletion)
+                null, // company issue (null for deletion)
+                null // tracking type (null for deletion)
+            ]
+        );
+
+        if ($result[0]->success == 1) {
+            return response()->json(['message' => 'Issue deleted successfully']);
+        } else {
+            return response()->json(['error' => 'Failed to delete issue'], 400);
+        }
+    } else {
+        return response()->json(['error' => 'Issue not found'], 404);
+    }
+}
 
 }
