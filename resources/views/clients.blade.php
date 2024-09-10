@@ -500,10 +500,10 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                         <x-print-concept :getprintissueforclients="$getprintissueforclients" :clientid="$data->ClientID"/>
                     </div>
                     <div id="print-complex-concept" role="tabpanel" aria-labelledby="print-complex-concept-tab">
-                        Print content for Complex Concept
+                        {{-- <x-print-complex-concept :getprintissueforclients="$getprintissueforclients" :clientid="$data->ClientID"/> --}}
                     </div>
                     <div id="print-issues" role="tabpanel" aria-labelledby="print-issues-tab">
-                        Print content for Issues
+                        {{-- <x-print-issue-defination :getprintissueforclients="$getprintissueforclients" :clientid="$data->ClientID"/> --}}
                     </div>
                 </div>
             </div>
