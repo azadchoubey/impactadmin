@@ -1,4 +1,4 @@
-<div class="sticky top-0 bg-gradient-to-r from-blue-500 to-blue-700 shadow-lg z-50">
+<div class="sticky top-0 bg-gradient-to-r  bg-blue-700 shadow-lg z-50">
     <div class="container mx-auto px-2 py-2 bg-blue-700">
         <div class="flex justify-between items-center">
       

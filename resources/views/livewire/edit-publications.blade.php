@@ -103,8 +103,8 @@
                         @foreach($pagenames as $key => $pagename)   
                         <div class="flex items-center justify-between space-x-2 mb-2">
                             <div class="flex items-center space-x-2">
-                                <input wire:model="pagenames.{{$key}}.IsPre" {{$pagename['IsPre'] == "1" ? "checked":""}} type="checkbox" class="text gap-1"> 
-                                @if(isset($pagename['editing']) && $pagename['editing'])
+                            <input wire:click="checked({{$key}})"  id="{{ rand() }}" type="checkbox" class="text gap-1" @if($pagename['IsPre'] == "1") checked @endif> 
+                            @if(isset($pagename['editing']) && $pagename['editing'])
                                     <input wire:model="pagenames.{{$key}}.Name" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 @else
                                     <span class="gap-2">{{$pagename['Name']}}</span>
@@ -129,13 +129,14 @@
 
                 <div class="mb-4">
                   {{-- <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Restricted MU</span> --}}
-                    <input wire:model="mu" {{$mu == 1 ?"checked":''}} class="text" value="{{$mu}}" type="checkbox" style="margin-left: 20px;"> 
+                    <input wire:model="mu" {{$mu == 1 ?"checked":''}} class="text" type="checkbox" style="margin-left: 20px;"> 
                     <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Media Universe</span> 
                 </div>
 
                 <div class="mb-4">
                     <label for="Masthead" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Mast Head File</label>
-                    <input type="file" accept="image/jpeg" wire:model="masthead" class="text" />
+                    <input type="file" accept="image/*" wire:model="newpic" class="text" />
+                    <span>{{$masthead}}</span>
                 </div>
                 
                 <div class="col-span-2 mt-4">
@@ -222,12 +223,13 @@
 
         </div>
     </form>
-</div>
-@script
+
 <script>
     $wire.on('alert', (event) => {
   
         alert(event);
     });
 </script>
-@endscript
+
+
+</div>

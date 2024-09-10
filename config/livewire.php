@@ -86,6 +86,7 @@ return [
     | Setting this to true will render the view once more before redirecting
     |
     */
+    // 'asset_url' => env('ASSET_URL'),
 
     'render_on_redirect' => false,
 

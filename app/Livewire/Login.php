@@ -45,7 +45,7 @@ class Login extends Component
         if ($user) {
             $hashedInputPassword = md5($this->password);
 
-            if ($hashedInputPassword === $user->Md5Pass) {
+            if ($hashedInputPassword === $user->Md5Pass && $user->status) {
 
                 Auth::login($user); 
                 if($this->rememberpasswd){
@@ -55,7 +55,7 @@ class Login extends Component
                 }
                 return redirect()->route('dashboard');
             } else {
-                $this->autherror = "Invalid Password";
+                $this->autherror = "Invalid Password Or Account Disabled";
             }
         } else {
             $this->autherror = "User not found";

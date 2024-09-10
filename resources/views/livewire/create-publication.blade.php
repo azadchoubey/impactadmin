@@ -1,17 +1,6 @@
 <div class="w-10/12 mx-auto">
     <x-sticky-header name="Create Publication" subtitle=""  title=""/>
-    @if (session()->has('error'))
-        <div>{{ session('error') }}</div>
-    @endif
-    @if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
+
     <div class='mt-3 flex flex-col items-center'>
         <button wire:loading disabled type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 inline-flex items-center">
             <svg aria-hidden="true" role="status" class="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -21,7 +10,7 @@
             Processing ...
         </button>
         </div>
-    <form wire:submit.prevent="submitForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 p-4">
+    <form wire:submit.prevent="submitForm3" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 p-4">
         <div class="mr-3 bg-white-300 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 p-4 dark:bg-gray-800 dark:border-gray-700">
             <div class="grid grid-cols-1 gap-3">
 
@@ -89,7 +78,10 @@
                 <div class="mb-4">
                     <label for="region" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Region</label>
                     <select wire:model="region" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        @forelse($data['Region'] as $key=>$region)
+                    <option value="">Select option</option>
+  
+                    @forelse($data['Region'] as $key=>$region)
+
                         <option value="{{$region->ID}}">{{$region->Name}}</option>
                         @empty
                         <option value="">Select option</option>
@@ -181,7 +173,9 @@
                 <div class="mb-4">
                     <label for="frequency" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Frequency</label>
                     <select wire:model="frequency" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        @foreach($data['periodicity'] as $freq)
+                    <option value="">Select option</option>
+ 
+                    @foreach($data['periodicity'] as $freq)
                         <option {{$freq->ID == $frequency ? 'seleted':''}}  value="{{$freq->ID}}">{{$freq->Name}}</option>
                         @endforeach
                     </select>
@@ -196,10 +190,10 @@
                 </div>
 
             </div>
-            <fieldset class="border border-gray-300 p-3 rounded-lg">
+            <fieldset class="border border-gray-300 p-3 rounded-lg gap-3">
                 <legend class="text-lg text-gray-700 mb-4">Rates</legend>
 
-                <table class="w-full">
+                <table class="w-full gap-2">
                     <thead>
                         <tr>
                             <th class="text-sm font-medium text-gray-700 p-2">Premium</th>
@@ -244,12 +238,11 @@
         </div>
 
     </form>
-</div>
-@script
-<script>
+    <script>
     $wire.on('alert', (event) => {
   
         alert(event);
     });
 </script>
-@endscript
+</div>
+

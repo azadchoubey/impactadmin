@@ -132,16 +132,14 @@
                                     <div id="username-error"  class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                                    
                                 </div>
-
                                 <div>
                                     <label for="profile" class="block text-sm font-medium text-gray-700">Profile</label>
                                     <select id="profile" onchange="profileeditchange(this.value)" name="profile" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 
-                                        @foreach($profiles['profile'] as $profile)
-                                        <option {{old('profile') == $profile->ID ? 'seleted':''}} value="{{$profile->ID}}">{{$profile->Name}}</option>
+                                     @foreach($profiles['profile'] as $profile)
+                                        <option {{old('profile') == $profile->profile ? 'seleted':''}} value="{{$profile->profile}}">{{$profile->profile}}</option>
                                         @endforeach
                                     </select>
-                               
                                     <div  id="profile-error" class="mt-2 text-xs text-red-600 dark:text-red-400"></div>
                                    
                                 </div>
@@ -188,7 +186,7 @@
                     <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
                         Add User
                     </h3>
-                    <button type="button" class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="adduser">
+                    <button type="button" class="clseadduser end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="adduser">
                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                         </svg>
@@ -285,21 +283,36 @@
                 topStart: {
                     buttons: [{
                         text: '<div class="flex items-center" data-modal-target="adduser" data-modal-toggle="adduser" ><svg class="h-4 w-4 text-white-600 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /> <circle cx="8.5" cy="7" r="4" /> <line x1="20" y1="8" x2="20" y2="14" /> <line x1="23" y1="11" x2="17" y2="11" /></svg> Add User</div>',
-                        className: 'px-3 py-2 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800',
+                        className: 'adduser px-3 py-2 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800',
                         
                     }]
                 }
             }
         });
+        $('.adduser').on('click',function(){
+            console.log("ok");
+            
+        if ($("#adduser").hasClass("hidden")) {
+            $("#adduser").removeClass("hidden").addClass("flex bg-gray-900/50 dark:bg-gray-900/80 fixed inset-0 z-40");
+        }
     });
-
+        $('.clseadduser').on('click',function(){
+            console.log("ok");
+            
+            $("#adduser").removeClass("flex").addClass("hidden").removeClass("bg-gray-900/50 dark:bg-gray-900/80 fixed inset-0 z-40");
+        
+    });
+    });
+ 
     // Event listener for the edit user button
     $('#users tbody').on('click', 'button[data-modal-target="edituser"]', function() {
-        var profileOptions = `{!! json_encode($profiles['profile']) !!}`;
-        var remoteprofileOptions = `{!! json_encode($profiles['remote profile']) !!}`;
+        
+        var profileOptions = JSON.parse(`{!! json_encode($profiles['profile']) !!}`);
+        var remoteprofileOptions = JSON.parse(`{!! json_encode($profiles['remote profile']) !!}`);
         var rowData = $(this).closest('tr').find('td, th').map(function() {
             return $(this).text().trim();
         }).get();
+        
         var profileSelect = $('#profile');
         profileSelect.empty();
         profileSelect.append('<option></option>')
@@ -329,6 +342,9 @@
             $('#status').prop('checked', true); 
         } else {
             $('#status').prop('checked', false); 
+        }
+        if ($("#edituser").hasClass("hidden")) {
+            $("#edituser").removeClass("hidden").addClass("flex bg-gray-900/50 dark:bg-gray-900/80 fixed inset-0 z-40");
         }
 
     });

@@ -10,13 +10,15 @@ use App\Models\PubPageName;
 use App\Models\Pubbase;
 use App\Models\PublicationLog;
 use Livewire\Component;
+use Livewire\WithFileUploads;
+
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class EditPublications extends Component
 {
-
+    use WithFileUploads;
     public $pubid;
     public $title;
     public $edition;
@@ -34,7 +36,9 @@ class EditPublications extends Component
     public $RatePB;
     public $RateNC;
     public $RateNB;
-    public $id;
+    public $_id;
+    public $newpic;
+    public $togglePrimary;
     public $masthead, $primary, $webuniverse, $restrictedmu, $mu, $primaryname;
 
     protected $rules = [
@@ -70,17 +74,18 @@ class EditPublications extends Component
     public function mount($id)
     {
 
-        $this->id = base64_decode($id);
+        $this->_id = base64_decode($id);
         $latestLog = PublicationLog::getLatestLogByPubId($this->id,request()->ip(),auth()->user()->UserID);
         if($latestLog && $latestLog->userid != auth()->user()->UserID){
             $this->dispatch('alert', 'Publication already updating by .',auth()->user()->UserID);
         }
-        $data = Pubmaster::with('Type', 'city', 'country', 'state', 'cat', 'lang', 'pub_pages', 'edition','frequency')->find($this->id);
+        $data = Pubmaster::with('Type', 'city', 'country', 'state', 'cat', 'lang', 'pub_pages', 'edition','frequency')->find($this->_id);
 
         $this->title = $data->Title;
         $this->pubid = $data->PubId;
         $this->edition = $data->edition->ID;
         $this->language = $data->Lang->ID;
+        $this->togglePrimary = $data->PrimaryPubID;
         $this->issn = $data->Issn_Num;
         $this->type = $data->type->ID;
         $this->category = $data->cat->ID;
@@ -140,9 +145,9 @@ class EditPublications extends Component
         DB::beginTransaction();
         $pubmaster->update([
             'PubId' => $this->pubid,
-            'PrimaryPubID' => $this->primary,
+            'PrimaryPubID' => $this->togglePrimary,
             'Title' => $this->title,
-            'place' => $this->edition,
+            'Place' => $this->edition,
             'Category' => $this->category,
             'Type' => $this->type,
             'Region' => $this->region,
@@ -160,17 +165,17 @@ class EditPublications extends Component
             'RateNB' => $this->RateNB,
             'EditDateTime'=>now()
         ]);
-        if ($this->masthead) {
-            $mastheadPath = $this->masthead->storeAs('images/publications/masthead', $pubmaster->PubId . '.' . $this->masthead->getClientOriginalExtension());
-            Pubmaster::where('PubId',  $pubmaster->PubId)->update(['MastHead' => $mastheadPath]);
+        if ($this->newpic) {
+            $mastheadPath = $this->newpic->storeAs('images/publications/masthead', $pubmaster->PubId . '.' . $this->newpic->getClientOriginalExtension());
+            Pubmaster::where('PubId',  $pubmaster->PubId)->update(['MastHead' => $pubmaster->PubId . '.' . $this->newpic->getClientOriginalExtension()]);
         }
+       
         foreach($this->pagenames as $pagename){
             if($pagename["IsPre"] == true || $pagename["IsPre"] == false){
                 $pagename["IsPre"] = $pagename["IsPre"] ?"1":"0";
             }     
           
             
-     
             PubPageName::updateOrCreate([
                 "PubId"=>$pagename['PubId'],
                 "Name"=>$pagename["Name"]
@@ -181,7 +186,6 @@ class EditPublications extends Component
         MediaUniverseMaster::where('pubid',$pubmaster->PubId)->delete();
         RemoteMediaMaster::where('pubid',$pubmaster->PubId)->delete();
         if($this->mu){
-
             MediaUniverseMaster::insertFromQuery($pubmaster->PubId);
             RemoteMediaMaster::insertFromQuery($pubmaster->PubId);
            
@@ -216,7 +220,9 @@ class EditPublications extends Component
         }
     }
     
-
+    public function checked($key){
+        $this->pagenames[$key]['IsPre'] = !$this->pagenames[$key]['IsPre'];
+    }
     public function removePage($index)
     {
         if (isset($this->pagenames[$index]['PageNameID'])) {

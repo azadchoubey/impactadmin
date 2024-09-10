@@ -113,7 +113,7 @@ class KeywordController extends Controller
         $keyword = $request->input('keyword');
 
         $keywordRecord = Keywordmaster::where(
-            ['KeyWord' => $keyword, 'keyID' => $request->input('keyid')],      
+            ['keyID' => $request->input('keyid')],      
         )->update($keywordData);
         $message = ['message' => 'Keyword updated successfully'];
         
@@ -142,7 +142,7 @@ class KeywordController extends Controller
     }
     public function keywordClients()  {
         $keyid = request('keyid');
-        $clients = Clinetprofile::on('mysql2')->whereHas('clientkeywords', function($query) use ($keyid) {
+        $clients = Clinetprofile::whereHas('clientkeywords', function($query) use ($keyid) {
             $query->where('KeywordID', $keyid);
         })->select('ClientID', 'Name')->get();
         return response()->json($clients);

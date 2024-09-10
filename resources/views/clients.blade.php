@@ -92,7 +92,7 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                             <label for="broadcast" class="block text-sm font-medium text-gray-700">Broadcast</label>
                             <div class="flex items-center">
                                 <input type="checkbox" {{$data->broadcastcid?'checked':''}} id="broadcastCheckbox" class="mr-2" disabled>
-                                <input type="text" value="{{ $data->broadcastcid }}" id="broadcastText" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled>
+                                <input type="text" name="broadcastcid" value="{{ $data->broadcastcid }}" id="broadcastText" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" disabled>
                             </div>
                         </div>
 
@@ -282,7 +282,7 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                             <legend class="text-sm font-medium text-gray-900">Twitter Monitoring Parameters</legend>
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for Twitter</label>
-                                <input type="checkbox" name="enablefortwitter" value="1" {{$data->enablefortwitter == 1 ? 'checked' : ''}}>
+                                <input type="checkbox" name="wm_enablefortwitter" value="1" {{$data->wm_enablefortwitter == 1 ? 'checked' : ''}}>
                             </div>
                             <div class="grid grid-cols-2 gap-4 mt-4">
                                 <div>
@@ -312,8 +312,8 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                                 <input type="checkbox" name="enableforwhatsapp" value="1" {{$data->enableforwhatsapp == 1 ? 'checked' : ''}}>
                                 <label for="type" class="block text-sm font-medium text-gray-700"> YouTube</label>
                                 <input type="checkbox" name="enableforyoutube" value="1" {{$data->enableforyoutube == 1 ? 'checked' : ''}}>
-                                <label for="type" class="block text-sm font-medium text-gray-700"> YouTube</label>
-                                <input type="checkbox" name="enableforyoutube" value="1" {{$data->enableforyoutube == 1 ? 'checked' : ''}}>
+                              {{-- <label for="type" class="block text-sm font-medium text-gray-700"> YouTube</label>
+                                <input type="checkbox" name="enableforyoutube" value="1" {{$data->enableforyoutube == 1 ? 'checked' : ''}}> --}}  
                                 <label for="type" class="block text-sm font-medium text-gray-700">DYNA</label>
                                 <input type="checkbox" name="enablefordidyounotice" value="1" {{$data->enablefordidyounotice == 1 ? 'checked' : ''}}>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Fulltext</label>
@@ -497,7 +497,7 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                 </div>
                 <div id="print-issue-conceptkeywords-submenu-content">
                     <div id="print-concepts" role="tabpanel" aria-labelledby="print-concepts-tab">
-                        <x-print-concept :concepts="$concepts" :clientid="$data->ClientID"/>
+                        <x-print-concept :getprintissueforclients="$getprintissueforclients" :clientid="$data->ClientID"/>
                     </div>
                     <div id="print-complex-concept" role="tabpanel" aria-labelledby="print-complex-concept-tab">
                         Print content for Complex Concept
@@ -747,7 +747,7 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                             </div>
                             <div class="{{$data->enablefortwitter == 1 ? '' : 'disabled'}}">
                                 <label for="type" class="block text-sm font-medium text-gray-700">Enable for Twitter</label>
-                                <input name="enablefortwitter" type="checkbox" value="1" {{$data->enablefortwitter == 1 ? 'checked' : ''}} {{$data->enablefortwitter == 1 ? '' : 'disabled'}}>
+                                <input name="enablefortwitter" type="checkbox" value="1" {{$data->wm_enablefortwitter == 1 ? 'checked' : ''}} {{$data->wm_enablefortwitter == 1 ? '' : 'disabled'}}>
                             </div>
 
                         </div>
@@ -1291,7 +1291,7 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
             if (keyword.length > 2) {
                 // Make an AJAX request to fetch autocomplete results
                 $.ajax({
-                    url: '/api/keywordlist',
+                    url: `{{route('keywords.list')}}`,
                     method: 'GET',
                     data: {
                         keyword: keyword
@@ -1321,6 +1321,35 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                 autocompleteList.hide(); // Hide autocomplete list if keyword length is less than 3
             }
         }
+        function displayValidationErrors(errors) {
+    // Get the error container
+    const errorContainer = $('#error-container');
+    
+    // Clear previous errors
+    errorContainer.empty();
+
+    // Check if errors are provided
+    if ($.isEmptyObject(errors)) {
+        return;
+    }
+
+    // Create an unordered list for the errors
+    const ul = $('<ul class="error-list"></ul>');
+
+    // Iterate over each error and create list items
+    $.each(errors, function(field, messages) {
+        // Append each message for the field
+        messages.forEach(message => {
+            ul.append(`<li>${message}</li>`);
+        });
+    });
+
+    // Append the list to the error container
+    errorContainer.append(ul);
+
+    // Optionally, show the error container if hidden
+    errorContainer.show();
+}
 
         // Define the selectResult function
         function selectResult(keyword) {
@@ -1491,7 +1520,7 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
 
                 // Send AJAX request to save the keyword
                 $.ajax({
-                    url: '/save-keyword',
+                    url: `{{route('save.keyword')}}`,
                     method: 'POST',
                     data: {
                         keyword: keyword,
@@ -1658,6 +1687,163 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                 });
 
             });
+         
+        const optionsDatas = @json($getprintissueforclients);
+
+        optionsDatas.forEach(option => {
+            const newOptions = new Option(option.name, option.id, false, false);
+            $('#select_1').append(newOptions).trigger('change');
+        });
+
+        // Handle selection change on first select element
+        $('#select_1').on('change', function() {
+            const selectedOptions = $(this).val();
+            if (selectedOptions.length > 1) {
+                alert("You can select only one option at a time.")
+                $(this).find('option:selected').last().prop('selected', false);
+            }
+            fetchKeyword($(this).find('option:selected').val());
+
+        });
+
+        function fetchKeyword(selectedOptions) {
+            if (selectedOptions) {
+                $.ajax({
+                    url: `{{route('displayKeywordsPrint')}}`,
+                    method: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        selectedOptions: selectedOptions
+                    },
+                    success: function(response) {
+                        updateselect__2(response);
+                    }
+                });
+            }
+        }
+
+        function updateselect__2(keywords) {
+            console.log(keywords);
+            
+        $('#select_2').empty(); // Clear the select element
+
+        $('#select_2').append(keywords).trigger('change');
+}
+
+            function toggleModal1(modalId, visible) {
+            const modal = $(modalId);
+            if (visible) {
+                modal.removeClass('hidden');
+                modal.attr('data-visible', 'true');
+            } else {
+                modal.addClass('hidden');
+                modal.attr('data-visible', 'false');
+            }
+        }
+        // Open Add Modal
+        $('#addOption_1Btn').on('click', function() {
+            $('#header_1').html('Add Concept');
+            $('#data_1').val('concept');
+            toggleModal1('#addOptionModal_1', true);
+        });
+        $('#addOption_2Btn').on('click', function() {
+            const selectedOption = $('#select_1').find('option:selected');
+            if(selectedOption.length == 0){
+                alert('Please select a concept first');
+                return;
+            }
+            $('#header_1').html('Add Keyword');
+            $('#data_1').val('keyword');
+            toggleModal1('#addOptionModal_1', true);
+        });
+
+
+
+        // Close Add Modal
+        $('.addCancelBtn_1').on('click', function() {
+            toggleModal1('#addOptionModal_1', false);
+        });
+
+
+        // Close Edit Modal
+        $('.editCancelBtn_1').on('click', function() {
+            toggleModal1('#editOptionModal_1', false);
+        });
+        $('#saveNewOptionBtn_1').on('click', function() {
+            const form = $('#addOptionForm_1');
+            const selectedValue = $('#select_1').val(); 
+            let formData = form.serialize();
+            formData += '&username='+encodeURIComponent('{{ Auth::user()->UserID }}') +'&concept_id=' + encodeURIComponent(selectedValue); 
+            $.ajax({
+            url: `{{route('saveOption')}}`,  
+            type: 'POST',
+            data: formData,
+            success: function(response) {
+                alert('Option saved successfully!');
+                form[0].reset();
+                if(response.concepts){
+                    response.concepts.forEach(function(concept) {
+                    var newOptions = new Option(concept.name, concept.id, false, false);
+                    $('#select_1').append(newOptions);
+                });
+                }else{
+                    response.keywords.forEach(function(keyword) {
+                    var newOptions = new Option(keyword.name, keyword.id, false, false);
+                    $('#select_2').append(newOptions);
+                });
+                }
+                
+            },
+            error: function(xhr, status, error) {
+                if (xhr.status === 422) { 
+                    var errors = xhr.responseJSON.errors;
+                    displayValidationErrors(errors);
+                } else {
+                    alert('An error occurred while saving the option.');
+                }
+            }
+        });
+        });
+        function displayValidationErrors(errors) {
+        $('.validation-error').remove(); 
+        $.each(errors, function(field, messages) {
+            var input = $('input[name=' + field + ']');
+            $.each(messages, function(index, message) {
+                input.after('<span class="validation-error text-red-500">' + message + '</span>');
+            });
+        });
+    }
+        $('#editOption_1Btn, #editOption_2Btn').on('click', function() {
+
+          
+            const targetSelect = $(this).attr('id') === 'editOption_1Btn' ? '#select_1' : '#select_2';
+            const selectedOption = $(targetSelect).find('option:selected');
+
+            if (selectedOption.length > 0) {
+
+                $('#editOptionText_1').val(selectedOption.text());
+                $('#editOptionModal_1').data('targetSelect', targetSelect).data('selectedOption', selectedOption).removeClass('hidden').addClass('flex');
+
+
+            } else {
+                alert('Please select an option to edit1.');
+            }
+        });
+
+        $('#saveEditOptionBtn_1').on('click', function() {
+            const editedOptionText = $('#editOptionText_1').val().trim();
+            if (editedOptionText) {
+                const targetSelect = $('#editOptionModal_1').data('targetSelect');
+                const selectedOption = $('#editOptionModal_1').data('selectedOption');
+                selectedOption.text(editedOptionText).val(editedOptionText).trigger('change');
+                closeModal('editOptionModal_1');
+            }
+        });
+
+        function closeModal(modalId) {
+            console.log(modalId);
+            $('#' + modalId).removeClass('flex').addClass('hidden');
+        }
             $('#button2').on('click', function() {
                 document.getElementById('processModal').classList.remove('hidden');
                 $.ajax({
@@ -1788,6 +1974,7 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
 
             });
         });
+        
     </script>
 
     @endsection

@@ -15,7 +15,7 @@ class ManageUsers extends Controller
     {
         
         $profiles['remote profile'] = Picklist::select('ID', 'Type', 'Name')->whereIn('id',[523, 524, 525, 526, 527, 528, 547, 685, 1087, 1195, 1201, 1300])->get();
-        $profiles['profile'] = User::select('profile')->distinct()->orderBy('profile')->get();
+        $profiles['profile'] = User::select('profile')->distinct('profile')->orderBy('profile')->get();
         return view('manageusers', [
             'users' => User::select('Id', 'UserName', 'UserId', 'Password', 'ProfileId', 'RemoteProfileID', 'status', 'Profile')
                 ->orderBy('UserId')->with('Remoteuser')->get(),
@@ -77,7 +77,6 @@ class ManageUsers extends Controller
         $user->Md5Pass = md5($request->password);
         $user->AllowRemote = 0;
         $user->LastUpdate = now();
-        $user->status = 1;
 
         if ($user->save()) {
             session()->flash('success', 'Record Updated Successfully!');

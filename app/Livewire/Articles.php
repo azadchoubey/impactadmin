@@ -10,7 +10,7 @@ class Articles extends Component
 {
     public $title = '';
     public $searchResults = [],$date;
-    public $id ;
+    public $_id ;
     private $Results = [];
     public function render()
     {
@@ -33,12 +33,12 @@ class Articles extends Component
     {
         $this->searchResults = [];
         $this->title = $title;
-        $this->id = $id;
+        $this->_id = $id;
 
     }
     public function getarticle(){
 
-        if($this->id){
+        if($this->_id){
             $this->Results = Article::where(['pubid'=>$this->id,'pubdate'=>$this->date])->groupBy('articleid','headline','publication','pubid','city','pubdate')->get();
         }
     }

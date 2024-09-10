@@ -33,6 +33,7 @@
 
             <textarea id="concept-input" name="concept_conditions" class="w-full text-sm h-24 p-2 border border-gray-300 rounded" placeholder="Type your concept here..."></textarea>
         </div>
+        <div id="error-container" class="hidden p-4 border border-red-500 bg-red-100 text-red-700 rounded-md"></div>
 
         <div class="flex flex-col items-center mb-4 space-y-4">
             <div class="flex items-center gap-4 text-sm">
@@ -100,7 +101,7 @@
                         @if($getissueforclient->enabled == 1)
                         <button class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-1 px-2 rounded" onclick="enableDisableIssue({{$getissueforclient->id}}, 'Disable')" >Disable</button>
                         @else
-                        <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded" onclick="enableDisableIssue({{$getissueforclient->id}},'Enable')">Enable</button>
+                    <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded" onclick="enableDisableIssue({{$getissueforclient->id}},'Enable')">Enable</button>
                         @endif
                     </div>
 
@@ -253,8 +254,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert(result.message);
                     window.location.href = "{{ route('client') }}";
                 } else {
-                    alert(result.message);
-                    window.location.reload();
+                    alert(result.error);
+                   // window.location.reload();
                 }
             },
             error: function (xhr, status, error) {
@@ -262,7 +263,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     var errors = xhr.responseJSON.errors;
                     displayValidationErrors(errors);
                 } else {
-                    console.error('Error saving issue:', error);
+
+                    console.error('Error saving issue:', error.error);
                 }
             }
         });

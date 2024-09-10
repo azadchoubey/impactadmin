@@ -34,6 +34,7 @@ Route::controller(ClientsProfile::class)->group(function () {
     Route::post('/saveOption','saveOption')->name('saveOption');
     Route::post('/searchexceptional','searchExceptional')->name('searchexceptional');
     Route::post('/displayKeywords','displayKeywords')->name('displayKeywords');
+    Route::post('/displayKeywordsPrint','displayKeywordsPrint')->name('displayKeywordsPrint');
     Route::delete('deleteClient','deleteClient')->name('delete.client');
     Route::get('/getclientconcepts',  'getClientConcepts')->name('getclientconcepts');
     Route::post('/add-complex-concepts',  'addComplexConcepts')->name('add-complex-concepts');

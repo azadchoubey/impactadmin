@@ -33,7 +33,7 @@ Route::middleware(['guest'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
 Route::get('/dashboard', function () {return view('admin');})->name('dashboard');
-Route::get('/manageusers',[ManageUsers::class,'index']); 
+Route::get('/manageusers',[ManageUsers::class,'index'])->name('manageusers'); 
 Route::post('/adduser',[ManageUsers::class,'adduser'])->name('adduser');
 Route::post('/edituser',[ManageUsers::class,'edituser'])->name('edituser');
 Route::view('/change-password', 'change-password')->name('changepassword');
@@ -60,12 +60,12 @@ Route::get('/media/universe/content', [ClientsProfile::class, 'loadMediaUniverse
 
 
 //  publications routes
-Route::view('/publications','publications/index');
+Route::view('/publications','publications/index')->name('publications');
 Route::get('/createpublication',CreatePublication::class)->name('createpub');
 Route::get('/editpublicaticon/{id}',EditPublications::class)->name('editpublication');
 
 // article routes 
-Route::get('/articles',Articles::class);
+Route::get('/articles',Articles::class)->name('articles');
 Route::get('/article/{id}/{id2}',[ArticleController::class,'viewarticle'])->name('viewarticle');
 
 Route::get('/keywordsearch',KeywordSearch::class);

@@ -17,7 +17,7 @@ class ClientProfile extends Component
     public $contacts;
     public $keywords = [];
     public $id ,$selectAll = false,$checkboxes,$cont;
-    public $activeTab = 'profile',$page = 20,$broadcastCheckbox,$broadcast,$primaryCheckbox,$primary; 
+    public $activeTab = 'profile',$pages = 20,$broadcastCheckbox,$broadcast,$primaryCheckbox,$primary; 
     private $editing;
    public function mount(){
     $this->id = request()->route()->parameter('id');

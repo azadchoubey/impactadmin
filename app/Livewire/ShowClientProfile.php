@@ -9,12 +9,12 @@ use Livewire\WithPagination;
 class ShowClientProfile extends Component
 {
     use WithPagination;
-    public $name,$page;
+    public $name,$pages;
     public function render()
     {
         return view('livewire.show-client-profile',[
             'Results' => Clinetprofile::orWhere('Name','LIKE','%'.$this->name.'%')->
-            where('deleted','!=',1)->paginate($this->page)
+            where('deleted','!=',1)->paginate($this->pages)
         ]);
     }
 }

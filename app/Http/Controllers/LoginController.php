@@ -12,9 +12,8 @@ class LoginController extends Controller
     {
         $hashedInputPassword = md5($request->password);
         $user = User::where('UserID', $request->userid)->first();
-        //return $user;
         if ($user) {
-            if($hashedInputPassword == $user->Md5Pass){
+            if($hashedInputPassword == $user->Md5Pass && $user->status){
                // return Auth::login($user);
                 if(Auth::loginUsingId ($user->Id)){
                    // return auth()->user();

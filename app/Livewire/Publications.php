@@ -38,10 +38,10 @@ class Publications extends Component
     public $RatePB;
     public $RateNC;
     public $RateNB;
-    public $id;
+    public $_id;
     public $pubshow = false;
     public $masthead;
-    public $page = 10;
+    public $pages = 10;
     public function render()
     {
         
@@ -49,9 +49,9 @@ class Publications extends Component
         return view('livewire.publications',[
             'Results' => Pubmaster::where('Title','LIKE','%'.$this->title.'%')->where('deleted',0)
             ->with('edition')->orderBy('Title')
-            ->paginate($this->page)
+            ->paginate($this->pages )
         ]);
     }
 
-
+    
 }

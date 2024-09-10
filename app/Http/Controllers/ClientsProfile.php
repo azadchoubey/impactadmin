@@ -40,7 +40,10 @@ class ClientsProfile extends Controller
         $issues = DB::connection('mysql3')->select($query);
         $query = 'CALL sp_getissuesforclient(?, ?)';
         $getissueforclients = DB::connection('mysql3')->select($query, [$decodedId, '']);
-        $data = Clinetprofile::on('mysql2')->with('contacts', 'contacts.delivery', 'contacts.delivery.deliveryformats', 'contacts.regularDigestPrint', 'contacts.regularDigestWeb', 'Country', 'Region', 'sector', 'keywords', 'billingcycle')->find($decodedId);
+        $query = 'CALL pm_getconceptsforclient(?, ?)';
+        $getprintissueforclients = DB::connection('mysql3')->select($query, [$decodedId, '0']);
+      
+        $data = Clinetprofile::with('contacts', 'contacts.delivery', 'contacts.delivery.deliveryformats', 'contacts.regularDigestPrint', 'contacts.regularDigestWeb', 'Country', 'Region', 'sector', 'keywords', 'billingcycle')->find($decodedId);
         $keywords = $data->keywords;
        
         $contacts = $data->contacts;
@@ -52,7 +55,7 @@ class ClientsProfile extends Controller
         $clients = Clinetprofile::where('deleted','!=',1)->get();
         $formats = CustomDigestFormat::select('id','format','format_name')->get();
         $customdelivery = Deliverymethod1::select('id','contactid','deliveryid','format')->get();
-        return view('clients', compact('data', 'getissueforclients','issues','complexconcepts','concepts','contacts', 'keywords', 'picklist', 'webdeliverymaster', 'deliverymaster','clients','formats','customdelivery'));
+        return view('clients', compact('data', 'getprintissueforclients','getissueforclients','issues','complexconcepts','concepts','contacts', 'keywords', 'picklist', 'webdeliverymaster', 'deliverymaster','clients','formats','customdelivery'));
     }
 
     public function edit(Request $request, $id)
@@ -65,7 +68,7 @@ class ClientsProfile extends Controller
         $clientProfile = Clinetprofile::findOrFail($id);
         try{
             $clientProfile->Name = $request->Name;
-            $clientProfile->broadcastcid = $request->broadcastid;
+            $clientProfile->broadcastcid = $request->broadcastcid;
             $clientProfile->PriClientID = $request->primary_client_id??'';
             $clientProfile->SectorPid = $request->SectorPid??0;
             $clientProfile->Mobile = $request->Mobile;
@@ -144,7 +147,6 @@ class ClientsProfile extends Controller
     }
     public function create(Request $request)
     {
-
         $request->validate([
             'Name'  => 'required',
             'Currency'  => 'required|alpha',
@@ -153,18 +155,20 @@ class ClientsProfile extends Controller
             'Region'=> 'required',
             'SectorPid'=>'required',
             'Type'=>'required',
+            'wm_contractstartdate'=>"required"
         ],
         [
             'SectorPid.required' => 'Industory / Sector field is required',
             'Source.required' => 'Reference field is required',
+            'wm_contractstartdate.required' => "Web Contract S-Date field is required"
         ]
     );
 
     try{
         DB::beginTransaction();
-        $input = $request->except(['_token']);
+        $input = $request->except(['_token','primaryCheckbox','broadcastCheckbox']);
        
-     
+
         $s2 = strtoupper(substr($request->Name, 0, 1));
         $clientid = '';
 
@@ -196,9 +200,11 @@ class ClientsProfile extends Controller
             unset($input['Status']);
         }
         Clinetprofile::insert($input);
+        DB::commit();
         Log::info('created new client name: {name} and clientid: {clientid} by user: {user} ',['clientid'=>$clientid,'user'=>auth()->user()->UserID,'name'=>$input['Name']]);
         return redirect('clients')->with('success', 'Client Added successfully.');
     }catch(Exception $e){
+        DB::rollback();
         Log::error('Error while creating clientprofile: {error}', ['error' => $e->getMessage()]);
         session()->flash('error', 'An error occurred while adding the record.');
 
@@ -343,7 +349,7 @@ class ClientsProfile extends Controller
     }
     
     public function editContact(Request $request)
-{
+{   
     $validator = Validator::make($request->all(), [
         'ContactName' => 'required|string',
         'Mobile' => 'required|digits:10',
@@ -369,6 +375,7 @@ class ClientsProfile extends Controller
     if ($validator->fails()) {
         return response()->json(['errors' => $validator->errors()]);
     }
+
     try {
         DB::beginTransaction();
         $contactId = $request->contactid;
@@ -385,6 +392,11 @@ class ClientsProfile extends Controller
         $input['enablefortwitter'] = $request->enablefortwitter ? 1 : 0;
         $input['enableformobile'] = $request->enableformobile ? 1 : 0;
         $input['enableforqlikview'] = $request->enableforqlikview ? 1 : 0;
+        $input['enableforbr'] = $request->enableforbr??0;
+        $input['dashboard'] = $request->dashboard??0;
+        $input['enableforyoutube'] = $request->enableforyoutube??0;
+        $input['enablefordidyounotice'] = $request->enablefordidyounotice??0;
+
        if($input['password']){
         $input['passwd'] = $input['password'];
         ClinetContacts::where('Email', $input['Email'])->update(['passwd' => $input['password']]); 
@@ -471,7 +483,7 @@ public function downloadMediaUniverseReport(Request $request)
             ORDER BY t, pm.type DESC, p ASC
         ";
 
-        $results = DB::connection('mysql2')->select($sql, [$clientId]);
+        $results = DB::select($sql, [$clientId]);
         
         $clientProfile = Clinetprofile::where('clientid', $clientId)->first();
         $clientName = $clientProfile ? $clientProfile->Name : 'Unknown';
@@ -614,7 +626,7 @@ public function downloadMediaUniverseReport(Request $request)
     }
     public function exportDetails()
     {
-        $data = DB::connection('mysql2')->table('clientprofile')
+        $data = DB::table('clientprofile')
             ->select(
                 'c1.Name as primaryc',
                 'clientprofile.Name as name',
@@ -929,22 +941,21 @@ public function displayKeywords(Request $request)
     $conceptId = $request->input('selectedOptions');
     
     if (empty($conceptId) || $conceptId == -1) {
-        return response()->json([
-            'keywords' => [
-                ['id' => -1, 'name' => ' --No Keywords Defined-- ']
-            ]
-        ]);
-    }
-
-      $query = 'CALL sp_getkeywordsforconcept(\'' . $conceptId . '\')';
-      $keywords= DB::connection('mysql3')->select($query);
-      
-      if (empty($keywords)) {
-        $keywords = [
-            (object) ['id' => -1, 'name' => ' --No Keywords Defined-- ']
+       
+            $keywords = [
+                (object)  ['id' => -1, 'name' => ' --No Keywords Defined-- ']
+            
         ];
+    }else{
+        $query = 'CALL sp_getkeywordsforconcept(\'' . $conceptId . '\')';
+        $keywords= DB::connection('mysql3')->select($query);
+        
+        if (empty($keywords)) {
+          $keywords = [
+              (object) ['id' => -1, 'name' => ' --No Keywords Defined-- ']
+          ];
+      }
     }
-
     $optionsHtml = '';
     foreach ($keywords as $item) {
         $name = mb_convert_encoding($item->name, 'Windows-1252', 'utf-8');
@@ -955,7 +966,6 @@ public function displayKeywords(Request $request)
     
 }
 public function saveOption(Request $request){
-   
     $validator = Validator::make($request->all(), [
         'option' => 'required|string|max:255',
         'clientid'=> 'required'
@@ -966,8 +976,8 @@ public function saveOption(Request $request){
     }
     $clientid = $request->input('clientid');
     if($request->datatype == 'concept'){
-        $concept = trim($request->input('concept'));
-        $result = DB::connection('mysql3')->select('CALL pm_conceptoperations(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [
+        $concept = trim($request->input('concept_id'));
+        $result = DB::connection('mysql3')->select('CALL sp_conceptoperations(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [
             0, 
             $concept, 
             $clientid, 
@@ -1008,7 +1018,7 @@ public function addKeyword(Request $request)
         $within = 0;
         $withinwords = 0;
 
-        $result = DB::connection('mysql3')->select('CALL pm_keywordoperations(?, ?, ?, ?, ?, ?, ?, ?, ?)', [
+        $result = DB::connection('mysql3')->select('CALL sp_keywordoperations(?, ?, ?, ?, ?, ?, ?, ?, ?)', [
             $conceptId, 
             '0', 
             $keyword, 
@@ -1160,6 +1170,7 @@ public function saveIssue(Request $request)
         'issue_color' => 'required|string',
         'company_issue' => 'nullable|integer',
         'tracking_type' => 'required|string',
+        'concept_conditions' => 'required|string',
     ]);
    
     $conceptConditionsString = $request->concept_conditions ?trim($request->concept_conditions):'';
@@ -1210,7 +1221,7 @@ public function saveIssue(Request $request)
     );
 
     if ($result[0]->success == 0) {
-        return response()->json(['error' => 'Issue already exists'], 400);
+        return response()->json(['error' => 'Issue already exists'], 200);
     }
 
     return response()->json(['message' => $issueId == 0 ? 'Issue Added' : 'Issue Modified']);
@@ -1262,23 +1273,54 @@ public function enableDisableIssue($id,Request $request){
     $clientid = $request->clientid;
     $userid = $request->user_id;
     try {
-    DB::connection('mysql3')->statement('CALL sp_issueoperations(?, ?, ?, ?, ?, ?, ?, ?, ?)', [
-        $id,
-        '',
-        '',
-        $clientid,
-        '',
-        '',
-        'enabled',
-        '',
-        0
-    ]);
+        $action = 'enabled'; 
+
+        DB::statement('CALL sp_issueoperations(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [
+            $id,
+            '',
+            '',
+            $clientid,
+            '',
+            '',
+            $action,
+            '',
+            0
+        ]);
     Log::info("Issue Enabled or Disabled successfully. Client ID: $clientid, User ID: $userid");
     return response()->json(['success' => 'Issue Deleted']);
 } catch (\Exception $e) {
     Log::error($e->getMessage());
     return response()->json(['error' => 'Failed to enable/disable issue', 'message' => $e->getMessage()]);
 }
+}
+public function displayKeywordsPrint(Request $request)
+{
+    $conceptId = $request->input('selectedOptions');
+    
+    if (empty($conceptId) || $conceptId == -1) {
+       
+            $keywords = [
+                (object)  ['id' => -1, 'name' => ' --No Keywords Defined-- ']
+            
+        ];
+    }else{
+        $query = 'CALL pm_getkeywordsforconcept(\'' . $conceptId . '\')';
+        $keywords= DB::connection('mysql3')->select($query);
+        
+        if (empty($keywords)) {
+          $keywords = [
+              (object) ['id' => -1, 'name' => ' --No Keywords Defined-- ']
+          ];
+      }
+    }
+    $optionsHtml = '';
+    foreach ($keywords as $item) {
+        $name = mb_convert_encoding($item->name, 'Windows-1252', 'utf-8');
+        $optionsHtml .= "<option value=\"{$item->id}\">{$name}</option>";
+    }
+
+    return response($optionsHtml, 200)->header('Content-Type', 'text/html');
+    
 }
 
 }

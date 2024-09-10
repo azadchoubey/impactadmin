@@ -20,6 +20,7 @@ class CreatePublication extends Component
     use WithFileUploads;
 
     public $title;
+    public $newpic;
     public $edition;
     public $issn;
     public $category;
@@ -38,6 +39,7 @@ class CreatePublication extends Component
     public $masthead;
     public $checkboxes =[];
     public $primaryDisabled = false; 
+    public $togglePrimary;
     protected $rules = [
         'title' => 'required',
         'type'=>'required',
@@ -127,7 +129,7 @@ class CreatePublication extends Component
        
         if ($this->masthead) {
             $mastheadPath = $this->masthead->storeAs('images/publications/masthead', $pubid . '.' . $this->masthead->getClientOriginalExtension());
-            Pubmaster::where('PubId', $pubid)->update(['MastHead' => $mastheadPath]);
+            Pubmaster::where('PubId', $pubid)->update(['MastHead' => $pubid . '.' . $this->newpic->getClientOriginalExtension()]);
         }
 
         foreach($this->checkboxes as $pagename){

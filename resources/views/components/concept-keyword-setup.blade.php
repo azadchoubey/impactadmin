@@ -63,7 +63,8 @@
 
     <!-- Edit Option Modal -->
     <div id="editOptionModal" data-visible="false" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
-        <div class="bg-white rounded-lg shadow-lg w-1/3">
+      <form id="editOptionForm">  
+    <div class="bg-white rounded-lg shadow-lg w-1/3">
             <div class="p-4 border-b">
                 <h5 class="text-lg font-medium">Edit Option</h5>
                 <button type="button" class="editCancelBtn text-gray-500 hover:text-gray-700 float-right">×</button>
@@ -71,12 +72,14 @@
             <div class="p-4">
                 <label for="editOptionText" class="block text-sm font-medium text-gray-700">Edit Option Text</label>
                 <input type="text" id="editOptionText" class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                <input type="hidden" name="conceptid" id="editconceptid">
             </div>
             <div class="p-4 border-t text-right">
                 <button type="button" class="editCancelBtn px-4 py-2 bg-gray-500 text-white rounded-md">Cancel</button>
                 <button type="button" id="saveEditOptionBtn" class="px-4 py-2 bg-blue-500 text-white rounded-md">Save</button>
             </div>
         </div>
+    </form>
     </div>
 </div>
 @section('scripts')
@@ -211,7 +214,8 @@
         $('#editOption1Btn, #editOption2Btn').on('click', function() {
             const targetSelect = $(this).attr('id') === 'editOption1Btn' ? '#select1' : '#select2';
             const selectedOption = $(targetSelect).find('option:selected');
-
+            $('#editconceptid').val(selectedOption.val())
+                
             if (selectedOption.length > 0) {
 
                 $('#editOptionText').val(selectedOption.text());
@@ -229,6 +233,7 @@
                 const targetSelect = $('#editOptionModal').data('targetSelect');
                 const selectedOption = $('#editOptionModal').data('selectedOption');
                 selectedOption.text(editedOptionText).val(editedOptionText).trigger('change');
+
                 closeModal('editOptionModal');
             }
         });
