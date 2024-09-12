@@ -63,23 +63,28 @@
 
     <!-- Edit Option Modal -->
     <div id="editOptionModal" data-visible="false" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
-      <form id="editOptionForm">  
-    <div class="bg-white rounded-lg shadow-lg w-1/3">
-            <div class="p-4 border-b">
-                <h5 class="text-lg font-medium">Edit Option</h5>
-                <button type="button" class="editCancelBtn text-gray-500 hover:text-gray-700 float-right">×</button>
+            <div class="bg-white rounded-lg shadow-lg w-1/3">
+            <form id="editOptionForm">
+
+                <div class="p-4 border-b">
+                    <h5 class="text-lg font-medium">Edit Option</h5>
+                    <button type="button" class="editCancelBtn text-gray-500 hover:text-gray-700 float-right">×</button>
+                </div>
+                <div class="p-4">
+                    <label for="editOptionText" class="block text-sm font-medium text-gray-700">Edit Option Text</label>
+                    <input type="text" name="name" id="editOptionText" class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <input type="hidden" name="conceptid" id="editconceptid">
+                    <input type="hidden" name="keywordid" id="keywordid">
+                    <input type="hidden" name="datatype" id="datatype">
+                    <input type="hidden" name="clientid" value="{{$clientid}}">
+                </div>
+                <div class="p-4 border-t text-right">
+                    <button type="button" class="editCancelBtn px-4 py-2 bg-gray-500 text-white rounded-md">Cancel</button>
+                    <button type="button" id="saveEditOptionBtn" class="px-4 py-2 bg-blue-500 text-white rounded-md">Save</button>
+                </div>
+                </form>
             </div>
-            <div class="p-4">
-                <label for="editOptionText" class="block text-sm font-medium text-gray-700">Edit Option Text</label>
-                <input type="text" id="editOptionText" class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                <input type="hidden" name="conceptid" id="editconceptid">
-            </div>
-            <div class="p-4 border-t text-right">
-                <button type="button" class="editCancelBtn px-4 py-2 bg-gray-500 text-white rounded-md">Cancel</button>
-                <button type="button" id="saveEditOptionBtn" class="px-4 py-2 bg-blue-500 text-white rounded-md">Save</button>
-            </div>
-        </div>
-    </form>
+    
     </div>
 </div>
 @section('scripts')
@@ -123,12 +128,12 @@
         }
 
         function updateSelect2(keywords) {
-    $('#select2').empty(); // Clear the select element
+            $('#select2').empty(); // Clear the select element
 
-    $('#select2').append(keywords).trigger('change');
-}
+            $('#select2').append(keywords).trigger('change');
+        }
 
-            function toggleModal(modalId, visible) {
+        function toggleModal(modalId, visible) {
             const modal = $(modalId);
             if (visible) {
                 modal.removeClass('hidden');
@@ -146,7 +151,7 @@
         });
         $('#addOption2Btn').on('click', function() {
             const selectedOption = $('#select1').find('option:selected');
-            if(selectedOption.length == 0){
+            if (selectedOption.length == 0) {
                 alert('Please select a concept first');
                 return;
             }
@@ -169,58 +174,68 @@
         });
         $('#saveNewOptionBtn').on('click', function() {
             const form = $('#addOptionForm');
-            const selectedValue = $('#select1').val(); 
+            const selectedValue = $('#select1').val();
             let formData = form.serialize();
-            formData += '&username='+encodeURIComponent('{{ Auth::user()->UserID }}') +'&concept_id=' + encodeURIComponent(selectedValue); 
+            formData += '&username=' + encodeURIComponent('{{ Auth::user()->UserID }}') + '&concept_id=' + encodeURIComponent(selectedValue);
             $.ajax({
-            url: `{{route('saveOption')}}`,  
-            type: 'POST',
-            data: formData,
-            success: function(response) {
-                alert('Option saved successfully!');
-                form[0].reset();
-                if(response.concepts){
-                    response.concepts.forEach(function(concept) {
-                    var newOption = new Option(concept.name, concept.id, false, false);
-                    $('#select1').append(newOption);
-                });
-                }else{
-                    response.keywords.forEach(function(keyword) {
-                    var newOption = new Option(keyword.name, keyword.id, false, false);
-                    $('#select2').append(newOption);
-                });
+                url: `{{route('saveOption')}}`,
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    alert('Option saved successfully!');
+                    form[0].reset();
+                    if (response.concepts) {
+                        response.concepts.forEach(function(concept) {
+                            var newOption = new Option(concept.name, concept.id, false, false);
+                            $('#select1').append(newOption);
+                        });
+                    } else {
+                        response.keywords.forEach(function(keyword) {
+                            var newOption = new Option(keyword.name, keyword.id, false, false);
+                            $('#select2').append(newOption);
+                        });
+                    }
+
+                },
+                error: function(xhr, status, error) {
+                    if (xhr.status === 422) {
+                        var errors = xhr.responseJSON.errors;
+                        displayValidationErrors(errors);
+                    } else {
+                        alert('An error occurred while saving the option.');
+                    }
                 }
-                
-            },
-            error: function(xhr, status, error) {
-                if (xhr.status === 422) { 
-                    var errors = xhr.responseJSON.errors;
-                    displayValidationErrors(errors);
-                } else {
-                    alert('An error occurred while saving the option.');
-                }
-            }
-        });
-        });
-        function displayValidationErrors(errors) {
-        $('.validation-error').remove(); 
-        $.each(errors, function(field, messages) {
-            var input = $('input[name=' + field + ']');
-            $.each(messages, function(index, message) {
-                input.after('<span class="validation-error text-red-500">' + message + '</span>');
             });
         });
-    }
+
+        function displayValidationErrors(errors) {
+            $('.validation-error').remove();
+            $.each(errors, function(field, messages) {
+                var input = $('input[name=' + field + ']');
+                $.each(messages, function(index, message) {
+                    input.after('<span class="validation-error text-red-500">' + message + '</span>');
+                });
+            });
+        }
         $('#editOption1Btn, #editOption2Btn').on('click', function() {
+            $('#datatype').val($(this).attr('id') === 'editOption1Btn' ? 'concept' : 'keyword')
+        
             const targetSelect = $(this).attr('id') === 'editOption1Btn' ? '#select1' : '#select2';
             const selectedOption = $(targetSelect).find('option:selected');
-            $('#editconceptid').val(selectedOption.val())
-                
+
             if (selectedOption.length > 0) {
 
                 $('#editOptionText').val(selectedOption.text());
                 $('#editOptionModal').data('targetSelect', targetSelect).data('selectedOption', selectedOption).removeClass('hidden').addClass('flex');
+                if($('#datatype').val() == 'concept'){
+                $('#editconceptid').val(selectedOption.val())
 
+            }else{
+                $('#editconceptid').val($('#select1').find('option:selected').val());
+                console.log(selectedOption.val());
+                
+                $('#keywordid').val(selectedOption.val());
+            }
 
             } else {
                 alert('Please select an option to edit.');
@@ -232,8 +247,31 @@
             if (editedOptionText) {
                 const targetSelect = $('#editOptionModal').data('targetSelect');
                 const selectedOption = $('#editOptionModal').data('selectedOption');
-                selectedOption.text(editedOptionText).val(editedOptionText).trigger('change');
+                const form = $('#editOptionForm');
+                let formData = form.serialize();
+                $.ajax({
+                    url: `{{route('renameconcept')}}`,
+                    type: 'POST',
+                    data: formData,
+                    success: function(response) {
+                      
+                        if(response.success){
+                            alert('Option saved successfully!');
+                            form[0].reset();
+                            window.location.reload();
+                        }
+                       
 
+                    },
+                    error: function(xhr, status, error) {
+                        if (xhr.status === 422) {
+                            var errors = xhr.responseJSON.errors;
+                            displayValidationErrors(errors);
+                        } else {
+                            alert('An error occurred while saving the option.');
+                        }
+                    }
+                });
                 closeModal('editOptionModal');
             }
         });

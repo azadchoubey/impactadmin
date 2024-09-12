@@ -68,6 +68,7 @@
     <!-- Edit Option Modal -->
     <div id="editOptionModal_1" data-visible="false" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
         <div class="bg-white rounded-lg shadow-lg w-1/3">
+        <form id="editOptionForm_1">
             <div class="p-4 border-b">
                 <h5 class="text-lg font-medium">Edit Option</h5>
                 <button type="button" class="editCancelBtn_1 text-gray-500 hover:text-gray-700 float-right">×</button>
@@ -80,6 +81,7 @@
                 <button type="button" class="editCancelBtn_1 px-4 py-2 bg-gray-500 text-white rounded-md">Cancel</button>
                 <button type="button" id="saveEditOptionBtn_1" class="px-4 py-2 bg-blue-500 text-white rounded-md">Save</button>
             </div>
+        </form>
         </div>
     </div>
 </div>

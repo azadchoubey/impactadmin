@@ -1748,6 +1748,7 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
         });
         $('#addOption_2Btn').on('click', function() {
             const selectedOption = $('#select_1').find('option:selected');
+            if(selectedOption.val() == -1) return;
             if(selectedOption.length == 0){
                 alert('Please select a concept first');
                 return;
@@ -1775,7 +1776,7 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
             let formData = form.serialize();
             formData += '&username='+encodeURIComponent('{{ Auth::user()->UserID }}') +'&concept_id=' + encodeURIComponent(selectedValue); 
             $.ajax({
-            url: `{{route('saveOption')}}`,  
+            url: `{{route('addConceptPrint')}}`,  
             type: 'POST',
             data: formData,
             success: function(response) {
@@ -1818,7 +1819,7 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
           
             const targetSelect = $(this).attr('id') === 'editOption_1Btn' ? '#select_1' : '#select_2';
             const selectedOption = $(targetSelect).find('option:selected');
-
+            // if(selectedOption.val() == -1) return;
             if (selectedOption.length > 0) {
 
                 $('#editOptionText_1').val(selectedOption.text());
@@ -1826,7 +1827,7 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
 
 
             } else {
-                alert('Please select an option to edit1.');
+                alert('Please select an option to edit.');
             }
         });
 
@@ -1835,7 +1836,31 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
             if (editedOptionText) {
                 const targetSelect = $('#editOptionModal_1').data('targetSelect');
                 const selectedOption = $('#editOptionModal_1').data('selectedOption');
-                selectedOption.text(editedOptionText).val(editedOptionText).trigger('change');
+                const form = $('#editOptionForm_1');
+                let formData = form.serialize();
+                $.ajax({
+                    url: `{{route('renameconceptprint')}}`,
+                    type: 'POST',
+                    data: formData,
+                    success: function(response) {
+                      
+                        if(response.success){
+                            alert('Option saved successfully!');
+                            form[0].reset();
+                            window.location.reload();
+                        }
+                       
+
+                    },
+                    error: function(xhr, status, error) {
+                        if (xhr.status === 422) {
+                            var errors = xhr.responseJSON.errors;
+                            displayValidationErrors(errors);
+                        } else {
+                            alert('An error occurred while saving the option.');
+                        }
+                    }
+                });
                 closeModal('editOptionModal_1');
             }
         });
