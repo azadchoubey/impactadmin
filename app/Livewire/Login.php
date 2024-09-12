@@ -33,7 +33,7 @@ class Login extends Component
         $this->userid = $userid;
         $this->password = $password;
 
-        if (trim($userid) != "" && trim($password) != "") {
+        if ($userid && trim($userid) != "" && trim($password) != "") {
             $this->rememberpasswd = true;
         }
     }
