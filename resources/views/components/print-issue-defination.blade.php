@@ -111,3 +111,148 @@
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const $inputBox = $('#concept-input');
+        const $postfixInput = $('#postfix-expression');
+        let lastConcept = null;
+        let lastComplexConcept = null;
+        let lastLogicalOp = null;
+        let postfixParts = []; 
+      
+        function updateInput1(value, id, isConcept) {
+        let currentValue = $inputBox.val().trim();
+        
+        // Initialize postfixParts with the current postfix expression
+        postfixParts.push($postfixInput.val().trim());
+    
+        if (value === "C") {
+            // Clear input and reset state
+            $inputBox.val('');
+            postfixParts = [];
+            $postfixInput.val('');
+            lastConcept = null;
+            lastComplexConcept = null;
+            lastLogicalOp = null;
+            return;
+        }
+    
+        if (["(", ")"].includes(value)) {
+            // Handle parentheses
+            if (value === "(" && !currentValue) {
+                // Allow open bracket at the start
+                currentValue = ` ${value} `;
+                postfixParts.push(value);
+            } else if (value === ")" && (lastConcept || lastComplexConcept)) {
+                // Handle closing bracket
+                currentValue += ` ${value} `;
+                postfixParts.push(value);
+                lastLogicalOp = null;
+            }
+        } else if (["and", "or", "not"].includes(value)) {
+            // Handle logical operators
+            if (lastLogicalOp || (!lastConcept && !lastComplexConcept)) {
+                return;
+            }
+            lastLogicalOp = value;
+            currentValue += ` ${value} `;
+            postfixParts.push(value);
+        } else {
+            // Handle concepts
+            if ((lastConcept == value) || (lastComplexConcept == value)) {
+                return;
+            }
+            if (isConcept) {
+                postfixParts.push(id);
+                currentValue += ` ${value} `;
+            } else {
+                postfixParts.push(id);
+                currentValue += ` ${value} `;
+            }
+            lastConcept = isConcept ? value : null;
+            lastComplexConcept = isConcept ? null : value;
+            lastLogicalOp = null;
+        }
+    
+        $inputBox.val(currentValue.trim());
+        $postfixInput.val(postfixParts.join(' '));
+    }
+    
+        $('.concept-option').on('click', function () {
+            const value = $(this).data('value');
+            const id = $(this).data('id');
+            if (lastConcept == value) return;
+    
+            $('.concept-option').removeClass('bg-gray-300');
+            $(this).addClass('bg-gray-300');
+    
+            updateInput1(value, id, true);
+        });
+    
+        $('.complex-concept-option').on('click', function () {
+            const value = $(this).data('value');
+            const id = $(this).data('id');
+            if (lastComplexConcept) return;
+    
+            $('.complex-concept-option').removeClass('bg-gray-300');
+            $(this).addClass('bg-gray-300');
+    
+            updateInput1(value, id, false);
+        });
+    
+        $('.logical-op-button').on('click', function () {
+            const value = $(this).data('value');
+            updateInput1(value, null, false);
+        });
+    
+        $('a[href="#"]').on('click', function (e) {
+            e.preventDefault();
+            $('#addCompanyModal').removeClass('hidden');
+        });
+    
+        $('#cancelButton').on('click', function () {
+            $('#addCompanyModal').addClass('hidden');
+        });
+    
+        $('#addCompanyForm').on('submit', function (e) {
+            e.preventDefault();
+            const companyName = $('#companyName').val();
+            $('#addCompanyModal').addClass('hidden');
+            alert(`Company "${companyName}" added successfully!`);
+        });
+    
+        $('#issueadd').on('submit', function (e) {
+            e.preventDefault();
+            let form = new FormData(this);
+            form.append('clientid', '{{ $clientid }}');
+            $.ajax({
+                url: `{{ route('save.issue') }}`,
+                type: 'POST',
+                data: form,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    if (result.status) {
+                        alert(result.message);
+                        window.location.href = "{{ route('client') }}";
+                    } else {
+                        alert(result.error);
+                       // window.location.reload();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    if (xhr.status === 422) {
+                        var errors = xhr.responseJSON.errors;
+                        displayValidationErrors(errors);
+                    } else {
+    
+                        console.error('Error saving issue:', error.error);
+                    }
+                }
+            });
+        });
+       
+    });
+    
+    
+    </script>
