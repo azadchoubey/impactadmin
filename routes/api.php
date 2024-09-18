@@ -39,9 +39,13 @@ Route::controller(ClientsProfile::class)->group(function () {
     Route::post('/displayKeywordsPrint','displayKeywordsPrint')->name('displayKeywordsPrint');
     Route::delete('deleteClient','deleteClient')->name('delete.client');
     Route::get('/getclientconcepts',  'getClientConcepts')->name('getclientconcepts');
+    Route::get('/getprintclientconcepts',  'getprintclientconcepts')->name('getprintclientconcepts');
     Route::post('/add-complex-concepts',  'addComplexConcepts')->name('add-complex-concepts');
+    Route::post('/add-print-complex-concepts',  'addPrintComplexConcepts')->name('addPrintComplexConcepts');
     Route::post('/update-complex-concepts',  'updateComplexConcepts')->name('updateComplexConcepts');
+    Route::post('/update-print-complex-concepts',  'updatePrintComplexConcepts')->name('updatePrintComplexConcepts');
     Route::delete('/deleteConcept',  'deleteConcept')->name('deleteConcept');
+    Route::delete('/deletePrintConcept',  'deletePrintConcept')->name('deletePrintConcept');
     Route::post('/saveissue',  'saveIssue')->name('save.issue');
     Route::get('/issues/{issueId}/edit',  'editIssue')->name('editIssue');
     Route::delete('/delete-issue/{id}',  'deleteIssue')->name('deleteIssue');

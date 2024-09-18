@@ -312,8 +312,8 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                                 <input type="checkbox" name="enableforwhatsapp" value="1" {{$data->enableforwhatsapp == 1 ? 'checked' : ''}}>
                                 <label for="type" class="block text-sm font-medium text-gray-700"> YouTube</label>
                                 <input type="checkbox" name="enableforyoutube" value="1" {{$data->enableforyoutube == 1 ? 'checked' : ''}}>
-                              {{-- <label for="type" class="block text-sm font-medium text-gray-700"> YouTube</label>
-                                <input type="checkbox" name="enableforyoutube" value="1" {{$data->enableforyoutube == 1 ? 'checked' : ''}}> --}}  
+                                {{-- <label for="type" class="block text-sm font-medium text-gray-700"> YouTube</label>
+                                <input type="checkbox" name="enableforyoutube" value="1" {{$data->enableforyoutube == 1 ? 'checked' : ''}}> --}}
                                 <label for="type" class="block text-sm font-medium text-gray-700">DYNA</label>
                                 <input type="checkbox" name="enablefordidyounotice" value="1" {{$data->enablefordidyounotice == 1 ? 'checked' : ''}}>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Fulltext</label>
@@ -497,13 +497,13 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                 </div>
                 <div id="print-issue-conceptkeywords-submenu-content">
                     <div id="print-concepts" role="tabpanel" aria-labelledby="print-concepts-tab">
-                        <x-print-concept :getprintissueforclients="$getprintissueforclients" :clientid="$data->ClientID"/>
+                        <x-print-concept :getprintissueforclients="$getprintissueforclients" :clientid="$data->ClientID" />
                     </div>
                     <div id="print-complex-concept" role="tabpanel" aria-labelledby="print-complex-concept-tab">
-                        <x-print-complex-concept :getprintissueforclients="$getprintissueforclients" :clientid="$data->ClientID"/>
+                        <x-print-complex-concept :complexprintconcepts="$complexprintconcepts" :clientid="$data->ClientID" />
                     </div>
                     <div id="print-issues" role="tabpanel" aria-labelledby="print-issues-tab">
-                        <x-print-issue-defination :getprintissueforclients="$getprintissueforclients" :clientid="$data->ClientID"/>
+                        <x-print-issue-defination :getprintissueforclients="$getprintissueforclients" :clientid="$data->ClientID" />
                     </div>
                 </div>
             </div>
@@ -1038,8 +1038,10 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
         }
 
         function editIssue(issueId) {
+            const baseUrl = `{{ route('editIssue', ['issueId' => '__issueId__']) }}`;
+            const url = baseUrl.replace('__issueId__', issueId);
             $.ajax({
-                url: `/api/issues/${issueId}/edit`,
+                url: url,
                 type: 'GET',
                 success: function(data) {
                     if (!data.error) {
@@ -1321,42 +1323,43 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                 autocompleteList.hide(); // Hide autocomplete list if keyword length is less than 3
             }
         }
+
         function displayValidationErrors(errors) {
-    // Get the error container
-    const errorContainer = $('#error-container');
-    
-    // Clear previous errors
-    errorContainer.empty();
+            // Get the error container
+            const errorContainer = $('#error-container');
 
-    // Check if errors are provided
-    if ($.isEmptyObject(errors)) {
-        return;
-    }
+            // Clear previous errors
+            errorContainer.empty();
 
-    // Create an unordered list for the errors
-    const ul = $('<ul class="error-list"></ul>');
+            // Check if errors are provided
+            if ($.isEmptyObject(errors)) {
+                return;
+            }
 
-    // Iterate over each error and create list items
-    $.each(errors, function(field, messages) {
-        // Append each message for the field
-        messages.forEach(message => {
-            ul.append(`<li>${message}</li>`);
-        });
-    });
+            // Create an unordered list for the errors
+            const ul = $('<ul class="error-list"></ul>');
 
-    // Append the list to the error container
-    errorContainer.append(ul);
+            // Iterate over each error and create list items
+            $.each(errors, function(field, messages) {
+                // Append each message for the field
+                messages.forEach(message => {
+                    ul.append(`<li>${message}</li>`);
+                });
+            });
 
-    // Optionally, show the error container if hidden
-    errorContainer.show();
-}
+            // Append the list to the error container
+            errorContainer.append(ul);
+
+            // Optionally, show the error container if hidden
+            errorContainer.show();
+        }
 
         // Define the selectResult function
         function selectResult(keyword) {
             $('#keyword').val(keyword);
             $('#autocomplete-list').hide();
             $.ajax({
-                url: '/api/filter-strings',
+                url: `{{route('keywords.filterstrings')}}`,
                 method: 'GET',
                 data: {
                     keyword: keyword
@@ -1385,60 +1388,59 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
         }
     </script>
     <script>
-        
         function deleteIssue(id) {
-                if (confirm('Are you sure you want to delete this issue?')) {
-                    $.ajax({
-                        url: '{{ route("deleteIssue", ":id") }}'.replace(':id', id),
-                        type: 'DELETE',
-                        data: {
-                            user_id: '{{ auth()->user()->UserID }}',
-                            clientid: '{{ $data->ClientID }}'
-                        },
-                        success: function(response) {
-                            if(response.success){
-                                alert('Issue deleted successfully.');
-                                location.reload();
-                            }else{
-                                alert('Failed to delete the issue. Please try again.');
-                            }
-                          
-                        },
-                        error: function(xhr) {
+            if (confirm('Are you sure you want to delete this issue?')) {
+                $.ajax({
+                    url: '{{ route("deleteIssue", ":id") }}'.replace(':id', id),
+                    type: 'DELETE',
+                    data: {
+                        user_id: '{{ auth()->user()->UserID }}',
+                        clientid: '{{ $data->ClientID }}'
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            alert('Issue deleted successfully.');
+                            location.reload();
+                        } else {
                             alert('Failed to delete the issue. Please try again.');
                         }
-                    });
-                }
 
-
+                    },
+                    error: function(xhr) {
+                        alert('Failed to delete the issue. Please try again.');
+                    }
+                });
             }
-            
-        function enableDisableIssue(id ,action) {
-                if (confirm('Are you sure you want to ${action} this issue?')) {
-                    $.ajax({
-                        url: '{{ route("enableDisableIssue", ":id") }}'.replace(':id', id),
-                        type: 'POST',
-                        data: {
-                            user_id: '{{ auth()->user()->UserID }}',
-                            clientid: '{{ $data->ClientID }}'
-                        },
-                        success: function(response) {
-                            if(response.success){
-                                alert('Issue ${action} successfully.');
-                                location.reload();
-                            }else{
-                                alert('Failed to ${action} the issue. Please try again.');
-                            }
-                          
-                        },
-                        error: function(xhr) {
+
+
+        }
+
+        function enableDisableIssue(id, action) {
+            if (confirm('Are you sure you want to ${action} this issue?')) {
+                $.ajax({
+                    url: '{{ route("enableDisableIssue", ":id") }}'.replace(':id', id),
+                    type: 'POST',
+                    data: {
+                        user_id: '{{ auth()->user()->UserID }}',
+                        clientid: '{{ $data->ClientID }}'
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            alert('Issue ${action} successfully.');
+                            location.reload();
+                        } else {
                             alert('Failed to ${action} the issue. Please try again.');
                         }
-                    });
-                }
 
-
+                    },
+                    error: function(xhr) {
+                        alert('Failed to ${action} the issue. Please try again.');
+                    }
+                });
             }
+
+
+        }
 
 
         // Function to enable/disable broadcast fields
@@ -1687,170 +1689,113 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                 });
 
             });
-         
-        const optionsDatas = @json($getprintissueforclients);
 
-        optionsDatas.forEach(option => {
-            const newOptions = new Option(option.name, option.id, false, false);
-            $('#select_1').append(newOptions).trigger('change');
-        });
+            const optionsDatas = @json($getprintissueforclients);
 
-        // Handle selection change on first select element
-        $('#select_1').on('change', function() {
-            const selectedOptions = $(this).val();
-            if (selectedOptions.length > 1) {
-                alert("You can select only one option at a time.")
-                $(this).find('option:selected').last().prop('selected', false);
+            optionsDatas.forEach(option => {
+                const newOptions = new Option(option.name, option.id, false, false);
+                $('#select_1').append(newOptions).trigger('change');
+            });
+
+            // Handle selection change on first select element
+            $('#select_1').on('change', function() {
+                const selectedOptions = $(this).val();
+                if (selectedOptions.length > 1) {
+                    alert("You can select only one option at a time.")
+                    $(this).find('option:selected').last().prop('selected', false);
+                }
+                fetchKeyword($(this).find('option:selected').val());
+
+            });
+
+            function fetchKeyword(selectedOptions) {
+                if (selectedOptions) {
+                    $.ajax({
+                        url: `{{route('displayKeywordsPrint')}}`,
+                        method: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            selectedOptions: selectedOptions
+                        },
+                        success: function(response) {
+                            updateselect__2(response);
+                        }
+                    });
+                }
             }
-            fetchKeyword($(this).find('option:selected').val());
 
-        });
+            function updateselect__2(keywords) {
+                console.log(keywords);
 
-        function fetchKeyword(selectedOptions) {
-            if (selectedOptions) {
-                $.ajax({
-                    url: `{{route('displayKeywordsPrint')}}`,
-                    method: 'POST',
-                    data: {
-                        _token: '{{ csrf_token() }}',
-                        selectedOptions: selectedOptions
-                    },
-                    success: function(response) {
-                        updateselect__2(response);
-                    }
-                });
+                $('#select_2').empty(); // Clear the select element
+
+                $('#select_2').append(keywords).trigger('change');
             }
-        }
-
-        function updateselect__2(keywords) {
-            console.log(keywords);
-            
-        $('#select_2').empty(); // Clear the select element
-
-        $('#select_2').append(keywords).trigger('change');
-}
 
             function toggleModal1(modalId, visible) {
-            const modal = $(modalId);
-            if (visible) {
-                modal.removeClass('hidden');
-                modal.attr('data-visible', 'true');
-            } else {
-                modal.addClass('hidden');
-                modal.attr('data-visible', 'false');
-            }
-        }
-        // Open Add Modal
-        $('#addOption_1Btn').on('click', function() {
-            $('#header_1').html('Add Concept');
-            $('#data_1').val('concept');
-            toggleModal1('#addOptionModal_1', true);
-        });
-        $('#addOption_2Btn').on('click', function() {
-            const selectedOption = $('#select_1').find('option:selected');
-            if(selectedOption.val() == -1) return;
-            if(selectedOption.length == 0){
-                alert('Please select a concept first');
-                return;
-            }
-            $('#header_1').html('Add Keyword');
-            $('#data_1').val('keyword');
-            toggleModal1('#addOptionModal_1', true);
-        });
-
-
-
-        // Close Add Modal
-        $('.addCancelBtn_1').on('click', function() {
-            toggleModal1('#addOptionModal_1', false);
-        });
-
-
-        // Close Edit Modal
-        $('.editCancelBtn_1').on('click', function() {
-            toggleModal1('#editOptionModal_1', false);
-        });
-        $('#saveNewOptionBtn_1').on('click', function() {
-            const form = $('#addOptionForm_1');
-            const selectedValue = $('#select_1').val(); 
-            let formData = form.serialize();
-            formData += '&username='+encodeURIComponent('{{ Auth::user()->UserID }}') +'&concept_id=' + encodeURIComponent(selectedValue); 
-            $.ajax({
-            url: `{{route('addConceptPrint')}}`,  
-            type: 'POST',
-            data: formData,
-            success: function(response) {
-                alert('Option saved successfully!');
-                form[0].reset();
-                if(response.concepts){
-                    response.concepts.forEach(function(concept) {
-                    var newOptions = new Option(concept.name, concept.id, false, false);
-                    $('#select_1').append(newOptions);
-                });
-                }else{
-                    response.keywords.forEach(function(keyword) {
-                    var newOptions = new Option(keyword.name, keyword.id, false, false);
-                    $('#select_2').append(newOptions);
-                });
-                }
-                
-            },
-            error: function(xhr, status, error) {
-                if (xhr.status === 422) { 
-                    var errors = xhr.responseJSON.errors;
-                    displayValidationErrors(errors);
+                const modal = $(modalId);
+                if (visible) {
+                    modal.removeClass('hidden');
+                    modal.attr('data-visible', 'true');
                 } else {
-                    alert('An error occurred while saving the option.');
+                    modal.addClass('hidden');
+                    modal.attr('data-visible', 'false');
                 }
             }
-        });
-        });
-        function displayValidationErrors(errors) {
-        $('.validation-error').remove(); 
-        $.each(errors, function(field, messages) {
-            var input = $('input[name=' + field + ']');
-            $.each(messages, function(index, message) {
-                input.after('<span class="validation-error text-red-500">' + message + '</span>');
+            // Open Add Modal
+            $('#addOption_1Btn').on('click', function() {
+                $('#header_1').html('Add Concept');
+                $('#data_1').val('concept');
+                toggleModal1('#addOptionModal_1', true);
             });
-        });
-    }
-        $('#editOption_1Btn, #editOption_2Btn').on('click', function() {
+            $('#addOption_2Btn').on('click', function() {
+                const selectedOption = $('#select_1').find('option:selected');
+                if (selectedOption.val() == -1) return;
+                if (selectedOption.length == 0) {
+                    alert('Please select a concept first');
+                    return;
+                }
+                $('#header_1').html('Add Keyword');
+                $('#data_1').val('keyword');
+                toggleModal1('#addOptionModal_1', true);
+            });
 
-          
-            const targetSelect = $(this).attr('id') === 'editOption_1Btn' ? '#select_1' : '#select_2';
-            const selectedOption = $(targetSelect).find('option:selected');
-            // if(selectedOption.val() == -1) return;
-            if (selectedOption.length > 0) {
-
-                $('#editOptionText_1').val(selectedOption.text());
-                $('#editOptionModal_1').data('targetSelect', targetSelect).data('selectedOption', selectedOption).removeClass('hidden').addClass('flex');
 
 
-            } else {
-                alert('Please select an option to edit.');
-            }
-        });
+            // Close Add Modal
+            $('.addCancelBtn_1').on('click', function() {
+                toggleModal1('#addOptionModal_1', false);
+            });
 
-        $('#saveEditOptionBtn_1').on('click', function() {
-            const editedOptionText = $('#editOptionText_1').val().trim();
-            if (editedOptionText) {
-                const targetSelect = $('#editOptionModal_1').data('targetSelect');
-                const selectedOption = $('#editOptionModal_1').data('selectedOption');
-                const form = $('#editOptionForm_1');
+
+            // Close Edit Modal
+            $('.editCancelBtn_1').on('click', function() {
+                toggleModal1('#editOptionModal_1', false);
+            });
+            $('#saveNewOptionBtn_1').on('click', function() {
+                const form = $('#addOptionForm_1');
+                const selectedValue = $('#select_1').val();
                 let formData = form.serialize();
+                formData += '&username=' + encodeURIComponent('{{ Auth::user()->UserID }}') + '&concept_id=' + encodeURIComponent(selectedValue);
                 $.ajax({
-                    url: `{{route('renameconceptprint')}}`,
+                    url: `{{route('addConceptPrint')}}`,
                     type: 'POST',
                     data: formData,
                     success: function(response) {
-                      
-                        if(response.success){
-                            alert('Option saved successfully!');
-                            form[0].reset();
-                            window.location.reload();
+                        alert('Option saved successfully!');
+                        form[0].reset();
+                        if (response.concepts) {
+                            response.concepts.forEach(function(concept) {
+                                var newOptions = new Option(concept.name, concept.id, false, false);
+                                $('#select_1').append(newOptions);
+                            });
+                        } else {
+                            response.keywords.forEach(function(keyword) {
+                                var newOptions = new Option(keyword.name, keyword.id, false, false);
+                                $('#select_2').append(newOptions);
+                            });
                         }
-                       
-
+                        window.location.reload();
                     },
                     error: function(xhr, status, error) {
                         if (xhr.status === 422) {
@@ -1861,14 +1806,78 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                         }
                     }
                 });
-                closeModal('editOptionModal_1');
-            }
-        });
+            });
 
-        function closeModal(modalId) {
-            console.log(modalId);
-            $('#' + modalId).removeClass('flex').addClass('hidden');
-        }
+            function displayValidationErrors(errors) {
+                $('.validation-error').remove();
+                $.each(errors, function(field, messages) {
+                    var input = $('input[name=' + field + ']');
+                    $.each(messages, function(index, message) {
+                        input.after('<span class="validation-error text-red-500">' + message + '</span>');
+                    });
+                });
+            }
+            $('#editOption_1Btn, #editOption_2Btn').on('click', function() {
+
+                $('#datatype_1').val($(this).attr('id') === 'editOption_1Btn' ? 'concept' : 'keyword');
+                const targetSelect = $(this).attr('id') === 'editOption_1Btn' ? '#select_1' : '#select_2';
+                const selectedOption = $(targetSelect).find('option:selected');
+                if (selectedOption.val() == -1) return;
+                if (selectedOption.length > 0) {
+                    $('#editOptionText_1').val(selectedOption.text());
+                    $('#editOptionModal_1').data('targetSelect', targetSelect).data('selectedOption', selectedOption).removeClass('hidden').addClass('flex');
+
+
+                } else {
+                    alert('Please select an option to edit.');
+                }
+            });
+            $('#button_1').click(function() {
+                $('#print-complex-concept-tab').click();
+            });
+            $('#saveEditOptionBtn_1').on('click', function() {
+                const editedOptionText = $('#editOptionText_1').val().trim();
+                if (editedOptionText) {
+                    const targetSelect = $('#editOptionModal_1').data('targetSelect');
+                    const selectedOption = $('#editOptionModal_1').data('selectedOption');
+                    const selectedValue = $('#select_1').val();
+                    const keywordid = $('#select_2').val();
+                    const form = $('#editOptionForm_1');
+                    let formData = form.serialize();
+                    formData += '&concept_id=' + encodeURIComponent(selectedValue) + '&client_id=' + encodeURIComponent('{{ $data->ClientID }}') + '&keywordid=' + encodeURIComponent(keywordid) + '&username=' + encodeURIComponent('{{ Auth::user()->UserID }}');
+                    console.log(selectedValue);
+
+                    $.ajax({
+                        url: `{{route('renameconceptprint')}}`,
+                        type: 'POST',
+                        data: formData,
+                        success: function(response) {
+
+                            if (response.success) {
+                                alert('Option saved successfully!');
+                                form[0].reset();
+                                window.location.reload();
+                            }
+
+
+                        },
+                        error: function(xhr, status, error) {
+                            if (xhr.status === 422) {
+                                var errors = xhr.responseJSON.errors;
+                                displayValidationErrors(errors);
+                            } else {
+                                alert('An error occurred while saving the option.');
+                            }
+                        }
+                    });
+                    closeModal('editOptionModal_1');
+                }
+            });
+
+            function closeModal(modalId) {
+                // console.log(modalId);
+                $('#' + modalId).removeClass('flex').addClass('hidden');
+            }
             $('#button2').on('click', function() {
                 document.getElementById('processModal').classList.remove('hidden');
                 $.ajax({
@@ -1888,6 +1897,35 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                             $('#concept2').append(option2);
                             $('#concept3').append(option3);
                             $('#concept4').append(option4);
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error loading content:', error);
+
+                        // Hide the loading spinner in case of error
+                        document.getElementById('processModal').classList.add('hidden');
+                    }
+                });
+            });
+            $('#print-complex-concept-tab').on('click', function() {
+                document.getElementById('processModal').classList.remove('hidden');
+                $.ajax({
+                    url: `{{route('getprintclientconcepts')}}`,
+                    method: 'GET',
+                    data: {
+                        clientid: "{{ $data->ClientID }}",
+                    },
+                    success: function(data) {
+                        document.getElementById('processModal').classList.add('hidden');
+                        data.forEach(option => {
+                            const option1 = new Option(option.name, option.id, false, false);
+                            const option2 = new Option(option.name, option.id, false, false);
+                            const option3 = new Option(option.name, option.id, false, false);
+                            const option4 = new Option(option.name, option.id, false, false);
+                            $('#concept_1').append(option1);
+                            $('#concept_2').append(option2);
+                            $('#concept_3').append(option3);
+                            $('#concept_4').append(option4);
                         });
                     },
                     error: function(xhr, status, error) {
@@ -1999,7 +2037,136 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
 
             });
         });
-        
+
+        function handleFormSubmit1(event, formType) {
+
+            event.preventDefault();
+
+            const form = event.target.form;
+
+            const formData = new FormData(form);
+
+            const data = {};
+            $(form).find('select').each(function() {
+                const key = $(this).attr('name');
+                const value = $(this).val();
+                const text = $(this).find('option:selected').text();
+                data[key] = {
+                    value,
+                    text
+                };
+            });
+
+
+            formData.forEach((value, key) => {
+                if (!data[key]) {
+                    data[key] = value;
+                }
+            });
+            console.log(data);
+
+            document.getElementById('processModal').classList.remove('hidden');
+
+            $.ajax({
+                url: `{{route('addPrintComplexConcepts')}}`,
+                type: 'POST',
+                data: data,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    document.getElementById('processModal').classList.add('hidden');
+                    if (response.success) {
+                        alert(response.success);
+                    } else {
+                        alert(response.error);
+                    }
+                    window.location.reload();
+
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error adding complex concept:', error);
+                }
+            });
+        }
+
+        function editConcept1(button) {
+            const listItem = $(button).closest('li');
+            const conceptNameSpan = listItem.find('.concept-name1');
+            const currentName = conceptNameSpan.text();
+
+            // Replace the span with an input field
+            const inputField = `<input type="text" class="edit-input1 text-sm w-4/5	 p-1 border border-gray-300 rounded" value="${currentName}" />`;
+            conceptNameSpan.replaceWith(inputField);
+
+            // Change the Edit button to Save
+            $(button).text('Save').removeClass('bg-blue-500 hover:bg-blue-600').addClass('bg-green-500 hover:bg-green-600');
+            $(button).attr('onclick', 'saveConcept1(this)');
+        }
+
+        function saveConcept1(button) {
+            const listItem = $(button).closest('li');
+            const inputField = listItem.find('.edit-input1');
+            const newName = inputField.val();
+
+            console.log(listItem.data('id'));
+            if (newName === '') {
+                alert('Concept name cannot be empty.');
+                return;
+            }
+
+            document.getElementById('processModal').classList.remove('hidden');
+
+            $.ajax({
+                url: `{{route('updatePrintComplexConcepts')}}`,
+                method: 'POST',
+                data: {
+                    id: listItem.data('id'),
+                    name: newName,
+                    clientid: `{{$data->ClientID }}`,
+                    _token: $('meta[name="csrf-token"]').attr('content') // Include CSRF token if needed
+                },
+                success: function(response) {
+                    document.getElementById('processModal').classList.add('hidden');
+                    if (response.success) {
+                        alert(response.success);
+                        window.location.reload();
+                    } else {
+                        alert('Failed to update the concept. Please try again.');
+                    }
+                },
+                error: function() {
+                    alert('An error occurred. Please try again.');
+                }
+            });
+        }
+
+        function deleteConcept1(button) {
+            const listItem = $(button).closest('li');
+            const conceptId = listItem.data('id');
+            if (confirm('Are you sure you want to delete this concept?')) {
+                $.ajax({
+                    url: `{{route('deletePrintConcept')}}`,
+                    method: 'DELETE',
+                    data: {
+                        concept_id: conceptId,
+                        clientid: `{{$data->ClientID }}`,
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            listItem.remove();
+                            alert(response.success);
+                            window.location.reload();
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error(xhr.responseText);
+                        alert('Failed to delete the concept.');
+                    }
+                });
+            }
+        }
     </script>
 
     @endsection

@@ -88,14 +88,8 @@
     </div>
 </div>
 
-<!-- JavaScript to handle form submission and delete functionality -->
 <script>
-
-    function deleteConcept(button) {
-        const listItem = button.parentElement;
-        listItem.remove();
-    }
-
+    
     function handleFormSubmit(event, formType) {
         event.preventDefault();
         const form = event.target;
@@ -192,7 +186,7 @@ function saveConcept(button) {
 }
 function deleteConcept(button) {
     const listItem = $(button).closest('li');
-    const conceptId = listItem.data('id'); // Retrieve the concept ID from the data-id attribute
+    const conceptId = listItem.data('id'); 
 
     if (confirm('Are you sure you want to delete this concept?')) {
         $.ajax({
