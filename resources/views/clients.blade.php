@@ -503,7 +503,7 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                         <x-print-complex-concept :complexprintconcepts="$complexprintconcepts" :clientid="$data->ClientID" />
                     </div>
                     <div id="print-issues" role="tabpanel" aria-labelledby="print-issues-tab">
-                        <x-print-issue-defination :getprintissueforclients="$getprintissueforclients" :clientid="$data->ClientID" />
+                        <x-print-issue-defination :getprintissueforclients="$getprintissueforclients" :getissueforprintclients="$getissueforprintclients" :issuesprints="$issuesprints" :concepts="$concepts" :complexprintconcepts="$complexprintconcepts" :clientid="$data->ClientID" />
                     </div>
                 </div>
             </div>
@@ -1065,6 +1065,32 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                 }
             });
         }
+        function editIssue1(issueId) {
+            const baseUrl = `{{ route('editPrintIssue', ['issueId' => '__issueId__']) }}`;
+            const url = baseUrl.replace('__issueId__', issueId);
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function(data) {
+                    if (!data.error) {
+                        $('#issue1').val(data.name);
+                        $('#concept-color1').val(data.color);
+                        $('input[name="typeprint"][value="' + data.type + '"]').prop('checked', true);
+                        $('input[name="tracking_typeprint"][value="' + data.tracking + '"]').prop('checked', true);
+                        $('select[name="company_issueprint"]').val(data.companyissue).trigger('change');
+                        $('#saveissue1').text('Edit and Save');
+                        $('#concept-input1').val(data.conceptcondition);
+                        $('#postfix-expression1').val(data.postfixexpression);
+                        $('#issue-id1').val(data.id);
+                    }
+
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching issue data:', error);
+                    alert('An error occurred while fetching the issue data.');
+                }
+            });
+        }
 
         function updateEditButtonVisibility() {
             var checkboxes = document.querySelectorAll('.checkboxes');
@@ -1326,7 +1352,7 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
 
         function displayValidationErrors(errors) {
             // Get the error container
-            const errorContainer = $('#error-container');
+            const errorContainer = $('.error-container');
 
             // Clear previous errors
             errorContainer.empty();
@@ -1414,8 +1440,60 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
 
 
         }
+        function deleteIssue1(id) {
+            if (confirm('Are you sure you want to delete this issue?')) {
+                $.ajax({
+                    url: '{{ route("deletePrintIssue", ":id") }}'.replace(':id', id),
+                    type: 'DELETE',
+                    data: {
+                        user_id: '{{ auth()->user()->UserID }}',
+                        clientid: '{{ $data->ClientID }}'
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            alert('Issue deleted successfully.');
+                            location.reload();
+                        } else {
+                            alert('Failed to delete the issue. Please try again.');
+                        }
+
+                    },
+                    error: function(xhr) {
+                        alert('Failed to delete the issue. Please try again.');
+                    }
+                });
+            }
+
+
+        }
 
         function enableDisableIssue(id, action) {
+            if (confirm('Are you sure you want to ${action} this issue?')) {
+                $.ajax({
+                    url: '{{ route("enableDisableIssue", ":id") }}'.replace(':id', id),
+                    type: 'POST',
+                    data: {
+                        user_id: '{{ auth()->user()->UserID }}',
+                        clientid: '{{ $data->ClientID }}'
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            alert('Issue ${action} successfully.');
+                            location.reload();
+                        } else {
+                            alert('Failed to ${action} the issue. Please try again.');
+                        }
+
+                    },
+                    error: function(xhr) {
+                        alert('Failed to ${action} the issue. Please try again.');
+                    }
+                });
+            }
+
+
+        }
+        function enableDisableIssue1(id, action) {
             if (confirm('Are you sure you want to ${action} this issue?')) {
                 $.ajax({
                     url: '{{ route("enableDisableIssue", ":id") }}'.replace(':id', id),

@@ -40,8 +40,12 @@ class ClientsProfile extends Controller
         $complexprintconcepts = DB::connection('mysql3')->select($query);
         $query = 'call sp_getcompanyissues()';
         $issues = DB::connection('mysql3')->select($query);
+        $query = 'call pm_getcompanyissues()';
+        $issuesprints = DB::connection('mysql3')->select($query);
         $query = 'CALL sp_getissuesforclient(?, ?)';
         $getissueforclients = DB::connection('mysql3')->select($query, [$decodedId, '']);
+        $query = 'CALL pm_getissuesforclient(?, ?)';
+        $getissueforprintclients = DB::connection('mysql3')->select($query, [$decodedId, '']);
         $query = 'CALL pm_getconceptsforclient(?, ?)';
         $getprintissueforclients = DB::connection('mysql3')->select($query, [$decodedId, '0']);
 
@@ -57,7 +61,7 @@ class ClientsProfile extends Controller
         $clients = Clinetprofile::where('deleted', '!=', 1)->get();
         $formats = CustomDigestFormat::select('id', 'format', 'format_name')->get();
         $customdelivery = Deliverymethod1::select('id', 'contactid', 'deliveryid', 'format')->get();
-        return view('clients', compact('data', 'complexprintconcepts','getprintissueforclients', 'getissueforclients', 'issues', 'complexconcepts', 'concepts', 'contacts', 'keywords', 'picklist', 'webdeliverymaster', 'deliverymaster', 'clients', 'formats', 'customdelivery'));
+        return view('clients', compact('data', 'getissueforprintclients','issuesprints','complexprintconcepts','getprintissueforclients', 'getissueforclients', 'issues', 'complexconcepts', 'concepts', 'contacts', 'keywords', 'picklist', 'webdeliverymaster', 'deliverymaster', 'clients', 'formats', 'customdelivery'));
     }
 
     public function edit(Request $request, $id)
@@ -1316,6 +1320,67 @@ class ClientsProfile extends Controller
 
         return response()->json(['message' => $issueId == 0 ? 'Issue Added' : 'Issue Modified']);
     }
+    public function savePrintIssue(Request $request)
+    {
+        $validated = $request->validate([
+            'issue' => 'required|string',
+            'typeprint' => 'required|string',
+            'issue_color' => 'required|string',
+            'concept_conditions' => 'required|string',
+        ]);
+        $conceptConditionsString = $request->concept_conditions ? trim($request->concept_conditions) : '';
+        $postfix_expression = $request->input('postfix_expression') ? trim($request->input('postfix_expression')) : '';
+        $pattern = '/(\(|\)|and|or|not)/';
+        $conceptConditions = preg_split($pattern, $postfix_expression, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+        $issue = trim($validated['issue']);
+        $type = trim($validated['typeprint']);
+        $issueColor = trim($validated['issue_color']);
+        $companyIssue = $validated['company_issue'] ?? null;
+        $openBracketsCount = 0;
+        $closeBracketsCount = 0;
+
+        foreach ($conceptConditions as $condition) {
+            if ($condition == '(') {
+                $openBracketsCount++;
+            } elseif ($condition == ')') {
+                $closeBracketsCount++;
+            }
+        }
+
+        if ($openBracketsCount !== $closeBracketsCount) {
+            return back()->withErrors(['concept_conditions' => 'Unbalanced parentheses in the concept conditions.']);
+        }
+
+        $postfixExpression = convertToPostfix($conceptConditions);
+
+
+        $clientId = $request->input('clientid');
+        $issueId = $request->input('issue_id', 0);
+  
+    
+            $result = DB::connection('mysql3')->select(
+                'CALL pm_issueoperations(?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                [
+                    $issueId,
+                    $issue,
+                    $type,
+                    $clientId,
+                    $conceptConditionsString,
+                    $postfixExpression,
+                    $issueId == 0 ? 'add' : 'modify',
+                    $issueColor,
+                    $companyIssue,
+                ]
+            );
+       
+      
+
+        if ($result[0]->success == 0) {
+            return response()->json(['error' => 'Issue already exists'], 200);
+        }
+
+        return response()->json(['status'=>true,'message' => $issueId == 0 ? 'Issue Added' : 'Issue Modified']);
+    }
     public function editIssue($id)
     {
         $issue = DB::connection('mysql3')->table('wm_issue')->find($id);
@@ -1326,6 +1391,25 @@ class ClientsProfile extends Controller
                 'color' => $issue->color,
                 'type' => $issue->type,
                 'tracking' => $issue->tracking,
+                'companyissue' => $issue->companyissue,
+                'id' => $issue->id,
+                'conceptcondition' => $issue->conceptcondition,
+                'postfixexpression' => $issue->postfixexpression
+            ]);
+        } else {
+            return response()->json(['error' => 'Issue not found'], 404);
+        }
+    }
+    public function editPrintIssue($id)
+    {
+     
+        $issue = DB::connection('mysql3')->table('pm_issue')->find($id);
+        return $issue;
+        if ($issue) {
+            return response()->json([
+                'name' => $issue->name,
+                'color' => $issue->color,
+                'type' => $issue->type,
                 'companyissue' => $issue->companyissue,
                 'id' => $issue->id,
                 'conceptcondition' => $issue->conceptcondition,
@@ -1359,6 +1443,30 @@ class ClientsProfile extends Controller
             return response()->json(['error' => 'Failed to delete issue', 'message' => $e->getMessage()]);
         }
     }
+    public function deletePrintIssue($id, Request $request)
+    {
+
+        $clientid = $request->clientid;
+        $userid = $request->user_id;
+        try {
+            DB::connection('mysql3')->statement('CALL pm_issueoperations(?, ?, ?, ?, ?, ?, ?, ?, ?)', [
+                $id,
+                '',
+                '',
+                $clientid,
+                '',
+                '',
+                'delete',
+                '',
+                0
+            ]);
+            Log::info("Issue deleted. Client ID: $clientid, User ID: $userid");
+            return response()->json(['success' => 'Issue Deleted']);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['error' => 'Failed to delete issue', 'message' => $e->getMessage()]);
+        }
+    }
     public function enableDisableIssue($id, Request $request)
     {
 
@@ -1368,6 +1476,32 @@ class ClientsProfile extends Controller
             $action = 'enabled';
 
             DB::statement('CALL sp_issueoperations(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [
+                $id,
+                '',
+                '',
+                $clientid,
+                '',
+                '',
+                $action,
+                '',
+                0
+            ]);
+            Log::info("Issue Enabled or Disabled successfully. Client ID: $clientid, User ID: $userid");
+            return response()->json(['success' => 'Issue Deleted']);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['error' => 'Failed to enable/disable issue', 'message' => $e->getMessage()]);
+        }
+    }
+    public function enableDisableIssuePrint($id, Request $request)
+    {
+
+        $clientid = $request->clientid;
+        $userid = $request->user_id;
+        try {
+            $action = 'enabled';
+
+            DB::statement('CALL pm_issueoperations(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [
                 $id,
                 '',
                 '',
@@ -1603,4 +1737,30 @@ class ClientsProfile extends Controller
             return response()->json(['success' => 'Concept Renamed']);
         }
     }
+    public function storeIssue(Request $request)
+{
+ 
+    $issueName = trim($request->input('IssueName'));
+
+    $existingIssue = DB::table('wm_company_issue')
+    ->where('name', $issueName)
+    ->first();
+    $result = '';
+    if (!$existingIssue) {
+        DB::table('wm_company_issue')->insert([
+            'name' => $issueName
+        ]);
+
+        $issues = DB::table('wm_company_issue')
+                    ->orderBy('name')
+                    ->get();
+
+        foreach ($issues as $issue) {
+            $result .= '<option value="' . $issue->id . '">' . $issue->name . '</option>';
+        }
+        return  $result;
+    } else {
+        return false;
+    }
+}
 }

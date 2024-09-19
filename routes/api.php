@@ -47,10 +47,15 @@ Route::controller(ClientsProfile::class)->group(function () {
     Route::delete('/deleteConcept',  'deleteConcept')->name('deleteConcept');
     Route::delete('/deletePrintConcept',  'deletePrintConcept')->name('deletePrintConcept');
     Route::post('/saveissue',  'saveIssue')->name('save.issue');
+    Route::post('/saveprintissue',  'savePrintIssue')->name('save.print.issue');
     Route::get('/issues/{issueId}/edit',  'editIssue')->name('editIssue');
+    Route::get('/issuesprint/{issueId}/edit',  'editPrintIssue')->name('editPrintIssue');
     Route::delete('/delete-issue/{id}',  'deleteIssue')->name('deleteIssue');
+    Route::delete('/delete-issue-print/{id}',  'deletePrintIssue')->name('deletePrintIssue');
     Route::post('/enableDisableIssue/{id}',  'enableDisableIssue')->name('enableDisableIssue');
+    Route::post('/enableDisableIssuePrint/{id}',  'enableDisableIssuePrint')->name('enableDisableIssuePrint');
     Route::post('/addConceptPrint',  'addConceptPrint')->name('addConceptPrint');
+    Route::post('/storeissue',  'storeIssue')->name('storeIssue');
 });
 
 Route::post('/filter',[FilterController::class,'filter'])->name('filter');

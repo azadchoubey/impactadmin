@@ -29,7 +29,7 @@
     </div>
     <form id="issueadd">
         <div class="bg-white p-4 rounded mb-4">
-        <input type="hidden" id="postfix-expression" name="postfix_expression" />
+            <input type="hidden" id="postfix-expression" name="postfix_expression" />
 
             <textarea id="concept-input" name="concept_conditions" class="w-full text-sm h-24 p-2 border border-gray-300 rounded" placeholder="Type your concept here..."></textarea>
         </div>
@@ -55,7 +55,7 @@
             </div>
             <div class="flex items-center gap-4">
                 <div class="flex items-center text-sm">Company Issue:</div>
-                <select name="company_issue" class="border border-gray-300 rounded p-1 text-sm">
+                <select id= "company_issue" name="company_issue" class="border border-gray-300 rounded p-1 text-sm">
                     <option value="">--company--</option>
                     @foreach ($issues as $issue)
                     <option value="{{ $issue->id }}">{{ $issue->name }}</option>
@@ -67,7 +67,7 @@
 
 
         <div class="text-center">
-            <button id="saveissue" class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">Save</button>
+            <button id="saveissue" class="bg-indigo-500 hover:bg-indigo-700 text-white text-xs py-2 px-4 rounded">Save</button>
         </div>
     </form>
     <div class="container mx-auto p-1 max-w-6xl">
@@ -96,12 +96,12 @@
                     </div>
                     <div class="w-1/6 p-1">{{$getissueforclient->companyissue}}</div>
                     <div class="w-1/6 p-1 flex justify-center gap-2">
-                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded" onclick="editIssue({{$getissueforclient->id}})">Edit</button>
-                        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded" onclick="deleteIssue({{$getissueforclient->id}})">Delete</button>
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white text-xs py-1 px-2 rounded" onclick="editIssue({{$getissueforclient->id}})">Edit</button>
+                        <button class="bg-red-500 hover:bg-red-700 text-white text-xs py-1 px-2 rounded" onclick="deleteIssue({{$getissueforclient->id}})">Delete</button>
                         @if($getissueforclient->enabled == 1)
-                        <button class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-1 px-2 rounded" onclick="enableDisableIssue({{$getissueforclient->id}}, 'Disable')" >Disable</button>
+                        <button class="bg-orange-500 hover:bg-orange-700 text-white text-xs py-1 px-2 rounded" onclick="enableDisableIssue({{$getissueforclient->id}}, 'Disable')">Disable</button>
                         @else
-                    <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded" onclick="enableDisableIssue({{$getissueforclient->id}},'Enable')">Enable</button>
+                        <button class="bg-green-500 hover:bg-green-700 text-white text-xs py-1 px-2 rounded" onclick="enableDisableIssue({{$getissueforclient->id}},'Enable')">Enable</button>
                         @endif
                     </div>
 
@@ -114,15 +114,15 @@
     <div id="addCompanyModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
         <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
             <h2 class="text-lg font-semibold mb-4">Company String:</h2>
-            <form id="addCompanyForm">
+            <form id="addCompanyForm" >
                 @csrf <!-- CSRF token for Laravel -->
                 <div class="mb-4">
                     <label for="companyName" class="block text-sm font-medium text-gray-700">Name</label>
                     <input type="text" id="companyName" name="companyName" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" required>
                 </div>
                 <div class="flex justify-end gap-2">
-                    <button type="button" id="cancelButton" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Cancel</button>
-                    <button type="submit" class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">Add</button>
+                    <button type="button" id="cancelButton" class="bg-gray-500 hover:bg-gray-700 text-white text-xs py-2 px-4 rounded">Cancel</button>
+                    <button type="submit" class="bg-indigo-500 hover:bg-indigo-700 text-white text-xs py-2 px-4 rounded">Add</button>
                 </div>
             </form>
         </div>
@@ -130,147 +130,167 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const $inputBox = $('#concept-input');
-    const $postfixInput = $('#postfix-expression');
-    let lastConcept = null;
-    let lastComplexConcept = null;
-    let lastLogicalOp = null;
-    let postfixParts = []; 
-  
-    function updateInput(value, id, isConcept) {
-    let currentValue = $inputBox.val().trim();
-    
-    // Initialize postfixParts with the current postfix expression
-    postfixParts.push($postfixInput.val().trim());
+    document.addEventListener('DOMContentLoaded', () => {
+        const $inputBox = $('#concept-input');
+        const $postfixInput = $('#postfix-expression');
+        let lastConcept = null;
+        let lastComplexConcept = null;
+        let lastLogicalOp = null;
+        let postfixParts = [];
 
-    if (value === "C") {
-        // Clear input and reset state
-        $inputBox.val('');
-        postfixParts = [];
-        $postfixInput.val('');
-        lastConcept = null;
-        lastComplexConcept = null;
-        lastLogicalOp = null;
-        return;
-    }
+        function updateInput(value, id, isConcept) {
+            let currentValue = $inputBox.val().trim();
 
-    if (["(", ")"].includes(value)) {
-        // Handle parentheses
-        if (value === "(" && !currentValue) {
-            // Allow open bracket at the start
-            currentValue = ` ${value} `;
-            postfixParts.push(value);
-        } else if (value === ")" && (lastConcept || lastComplexConcept)) {
-            // Handle closing bracket
-            currentValue += ` ${value} `;
-            postfixParts.push(value);
-            lastLogicalOp = null;
-        }
-    } else if (["and", "or", "not"].includes(value)) {
-        // Handle logical operators
-        if (lastLogicalOp || (!lastConcept && !lastComplexConcept)) {
-            return;
-        }
-        lastLogicalOp = value;
-        currentValue += ` ${value} `;
-        postfixParts.push(value);
-    } else {
-        // Handle concepts
-        if ((lastConcept == value) || (lastComplexConcept == value)) {
-            return;
-        }
-        if (isConcept) {
-            postfixParts.push(id);
-            currentValue += ` ${value} `;
-        } else {
-            postfixParts.push(id);
-            currentValue += ` ${value} `;
-        }
-        lastConcept = isConcept ? value : null;
-        lastComplexConcept = isConcept ? null : value;
-        lastLogicalOp = null;
-    }
+            // Initialize postfixParts with the current postfix expression
+            postfixParts.push($postfixInput.val().trim());
 
-    $inputBox.val(currentValue.trim());
-    $postfixInput.val(postfixParts.join(' '));
-}
-
-    $('.concept-option').on('click', function () {
-        const value = $(this).data('value');
-        const id = $(this).data('id');
-        if (lastConcept == value) return;
-
-        $('.concept-option').removeClass('bg-gray-300');
-        $(this).addClass('bg-gray-300');
-
-        updateInput(value, id, true);
-    });
-
-    $('.complex-concept-option').on('click', function () {
-        const value = $(this).data('value');
-        const id = $(this).data('id');
-        if (lastComplexConcept) return;
-
-        $('.complex-concept-option').removeClass('bg-gray-300');
-        $(this).addClass('bg-gray-300');
-
-        updateInput(value, id, false);
-    });
-
-    $('.logical-op-button').on('click', function () {
-        const value = $(this).data('value');
-        updateInput(value, null, false);
-    });
-
-    $('a[href="#"]').on('click', function (e) {
-        e.preventDefault();
-        $('#addCompanyModal').removeClass('hidden');
-    });
-
-    $('#cancelButton').on('click', function () {
-        $('#addCompanyModal').addClass('hidden');
-    });
-
-    $('#addCompanyForm').on('submit', function (e) {
-        e.preventDefault();
-        const companyName = $('#companyName').val();
-        $('#addCompanyModal').addClass('hidden');
-        alert(`Company "${companyName}" added successfully!`);
-    });
-
-    $('#issueadd').on('submit', function (e) {
-        e.preventDefault();
-        let form = new FormData(this);
-        form.append('clientid', '{{ $clientid }}');
-        $.ajax({
-            url: `{{ route('save.issue') }}`,
-            type: 'POST',
-            data: form,
-            processData: false,
-            contentType: false,
-            success: function (result) {
-                if (result.status) {
-                    alert(result.message);
-                    window.location.href = "{{ route('client') }}";
-                } else {
-                    alert(result.error);
-                   // window.location.reload();
-                }
-            },
-            error: function (xhr, status, error) {
-                if (xhr.status === 422) {
-                    var errors = xhr.responseJSON.errors;
-                    displayValidationErrors(errors);
-                } else {
-
-                    console.error('Error saving issue:', error.error);
-                }
+            if (value === "C") {
+                // Clear input and reset state
+                $inputBox.val('');
+                postfixParts = [];
+                $postfixInput.val('');
+                lastConcept = null;
+                lastComplexConcept = null;
+                lastLogicalOp = null;
+                return;
             }
+
+            if (["(", ")"].includes(value)) {
+                // Handle parentheses
+                if (value === "(" && !currentValue) {
+                    // Allow open bracket at the start
+                    currentValue = ` ${value} `;
+                    postfixParts.push(value);
+                } else if (value === ")" && (lastConcept || lastComplexConcept)) {
+                    // Handle closing bracket
+                    currentValue += ` ${value} `;
+                    postfixParts.push(value);
+                    lastLogicalOp = null;
+                }
+                lastConcept = null;
+                lastComplexConcept = null;
+            } else if (["and", "or", "not"].includes(value)) {
+                // Handle logical operators
+                if (lastLogicalOp != 'null' || (!lastConcept && !lastComplexConcept)) {
+                    return;
+                }
+                lastLogicalOp = value;
+                currentValue += ` ${value} `;
+                postfixParts.push(value);
+                lastConcept = null;
+                lastComplexConcept = null;
+            } else {
+                // Handle concepts
+
+                if ((lastConcept == value) || (lastComplexConcept == value)) {
+                    return;
+                }
+                if (isConcept) {
+                    postfixParts.push(id);
+                    currentValue += ` ${value} `;
+                } else {
+                    postfixParts.push(id);
+                    currentValue += ` ${value} `;
+                }
+                lastConcept = isConcept ? value : null;
+                lastComplexConcept = isConcept ? null : value;
+                lastLogicalOp = 'null';
+            }
+
+            $inputBox.val(currentValue.trim());
+            $postfixInput.val(postfixParts.join(' '));
+        }
+
+        $('.concept-option').on('click', function() {
+            const value = $(this).data('value');
+            const id = $(this).data('id');
+            if (lastConcept == value) return;
+            if (lastLogicalOp == 'null') return;
+            $('.concept-option').removeClass('bg-gray-300');
+            $(this).addClass('bg-gray-300');
+
+            updateInput(value, id, true);
         });
+
+        $('.complex-concept-option').on('click', function() {
+            const value = $(this).data('value');
+            const id = $(this).data('id');
+            if (lastComplexConcept == value) return;
+            if (lastLogicalOp == 'null') return;
+            $('.complex-concept-option').removeClass('bg-gray-300');
+            $(this).addClass('bg-gray-300');
+
+            updateInput(value, id, false);
+        });
+
+        $('.logical-op-button').on('click', function() {
+            const value = $(this).data('value');
+            updateInput(value, null, false);
+        });
+
+        $('a[href="#"]').on('click', function(e) {
+            e.preventDefault();
+            $('#addCompanyModal').removeClass('hidden');
+        });
+
+        $('#cancelButton').on('click', function() {
+            $('#addCompanyModal').addClass('hidden');
+        });
+
+        $('#addCompanyForm').on('submit', function(e) {
+            e.preventDefault();
+            const IssueName = $('#companyName').val();
+            if (IssueName == '') {
+                alert("Issue name is empty!");
+                return;
+            } else {
+                $.post(`{{route('storeIssue')}}`, {
+                    IssueName: IssueName
+                }, function(response) {
+                    if (!response) {
+                        alert("Already Added!");
+                    } else {
+                        $('#company_issue').html(response);
+                        alert(`Company "${IssueName}" added successfully!`);
+                    }
+                    $('#addCompanyModal').addClass('hidden');
+                });
+            }
+           
+        });
+
+        $('#issueadd').on('submit', function(e) {
+       
+            e.preventDefault();
+            let form = new FormData(this);
+            form.append('clientid', '{{ $clientid }}');
+            $.ajax({
+                url: `{{ route('save.issue') }}`,
+                type: 'POST',
+                data: form,
+                processData: false,
+                contentType: false,
+                success: function(result) {
+                    if (result.status) {
+                        alert(result.message);
+                        window.location.href = "{{ route('client') }}";
+                    } else {
+                        alert(result.error);
+                        // window.location.reload();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    if (xhr.status === 422) {
+                        var errors = xhr.responseJSON.errors;
+                        displayValidationErrors(errors);
+                    } else {
+
+                        console.error('Error saving issue:', error.error);
+                    }
+                }
+            });
+        });
+
+       
     });
-   
-});
-
-
 </script>
