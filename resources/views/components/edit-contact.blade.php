@@ -216,6 +216,7 @@
                                     <div class="w-1/3 px-2 py-2 border border-gray-400">Action</div>
                                 </div>
                                 @php
+                                $weekformats = $formats;
                                 if($contact->delivery->isNotEmpty()){
                                 $formats = $contact->delivery->pluck('format')->implode(', ');
                                 }else{
@@ -249,6 +250,72 @@
                         </div>
                     </div>
                 </fieldset>
+                <fieldset class="border border-gray-300 p-2 rounded-lg">
+                    <legend class="text-sm font-medium text-gray-900">Weekend Custom Digest</legend>
+                    <div class="flex flex-wrap justify-between items-center">
+                        <div id="editSection1{{$contact->contactid}}" class="hidden w-full flex flex-wrap justify-between">
+                        <div class="w-full sm:w-1/4 mb-4 sm:mb-0">
+                            <label for="format" class="block text-sm font-medium text-gray-700">Format</label>
+                            <select name="weekendformat" onchange="selectFormat1(this.value,'{{$contact->contactid}}')" id="weekendformat" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option value="">Select format</option>
+                                @foreach($weekformats as $format)
+                                <option value="{{$format->format}}" data-delivery="{{$format->deliverymethod}}">{{$format->format_name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="w-full sm:w-1/4 mb-4 sm:mb-0">
+                            <label for="weekend_delivery_method_week" class="block text-sm font-medium text-gray-700">Delivery Method</label>
+                            <select name="weekenddeliveryid[]" id="delivery_method_week" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option value="">Select delivery method(s)</option>
+                                @foreach($deliverymaster as $delivery)
+                                <option value="{{ $delivery->id }}">{{ $delivery->deliverytime }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="w-full sm:w-auto">
+                            <button onclick="event.preventDefault(); saveChanges1({{$contact->contactid}})" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+                                Back
+                            </button>
+                        </div>
+                    </div>
+                    <div id="displaySection1{{$contact->contactid}}" class="w-full text-sm font-medium">
+                        <div class="border border-gray-400">
+                            <div class="flex">
+                                <div class="w-1/3 px-2 py-2 border border-gray-400">Formats</div>
+                                <div class="w-1/3 px-2 py-2 border border-gray-400">Timings</div>
+                                <div class="w-1/3 px-2 py-2 border border-gray-400">Action</div>
+                            </div>
+                            @php
+                            if($contact->deliveryweekend->isNotEmpty()){
+                            $formats = $contact->deliveryweekend->pluck('format')->implode(', ');
+                            }else{
+                            $formats = $contact->deliveryweekend;
+                            }
+                            @endphp
+                            @php
+                            $deliveryTimes = $contact->deliveryweekend->pluck('deliveryformats.deliverytime')->implode(', ');
+                            @endphp
+                            @if(count($contact->deliveryweekend) > 0 )
+                            <div class="flex">
+                                <div class="w-1/3 px-2 py-2 border border-gray-400">P{{$formats}}</div>
+                                <div class="w-1/3 px-2 py-2 border border-gray-400">{{$deliveryTimes}}</div>
+                                <div class="w-1/3 px-2 py-2 border border-gray-400">
+                                    <button onclick="event.preventDefault(); toggleEditSection1({{$contact->contactid}})" class="text-blue-600 hover:text-blue-800">Edit</button>
+                                </div>
+                            </div>
+                            @else
+                            <div class="flex">
+                                <div class="w-1/3 px-2 py-2 border border-gray-400">No Digest Found</div>
+                                <div class="w-1/3 px-2 py-2 border border-gray-400"></div>
+                                <div class="w-1/3 px-2 py-2 border border-gray-400">
+                                    <button onclick="event.preventDefault(); toggleEditSection1({{$contact->contactid}})" class="text-blue-600 hover:text-blue-800">Edit</button>
+                                </div>
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                </fieldset>
+                
         <fieldset class="border border-gray-300 p-2 rounded-lg">
             <legend class="text-sm font-medium text-gray-900">Web Monitoring Parameters</legend>
             <div class="grid grid-cols-4 gap-4">
@@ -454,9 +521,51 @@
             });
         }
     }
+    function selectFormat1(id, contactid) {
+        if (id !== '') {
+            $.ajax({
+                url: '{{ route("getdeliveryweek") }}',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    id: id,
+                    _token: '{{ csrf_token() }}',
+                    contactid: contactid
+                }),
+                success: function(resultData) {
+                    $('#delivery_method_week option:selected').prop('selected', false);
+                    resultData.forEach(function(data) {
+                        $('#delivery_method_week option[value="' + data + '"]').prop('selected', true);
+                    });
+                },
+                error: function(error) {
+                    alert(error);
+                }
+            });
+        }
+    }
     function toggleEditSection(contactId, close = false) {
         const editSection = document.getElementById('editSection' + contactId);
         const displaySection = document.getElementById('displaySection' + contactId);
+        if (editSection.classList && close) {
+            editSection.classList.add('hidden');
+            displaySection.classList.remove('hidden');
+        } else {
+            if (editSection.classList && editSection.classList.contains('hidden')) {
+                editSection.classList.remove('hidden');
+                displaySection.classList.add('hidden');
+            } else {
+                if(editSection.classList){
+                    editSection.classList.add('hidden');
+                    displaySection.classList.remove('hidden');
+                }
+               
+            }
+        }
+    }
+    function toggleEditSection1(contactId, close = false) {
+        const editSection = document.getElementById('editSection1' + contactId);
+        const displaySection = document.getElementById('displaySection1' + contactId);
         if (editSection.classList && close) {
             editSection.classList.add('hidden');
             displaySection.classList.remove('hidden');
@@ -479,6 +588,12 @@
         // After saving, update the display section with new values and close the edit section
         toggleEditSection(contactId, true);
     }
+    function saveChanges1(contactId) {
+        // Your save logic here
+        // After saving, update the display section with new values and close the edit section
+        toggleEditSection1(contactId, true);
+    }
+
 
     function closeModal(contactId) {
         // Your close modal logic here
