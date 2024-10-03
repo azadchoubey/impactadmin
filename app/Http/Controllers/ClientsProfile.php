@@ -1671,15 +1671,6 @@ class ClientsProfile extends Controller
             $keyword = trim($request->option);
             $query = "CALL pm_keywordoperations(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-<<<<<<< Updated upstream
-            $result= DB::connection('mysql3')->select($query, [
-                $conceptid,  
-                0,           
-                $keyword,    
-                $atleast,    
-                $keyword2,   
-                $within,     
-=======
             $result = DB::select($query, [
                 $conceptid,
                 0,
@@ -1687,7 +1678,6 @@ class ClientsProfile extends Controller
                 $atleast,
                 $keyword2,
                 $within,
->>>>>>> Stashed changes
                 $withinwords,
                 'add',
                 0
