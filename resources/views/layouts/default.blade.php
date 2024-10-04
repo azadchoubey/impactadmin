@@ -20,6 +20,11 @@
     @vite(['resources/css/app.css','resources/js/app.js'])
 
     @yield('style')
+    <style>
+        select:not([size]) {
+            background-image: none;
+        }
+        </style>
 </head>
 
 <body>

@@ -26,6 +26,7 @@ use App\Exports\ClientsExport;
 use App\Models\MediaUniverse;
 use App\Models\MediaUniverseMaster;
 use App\View\Components\ClientMediaUniverse;
+use Illuminate\Support\Facades\Auth;
 
 class ClientsProfile extends Controller
 {
@@ -52,6 +53,30 @@ class ClientsProfile extends Controller
         $data = Clinetprofile::with('contacts', 'contacts.delivery', 'contacts.delivery.deliveryformats', 'contacts.regularDigestPrint', 'contacts.regularDigestWeb', 'Country', 'Region', 'sector', 'keywords', 'billingcycle')->find($decodedId);
         $keywords = $data->keywords;
 
+        $rssFeeds = DB::connection('mysql3')->table('wm_rss_feed as rf')
+        ->leftJoin('wm_rssfeed_client as rc', 'rf.id', '=', 'rc.rssfeed')
+        ->leftJoin('wm_web_universe as wu', 'rf.wm_web_universe_id', '=', 'wu.id')
+        ->leftJoin('wm_type_master as tm', 'wu.type', '=', 'tm.id')
+        ->leftJoin('wm_category_master as cm', 'wu.category', '=', 'cm.id')
+        ->leftJoin('wm_country_master as wcm', 'wu.countryoforigin', '=', 'wcm.id')
+        ->leftJoin('wm_focus_master as fm', 'rf.focus', '=', 'fm.id')
+        ->leftJoin('wm_industry_focus_master as ifm', 'rf.industryfocus', '=', 'ifm.id')
+        ->select(
+            'rc.rssfeed as id',
+            'wu.name as websitename',
+            'rf.name as rssname',
+            'wcm.name as country',
+            'cm.name as category',
+            'tm.name as type',
+            'fm.name as focus',
+            'ifm.name as industryfocus'
+        )
+        ->where('rf.deleted', 0)
+        ->where('wu.deleted', 0)
+        ->where('rc.client', $decodedId)
+        ->orderBy('rf.name')
+        // ->paginate(15, ['*'], 'webuniverse') ;
+        ->get();
         $contacts = $data->contacts;
         $picklist = Picklist::whereIn('Type', ['City', 'Country', 'Delivery Method', 'Sector Summary Delivery', 'contacttype', 'client type', 'client source', 'Region', 'bill cycle', 'client status', 'sector'])->get()->groupBy(function ($query) {
             return strtolower($query->Type);
@@ -61,7 +86,7 @@ class ClientsProfile extends Controller
         $clients = Clinetprofile::where('deleted', '!=', 1)->get();
         $formats = CustomDigestFormat::select('id', 'format', 'format_name')->get();
         $customdelivery = Deliverymethod1::select('id', 'contactid', 'deliveryid', 'format')->get();
-        return view('clients', compact('data', 'getissueforprintclients','issuesprints','complexprintconcepts','getprintissueforclients', 'getissueforclients', 'issues', 'complexconcepts', 'concepts', 'contacts', 'keywords', 'picklist', 'webdeliverymaster', 'deliverymaster', 'clients', 'formats', 'customdelivery'));
+        return view('clients', compact('data','rssFeeds', 'getissueforprintclients','issuesprints','complexprintconcepts','getprintissueforclients', 'getissueforclients', 'issues', 'complexconcepts', 'concepts', 'contacts', 'keywords', 'picklist', 'webdeliverymaster', 'deliverymaster', 'clients', 'formats', 'customdelivery'));
     }
 
     public function edit(Request $request, $id)
@@ -1762,5 +1787,49 @@ class ClientsProfile extends Controller
     } else {
         return false;
     }
+}
+public function rssnames(Request $request){
+    $request->validate([
+        'rssname' => 'required|string',
+    ]);
+
+    $txtsearch = $request->input('rssname');
+    $rssFeeds = DB::connection('mysql3')->table('wm_web_universe as wu')
+    ->leftJoin('wm_rss_feed as rf', 'wu.id', '=', 'rf.wm_web_universe_id')
+    ->select(
+        'rf.id as id',
+        DB::raw("concat(wu.name, '/', rf.name) as name"),
+        'rf.url as url'
+    )
+    ->where('wu.name', 'like', $txtsearch . '%')
+    ->where('rf.deleted', 0)
+    ->where('wu.deleted', 0)
+    ->orderBy('name')
+    ->get();    return response()->json($rssFeeds);
+}
+public function saveSelectedRssFeeds(Request $request)
+{
+    $selectedItems = $request->input('selectedItems');
+    $clinetid = $request->input('clientid');   
+    foreach ($selectedItems as $newrssid) {
+        $exists = DB::table('wm_rssfeed_client')
+                    ->where('client', $clinetid)
+                    ->where('rssfeed', $newrssid)
+                    ->exists();
+
+        if (!$exists) {
+            DB::table('wm_rssfeed_client')->insert([
+                'rssfeed' => $newrssid,
+                'client' => $clinetid,
+            ]);
+            Log::info('Rss feed added to client id: ' . $clinetid . ' with rss feed id: ' . $newrssid. ' by user id: ' .auth()->UserID);
+        }else{
+            Log::info('Rss feed already exist in client id: ' . $clinetid . ' with rss feed id: ' . $newrssid. ' by user id: ' .auth()->UserID);
+            return response()->json(['status'=>false,'message' => 'Rss feed already exist.'], 409);
+
+        }
+    }
+
+    return response()->json(['status'=>true,'message' => 'Process completed. New RSS feeds added if they did not exist.'], 201);
 }
 }

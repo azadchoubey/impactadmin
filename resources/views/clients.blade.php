@@ -73,7 +73,7 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                     <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="print-issue-conceptkeywords-tab" data-tabs-target="#printissueconceptkeywords" type="button" role="tab" aria-controls="printissueconceptkeywords" aria-selected="false">Print Issues/Concepts/Keywords</button>
                 </li>
                 <li class="me-2" role="presentation">
-                    <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="web-universe-tab" data-tabs-target="#webuniverse" type="button" role="tab" aria-controls="webuniverse" aria-selected="false">Web Universe</button>
+                    <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="web-universe-tab" data-tabs-target="#webuniverse" type="button" role="tab" aria-controls="webuniverse" aria-selected="{{  request()->query('webuniverse') ? 'true' : 'false' }}">Web Universe</button>
                 </li>
                 @endif
             </ul>
@@ -475,10 +475,11 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                     <div id="subtab4" role="tabpanel" aria-labelledby="sub-tab-3">
                         <!-- Sub Tab 3 content -->
                     </div>
+
                 </div>
             </div>
             <div id="webuniverse" role="tabpanel" aria-labelledby="web-universe-tab">
-                <!-- Web Universe content -->
+                <x-client-web-universe :clientid="$data->ClientID" :rssFeeds="$rssFeeds" />
             </div>
             <div id="printissueconceptkeywords" role="tabpanel" aria-labelledby="print-issue-conceptkeywords-tab">
                 <!-- Print Issues/Concepts/Keywords content with submenu -->
@@ -507,9 +508,10 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                     </div>
                 </div>
             </div>
+
             @endif
             <div id="large-modal" wire:ignore tabindex="-1" class="fixed top-0 left-60 right-0 z-50 w-full p-4 hidden overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                <div class="relative w-full max-w-4xl max-h-full">
+                <div class="relative w-full max-w-5xl max-h-full">
                     <!-- Modal content -->
 
                     <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -603,7 +605,7 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
             <x-createkeyword :keywordtypes="$keywordtypes" :keywordcategories="$keywordcategories" />
 
             <div id="large-modal2" tabindex="-1" class="fixed top-0 left-60 right-0 z-50 w-full p-4 hidden overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-                <div class="relative w-lg max-w-4xl max-h-full">
+                <div class="relative w-lg max-w-5xl max-h-full">
 
                     <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                         <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
@@ -1065,6 +1067,7 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                 }
             });
         }
+
         function editIssue1(issueId) {
             const baseUrl = `{{ route('editPrintIssue', ['issueId' => '__issueId__']) }}`;
             const url = baseUrl.replace('__issueId__', issueId);
@@ -1440,6 +1443,7 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
 
 
         }
+
         function deleteIssue1(id) {
             if (confirm('Are you sure you want to delete this issue?')) {
                 $.ajax({
@@ -1493,6 +1497,7 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
 
 
         }
+
         function enableDisableIssue1(id, action) {
             if (confirm('Are you sure you want to ${action} this issue?')) {
                 $.ajax({
@@ -1951,6 +1956,27 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                     closeModal('editOptionModal_1');
                 }
             });
+            $('#clientwebuniverse').DataTable({
+                pagingType: 'first_last_numbers',
+                layout: {
+                    topStart: {
+                        buttons: [{
+                                text: '<div class="flex items-center" data-modal-target="addclientwebuniverse" data-modal-toggle="addclientwebuniverse"><svg class="h-4 w-4 text-white-600 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg> Add</div>',
+                                className: 'px-3 py-2 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800',
+                            },
+                            {
+                                text: '<div class="flex items-center"><svg class="h-4 w-4 text-white-600 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 1-7.07 2.93l7.07 7.07 1.41-1.41-7.07-7.07A10 10 0 0 1 12 2z"/></svg> Regenrate</div>',
+                                className: 'px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800',
+                            },
+                            {
+                                text: '<div class="flex items-center"><svg class="h-4 w-4 text-white-600 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M6 6v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V6"/><path d="M14 6V4a2 2 0 1 0-4 0v2"/></svg> Delete</div>',
+                                className: 'px-3 py-2 text-xs font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800',
+                            }
+                        ]
+
+                    }
+                }
+            });
 
             function closeModal(modalId) {
                 // console.log(modalId);
@@ -2114,6 +2140,74 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                 }
 
             });
+        $("#address").on("submit", function(e) {
+        e.preventDefault();
+        document.getElementById('processModal').classList.remove('hidden');
+        document.getElementById('addclientwebuniverse').classList.add('hidden');
+
+        $('#resultsBody').empty();
+
+        $.ajax({
+            url: $(this).attr('action'), 
+            method: 'POST',
+            data: $(this).serialize(), 
+            success: function(data) {
+                document.getElementById('addclientwebuniverse').classList.remove('hidden');
+                document.getElementById('processModal').classList.add('hidden');
+                $('.saverss').removeClass('hidden');
+                if (data.length > 0) {
+                    $.each(data, function(index, item) {
+                        $('#resultsBody').append(`
+                            <tr>
+                                <td class="border px-4 py-2"><input type="checkbox" name="selectedItems[]" value="${item.id}" class="checkbox-class" /></td>
+                                <td class="border px-4 py-2">${item.name}</td>
+                                <td class="border px-4 py-2">${item.url}</td>
+                            </tr>
+                        `);
+                    });
+                } else {
+                    $('#resultsBody').append(`
+                        <tr>
+                            <td colspan="3" class="border px-4 py-2 text-center">No results found</td>
+                        </tr>
+                    `);
+                }
+            },
+            error: function(xhr) {
+                // Handle any errors
+                console.error(xhr);
+                alert('An error occurred while fetching results.');
+            }
+        });
+    });
+
+    $("#saverssButton").on("click", function() {
+        const selectedItems = $("input[name='selectedItems[]']:checked").map(function() {
+            return $(this).val();
+        }).get();
+
+        if (selectedItems.length === 0) {
+            alert('Please select at least one RSS feed to save.');
+            return;
+        }
+        $.ajax({
+            url: "{{ route('saveSelectedRssFeeds') }}",
+            method: 'POST',
+            data: {
+                selectedItems: selectedItems,
+                _token: '{{ csrf_token() }}',
+                clientid:`{{$data->ClientID}}`
+            },
+            success: function(response) {
+                alert('Selected RSS feeds saved successfully!');
+                window.location.reload();
+            },
+            error: function(xhr) {
+                console.error(xhr);
+                alert('An error occurred while saving selected RSS feeds.');
+            }
+        });
+    });
         });
 
         function handleFormSubmit1(event, formType) {

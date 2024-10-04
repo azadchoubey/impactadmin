@@ -1,5 +1,5 @@
 <div id="large-modal{{$contact->contactid}}" tabindex="-1" class="fixed top-0 left-60 right-0 z-50 w-full hidden overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-    <div class="relative w-lg max-w-4xl max-h-full">
+    <div class="relative w-lg max-w-5xl max-h-full">
         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
             <div class="sticky top-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-600 z-50">
                 <div class="flex items-center justify-between py-2 md:p-3 rounded-t">

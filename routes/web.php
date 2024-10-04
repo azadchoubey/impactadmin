@@ -15,6 +15,7 @@ use App\Http\Controllers\ClientsProfile;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\KeywordController;
+use App\Http\Controllers\WebUniverse;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,7 +56,7 @@ Route::get('/export-client-details', [ClientsProfile::class, 'exportDetails'])->
 Route::get('/export-brand-strings', [ClientsProfile::class, 'exportBrandStrings'])->name('clients.exportBrandStrings');
 Route::post('/update-checkbox', [ClientsProfile::class, 'updateCheckbox'])->name('update.checkbox');
 Route::get('/media/universe/content', [ClientsProfile::class, 'loadMediaUniverseContent'])->name('loadMediaUniverseContent');
-
+Route::post('/saveSelectedRssFeeds', [ClientsProfile::class, 'saveSelectedRssFeeds'])->name('saveSelectedRssFeeds');
 
 
 
@@ -76,6 +77,9 @@ Route::post('/addcomment', [ClientsProfile::class, 'addComment'])->name('addcomm
 
 //report download 
 Route::get('/downloadmediauniverse',[ClientsProfile::class,'downloadMediaUniverseReport'])->name('downloadmediauniverse');
+
+Route::get('/webuniverse',[WebUniverse::class,'index'])->name('webuniverse');
+Route::get('/webuniverse/{id}',[WebUniverse::class,'view'])->name('webuniverse.view');
 
 
 Route::get('/test',function(){

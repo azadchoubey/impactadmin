@@ -1,4 +1,4 @@
-<div class="complex-concepts-container container mx-auto p-2 rounded-lg space-y-8 mb-4 max-w-6xl">
+<div class="complex-concepts-container container mx-auto p-2 rounded-lg space-y-8 mb-4 max-w-5xl">
     <!-- Section to display saved complex concepts -->
     <div id="saved-complex-concepts-box" class="box saved-complex-concepts bg-white border border-gray-300 rounded-lg p-2 shadow max-h-60 overflow-auto">
         <h3 class="text-sm font-semibold mb-4">Saved Complex Concepts</h3>

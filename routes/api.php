@@ -56,6 +56,8 @@ Route::controller(ClientsProfile::class)->group(function () {
     Route::post('/enableDisableIssuePrint/{id}',  'enableDisableIssuePrint')->name('enableDisableIssuePrint');
     Route::post('/addConceptPrint',  'addConceptPrint')->name('addConceptPrint');
     Route::post('/storeissue',  'storeIssue')->name('storeIssue');
+    Route::post('/rssnames',  'rssnames')->name('rssnames');
+    
 });
 
 Route::post('/filter',[FilterController::class,'filter'])->name('filter');

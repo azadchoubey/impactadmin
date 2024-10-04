@@ -1,4 +1,4 @@
-<div class="container mx-auto p-4 max-w-6xl">
+<div class="container mx-auto p-4 max-w-5xl">
     <div class="bg-white text-black border border-black p-4 rounded mb-4">
         <h2 class="text-sm font-semibold mb-2">Concept</h2>
         <div class="flex flex-wrap gap-2">
@@ -68,7 +68,7 @@
         </div>
     </form>
 
-    <div class="container mx-auto p-1 max-w-6xl">
+    <div class="container mx-auto p-1 max-w-5xl">
         <h2 class="text-sm font-semibold mb-4">Existing Issues:</h2>
         <div class="bg-white border border-gray-300 rounded-lg shadow overflow-hidden">
             <div class="text-sm flex bg-gray-100 text-gray-800 font-semibold p-1">

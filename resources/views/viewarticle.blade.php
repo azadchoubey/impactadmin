@@ -221,7 +221,7 @@
             const keyword = request.term.trim();
             if (keyword.length >= 2) {
                 $.ajax({
-                    url: '/api/keywordlist',
+                    url: `{{route('keywords.list')}}`,
                     method: 'GET',
                     data: {
                         keyword: keyword
@@ -267,7 +267,7 @@
         $('#keywordid').val(keyID);
         $('#autocomplete-list').hide();
         $.ajax({
-            url: '/api/keywordClients',
+            url: `{{route('keywords.clients')}}`,
             method: 'GET',
             data: {
                 keyid: keyID
