@@ -24,4 +24,7 @@ class ClinetContacts extends Model
     public function regularDigestWeb(){
         return $this->hasMany(Wmwebdeliverymethod::class,'contactid','contactid');
     }
+    public function deliveryweekend(){
+        return $this->hasMany(CustomDigestWeekend::class,'contactid','contactid');
+    }
 }

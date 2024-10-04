@@ -6,6 +6,7 @@ use App\Models\ClinetContacts;
 use App\Models\Clinetprofile;
 use App\Models\ContactSector;
 use App\Models\CustomDigestFormat;
+use App\Models\CustomDigestWeekend;
 use App\Models\Deliverymethod1;
 use App\Models\Deliverymethodmaster;
 use App\Models\Mongo\ClientContact;
@@ -50,7 +51,7 @@ class ClientsProfile extends Controller
         $query = 'CALL pm_getconceptsforclient(?, ?)';
         $getprintissueforclients = DB::connection('mysql3')->select($query, [$decodedId, '0']);
 
-        $data = Clinetprofile::with('contacts', 'contacts.delivery', 'contacts.delivery.deliveryformats', 'contacts.regularDigestPrint', 'contacts.regularDigestWeb', 'Country', 'Region', 'sector', 'keywords', 'billingcycle')->find($decodedId);
+        $data = Clinetprofile::with('contacts', 'contacts.delivery','contacts.deliveryweekend', 'contacts.deliveryweekend.deliveryformats','contacts.delivery.deliveryformats', 'contacts.regularDigestPrint', 'contacts.regularDigestWeb', 'Country', 'Region', 'sector', 'keywords', 'billingcycle')->find($decodedId);
         $keywords = $data->keywords;
 
         $rssFeeds = DB::connection('mysql3')->table('wm_rss_feed as rf')
@@ -93,9 +94,9 @@ class ClientsProfile extends Controller
     {
         $request->validate(
             [
-                'Name'  => 'required',
-                'Currency'  => 'alpha',
-                'Mobile'  => 'regex:/^[0-9]{10}$/',
+                'Name' => 'required',
+                'Currency' => 'alpha',
+                'Mobile' => 'regex:/^[0-9]{10}$/',
             ],
         );
         $clientProfile = Clinetprofile::findOrFail($id);
@@ -165,6 +166,13 @@ class ClientsProfile extends Controller
 
         return response()->json($deliveryTimes);
     }
+    public function getDeliveryTimesweek(Request $request)
+    {
+
+        $deliveryTimes = CustomDigestWeekend::where(['format' => $request->id, 'contactid' => $request->contactid])->pluck('deliveryid');
+
+        return response()->json($deliveryTimes);
+    }
 
     public function getSubsectors($industry)
     {
@@ -179,9 +187,9 @@ class ClientsProfile extends Controller
     {
         $request->validate(
             [
-                'Name'  => 'required',
-                'Currency'  => 'required|alpha',
-                'Mobile'  => 'required|regex:/^[0-9]{10}$/',
+                'Name' => 'required',
+                'Currency' => 'required|alpha',
+                'Mobile' => 'required|regex:/^[0-9]{10}$/',
                 'Source' => 'required',
                 'Region' => 'required',
                 'SectorPid' => 'required',
@@ -207,7 +215,7 @@ class ClientsProfile extends Controller
             if (!$maxClientId) {
                 $clientid = $s2 . '0001';
             } else {
-                $maxNumber = (int)substr($maxClientId, 1);
+                $maxNumber = (int) substr($maxClientId, 1);
                 $a = $maxNumber + 1;
                 $clientid = $s2 . str_pad($a, 4, '0', STR_PAD_LEFT);
             }
@@ -243,6 +251,7 @@ class ClientsProfile extends Controller
 
     public function addcontact(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
             'ContactName' => 'required|string',
             'Mobile' => 'required|digits:10',
@@ -280,8 +289,9 @@ class ClientsProfile extends Controller
             $wm_deliverymethod = $request->only('wm_deliveryids');
             $broadcast = $request->broadcast;
             $deliverymethod = $request->only('deliverymethod');
-
-            $input = $request->except(['_token', 'deliveryid', 'SectorID', 'format', 'wm_deliveryids', 'deliverymethod']);
+            $weekformat = $request->input(key: 'weekendformat');
+            $weekdeliveryid = $request->input('weekenddeliveryid', []);
+            $input = $request->except(['_token', 'deliveryid', 'SectorID', 'format', 'wm_deliveryids', 'deliverymethod', 'weekendformat', 'weekenddeliveryid']);
 
             // Set default values
             $defaultValues = [
@@ -338,6 +348,17 @@ class ClientsProfile extends Controller
                             'format' => $format['format'],
                         ]);
                     }
+                }
+
+                foreach ($weekdeliveryid as $deliveryid) {
+                    DB::table('custom_digest_weekend')->insert(
+                        [
+                            'contactid' => $contactid,
+                            'datetime' => now(),
+                            'format' => $weekformat,
+                            'deliveryid' => $deliveryid // Adjust according to your schema
+                        ]
+                    );
                 }
                 DB::commit();
                 $client = Clinetprofile::find($input['clientid']);
@@ -414,7 +435,9 @@ class ClientsProfile extends Controller
             $format = $request->only('format');
             $wmDeliveryMethod = $request->only('wm_deliveryids');
             $deliveryMethod = $request->only('deliverymethod');
-            $input = $request->except(['_token', 'contactid', 'deliveryid', 'SectorID', 'format', 'wm_deliveryids', 'deliverymethod']);
+            $weekFormat = $request->input('weekendformat');
+            $weekDeliveryId = $request->input('weekenddeliveryid', []);
+            $input = $request->except(['_token', 'contactid', 'deliveryid', 'SectorID', 'format', 'wm_deliveryids', 'deliverymethod', 'weekendformat', 'weekenddeliveryid']);
             $input['ContactType'] = 0;
             $input['DeliveryID'] = $input['wm_deliverymethod'] ?? 0;
             $input['wm_deliverymethod'] = $request->wm_enableforweb ? 1 : 0;
@@ -473,9 +496,19 @@ class ClientsProfile extends Controller
             } else {
                 // Handle the case where the conditions are not met, or provide alternative logic
             }
-
-
-
+            foreach ($weekDeliveryId as $deliveryId) {
+                DB::table('custom_digest_weekend')->updateOrInsert([
+                    'contactid' => $contactId,
+                    'format' => $weekFormat,
+                ],
+                    [
+                        'contactid' => $contactId,
+                        'datetime' => now(),
+                        'format' => $weekFormat,
+                        'deliveryid' => $deliveryId,
+                    ]
+                );
+            }
 
             DB::commit();
 
@@ -863,7 +896,7 @@ class ClientsProfile extends Controller
             ->whereNotNull('picklist.ID')
             ->orderBy('Category')
             ->get();
-        $comments =  DB::connection('mysql2')->table('wm_users')
+        $comments = DB::connection('mysql2')->table('wm_users')
             ->join('MUComment', 'wm_users.login', '=', 'MUComment.user')
             ->where('MUComment.clientid', $clientid)
             ->where('MUComment.isdeleted', 'No')
@@ -922,7 +955,7 @@ class ClientsProfile extends Controller
             ->get();
 
         $selectpubnews = Pubmaster::on('mysql2')->where('IsMain', 1)->pluck('PubId')->toArray();
-        return  view('components.client-media-universe')
+        return view('components.client-media-universe')
             ->with([
                 'clientid' => $clientid,
                 'priority' => $priority,
@@ -943,7 +976,7 @@ class ClientsProfile extends Controller
                 'selectpubnews' => $selectpubnews,
             ])->render();
     }
-    public function  deleteClient(Request $request)
+    public function deleteClient(Request $request)
     {
         $clientid = $request->input('clientid');
         $userid = $request->input('userid');
@@ -972,7 +1005,7 @@ class ClientsProfile extends Controller
         if (empty($conceptId) || $conceptId == -1) {
 
             $keywords = [
-                (object)  ['id' => -1, 'name' => ' --No Keywords Defined-- ']
+                (object) ['id' => -1, 'name' => ' --No Keywords Defined-- ']
 
             ];
         } else {
@@ -1196,9 +1229,9 @@ class ClientsProfile extends Controller
             intval($withinwords),
         ]);
         if (!empty($result) && $result[0]->success == 0) {
-            return  2;
+            return 2;
         } else {
-            return  $result[0]->success;
+            return $result[0]->success;
         }
     }
     function addPrintConcept($concept, $atleast, $concept1, $concept2, $withinwords, $within, $clientId)
@@ -1551,7 +1584,7 @@ class ClientsProfile extends Controller
         if (empty($conceptId) || $conceptId == -1) {
 
             $keywords = [
-                (object)  ['id' => -1, 'name' => ' --No Keywords Defined-- ']
+                (object) ['id' => -1, 'name' => ' --No Keywords Defined-- ']
 
             ];
         } else {
@@ -1663,16 +1696,16 @@ class ClientsProfile extends Controller
             $keyword = trim($request->option);
             $query = "CALL pm_keywordoperations(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-            $result= DB::connection('mysql3')->select($query, [
-                $conceptid,  
-                0,           
-                $keyword,    
-                $atleast,    
-                $keyword2,   
-                $within,     
+            $result = DB::select($query, [
+                $conceptid,
+                0,
+                $keyword,
+                $atleast,
+                $keyword2,
+                $within,
                 $withinwords,
-                'add',       
-                0            
+                'add',
+                0
             ]);
             if (!empty($result) && isset($result[0]->success) && $result[0]->success == 0) {
                 response()->json(['error' => 'Error: Keyword already exists for this Concept'], 400);

@@ -802,6 +802,37 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
 
                         </div>
                     </fieldset>
+                   <!-- your-view.blade.php -->
+
+<!-- your-view.blade.php -->
+
+<fieldset class="border border-gray-300 p-3 rounded-lg">
+    <legend class="text-sm font-medium text-gray-900">Weekend Digest</legend>
+    <div class="grid grid-cols-3 gap-2 mt-4">
+        {{-- <div>
+            <label for="wm_enableforweb" class="block text-sm font-medium text-gray-700">Enable for custom digest</label>
+            <input id="wm_enableforweb" name="wm_enableforweb" value="1" type="checkbox">
+        </div> --}}
+        <div>
+            <label for="format" class="block text-sm font-medium text-gray-700">Formats</label>
+            <select id="format" name="weekendformat" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg">
+                <option value="">Select option</option>
+                @foreach($formats as $format)
+                    <option value="{{ $format->id }}">{{ $format->format_name }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div>
+            <label for="deliveryid" class="block text-sm font-medium text-gray-700">Delivery Method</label>
+            <select id="deliveryid" name="weekenddeliveryid[]" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg">
+                @foreach($deliverymaster as $Delivery)
+                    <option value="{{ $Delivery->id }}">{{ $Delivery->deliverytime }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+</fieldset>
+
 
                     <fieldset class="border border-gray-300 p-3 rounded-lg">
                         <legend class="text-sm font-medium text-gray-900">Web Monitoring Parameters</legend>

@@ -51,6 +51,7 @@ Route::get('/get-subsectors/{industry}', [ClientsProfile::class,'getSubsectors']
 Route::post('/addcontact',[ClientsProfile::class,'addcontact'])->name('addcontact');
 Route::post('/editcontact',[ClientsProfile::class,'editContact'])->name('editcontact');
 Route::post('/get-delivery-times', [ClientsProfile::class, 'getDeliveryTimes'])->name('getdelivery');
+Route::post('/get-delivery-times-weekend', [ClientsProfile::class, 'getDeliveryTimesweek'])->name('getdeliveryweek');
 Route::get('/export-clients', [ClientsProfile::class, 'export'])->name('clients.export');
 Route::get('/export-client-details', [ClientsProfile::class, 'exportDetails'])->name('clients.exportDetails');
 Route::get('/export-brand-strings', [ClientsProfile::class, 'exportBrandStrings'])->name('clients.exportBrandStrings');
