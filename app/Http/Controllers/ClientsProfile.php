@@ -35,26 +35,26 @@ class ClientsProfile extends Controller
     {
         $decodedId = base64_decode($id);
         $query = 'CALL sp_getconceptsforclient(\'' . $decodedId . '\', 0)';
-        $concepts = DB::connection('mysql3')->select($query);
+        $concepts = DB::select($query);
         $query = 'call sp_getconceptsforclient(\'' . $decodedId . '\',1)';
-        $complexconcepts = DB::connection('mysql3')->select($query);
+        $complexconcepts = DB::select($query);
         $query = 'call pm_getconceptsforclient(\'' . $decodedId . '\',1)';
-        $complexprintconcepts = DB::connection('mysql3')->select($query);
+        $complexprintconcepts = DB::select($query);
         $query = 'call sp_getcompanyissues()';
-        $issues = DB::connection('mysql3')->select($query);
+        $issues = DB::select($query);
         $query = 'call pm_getcompanyissues()';
-        $issuesprints = DB::connection('mysql3')->select($query);
+        $issuesprints = DB::select($query);
         $query = 'CALL sp_getissuesforclient(?, ?)';
-        $getissueforclients = DB::connection('mysql3')->select($query, [$decodedId, '']);
+        $getissueforclients = DB::select($query, [$decodedId, '']);
         $query = 'CALL pm_getissuesforclient(?, ?)';
-        $getissueforprintclients = DB::connection('mysql3')->select($query, [$decodedId, '']);
+        $getissueforprintclients = DB::select($query, [$decodedId, '']);
         $query = 'CALL pm_getconceptsforclient(?, ?)';
-        $getprintissueforclients = DB::connection('mysql3')->select($query, [$decodedId, '0']);
+        $getprintissueforclients = DB::select($query, [$decodedId, '0']);
 
         $data = Clinetprofile::with('contacts', 'contacts.delivery','contacts.deliveryweekend', 'contacts.deliveryweekend.deliveryformats','contacts.delivery.deliveryformats', 'contacts.regularDigestPrint', 'contacts.regularDigestWeb', 'Country', 'Region', 'sector', 'keywords', 'billingcycle')->find($decodedId);
         $keywords = $data->keywords;
 
-        $rssFeeds = DB::connection('mysql3')->table('wm_rss_feed as rf')
+        $rssFeeds = DB::table('wm_rss_feed as rf')
         ->leftJoin('wm_rssfeed_client as rc', 'rf.id', '=', 'rc.rssfeed')
         ->leftJoin('wm_web_universe as wu', 'rf.wm_web_universe_id', '=', 'wu.id')
         ->leftJoin('wm_type_master as tm', 'wu.type', '=', 'tm.id')
@@ -1010,7 +1010,7 @@ class ClientsProfile extends Controller
             ];
         } else {
             $query = 'CALL sp_getkeywordsforconcept(\'' . $conceptId . '\')';
-            $keywords = DB::connection('mysql3')->select($query);
+            $keywords = DB::select($query);
 
             if (empty($keywords)) {
                 $keywords = [
@@ -1039,7 +1039,7 @@ class ClientsProfile extends Controller
         $clientid = $request->input('clientid');
         if ($request->datatype == 'concept') {
             $concept = trim($request->input('concept_id'));
-            $result = DB::connection('mysql3')->select('CALL sp_conceptoperations(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [
+            $result = DB::select('CALL sp_conceptoperations(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [
                 0,
                 $concept,
                 $clientid,
@@ -1080,7 +1080,7 @@ class ClientsProfile extends Controller
         $within = 0;
         $withinwords = 0;
 
-        $result = DB::connection('mysql3')->select('CALL sp_keywordoperations(?, ?, ?, ?, ?, ?, ?, ?, ?)', [
+        $result = DB::select('CALL sp_keywordoperations(?, ?, ?, ?, ?, ?, ?, ?, ?)', [
             $conceptId,
             '0',
             $keyword,
@@ -1099,7 +1099,7 @@ class ClientsProfile extends Controller
             ], 422);
         } else {
 
-            $keywords = DB::connection('mysql3')->select('CALL pm_getkeywordsforconcept(?)', [$conceptId]);
+            $keywords = DB::select('CALL pm_getkeywordsforconcept(?)', [$conceptId]);
             Log::info("Keyword added successfully. Client ID: $conceptId, Keyword: $keyword, User ID: $request->username");
             return response()->json([
                 'message' => 'Keyword Added',
@@ -1109,13 +1109,13 @@ class ClientsProfile extends Controller
     }
     private function getConcepts($clientid)
     {
-        $concepts = DB::connection('mysql3')->select('CALL sp_getconceptsforclient(?, ?)', [$clientid, 0]);
+        $concepts = DB::select('CALL sp_getconceptsforclient(?, ?)', [$clientid, 0]);
 
         return $concepts;
     }
     private function getPrintConcepts($clientid)
     {
-        $concepts = DB::connection('mysql3')->select('CALL pm_getconceptsforclient(?, ?)', [$clientid, 0]);
+        $concepts = DB::select('CALL pm_getconceptsforclient(?, ?)', [$clientid, 0]);
 
         return $concepts;
     }
@@ -1159,7 +1159,7 @@ class ClientsProfile extends Controller
             response()->json(['error' => 'Error: Concept already exists'], 400);
         }
 
-        $query = DB::connection('mysql3')->statement('CALL sp_setupkeywordsforcomplexconcept(?, ?, ?, ?, ?, ?)', [
+        $query = DB::statement('CALL sp_setupkeywordsforcomplexconcept(?, ?, ?, ?, ?, ?)', [
             $complexConcept,
             intval($conceptvalue),
             $atleast,
@@ -1198,7 +1198,7 @@ class ClientsProfile extends Controller
             response()->json(['error' => 'Error: Concept already exists'], 400);
         }
 
-        $query = DB::connection('mysql3')->statement('CALL pm_setupkeywordsforcomplexconcept(?, ?, ?, ?, ?, ?)', [
+        $query = DB::statement('CALL pm_setupkeywordsforcomplexconcept(?, ?, ?, ?, ?, ?)', [
             $complexConcept,
             intval($conceptvalue),
             $atleast,
@@ -1216,7 +1216,7 @@ class ClientsProfile extends Controller
         }
         $query = "CALL sp_conceptoperations(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        $result = DB::connection('mysql3')->select($query, [
+        $result = DB::select($query, [
             0,
             $concept,
             $clientId,
@@ -1241,7 +1241,7 @@ class ClientsProfile extends Controller
         }
         $query = "CALL pm_conceptoperations(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        $result = DB::connection('mysql3')->select($query, [
+        $result = DB::select($query, [
             0,
             $concept,
             $clientId,
@@ -1267,7 +1267,7 @@ class ClientsProfile extends Controller
 
         $query = "CALL sp_conceptoperations(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        $result = DB::connection('mysql3')->select($query, [
+        $result = DB::select($query, [
             $conceptId,
             $concept,
             $clientId,
@@ -1293,7 +1293,7 @@ class ClientsProfile extends Controller
 
         $query = "CALL sp_conceptoperations(?, '', ?, 'delete', 1, 0, 0, 0, 0, 0)";
 
-        DB::connection('mysql3')->select($query, [
+        DB::select($query, [
             $conceptId,
             $clientId
         ]);
@@ -1307,7 +1307,7 @@ class ClientsProfile extends Controller
 
         $query = "CALL pm_conceptoperations(?, '', ?, 'delete', 1, 0, 0, 0, 0, 0)";
 
-        DB::connection('mysql3')->select($query, [
+        DB::select($query, [
             $conceptId,
             $clientId
         ]);
@@ -1356,7 +1356,7 @@ class ClientsProfile extends Controller
         $clientId = $request->input('clientid');
         $issueId = $request->input('issue_id', 0);
 
-        $result = DB::connection('mysql3')->select(
+        $result = DB::select(
             'CALL sp_issueoperations_test(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
             [
                 $issueId,
@@ -1416,7 +1416,7 @@ class ClientsProfile extends Controller
         $issueId = $request->input('issue_id', 0);
   
     
-            $result = DB::connection('mysql3')->select(
+            $result = DB::select(
                 'CALL pm_issueoperations(?, ?, ?, ?, ?, ?, ?, ?, ?)',
                 [
                     $issueId,
@@ -1441,7 +1441,7 @@ class ClientsProfile extends Controller
     }
     public function editIssue($id)
     {
-        $issue = DB::connection('mysql3')->table('wm_issue')->find($id);
+        $issue = DB::table('wm_issue')->find($id);
 
         if ($issue) {
             return response()->json([
@@ -1461,7 +1461,7 @@ class ClientsProfile extends Controller
     public function editPrintIssue($id)
     {
      
-        $issue = DB::connection('mysql3')->table('pm_issue')->find($id);
+        $issue = DB::table('pm_issue')->find($id);
         return $issue;
         if ($issue) {
             return response()->json([
@@ -1483,7 +1483,7 @@ class ClientsProfile extends Controller
         $clientid = $request->clientid;
         $userid = $request->user_id;
         try {
-            DB::connection('mysql3')->statement('CALL sp_issueoperations(?, ?, ?, ?, ?, ?, ?, ?, ?)', [
+            DB::statement('CALL sp_issueoperations(?, ?, ?, ?, ?, ?, ?, ?, ?)', [
                 $id,
                 '',
                 '',
@@ -1507,7 +1507,7 @@ class ClientsProfile extends Controller
         $clientid = $request->clientid;
         $userid = $request->user_id;
         try {
-            DB::connection('mysql3')->statement('CALL pm_issueoperations(?, ?, ?, ?, ?, ?, ?, ?, ?)', [
+            DB::statement('CALL pm_issueoperations(?, ?, ?, ?, ?, ?, ?, ?, ?)', [
                 $id,
                 '',
                 '',
@@ -1589,7 +1589,7 @@ class ClientsProfile extends Controller
             ];
         } else {
             $query = 'CALL pm_getkeywordsforconcept(\'' . $conceptId . '\')';
-            $keywords = DB::connection('mysql3')->select($query);
+            $keywords = DB::select($query);
 
             if (empty($keywords)) {
                 $keywords = [
@@ -1619,7 +1619,7 @@ class ClientsProfile extends Controller
 
             $query = "CALL sp_conceptoperations(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-            $result = DB::connection('mysql3')->select($query, [
+            $result = DB::select($query, [
                 $conceptId,
                 $concept,
                 $clientId,
@@ -1640,7 +1640,7 @@ class ClientsProfile extends Controller
         } else {
             $pram = '';
             $query = "CALL sp_keywordoperations(?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            $result = DB::connection('mysql3')->select($query, [
+            $result = DB::select($query, [
                 $conceptId,
                 trim($request->keywordid),
                 $concept,
@@ -1669,7 +1669,7 @@ class ClientsProfile extends Controller
         $concept = trim($request->option);
         $clientId = $request->clientid;
         if ($request->datatype == 'concept') {
-            $result = DB::connection('mysql3')->select($query, [
+            $result = DB::select($query, [
                 0,
                 $concept,
                 $clientId,
@@ -1728,7 +1728,7 @@ class ClientsProfile extends Controller
 
             $query = "CALL pm_conceptoperations(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-            $result = DB::connection('mysql3')->select($query, [
+            $result = DB::select($query, [
                 $conceptId,
                 $concept,
                 $clientId,
@@ -1749,7 +1749,7 @@ class ClientsProfile extends Controller
         } else {
             $pram = '';
             $query = "CALL pm_keywordoperations(?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            $result = DB::connection('mysql3')->select($query, [
+            $result = DB::select($query, [
                 $conceptId,
                 trim($request->keywordid),
                 $concept,
@@ -1776,7 +1776,7 @@ class ClientsProfile extends Controller
 
         $query = "CALL pm_conceptoperations(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        $result = DB::connection('mysql3')->select($query, [
+        $result = DB::select($query, [
             $conceptId,
             $concept,
             $clientId,
@@ -1827,9 +1827,11 @@ public function rssnames(Request $request){
     ]);
 
     $txtsearch = $request->input('rssname');
-    $rssFeeds = DB::connection('mysql3')->table('wm_web_universe as wu')
-    ->leftJoin('wm_rss_feed as rf', 'wu.id', '=', 'rf.wm_web_universe_id')
+    $mappedFeeds = DB::table('wm_web_universe as wu')
+    ->leftJoin('wm_opoint_web_universe_mapping as owm', 'wu.id', '=', 'owm.impact_web_universe')
+    ->leftJoin('wm_rss_feed as rf', 'owm.impact_rss_feed', '=', 'rf.id')
     ->select(
+        'wu.id as wu_id',
         'rf.id as id',
         DB::raw("concat(wu.name, '/', rf.name) as name"),
         'rf.url as url'
@@ -1838,12 +1840,36 @@ public function rssnames(Request $request){
     ->where('rf.deleted', 0)
     ->where('wu.deleted', 0)
     ->orderBy('name')
-    ->get();    return response()->json($rssFeeds);
+    ->get(); 
+    if($mappedFeeds->count() > 0){
+        return response()->json(['unMappedFeeds'=>[], 'mappedFeeds'=>$mappedFeeds]);
+    }else{
+        $unMappedFeeds = DB::table('wm_web_universe as wu')
+        ->leftJoin('wm_rss_feed as rf', 'wu.id', '=', 'rf.wm_web_universe_id')
+        ->select(
+            'wu.id as wu_id',
+            'rf.id as id',
+            DB::raw("concat(wu.name, '/', rf.name) as name"),
+            'rf.url as url'
+        )
+        ->where('wu.name', 'like', $txtsearch . '%')
+        ->where('rf.deleted', 0)
+        ->where('wu.deleted', 0)
+        ->orderBy('name')
+        ->get(); 
+
+        return response()->json(['unMappedFeeds'=>$unMappedFeeds, 'mappedFeeds'=>[]]);
+    }
+  
+
+
+    return response()->json(['unMappedFeeds'=>$unMappedFeeds, 'mappedFeeds'=>$mappedFeeds]);
 }
 public function saveSelectedRssFeeds(Request $request)
 {
     $selectedItems = $request->input('selectedItems');
-    $clinetid = $request->input('clientid');   
+    $clinetid = $request->input('clientid');  
+    $userid =  $request->input('user_id');  ; 
     foreach ($selectedItems as $newrssid) {
         $exists = DB::table('wm_rssfeed_client')
                     ->where('client', $clinetid)
@@ -1855,9 +1881,9 @@ public function saveSelectedRssFeeds(Request $request)
                 'rssfeed' => $newrssid,
                 'client' => $clinetid,
             ]);
-            Log::info('Rss feed added to client id: ' . $clinetid . ' with rss feed id: ' . $newrssid. ' by user id: ' .auth()->UserID);
+            Log::info('Rss feed added to client id: ' . $clinetid . ' with rss feed id: ' . $newrssid. ' by user id: ' .$userid);
         }else{
-            Log::info('Rss feed already exist in client id: ' . $clinetid . ' with rss feed id: ' . $newrssid. ' by user id: ' .auth()->UserID);
+            Log::info('Rss feed already exist in client id: ' . $clinetid . ' with rss feed id: ' . $newrssid. ' by user id: ' .$userid);
             return response()->json(['status'=>false,'message' => 'Rss feed already exist.'], 409);
 
         }
@@ -1865,4 +1891,93 @@ public function saveSelectedRssFeeds(Request $request)
 
     return response()->json(['status'=>true,'message' => 'Process completed. New RSS feeds added if they did not exist.'], 201);
 }
+public function getSelectedRssFeeds(Request $request){
+    $request->validate([
+        'rssname' => 'required|string',
+    ]);
+    $clinetid = $request->input('clientid');  
+    $txtsearch = $request->input('rssname');
+
+    $feeds = DB::table('wm_rssfeed_client as rfc')
+    ->leftJoin('wm_rss_feed as rf', 'rf.id', '=', 'rfc.rssfeed')
+    ->leftJoin('wm_web_universe as wu', 'rf.wm_web_universe_id', '=', 'wu.id')
+    ->select(
+        'rf.id as id',
+        DB::raw("concat(wu.name, '/', rf.name) as name"),
+        'rf.url as url'
+    )
+    ->where('wu.name', 'like', $txtsearch . '%')
+    ->where('rfc.client', '=', $clinetid)
+    ->get();
+    return response()->json(['feeds'=>$feeds]);
+}
+public function deleteSelectedRssFeeds(Request $request)
+{
+    $selectedItems = $request->input('selectedItems');
+    $clinetid = $request->input('clientid');  
+    $userid =  $request->input('user_id');  ; 
+    foreach ($selectedItems as $newrssid) {
+        DB::table('wm_rssfeed_client')
+        ->where('client', $clinetid)
+        ->where('rssfeed', $newrssid)
+        ->delete();
+        Log::info('Rss feed deleted from client id: ' . $clinetid . ' with rss feed id: ' . $newrssid. ' by user id: ' .$userid);
+    }
+    return response()->json(['status'=>true,'message' => 'Process completed. Deleted RSS feeds.'], 201);
+}
+public function delSelectedRssFeeds(Request $request){
+
+    $clid = $request->input('clientid');
+    $rssIdsArr = $request->input('selectedItems', []);
+    $userId = $request->input('user_id');
+
+    try {
+        foreach ($rssIdsArr as $rssId) {
+            if (!empty($rssId)) {
+                $exists = DB::table('wm_rssfeed_client')
+                    ->where('client', $clid)
+                    ->where('rssfeed', $rssId)
+                    ->exists();
+
+                if ($exists) {
+                    DB::table('wm_rssfeed_client')
+                        ->where('rssfeed', $rssId)
+                        ->where('client', $clid)
+                        ->delete();
+                }
+            }
+        }
+
+        Log::info('Feeds processed successfully.', [
+            'client_id' => $clid,
+            'rss_ids' => $rssIdsArr,
+            'user_id' => $userId
+        ]);
+
+        return response()->json(['status' => 'success', 'message' => 'Feeds processed successfully.']);
+
+    } catch (\Exception $e) {
+        Log::error('Error processing feeds.', [
+            'client_id' => $clid,
+            'rss_ids' => $rssIdsArr,
+            'user_id' => $userId,
+            'error' => $e->getMessage()
+        ]);
+
+        return response()->json(['status' => 'error', 'message' => 'An error occurred while processing feeds.'], 500);
+    }
+}
+public function resetRecord(Request $request)
+    {
+        $clientid = $request->input('clientid');
+
+        try {
+            DB::table('wm_rssfeed_client')->where('client', $clientid)->delete();
+            Log::info("Records reset successfully for client ID: {$clientid} user ID: {$request->user_id}" );
+            return response()->json(['success' => true, 'message' => 'Records reset successfully.']);
+        } catch (\Exception $e) {
+            Log::error("Error resetting records for client ID: {$clientid} user ID: {$request->user_id}. Error: {$e->getMessage()}");
+            return response()->json(['success' => false, 'message' => 'Failed to reset records.'], 500);
+        }
+    }
 }

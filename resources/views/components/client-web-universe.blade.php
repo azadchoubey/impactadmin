@@ -24,7 +24,7 @@
                     <td  class="px-6 py-4">{{$item->focus}}</td>
                     <td  class="px-6 py-4">{{$item->industryfocus}}</td>
                     
-                    <td  class="px-6 py-4"><button class="bg-red-500 hover:bg-red-700 text-white text-xs py-1 px-2 rounded" >Delete</button>
+                    <td class="px-6 py-4"><button  class="bg-red-500 hover:bg-red-700 text-white text-xs py-1 px-2 rounded" >Delete</button>
                     </td>
 
                 </tr>
@@ -56,25 +56,46 @@
            
         </form>
 
-        <!-- Results Table -->
-        <div id="results" class="saverss mt-4 max-h-[300px] overflow-y-auto hidden">
-            <table class="min-w-full bg-white border border-gray-300">
-                <thead>
-                    <tr>
-                    <th class="border px-4 py-2">Select</th>
-                    <th class="border px-4 py-2">Website/Rss Name</th>
-                        <th class="border px-4 py-2">URL</th>
-                    </tr>
-                </thead>
-                <tbody id="resultsBody">
-                </tbody>
-            </table>
+<div id="results" style="gap: 2rem;" class="saverss mt-4 grid grid-cols-1">
+    <!-- Mapped RSS Section -->
+    <fieldset class="mapped border border-gray-300 hidden">
+        <legend class="text-lg font-semibold">Mapped RSS</legend>
+        <div class="max-h-[300px] overflow-y-auto">
+            <div class="flex border-b font-semibold bg-gray-200">
+                <div class="w-1/7 px-2 py-2">Select</div>
+                <div class="w-2/6 px-4 py-2">Website/RSS Name</div>
+                <div class="w-3/6 px-4 py-2">URL</div>
+            </div>
+            <div id="resultsBody">
+          
+            </div>
         </div>
+    </fieldset>
+
+    <!-- Unmapped RSS Section -->
+    <fieldset class="unmapped border border-gray-300 hidden">
+        <legend class="text-lg font-semibold">Unmapped RSS</legend>
+        <div class="max-h-[300px] overflow-y-auto">
+            <div class="flex border-b font-semibold bg-gray-200">
+                <div class="w-1/7 px-2 py-2">Select</div>
+                <div class="w-2/6 px-4 py-2">Website/RSS Name</div>
+                <div class="w-3/6 px-4 py-2">URL</div>
+            </div>
+            <div id="resultsBody1">
+        
+            </div>
+        </div>
+    </fieldset>
+</div>
+
         <div class="saverss flex justify-center mt-4 hidden">
             <button type="button" id="saverssButton" class="bg-green-500 hover:bg-green-700 text-white text-xs py-2 px-6 rounded">Save</button>
         </div>
+        
     </div>
 
 </div>
 
 </div>
+<x-regenerate :clientid="$clientid"  />
+<x-deleterss :clientid="$clientid"  />

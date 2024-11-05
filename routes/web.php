@@ -58,6 +58,8 @@ Route::get('/export-brand-strings', [ClientsProfile::class, 'exportBrandStrings'
 Route::post('/update-checkbox', [ClientsProfile::class, 'updateCheckbox'])->name('update.checkbox');
 Route::get('/media/universe/content', [ClientsProfile::class, 'loadMediaUniverseContent'])->name('loadMediaUniverseContent');
 Route::post('/saveSelectedRssFeeds', [ClientsProfile::class, 'saveSelectedRssFeeds'])->name('saveSelectedRssFeeds');
+Route::post('/deleteSelectedRssFeeds', [ClientsProfile::class, 'delSelectedRssFeeds'])->name('deleteSelectedRssFeeds');
+Route::post('/reset-record', [ClientsProfile::class, 'resetRecord'])->name('reset.record');
 
 
 

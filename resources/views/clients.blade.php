@@ -802,36 +802,36 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
 
                         </div>
                     </fieldset>
-                   <!-- your-view.blade.php -->
+                    <!-- your-view.blade.php -->
 
-<!-- your-view.blade.php -->
+                    <!-- your-view.blade.php -->
 
-<fieldset class="border border-gray-300 p-3 rounded-lg">
-    <legend class="text-sm font-medium text-gray-900">Weekend Digest</legend>
-    <div class="grid grid-cols-3 gap-2 mt-4">
-        {{-- <div>
+                    <fieldset class="border border-gray-300 p-3 rounded-lg">
+                        <legend class="text-sm font-medium text-gray-900">Weekend Digest</legend>
+                        <div class="grid grid-cols-3 gap-2 mt-4">
+                            {{-- <div>
             <label for="wm_enableforweb" class="block text-sm font-medium text-gray-700">Enable for custom digest</label>
             <input id="wm_enableforweb" name="wm_enableforweb" value="1" type="checkbox">
         </div> --}}
-        <div>
-            <label for="format" class="block text-sm font-medium text-gray-700">Formats</label>
-            <select id="format" name="weekendformat" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg">
-                <option value="">Select option</option>
-                @foreach($formats as $format)
-                    <option value="{{ $format->id }}">{{ $format->format_name }}</option>
-                @endforeach
-            </select>
-        </div>
-        <div>
-            <label for="deliveryid" class="block text-sm font-medium text-gray-700">Delivery Method</label>
-            <select id="deliveryid" name="weekenddeliveryid[]" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg">
-                @foreach($deliverymaster as $Delivery)
-                    <option value="{{ $Delivery->id }}">{{ $Delivery->deliverytime }}</option>
-                @endforeach
-            </select>
-        </div>
-    </div>
-</fieldset>
+                            <div>
+                                <label for="format" class="block text-sm font-medium text-gray-700">Formats</label>
+                                <select id="format" name="weekendformat" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg">
+                                    <option value="">Select option</option>
+                                    @foreach($formats as $format)
+                                    <option value="{{ $format->id }}">{{ $format->format_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label for="deliveryid" class="block text-sm font-medium text-gray-700">Delivery Method</label>
+                                <select id="deliveryid" name="weekenddeliveryid[]" multiple class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-lg">
+                                    @foreach($deliverymaster as $Delivery)
+                                    <option value="{{ $Delivery->id }}">{{ $Delivery->deliverytime }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
 
 
                     <fieldset class="border border-gray-300 p-3 rounded-lg">
@@ -1193,6 +1193,18 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
             const $targetEl = document.getElementById(`large-modal${id}`);
             const modal = new Modal($targetEl);
             modal.show();
+        }
+
+        function showmodal(id) {
+            const $targetEl = document.getElementById(`${id}`);
+            const modal = new Modal($targetEl);
+            modal.show();
+        }
+
+        function hidemodal(id) {
+            const $targetEl = document.getElementById(`${id}`);
+            const modal = new Modal($targetEl);
+            modal.hide();
         }
 
         function toggleEditMode(contactId) {
@@ -1996,21 +2008,103 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                                 className: 'px-3 py-2 text-xs font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800',
                             },
                             {
-                                text: '<div class="flex items-center"><svg class="h-4 w-4 text-white-600 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 1-7.07 2.93l7.07 7.07 1.41-1.41-7.07-7.07A10 10 0 0 1 12 2z"/></svg> Regenrate</div>',
+                                text: '<div class="flex items-center" id="regenetarebutton" ><svg class="h-4 w-4 text-white-600 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 1-7.07 2.93l7.07 7.07 1.41-1.41-7.07-7.07A10 10 0 0 1 12 2z"/></svg> Regenrate</div>',
                                 className: 'px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800',
                             },
                             {
-                                text: '<div class="flex items-center"><svg class="h-4 w-4 text-white-600 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M6 6v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V6"/><path d="M14 6V4a2 2 0 1 0-4 0v2"/></svg> Delete</div>',
+                                text: '<div id="deleterssbutton" class="flex items-center"><svg class="h-4 w-4 text-white-600 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M6 6v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V6"/><path d="M14 6V4a2 2 0 1 0-4 0v2"/></svg> Delete</div>',
                                 className: 'px-3 py-2 text-xs font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800',
+                            },
+                            {
+                                text: '<div class="flex items-center" id="resetbutton"><svg class="h-4 w-4 text-white-600 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6v12h16V6H4zm4 2h8v8H8V8z"/></svg> Reset</div>',
+                                className: 'px-3 py-2 text-xs font-medium text-center text-white bg-gray-700 rounded-lg hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800',
+                            },
+                            {
+                                text: '<div class="flex items-center"><svg class="h-4 w-4 text-white-600 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M12 3l9 9-9 9" /></svg>Export</div>',
+                                action: function(e, dt, button, config) {
+                                    exportDataToCSV('clientwebuniverse.csv', dt);
+                                },
+                                className: 'px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800',
                             }
+
                         ]
 
                     }
+                },
+
+            });
+            $('#resetbutton').on('click', function() {
+                if (confirm('Are you sure you want to delete all existing feeds?')) {
+                    $.ajax({
+                        url: `{{route('reset.record')}}`,
+                        type: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            clientid:`{{$data->ClientID}}`,
+                            user_id: `{{auth()->user()->UserID}}`
+
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                alert(response.message);
+                                window.location.reload();
+                            } else {
+                                alert(response.message);
+                            }
+                        },
+                        error: function(xhr) {
+                            console.error(xhr.responseText);
+                            alert('An error occurred while resetting records.');
+                        }
+                    });
                 }
             });
 
+            $('#regenetarebutton').on('click', function() {
+                document.getElementById('processModal').classList.remove('hidden');
+                getContries();
+                fetchCategories();
+                fetchMedia();
+                fetchAudience();
+
+            });
+            $('#deleterssbutton').on('click', function() {
+                showmodal('deleterss');
+
+            });
+            $('#deleterssSaveButton').on('click', function() {
+                const Feeds = $("input[name='feeds[]']:checked").map(function() {
+                    return $(this).val();
+                }).get();
+                console.log(Feeds);
+
+                if (Feeds.length === 0) {
+                    alert('Please select at least one RSS feed to save.');
+                    return;
+                }
+                $.ajax({
+                    url: "{{ route('deleteSelectedRssFeeds') }}",
+                    method: 'POST',
+                    data: {
+                        selectedItems: Feeds,
+                        _token: '{{ csrf_token() }}',
+                        clientid: `{{$data->ClientID}}`,
+                        user_id: `{{auth()->user()->UserID}}`
+                    },
+                    success: function(response) {
+                        alert('Selected RSS feeds Deleted successfully!');
+                        window.location.reload();
+                    },
+                    error: function(xhr) {
+                        console.error(xhr);
+                        alert('An error occurred while saving selected RSS feeds.');
+                    }
+                });
+
+            });
+
+
             function closeModal(modalId) {
-                // console.log(modalId);
                 $('#' + modalId).removeClass('flex').addClass('hidden');
             }
             $('#button2').on('click', function() {
@@ -2171,74 +2265,165 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                 }
 
             });
-        $("#address").on("submit", function(e) {
-        e.preventDefault();
-        document.getElementById('processModal').classList.remove('hidden');
-        document.getElementById('addclientwebuniverse').classList.add('hidden');
+            $("#address").on("submit", function(e) {
+                e.preventDefault();
+                document.getElementById('processModal').classList.remove('hidden');
+                document.getElementById('addclientwebuniverse').classList.add('hidden');
 
-        $('#resultsBody').empty();
+                $('#resultsBody').empty();
 
-        $.ajax({
-            url: $(this).attr('action'), 
-            method: 'POST',
-            data: $(this).serialize(), 
-            success: function(data) {
-                document.getElementById('addclientwebuniverse').classList.remove('hidden');
-                document.getElementById('processModal').classList.add('hidden');
-                $('.saverss').removeClass('hidden');
-                if (data.length > 0) {
-                    $.each(data, function(index, item) {
-                        $('#resultsBody').append(`
-                            <tr>
-                                <td class="border px-4 py-2"><input type="checkbox" name="selectedItems[]" value="${item.id}" class="checkbox-class" /></td>
-                                <td class="border px-4 py-2">${item.name}</td>
-                                <td class="border px-4 py-2">${item.url}</td>
-                            </tr>
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: 'POST',
+                    data: $(this).serialize(),
+                    success: function(data) {
+                        document.getElementById('addclientwebuniverse').classList.remove('hidden');
+                        document.getElementById('processModal').classList.add('hidden');
+                        $('.saverss').removeClass('hidden');
+                        if (data.unMappedFeeds.length > 0) {
+                            $('.unmapped').removeClass('hidden');
+                            $.each(data.unMappedFeeds, function(index, item) {
+                                $('#resultsBody1').append(`
+                                <div class="flex border-t">
+                                <div class="w-1/7 px-2 py-2 text-xs break-words"><input type="checkbox" name="unMappedFeeds[]" value="${item.id}" class="checkbox-class" /></div>
+                                <div class="w-2/6 px-4 py-2 text-xs break-words">${item.name}</div>
+                                <div class="w-3/6 px-4 py-2 text-xs break-words">${item.url}</div>
+                                </div>
                         `);
-                    });
-                } else {
-                    $('#resultsBody').append(`
+                            });
+
+                        }
+                        if (data.mappedFeeds.length > 0) {
+                            $('.mapped').removeClass('hidden');
+                            $.each(data.mappedFeeds, function(index, item) {
+                                $('#resultsBody').append(`
+                                <div class="flex border-t">
+                                <div class="w-1/7 px-2 py-2 text-xs break-words"><input type="checkbox" name="mappedFeeds[]" value="${item.id}" class="checkbox-class" /></div>
+                                <div class="w-2/6 px-4 py-2 text-xs break-words">${item.name}</div>
+                                <div class="w-3/6 px-4 py-2 text-xs break-words">${item.url}</div>
+                                </div>
+                        `);
+                            });
+                        } else {
+                            $('#resultsBody').append(`
                         <tr>
                             <td colspan="3" class="border px-4 py-2 text-center">No results found</td>
                         </tr>
                     `);
+                            $('#resultsBody1').append(`
+                        <tr>
+                            <td colspan="3" class="border px-4 py-2 text-center">No results found</td>
+                        </tr>
+                    `);
+                        }
+                    },
+                    error: function(xhr) {
+                        // Handle any errors
+                        console.error(xhr);
+                        alert('An error occurred while fetching results.');
+                    }
+                });
+            });
+            $("#deleterssfrom").on("submit", function(e) {
+                e.preventDefault();
+                document.getElementById('processModal').classList.remove('hidden');
+                document.getElementById('deleterss').classList.add('hidden');
+                $('#resultsfeeds').empty();
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: 'POST',
+                    data: $(this).serialize(),
+                    success: function(data) {
+                        document.getElementById('deleterss').classList.remove('hidden');
+                        document.getElementById('processModal').classList.add('hidden');
+                        if (data.feeds.length > 0) {
+                            $('.feeds').removeClass('hidden');
+                            $('.saversss').removeClass('hidden');
+                            $.each(data.feeds, function(index, item) {
+                                $('#resultsfeeds').append(`
+                                <div class="flex border-t">
+                                <div class="w-1/7 px-2 py-2 text-xs break-words"><input type="checkbox" name="feeds[]" value="${item.id}" class="checkbox-class" /></div>
+                                <div class="w-2/6 px-4 py-2 text-xs break-words">${item.name}</div>
+                                <div class="w-3/6 px-4 py-2 text-xs break-words">${item.url}</div>
+                                </div>
+                        `);
+                            });
+
+                        } else {
+                            $('#resultsfeeds').append(`
+                        <tr>
+                            <td colspan="3" class="border px-4 py-2 text-center">No results found</td>
+                        </tr>
+                    `);
+                        }
+                    },
+                    error: function(xhr) {
+                        // Handle any errors
+                        console.error(xhr);
+                        alert('An error occurred while fetching results.');
+                    }
+                });
+            });
+
+            $("#saverssButton").on("click", function() {
+                const mappedFeeds = $("input[name='mappedFeeds[]']:checked").map(function() {
+                    return $(this).val();
+                }).get();
+                const unMappedFeeds = $("input[name='unMappedFeeds[]']:checked").map(function() {
+                    return $(this).val();
+                }).get();
+                const combinedFeeds = mappedFeeds.concat(unMappedFeeds);
+
+                if (combinedFeeds.length === 0) {
+                    alert('Please select at least one RSS feed to save.');
+                    return;
                 }
-            },
-            error: function(xhr) {
-                // Handle any errors
-                console.error(xhr);
-                alert('An error occurred while fetching results.');
-            }
-        });
-    });
+                $.ajax({
+                    url: "{{ route('saveSelectedRssFeeds') }}",
+                    method: 'POST',
+                    data: {
+                        selectedItems: combinedFeeds,
+                        _token: '{{ csrf_token() }}',
+                        clientid: `{{$data->ClientID}}`,
+                        user_id: `{{auth()->user()->UserID}}`
+                    },
+                    success: function(response) {
+                        alert('Selected RSS feeds saved successfully!');
+                        window.location.reload();
+                    },
+                    error: function(xhr) {
+                        console.error(xhr);
+                        alert('An error occurred while saving selected RSS feeds.');
+                    }
+                });
+            });
+            $("#regenerateForm").on("submit", function(e) {
+                e.preventDefault();
+                document.getElementById('processModal').classList.remove('hidden');
+                closeModal('regenetare');
 
-    $("#saverssButton").on("click", function() {
-        const selectedItems = $("input[name='selectedItems[]']:checked").map(function() {
-            return $(this).val();
-        }).get();
-
-        if (selectedItems.length === 0) {
-            alert('Please select at least one RSS feed to save.');
-            return;
-        }
-        $.ajax({
-            url: "{{ route('saveSelectedRssFeeds') }}",
-            method: 'POST',
-            data: {
-                selectedItems: selectedItems,
-                _token: '{{ csrf_token() }}',
-                clientid:`{{$data->ClientID}}`
-            },
-            success: function(response) {
-                alert('Selected RSS feeds saved successfully!');
-                window.location.reload();
-            },
-            error: function(xhr) {
-                console.error(xhr);
-                alert('An error occurred while saving selected RSS feeds.');
-            }
-        });
-    });
+                $.ajax({
+                    url: `{{route('saverssRegenerate')}}`,
+                    method: 'POST',
+                    data: $(this).serialize(),
+                    success: function(data) {
+                        document.getElementById('processModal').classList.add('hidden');
+                        if (data.success) {
+                            alert(data.success);
+                            window.location.reload();
+                        } else {
+                            document.getElementById('processModal').classList.add('hidden');
+                            showmodal('regenetare');
+                            alert('Failed to regenerate. Please try again.');
+                        }
+                    },
+                    error: function(xhr) {
+                        // Handle any errors
+                        console.error(xhr);
+                        alert('An error occurred while regenerating.');
+                    }
+                });
+            });
         });
 
         function handleFormSubmit1(event, formType) {
@@ -2369,6 +2554,389 @@ $keywordcategories = \App\Models\Picklist::where('type','keyword category')->ord
                     }
                 });
             }
+        }
+
+        function getContries() {
+            let result;
+            $.ajax({
+                url: `{{route('getCountries')}}`,
+                method: 'GET',
+                data: {
+                    clientid: "{{ $data->ClientID }}",
+                },
+                success: function(response) {
+                    generateCountryCheckboxes(response);
+                    showmodal('regenetare');
+                    document.getElementById('processModal').classList.add('hidden');
+
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching countries:', error);
+                }
+            });
+        }
+
+        function generateCountryCheckboxes(countries) {
+            const container = $('#country-checkboxes');
+            $('#select-all').prop('checked', false);
+
+            container.empty();
+            $.each(countries, function(index, country) {
+                const isChecked = country.checked ? 'checked' : '';
+                const checkbox = `
+                <div class="checkbox-item mb-2 flex items-center">
+                    <input type="checkbox" name="countries[]" value="${country.countryid}" ${isChecked}=""
+                        class="country-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                    <label class="ml-2 text-gray-700 text-xs">${country.country}</label>
+                </div>
+            `;
+                container.append(checkbox);
+            });
+            $('#select-all').on('change', function() {
+                const isChecked = $(this).is(':checked');
+                $('.country-checkbox').prop('checked', isChecked);
+            });
+        }
+
+        function fetchCategories() {
+            $('#select-catall').prop('checked', false);
+            document.getElementById('processModal').classList.remove('hidden');
+            hidemodal('regenetare');
+            $.ajax({
+                url: `{{route('getCategories')}}`,
+                method: 'GET',
+                data: {
+                    clientid: "{{ $data->ClientID }}",
+                },
+                success: function(response) {
+                    document.getElementById('processModal').classList.add('hidden');
+
+                    generateCategoryCheckboxes(response);
+                    showmodal('regenetare');
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching categories:', error);
+                }
+            });
+        }
+
+        function generateCategoryCheckboxes(categories) {
+            const container = $('#category-checkboxes');
+            container.empty();
+
+            $.each(categories, function(index, category) {
+                const checkbox = `
+                <div class="checkbox-item flex items-center">
+                    <input type="checkbox" name="categories[]" value="${category.categoryid}"
+                        class="category-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                    <label class="ml-2 text-xs text-gray-700">${category.category}</label>
+                </div>
+            `;
+
+                const $checkbox = $(checkbox);
+                if (category.checked) {
+                    $checkbox.find('input').prop('checked', true);
+                }
+                container.append($checkbox);
+            });
+
+            $('#select-catall').on('change', function() {
+                const isChecked = $(this).is(':checked');
+                $('.category-checkbox').prop('checked', isChecked);
+            });
+        }
+
+        function fetchIndustries() {
+            $('#select-indall').prop('checked', false);
+            document.getElementById('processModal').classList.remove('hidden');
+            hidemodal('regenetare');
+            $.ajax({
+                url: `{{route('getIndustory')}}`,
+                method: 'GET',
+                data: {
+                    clientid: "{{ $data->ClientID }}",
+                },
+                success: function(response) {
+                    document.getElementById('processModal').classList.add('hidden');
+
+                    generateIndustryCheckboxes(response);
+                    showmodal('regenetare');
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching categories:', error);
+                }
+            });
+        }
+
+        function generateIndustryCheckboxes(industries) {
+            const container = $('#industry-checkboxes');
+            container.empty();
+
+            $.each(industries, function(index, industry) {
+                const checkbox = `
+             <div class="checkbox-item flex items-center">
+                    <input type="checkbox" name="industries[]" value="${industry.industryid}"
+                        class="industry-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                    <label class="ml-2 text-gray-700 text-xs">${industry.industry}</label>
+                </div>
+            `;
+
+                const $checkbox = $(checkbox);
+                if (category.checked) {
+                    $checkbox.find('input').prop('checked', true);
+                }
+                container.append($checkbox);
+            });
+
+            $('#select-indall').on('change', function() {
+                const isChecked = $(this).is(':checked');
+                $('.industry-checkbox').prop('checked', isChecked);
+            });
+        }
+
+        function fetchFocus() {
+            hidemodal('regenetare');
+            document.getElementById('processModal').classList.remove('hidden');
+
+
+            $.ajax({
+                url: `{{route('getFocus')}}`,
+                method: 'GET',
+                data: {
+                    clientid: "{{ $data->ClientID }}",
+                },
+                success: function(response) {
+                    document.getElementById('processModal').classList.add('hidden');
+                    generateFocusCheckboxes(response);
+                    showmodal('regenetare');
+
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching focus areas:', error);
+                }
+            });
+        }
+
+        function generateFocusCheckboxes(focuses) {
+            $('#select-focus-all').prop('checked', false);
+            const container = $('#focus-checkboxes');
+            container.empty();
+            $.each(focuses, function(index, focus) {
+                const checkbox = `
+                <div class="checkbox-item flex items-center">
+                    <input type="checkbox" name="focuses[]" value="${focus.focusid}"
+                        class="focus-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                    <label class="ml-2 text-gray-700 text-xs">${focus.focus}</label>
+                </div>
+            `;
+
+                const $checkbox = $(checkbox);
+                if (focus.checked) {
+                    $checkbox.find('input').prop('checked', true);
+                }
+                container.append($checkbox);
+            });
+
+            $('#select-focus-all').on('change', function() {
+                const isChecked = $(this).is(':checked');
+                $('.focus-checkbox').prop('checked', isChecked);
+            });
+        }
+
+        function fetchMedia() {
+            hidemodal('regenetare');
+            document.getElementById('processModal').classList.remove('hidden');
+
+
+            $.ajax({
+                url: `{{route('getMedia')}}`,
+                method: 'GET',
+                data: {
+                    clientid: "{{ $data->ClientID }}",
+                },
+                success: function(response) {
+                    document.getElementById('processModal').classList.add('hidden');
+                    generateMediaCheckboxes(response);
+                    showmodal('regenetare');
+
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching focus areas:', error);
+                }
+            });
+        }
+
+        function generateMediaCheckboxes(medias) {
+            $('#select-media-all').prop('checked', false);
+            const container = $('#media-checkboxes');
+            container.empty();
+            $.each(medias, function(index, media) {
+                const checkbox = `
+                <div class="checkbox-item flex items-center">
+                    <input type="checkbox" name="media[]" value="${media.typeid}"
+                        class="focus-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                    <label class="ml-2 text-gray-700 text-xs">${media.type}</label>
+                </div>
+            `;
+
+                const $checkbox = $(checkbox);
+                if (media.checked) {
+                    $checkbox.find('input').prop('checked', true);
+                }
+                container.append($checkbox);
+            });
+
+            $('#select-media-all').on('change', function() {
+                const isChecked = $(this).is(':checked');
+                $('.media-checkbox').prop('checked', isChecked);
+            });
+        }
+
+        function fetchAudience() {
+            hidemodal('regenetare');
+            document.getElementById('processModal').classList.remove('hidden');
+
+
+            $.ajax({
+                url: `{{route('getAudience')}}`,
+                method: 'GET',
+                data: {
+                    clientid: "{{ $data->ClientID }}",
+                },
+                success: function(response) {
+                    document.getElementById('processModal').classList.add('hidden');
+                    generateAudienceCheckboxes(response);
+                    showmodal('regenetare');
+
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching focus areas:', error);
+                }
+            });
+        }
+
+        function generateAudienceCheckboxes(audiences) {
+            $('#select-audience-all').prop('checked', false);
+            const container = $('#audience-checkboxes');
+            container.empty();
+            $.each(audiences, function(index, audience) {
+                const checkbox = `
+                <div class="checkbox-item flex items-center">
+                    <input type="checkbox" name="audience[]" value="${audience.audiencetypeid}"
+                        class="focus-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                    <label class="ml-2 text-gray-700 text-xs">${audience.audiencetype}</label>
+                </div>
+            `;
+
+                const $checkbox = $(checkbox);
+                if (audience.checked) {
+                    $checkbox.find('input').prop('checked', true);
+                }
+                container.append($checkbox);
+            });
+
+            $('#select-audience-all').on('change', function() {
+                const isChecked = $(this).is(':checked');
+                $('.audience-checkbox').prop('checked', isChecked);
+            });
+        }
+
+        function fetchAudienceAge() {
+            hidemodal('regenetare');
+            document.getElementById('processModal').classList.remove('hidden');
+
+
+            $.ajax({
+                url: `{{route('getAudienceAge')}}`,
+                method: 'GET',
+                data: {
+                    clientid: "{{ $data->ClientID }}",
+                },
+                success: function(response) {
+                    document.getElementById('processModal').classList.add('hidden');
+                    generateAudienceAgeCheckboxes(response);
+                    showmodal('regenetare');
+
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching focus areas:', error);
+                }
+            });
+        }
+
+        function generateAudienceAgeCheckboxes(audienceages) {
+            $('#select-audienceage-all').prop('checked', false);
+            const container = $('#audienceage-checkboxes');
+            container.empty();
+            $.each(audienceages, function(index, audienceage) {
+                const checkbox = `
+                <div class="checkbox-item flex items-center">
+                    <input type="checkbox" name="audienceage[]" value="${audienceage.audienceageid}"
+                        class="focus-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                    <label class="ml-2 text-gray-700 text-xs">${audienceage.audienceage}</label>
+                </div>
+            `;
+
+                const $checkbox = $(checkbox);
+                if (audienceage.checked) {
+                    $checkbox.find('input').prop('checked', true);
+                }
+                container.append($checkbox);
+            });
+
+            $('#select-audienceage-all').on('change', function() {
+                const isChecked = $(this).is(':checked');
+                $('.audienceage-checkbox').prop('checked', isChecked);
+            });
+        }
+
+        function fetchRegional() {
+            hidemodal('regenetare');
+            document.getElementById('processModal').classList.remove('hidden');
+
+
+            $.ajax({
+                url: `{{route('getRegional')}}`,
+                method: 'GET',
+                data: {
+                    clientid: "{{ $data->ClientID }}",
+                },
+                success: function(response) {
+                    document.getElementById('processModal').classList.add('hidden');
+                    generateRegionalCheckboxes(response);
+                    showmodal('regenetare');
+
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching focus areas:', error);
+                }
+            });
+        }
+
+        function generateRegionalCheckboxes(regionals) {
+            $('#select-regional-all').prop('checked', false);
+            const container = $('#regional-checkboxes');
+            container.empty();
+            $.each(regionals, function(index, regional) {
+                const checkbox = `
+                <div class="checkbox-item flex items-center">
+                    <input type="checkbox" name="regional[]" value="${regional.regionalid}"
+                        class="focus-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                    <label class="ml-2 text-gray-700 text-xs">${regional.regional}</label>
+                </div>
+            `;
+
+                const $checkbox = $(checkbox);
+                if (regional.checked) {
+                    $checkbox.find('input').prop('checked', true);
+                }
+                container.append($checkbox);
+            });
+
+            $('#select-regional-all').on('change', function() {
+                const isChecked = $(this).is(':checked');
+                $('.regional-checkbox').prop('checked', isChecked);
+            });
         }
     </script>
 

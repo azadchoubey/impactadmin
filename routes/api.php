@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ClientsProfile;
+use App\Http\Controllers\ClientWebUniverse;
 use App\Http\Controllers\FilterController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KeywordController;
+use App\Http\Controllers\WebUniverse;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,8 +59,24 @@ Route::controller(ClientsProfile::class)->group(function () {
     Route::post('/addConceptPrint',  'addConceptPrint')->name('addConceptPrint');
     Route::post('/storeissue',  'storeIssue')->name('storeIssue');
     Route::post('/rssnames',  'rssnames')->name('rssnames');
+    Route::post('/deleterssnames',  'getSelectedRssFeeds')->name('getSelectedRssFeeds');
     
 });
+
+Route::controller(ClientWebUniverse::class)->group(function () {
+    Route::get('/getCountries', 'getCountries')->name('getCountries');
+    Route::get('/getCategories', 'getCategories')->name('getCategories');
+    Route::get('/getIndustory','getIndustory')->name('getIndustory');
+    Route::get('/getFocus','getFocus')->name('getFocus');
+    Route::get('/getMedia','getMedia')->name('getMedia');
+    Route::get('/getAudience','getAudience')->name('getAudience');
+    Route::get('/getAudienceAge','getAudienceAge')->name('getAudienceAge');
+    Route::get('/getRegional','getRegional')->name('getRegional');
+    Route::post('/saverssRegenerate','saverssRegenerate')->name('saverssRegenerate');
+});
+
+Route::get('webuniverse/fetch', [WebUniverse::class, 'fetchWebUniverse'])->name('webuniverse.fetch');
+
 
 Route::post('/filter',[FilterController::class,'filter'])->name('filter');
 Route::post('/saveselecteddata',[FilterController::class,'saveselecteddata'])->name('saveselecteddata');
