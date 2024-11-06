@@ -83,6 +83,9 @@ Route::get('/downloadmediauniverse',[ClientsProfile::class,'downloadMediaUnivers
 
 Route::get('/webuniverse',[WebUniverse::class,'index'])->name('webuniverse');
 Route::get('/webuniverse/{id}',[WebUniverse::class,'view'])->name('webuniverse.view');
+Route::post('/webuniverse/store', [WebUniverse::class, 'store'])->name('webuniverse.store');
+Route::post('/rssfeed', [WebUniverse::class, 'store'])->name('rssfeed.store');
+
 
 
 Route::get('/test',function(){
